@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Question;
+use App\Models\Reply;
+use App\Observers\QuestionObserver;
+use App\Observers\ReplyObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Question::observe(QuestionObserver::class);
+        Reply::observe(ReplyObserver::class);
     }
 }
