@@ -129,20 +129,10 @@ return $currentRoute === $routeName
                 </li>
 
                 <li>
-                    {{-- <a href="{{ route('about') }}"> --}}
-                    <a href="#"
-                        class="px-3 py-2 {{ $isActive('about') }} transition-colors flex items-center gap-2">
-                        <x-lucide-info class="w-4 h-4" />
-                        About
-                    </a>
-                </li>
-
-                <li>
-                    {{-- <a href="{{ route('contact') }}"> --}}
-                    <a href="#"
-                        class="px-3 py-2 {{ $isActive('contact') }} transition-colors flex items-center gap-2">
-                        <x-lucide-phone class="w-4 h-4" />
-                        Contact
+                    <a href="{{ route('forum.question.index') }}"
+                        class="px-3 py-2 {{ $isActive('forum.question.index') }} transition-colors flex items-center gap-2">
+                        <x-lucide-message-square class="w-4 h-4" />
+                        Forum
                     </a>
                 </li>
             </ul>
