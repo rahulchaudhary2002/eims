@@ -31,7 +31,7 @@
                 error="{{ $errors->first('name') }}" />
 
             <!-- Email or Phone -->
-            <x-text-input
+            <!-- <x-text-input
                 label="Email Address"
                 id="email"
                 type="email"
@@ -40,7 +40,7 @@
                 required
                 autocomplete="email"
                 placeholder="Enter your email address"
-                error="{{ $errors->first('email') }}" />
+                error="{{ $errors->first('email') }}" /> -->
 
             <!-- Phone Number -->
             <x-text-input
