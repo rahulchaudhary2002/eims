@@ -1,0 +1,81 @@
+services:
+  eims-postgres:
+    image: postgres:16.2-alpine
+    container_name: eims-postgres
+    restart: on-failure
+    env_file: .env
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - eims-postgres-data:/var/lib/postgresql/data
+    networks:
+      - eims-services
+
+  eims-adminer:
+    image: adminer:latest
+    container_name: eims-adminer
+    depends_on:
+      - eims-postgres
+    environment:
+      ADMINER_DEFAULT_SERVER: eims-postgres
+    ports:
+      - "8888:8080"
+    networks:
+      - eims-services
+
+  eims-redis:
+    image: redis:7.4.1-alpine
+    container_name: eims-redis
+    command: [ "redis-server", "--appendonly", "yes" ]
+    ports:
+      - "6380:6379"
+    restart: on-failure
+    networks:
+      - eims-services
+
+  eims-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        user: eims
+        uid: 1000
+    image: eims-app
+    container_name: eims-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./.dockerfile/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    depends_on:
+      - eims-postgres
+      - eims-redis
+    networks:
+      - eims-services
+
+  eims-webserver:
+    image: nginx:alpine
+    container_name: eims-webserver
+    restart: unless-stopped
+    ports:
+      - "8100:80"
+      - "8143:443"
+    volumes:
+      - ./:/var/www
+      - ./.dockerfile/nginx/conf.d:/etc/nginx/conf.d/
+    depends_on:
+      - eims-app
+    networks:
+      - eims-services
+
+networks:
+  eims-services:
+    driver: bridge
+
+volumes:
+  eims-postgres-data:

@@ -1,0 +1,20 @@
+<?php
+
+use App\Http\Controllers\Vendor\InstitutionController;
+use App\Http\Controllers\Vendor\SettingController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/vendor/dashboard', function () {
+    return view('vendor.modules.dashboard.index');
+})->middleware(['auth:vendor', 'verified:vendor'])->name('vendor.dashboard');
+
+Route::prefix('vendor')->name('vendor.')->middleware(['auth:vendor'])->group(function () {
+    Route::post('/set-current-institution', [SettingController::class, 'setCurrentInstitution'])
+        ->name('set-current-institution');
+
+    Route::prefix('institution')->name('institution.')->group(function () {
+        Route::get('profile', [InstitutionController::class, 'profile'])->name('profile');
+        Route::get('edit', [InstitutionController::class, 'edit'])->name('edit');
+        Route::put('update', [InstitutionController::class, 'update'])->name('update');
+    });
+});
