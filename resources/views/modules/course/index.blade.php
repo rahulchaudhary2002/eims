@@ -53,7 +53,7 @@
         <!-- Action -->
         <div class="mt-4">
             <a
-                href="#"
+                href="{{ route('course.show', $course) }}"
                 class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700">
                 View Details →
             </a>
