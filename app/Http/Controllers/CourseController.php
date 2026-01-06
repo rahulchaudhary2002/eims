@@ -13,4 +13,10 @@ class CourseController extends Controller
 
         return view('modules.course.index', compact('courses'));
     }
+
+    public function show(Course $course)
+    {
+        $course->load(['level', 'affiliation', 'descriptions']);
+        return view('modules.course.show', compact('course'));
+    }
 }
