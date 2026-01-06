@@ -31,13 +31,14 @@ Route::prefix('school')->name('school')->group(function () {
 
 Route::prefix('forum/question')->name('forum.')->group(function () {
     Route::get('/', [QuestionController::class, 'index'])->name('question.index');
-    Route::get('/{question}', [QuestionController::class, 'show'])->name('question.show');
 
     Route::middleware('auth')->group(function () {
         Route::get('/create', [QuestionController::class, 'create'])->name('question.create');
         Route::post('/', [QuestionController::class, 'store'])->name('question.store');
         Route::post('/{question}/reply', [ReplyController::class, 'store'])->name('reply.store');
     });
+
+    Route::get('/{question}', [QuestionController::class, 'show'])->name('question.show');
 });
 
 require __DIR__ . '/auth.php';
