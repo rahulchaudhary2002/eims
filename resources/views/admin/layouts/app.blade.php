@@ -32,14 +32,7 @@
         @yield('content')
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-    </script>
+    <script src="https://cdn.tiny.cloud/1/8wbt89rzkyg60acmtvlic31msdvwo1jbftv5sfl6ws93wevi/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
 
     @yield('page-specific-script')
 </body>

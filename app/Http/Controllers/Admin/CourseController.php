@@ -36,7 +36,7 @@ class CourseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -46,12 +46,32 @@ class CourseController extends Controller
             'affiliation_id' => 'nullable|exists:affiliations,id',
             'duration' => 'nullable|string|max:50',
             'is_active' => 'boolean',
+            'sections.*.title' => 'required|string|max:255',
+            'sections.*.content' => 'required|string',
         ]);
 
-        Course::create([$validated, 'is_active' => $request->is_active ?? false]);
+        $course = Course::create([
+            'name' => $validated['name'],
+            'code' => $validated['code'],
+            'description' => $validated['description'] ?? null,
+            'level_id' => $validated['level_id'],
+            'affiliation_id' => $validated['affiliation_id'] ?? null,
+            'duration' => $validated['duration'] ?? null,
+            'is_active' => $request->is_active ?? false,
+        ]);
 
-        return redirect()->route('admin.course.index')
-            ->with('success', 'Course created successfully.');
+        // Save sections
+        if (!empty($request->sections)) {
+            foreach ($request->sections as $index => $section) {
+                $course->descriptions()->create([
+                    'title' => $section['title'],
+                    'content' => $section['content'],
+                    'order' => $index,
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.course.index')->with('success', 'Course created successfully.');
     }
 
     /**
@@ -65,10 +85,16 @@ class CourseController extends Controller
         return view('admin.modules.course.edit', compact('course', 'levels', 'affiliations'));
     }
 
+    public function show(Course $course)
+    {
+        $course->load(['level', 'affiliation', 'descriptions']);
+        return view('admin.modules.course.show', compact('course'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Course $course): RedirectResponse
+    public function update(Request $request, Course $course)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -78,12 +104,35 @@ class CourseController extends Controller
             'affiliation_id' => 'nullable|exists:affiliations,id',
             'duration' => 'nullable|string|max:50',
             'is_active' => 'boolean',
+            'sections.*.title' => 'required|string|max:255',
+            'sections.*.content' => 'required|string',
         ]);
 
-        $course->update([$validated, 'is_active' => $request->is_active ?? false]);
+        $course->update([
+            'name' => $validated['name'],
+            'code' => $validated['code'],
+            'description' => $validated['description'] ?? null,
+            'level_id' => $validated['level_id'],
+            'affiliation_id' => $validated['affiliation_id'] ?? null,
+            'duration' => $validated['duration'] ?? null,
+            'is_active' => $request->is_active ?? false,
+        ]);
 
-        return redirect()->route('admin.course.index')
-            ->with('success', 'Course updated successfully.');
+        // Delete old sections
+        $course->descriptions()->delete();
+
+        // Save new sections
+        if (!empty($request->sections)) {
+            foreach ($request->sections as $index => $section) {
+                $course->descriptions()->create([
+                    'title' => $section['title'],
+                    'content' => $section['content'],
+                    'order' => $index,
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.course.index')->with('success', 'Course updated successfully.');
     }
 
     /**
