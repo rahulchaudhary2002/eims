@@ -1,0 +1,186 @@
+@extends('layouts.app')
+
+@section('title', $course->name)
+
+@section('content')
+
+{{-- Icon --}}
+<div class="flex items-center gap-3 mb-6">
+    <div class="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center">
+        <x-lucide-graduation-cap class="w-14 h-14 text-blue-600" />
+    </div>
+    <div>
+        {{-- Course Name --}}
+        <p class="text-3xl font-semibold text-gray-900">
+            {{ $course->display_name }}
+        </p>
+
+        {{-- Affiliation --}}
+        <p class="mt-1 text-lg text-gray-700">
+            {{ $course->affiliation->name }}
+        </p>
+
+        {{-- Level · Duration --}}
+        <p class="mt-1 text-sm text-gray-500">
+            {{ $course->level->name }} · {{ $course->duration }}
+        </p>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    {{-- LEFT SIDEBAR --}}
+    <aside class="lg:col-span-3">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sticky top-24">
+            {{-- Dynamic Section Menu --}}
+            <ul class="space-y-2 text-base" id="course-nav">
+                @foreach($course->descriptions->sortBy('order')->values() as $key => $section)
+                <li>
+                    <a href="#section-{{ $key + 1 }}"
+                        data-section-link
+                        class="nav-link block px-3 py-2 rounded-lg
+                            text-gray-700 hover:text-blue-600 hover:bg-blue-50
+                            transition">
+                        {{ $section->title }}
+                    </a>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+    </aside>
+
+    {{-- MAIN CONTENT --}}
+    <main class="lg:col-span-6 space-y-5">
+
+        {{-- COURSE HEADER --}}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h1 class="text-3xl font-bold text-gray-900">
+                {{ $course->name }}
+            </h1>
+
+            <p class="text-gray-600 mt-2">
+                {{ $course->level?->name }} ·
+                {{ $course->duration ?? '—' }}
+            </p>
+
+            @if($course->description)
+            <p class="mt-4 text-gray-700 leading-relaxed">
+                {{ $course->description }}
+            </p>
+            @endif
+        </div>
+
+        {{-- COURSE SECTIONS --}}
+        @forelse($course->descriptions->sortBy('order')->values() as $key => $section)
+        <section id="section-{{ $key + 1 }}"
+            class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 scroll-mt-28">
+
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">
+                {{ $section->title }}
+            </h2>
+
+            <div class="prose max-w-none prose-blue">
+                {!! $section->content !!}
+            </div>
+
+        </section>
+        @empty
+        <div class="bg-white rounded-xl border border-gray-200 p-6 text-center text-gray-500">
+            No content available for this course.
+        </div>
+        @endforelse
+
+    </main>
+
+    {{-- RIGHT SIDEBAR (RELATED PROGRAMS) --}}
+    <aside class="lg:col-span-3 space-y-6">
+
+        <h3 class="text-lg font-semibold text-gray-800">
+            Related Programs
+        </h3>
+
+        {{-- Uncomment when you have related courses
+        @foreach($relatedCourses as $related)
+        <a href="{{ route('course.show', $related) }}"
+        class="block bg-white rounded-xl border border-gray-200 p-4 hover:shadow transition">
+        <h4 class="font-semibold text-gray-800">
+            {{ $related->name }}
+        </h4>
+        <p class="text-sm text-gray-500 mt-1">
+            {{ $related->affiliation?->name ?? '—' }}
+        </p>
+        <p class="text-sm text-gray-500 mt-1">
+            {{ $related->duration ?? '' }}
+        </p>
+        </a>
+        @endforeach
+        --}}
+
+    </aside>
+
+</div>
+
+@endsection
+
+@section('page-specific-script')
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const links = document.querySelectorAll('[data-section-link]');
+        const sections = [...links].map(link =>
+            document.querySelector(link.getAttribute('href'))
+        );
+
+        const offset = 120; // sticky header height
+
+        function activateLink() {
+            let current = null; // default to none
+            const scrollPosition = window.scrollY + offset + 1; // +1 to avoid rounding issues
+            const pageHeight = document.documentElement.scrollHeight;
+            const windowHeight = window.innerHeight;
+
+            // Find the section closest to top but only if user scrolled past it
+            sections.forEach(section => {
+                if (section.offsetTop <= scrollPosition) {
+                    current = section;
+                }
+            });
+
+            // If scrolled to bottom, activate last section
+            if (window.scrollY + windowHeight >= pageHeight - 5) {
+                current = sections[sections.length - 1];
+            }
+
+            // Update sidebar links
+            links.forEach(link => {
+                link.classList.toggle('active', current && link.getAttribute('href') === `#${current.id}`);
+            });
+
+            // Update URL fragment
+            if (current) {
+                history.replaceState(null, '', `#${current.id}`);
+            }
+        }
+
+        // Smooth scroll when clicking sidebar links
+        links.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (!target) return;
+                window.scrollTo({
+                    top: target.offsetTop - offset,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Scroll event triggers activation
+        window.addEventListener('scroll', activateLink);
+
+        // Do NOT run activateLink on load — so no link is active initially
+    });
+</script>
+
+
+@endsection
