@@ -79,7 +79,7 @@
                 {{ $section->title }}
             </h2>
 
-            <div class="prose max-w-none prose-blue">
+            <div class="prose max-w-none prose-blue no-tailwind">
                 {!! $section->content !!}
             </div>
 
