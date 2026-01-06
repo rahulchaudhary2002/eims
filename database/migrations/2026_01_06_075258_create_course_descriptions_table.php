@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('course_id');
             $table->string('title');
-            $table->text('content');
+            $table->longText('content');
             $table->integer('order')->default(0);
             $table->timestamps();
 
