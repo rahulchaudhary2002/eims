@@ -12,7 +12,7 @@
     @yield('page-specific-style')
 </head>
 
-<body class="flex bg-gray-50 flex-col min-h-screen relative">
+<body class="flex flex-col min-h-screen relative">
     @include('includes.header')
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4">
