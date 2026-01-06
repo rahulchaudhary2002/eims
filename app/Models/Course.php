@@ -62,4 +62,13 @@ class Course extends Model
     {
         return "{$this->name} ({$this->code})";
     }
+
+    /**
+     * Get all descriptions for the course, ordered by 'order'.
+     */
+    public function descriptions()
+    {
+        return $this->hasMany(CourseDescription::class)
+            ->orderBy('order');
+    }
 }
