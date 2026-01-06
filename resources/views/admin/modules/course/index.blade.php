@@ -85,6 +85,10 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-2">
+                                    <a href="{{ route('admin.course.show', $course) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-colors duration-150 flex items-center">
+                                        <x-lucide-eye class="w-4 h-4 mr-1" />
+                                        View
+                                    </a>
                                     <a href="{{ route('admin.course.edit', $course) }}"
                                         class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 transform hover:-translate-y-0.5 flex items-center shadow-sm hover:shadow">
                                         <x-lucide-edit class="w-4 h-4 mr-1" />
