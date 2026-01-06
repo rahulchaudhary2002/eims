@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\Vendor;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -23,17 +21,6 @@ return new class extends Migration
             $table->string('password');
             $table->timestamps();
         });
-
-        Vendor::create([
-            'name' => 'Vendor',
-            'email' => 'vendor@app.com',
-            'phone' => '1234567890',
-            'email_verified_at' => now(),
-            'phone_verified_at' => now(),
-            'password' => Hash::make('123456789'),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
     }
 
     /**
