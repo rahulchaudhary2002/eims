@@ -11,8 +11,13 @@ body {
     color: #212529;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
 }
 
 .no-tailwind * {
   all: revert;
+}
+
+.nav-link.active {
+  @apply bg-blue-100 text-blue-700 font-semibold;
 }
