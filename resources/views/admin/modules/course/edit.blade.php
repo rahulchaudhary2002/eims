@@ -1,18 +1,22 @@
 @extends('admin.layouts.app')
 @section('title', 'Edit Course')
 @section('content')
+
 <div class="bg-white rounded-lg shadow-lg border border-gray-200">
+    {{-- Header --}}
     <div class="p-6 flex justify-between items-center mb-6 bg-white bg-opacity-80 backdrop-blur-sm rounded-t-lg">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">📚 Edit Course</h1>
+            <h1 class="text-3xl font-bold text-gray-800">✏️ Edit Course</h1>
             <p class="text-gray-600 mt-1">Update course details</p>
         </div>
-        <a href="{{ route('admin.course.index') }}" class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 flex items-center">
+        <a href="{{ route('admin.course.index') }}"
+            class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-2 px-4 rounded-lg shadow-md flex items-center">
             <x-lucide-arrow-left class="w-5 h-5 mr-2" />
             Back to Courses
         </a>
     </div>
 
+    {{-- Errors --}}
     @if($errors->any())
     <div class="px-6 pb-4">
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
@@ -25,12 +29,14 @@
     </div>
     @endif
 
+    {{-- Form --}}
     <div class="px-6 pb-6">
         <div class="bg-white rounded-lg shadow-md p-6">
             <form action="{{ route('admin.course.update', $course) }}" method="POST">
                 @csrf
                 @method('PUT')
 
+                {{-- Course Basic Info --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
@@ -154,20 +160,113 @@
                     </div>
                 </div>
 
+                {{-- Sections --}}
+                <div class="mt-6" x-data="sectionsForm({{ $course->descriptions->map(fn($d) => ['title'=>$d->title,'content'=>$d->content])->toJson() }})" x-init="initEditors()">
+                    <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                        <x-lucide-file-text class="w-5 h-5 mr-2 text-blue-500" />
+                        Course Sections
+                    </label>
+
+                    <template x-for="(section, index) in sections" :key="index">
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-300 mb-4 flex flex-col gap-2">
+                            <div class="flex justify-between items-center">
+                                <strong class="text-gray-700">Section <span x-text="index+1"></span></strong>
+                                <div class="flex gap-2">
+                                    <button type="button" @click="moveUp(index)" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">↑</button>
+                                    <button type="button" @click="moveDown(index)" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">↓</button>
+                                    <button type="button" @click="remove(index)" class="text-red-500 hover:text-red-700">✕</button>
+                                </div>
+                            </div>
+
+                            <input type="text" :name="'sections['+index+'][title]'" x-model="section.title"
+                                placeholder="Section Title"
+                                class="w-full px-3 py-2 border border-gray-300 rounded">
+
+                            <textarea :id="'content-'+index" :name="'sections['+index+'][content]'" x-model="section.content"
+                                placeholder="Section Content" class="w-full px-3 py-2 border border-gray-300 rounded" rows="3"></textarea>
+                        </div>
+                    </template>
+
+                    <button type="button" @click="add()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">+ Add Section</button>
+                </div>
+
+                {{-- Submit buttons --}}
                 <div class="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
                     <a href="{{ route('admin.course.index') }}"
-                        class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 flex items-center">
-                        <x-lucide-x class="w-5 h-5 mr-2" />
-                        Cancel
+                        class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 rounded-lg flex items-center">
+                        <x-lucide-x class="w-5 h-5 mr-2" /> Cancel
                     </a>
                     <button type="submit"
-                        class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 flex items-center">
-                        <x-lucide-save class="w-5 h-5 mr-2" />
-                        Update Course
+                        class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-lg flex items-center">
+                        <x-lucide-save class="w-5 h-5 mr-2" /> Update Course
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    function sectionsForm(initial = []) {
+        return {
+            sections: initial.length ? initial : [{
+                title: '',
+                content: '',
+                order: 0
+            }],
+            add() {
+                this.sections.push({
+                    title: '',
+                    content: '',
+                    order: this.sections.length
+                });
+                this.$nextTick(() => this.initEditors());
+            },
+            remove(index) {
+                const id = 'content-' + index;
+                if (tinymce.get(id)) tinymce.get(id).remove();
+                this.sections.splice(index, 1);
+            },
+            moveUp(index) {
+                if (index === 0) return;
+                [this.sections[index - 1], this.sections[index]] = [this.sections[index], this.sections[index - 1]];
+                this.$nextTick(() => this.initEditors());
+            },
+            moveDown(index) {
+                if (index === this.sections.length - 1) return;
+                [this.sections[index + 1], this.sections[index]] = [this.sections[index], this.sections[index + 1]];
+                this.$nextTick(() => this.initEditors());
+            },
+            initEditors() {
+                // Destroy all existing TinyMCE editors first
+                this.sections.forEach((_, index) => {
+                    const id = 'content-' + index;
+                    if (tinymce.get(id)) tinymce.get(id).remove();
+                });
+
+                // Initialize TinyMCE for each section
+                this.$nextTick(() => {
+                    this.sections.forEach((section, index) => {
+                        const id = 'content-' + index;
+                        if (!tinymce.get(id)) {
+                            tinymce.init({
+                                selector: '#' + id,
+                                height: 500,
+                                menubar: false,
+                                plugins: 'lists link image table code',
+                                toolbar: 'undo redo | bold italic underline | bullist numlist | link image | code',
+                                setup: (editor) => {
+                                    editor.on('Change KeyUp', () => {
+                                        section.content = editor.getContent();
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+        }
+    }
+</script>
+
 @endsection

@@ -16,5 +16,5 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::resource('vendor', VendorController::class);
     Route::resource('affiliation', AffiliationController::class)->except('show');
     Route::resource('level', LevelController::class)->except('show');
-    Route::resource('course', CourseController::class)->except('show');
+    Route::resource('course', CourseController::class);
 });
