@@ -63,15 +63,17 @@
             </label>
         </div>
 
-        <div class="flex justify-end gap-3">
-            <a href="{{ route('forum.question.index') }}" class="text-sm text-gray-600 hover:text-gray-800">
+        <div class="flex justify-end items-center gap-3">
+            <a href="{{ route('forum.question.index') }}"
+                class="text-sm text-gray-600 hover:text-gray-800">
                 Cancel
             </a>
             <button type="submit"
-                class="inline-flex items-center px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700">
+                class="inline-flex items-center px-6 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700">
                 Submit
             </button>
         </div>
+
     </form>
 </div>
 @endsection
