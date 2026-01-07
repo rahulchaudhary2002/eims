@@ -84,7 +84,7 @@
         {{-- COURSE SECTIONS --}}
         @forelse($course->descriptions->sortBy('order')->values() as $key => $section)
         <section id="section-{{ $key + 1 }}"
-            class="bg-white border border-gray-200 rounded-xl px-6 scroll-mt-28">
+            class="bg-white scroll-mt-28 {{ $key !== 0 ? 'border border-gray-200 rounded-xl px-6' : '' }}">
             <div class="prose max-w-none prose-blue no-tailwind">
                 {!! $section->content !!}
             </div>
