@@ -22,7 +22,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($colleges as $college)
-        <div class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
+        <a href="#" class="bg-white border rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
 
             <!-- Cover Image -->
             <div class="h-32 bg-gray-100">
@@ -52,32 +52,25 @@
                     </div>
                 </div>
 
-                @if($college->address)
-                <p class="text-sm text-gray-600 mb-3 line-clamp-2">
-                    {{ $college->address }}
+                @if($college->affiliations)
+                <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex items-center gap-2">
+                    <x-lucide-award class="w-4 h-4 text-gray-400" />
+                    <span>
+                        @foreach($college->affiliations as $affiliation)
+                        {{ $affiliation->name }}@if(!$loop->last), @endif
+                        @endforeach
+                    </span>
                 </p>
                 @endif
 
-                <!-- Contact -->
-                <div class="text-sm text-gray-500 space-y-1">
-                    @if($college->phone)
-                    <p>📞 {{ $college->phone }}</p>
-                    @endif
-                    @if($college->email)
-                    <p>✉️ {{ $college->email }}</p>
-                    @endif
-                </div>
-
-                <!-- Action -->
-                <div class="mt-4">
-                    <a
-                        href="#"
-                        class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700">
-                        View College →
-                    </a>
-                </div>
+                @if($college->address)
+                <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex items-center gap-2">
+                    <x-lucide-map-pin class="w-4 h-4 text-gray-400" />
+                    <span>{{ $college->address }}</span>
+                </p>
+                @endif
             </div>
-        </div>
+        </a>
         @empty
         <div class="col-span-full bg-white rounded-xl p-6 text-center text-gray-500">
             No colleges found.
@@ -98,7 +91,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($schools as $school)
-        <div class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
+        <a href="#" class="bg-white border rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
 
             <!-- Cover Image -->
             <div class="h-32 bg-gray-100">
@@ -128,32 +121,25 @@
                     </div>
                 </div>
 
-                @if($school->address)
-                <p class="text-sm text-gray-600 mb-3 line-clamp-2">
-                    {{ $school->address }}
+                @if($school->affiliations)
+                <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex items-center gap-2">
+                    <x-lucide-award class="w-4 h-4 text-gray-400" />
+                    <span>
+                        @foreach($school->affiliations as $affiliation)
+                        {{ $affiliation->name }}@if(!$loop->last), @endif
+                        @endforeach
+                    </span>
                 </p>
                 @endif
 
-                <!-- Contact -->
-                <div class="text-sm text-gray-500 space-y-1">
-                    @if($school->phone)
-                    <p>📞 {{ $school->phone }}</p>
-                    @endif
-                    @if($school->email)
-                    <p>✉️ {{ $school->email }}</p>
-                    @endif
-                </div>
-
-                <!-- Action -->
-                <div class="mt-4">
-                    <a
-                        href="#"
-                        class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700">
-                        View School →
-                    </a>
-                </div>
+                @if($school->address)
+                <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex items-center gap-2">
+                    <x-lucide-map-pin class="w-4 h-4 text-gray-400" />
+                    <span>{{ $school->address }}</span>
+                </p>
+                @endif
             </div>
-        </div>
+        </a>
         @empty
         <div class="col-span-full bg-white rounded-xl p-6 text-center text-gray-500">
             No schools found.
@@ -174,7 +160,9 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($courses as $course)
-        <div class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6 flex flex-col">
+        <a
+            href="{{ route('course.show', $course) }}"
+            class="bg-white border rounded-2xl shadow hover:shadow-lg transition p-6 flex flex-col">
 
             <!-- Course Title -->
             <h2 class="text-lg font-semibold text-gray-800 mb-1">
@@ -191,33 +179,27 @@
             <!-- Meta Info -->
             <div class="flex flex-wrap gap-2 text-xs mt-auto">
                 @if($course->level)
-                <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">
+                <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded flex items-center gap-1">
+                    <x-lucide-bar-chart-3 class="w-4 h-4 text-indigo-400" />
                     {{ $course->level->name }}
                 </span>
                 @endif
 
                 @if($course->affiliation)
-                <span class="bg-green-100 text-green-700 px-2 py-1 rounded">
+                <span class="bg-green-100 text-green-700 px-2 py-1 rounded flex items-center gap-1">
+                    <x-lucide-award class="w-4 h-4 text-green-400" />
                     {{ $course->affiliation->name }}
                 </span>
                 @endif
 
                 @if($course->duration)
-                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded flex items-center gap-1">
+                    <x-lucide-clock class="w-4 h-4 text-gray-400" />
                     {{ $course->duration }}
                 </span>
                 @endif
             </div>
-
-            <!-- Action -->
-            <div class="mt-4">
-                <a
-                    href="{{ route('course.show', $course) }}"
-                    class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700">
-                    View Details →
-                </a>
-            </div>
-        </div>
+        </a>
         @empty
         <div class="col-span-full bg-white rounded-xl p-6 text-center text-gray-500">
             No courses available.

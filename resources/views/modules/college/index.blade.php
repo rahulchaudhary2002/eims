@@ -5,10 +5,10 @@
 @section('content')
 
 <!-- Page Header -->
-<div class="mb-8">
-    <div class="bg-white rounded-2xl shadow p-6">
-        <h1 class="text-2xl font-bold text-gray-800">Colleges</h1>
-        <p class="text-sm text-gray-500 mt-1">
+<div class="mb-10">
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white">
+        <h1 class="text-3xl font-bold">Colleges</h1>
+        <p class="mt-2 text-indigo-100">
             Browse active colleges and institutions
         </p>
     </div>
@@ -17,7 +17,7 @@
 <!-- Colleges Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     @forelse ($colleges as $college)
-    <div class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
+    <a href="#" class="bg-white border rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
 
         <!-- Cover Image -->
         <div class="h-32 bg-gray-100">
@@ -45,30 +45,25 @@
                 </div>
             </div>
 
-            <p class="text-sm text-gray-600 mb-3 line-clamp-2">
-                {{ $college->address ?? 'Address not available.' }}
+            @if($college->affiliations)
+            <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex items-center gap-2">
+                <x-lucide-award class="w-4 h-4 text-gray-400" />
+                <span>
+                    @foreach($college->affiliations as $affiliation)
+                    {{ $affiliation->name }}@if(!$loop->last), @endif
+                    @endforeach
+                </span>
             </p>
+            @endif
 
-            <!-- Contact -->
-            <div class="text-sm text-gray-500 space-y-1">
-                @if($college->phone)
-                <p>📞 {{ $college->phone }}</p>
-                @endif
-                @if($college->email)
-                <p>✉️ {{ $college->email }}</p>
-                @endif
-            </div>
-
-            <!-- Actions -->
-            <div class="mt-4">
-                <a
-                    href="#"
-                    class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-700">
-                    View College →
-                </a>
-            </div>
+            @if($college->address)
+            <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex items-center gap-2">
+                <x-lucide-map-pin class="w-4 h-4 text-gray-400" />
+                <span>{{ $college->address }}</span>
+            </p>
+            @endif
         </div>
-    </div>
+    </a>
     @empty
     <div class="col-span-full bg-white rounded-xl p-6 text-center text-gray-500">
         No colleges found.
