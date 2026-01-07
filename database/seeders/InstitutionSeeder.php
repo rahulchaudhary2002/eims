@@ -4,14 +4,14 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Institution;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class InstitutionSeeder extends Seeder
 {
     public function run(): void
     {
         $institutions = [
-            // === 5 SCHOOLS ===
             [
                 'name' => 'Budhanilkantha School',
                 'address' => 'Budhanilkantha, Kathmandu, Nepal',
@@ -19,8 +19,8 @@ class InstitutionSeeder extends Seeder
                 'email' => 'info@bnks.edu.np',
                 'established_year' => 1972,
                 'type' => 'school',
-                'logo' => 'institutions/logos/bnks.png',
-                'cover_image' => 'institutions/covers/bnks.jpg',
+                'logo_filename' => 'budhanilkantha-logo.png',
+                'cover_filename' => 'budhanilkantha-cover.jpg',
                 'is_active' => true,
             ],
             [
@@ -30,8 +30,8 @@ class InstitutionSeeder extends Seeder
                 'email' => 'info@las.edu.np',
                 'established_year' => 1986,
                 'type' => 'school',
-                'logo' => 'institutions/logos/las.png',
-                'cover_image' => 'institutions/covers/las.jpg',
+                'logo_filename' => 'little-angels-logo.png',
+                'cover_filename' => 'little-angels-cover.jpg',
                 'is_active' => true,
             ],
             [
@@ -41,8 +41,8 @@ class InstitutionSeeder extends Seeder
                 'email' => 'info@sxsm.edu.np',
                 'established_year' => 1951,
                 'type' => 'school',
-                'logo' => 'institutions/logos/sxs.png',
-                'cover_image' => 'institutions/covers/sxs.jpg',
+                'logo_filename' => 'sxs-logo.jpg',
+                'cover_filename' => 'sxs-cover.jpg',
                 'is_active' => true,
             ],
             [
@@ -52,8 +52,8 @@ class InstitutionSeeder extends Seeder
                 'email' => 'info@gems.edu.np',
                 'established_year' => 2000,
                 'type' => 'school',
-                'logo' => 'institutions/logos/gems.png',
-                'cover_image' => 'institutions/covers/gems.jpg',
+                'logo_filename' => 'gems-logo.png',
+                'cover_filename' => 'gems-cover.jpg',
                 'is_active' => true,
             ],
             [
@@ -63,12 +63,10 @@ class InstitutionSeeder extends Seeder
                 'email' => 'info@lsnepal.com',
                 'established_year' => 1954,
                 'type' => 'school',
-                'logo' => 'institutions/logos/lincoln.png',
-                'cover_image' => 'institutions/covers/lincoln.jpg',
+                'logo_filename' => 'lincoln-logo.jpg',
+                'cover_filename' => 'lincoln-cover.jpg',
                 'is_active' => true,
             ],
-
-            // === 5 COLLEGES ===
             [
                 'name' => 'St. Xavier\'s College',
                 'address' => 'Maitighar, Kathmandu, Nepal',
@@ -76,8 +74,8 @@ class InstitutionSeeder extends Seeder
                 'email' => 'info@sxc.edu.np',
                 'established_year' => 1988,
                 'type' => 'college',
-                'logo' => 'institutions/logos/sxc.png',
-                'cover_image' => 'institutions/covers/sxc.jpg',
+                'logo_filename' => 'sxc-logo.jpg',
+                'cover_filename' => 'sxc-cover.jpg',
                 'is_active' => true,
             ],
             [
@@ -87,8 +85,8 @@ class InstitutionSeeder extends Seeder
                 'email' => 'info@keckist.edu.np',
                 'established_year' => 1998,
                 'type' => 'college',
-                'logo' => 'institutions/logos/kec.png',
-                'cover_image' => 'institutions/covers/kec.jpg',
+                'logo_filename' => 'kec-logo.jpg',
+                'cover_filename' => 'kec-cover.jpg',
                 'is_active' => true,
             ],
             [
@@ -98,8 +96,8 @@ class InstitutionSeeder extends Seeder
                 'email' => 'info@ncit.edu.np',
                 'established_year' => 2001,
                 'type' => 'college',
-                'logo' => 'institutions/logos/ncit.png',
-                'cover_image' => 'institutions/covers/ncit.jpg',
+                'logo_filename' => 'ncit-logo.jpeg',
+                'cover_filename' => 'ncit-cover.jpg',
                 'is_active' => true,
             ],
             [
@@ -109,8 +107,8 @@ class InstitutionSeeder extends Seeder
                 'email' => 'info@trinitycollege.edu.np',
                 'established_year' => 1999,
                 'type' => 'college',
-                'logo' => 'institutions/logos/trinity.png',
-                'cover_image' => 'institutions/covers/trinity.jpg',
+                'logo_filename' => 'trinity-logo.jpg',
+                'cover_filename' => 'trinity-cover.jpg',
                 'is_active' => true,
             ],
             [
@@ -120,14 +118,64 @@ class InstitutionSeeder extends Seeder
                 'email' => 'info@prime.edu.np',
                 'established_year' => 1999,
                 'type' => 'college',
-                'logo' => 'institutions/logos/prime.png',
-                'cover_image' => 'institutions/covers/prime.jpg',
+                'logo_filename' => 'prime-logo.jpeg',
+                'cover_filename' => 'prime-cover.jpeg',
                 'is_active' => true,
             ],
         ];
 
-        foreach ($institutions as $institution) {
-            Institution::create($institution);
+        foreach ($institutions as $data) {
+            // Copy logo
+            $publicLogoPath = 'assets/images/institutions/' . $data['logo_filename'];
+            $storageLogoPath = 'institutions/logos/' . $data['logo_filename'];
+
+            if (File::exists(public_path($publicLogoPath))) {
+                // Use the public disk
+                Storage::disk('public')->makeDirectory('institutions/logos');
+
+                Storage::disk('public')->put(
+                    $storageLogoPath,
+                    File::get(public_path($publicLogoPath))
+                );
+
+                $this->command?->info("Logo copied: {$data['logo_filename']}");
+            } else {
+                $this->command?->warn("Logo not found: {$publicLogoPath}");
+                $storageLogoPath = null;
+            }
+
+            // Copy cover
+            $publicCoverPath = 'assets/images/institutions/' . $data['cover_filename'];
+            $storageCoverPath = 'institutions/covers/' . $data['cover_filename'];
+
+            if (File::exists(public_path($publicCoverPath))) {
+                // Use the public disk
+                Storage::disk('public')->makeDirectory('institutions/covers');
+
+                Storage::disk('public')->put(
+                    $storageCoverPath,
+                    File::get(public_path($publicCoverPath))
+                );
+
+                $this->command?->info("Cover copied: {$data['cover_filename']}");
+            } else {
+                $this->command?->warn("Cover not found: {$publicCoverPath}");
+                $storageCoverPath = null;
+            }
+
+            Institution::create([
+                'name' => $data['name'],
+                'address' => $data['address'],
+                'phone' => $data['phone'],
+                'email' => $data['email'],
+                'established_year' => $data['established_year'],
+                'type' => $data['type'],
+                'logo' => $storageLogoPath,
+                'cover_image' => $storageCoverPath,
+                'is_active' => $data['is_active'],
+            ]);
+
+            $this->command?->info("Institution created: {$data['name']}");
         }
     }
 }
