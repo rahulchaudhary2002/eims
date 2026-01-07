@@ -16,6 +16,72 @@ body {
 
 .no-tailwind * {
   all: revert;
+  font-size: medium;
+}
+
+.no-tailwind h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.no-tailwind h2 {
+  font-size: 1.5em;
+  margin: 0.83em 0;
+}
+
+.no-tailwind h3 {
+  font-size: 1.17em;
+  margin: 1em 0;
+}
+
+.no-tailwind h4 {
+  font-size: 1em;
+  margin: 1.33em 0;
+}
+
+.no-tailwind h5 {
+  font-size: 0.83em;
+  margin: 1.67em 0;
+}
+
+.no-tailwind h6 {
+  font-size: 0.75em;
+  margin: 2.33em 0;
+}
+
+.no-tailwind table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  display: block;
+  overflow-x: auto;
+}
+
+.no-tailwind thead {
+  background-color: #f3f4f6;
+}
+
+.no-tailwind th,
+.no-tailwind td {
+  padding: 0.75em 1em;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.no-tailwind th {
+  font-weight: 600;
+  color: #374151;
+}
+
+.no-tailwind tr:last-child td {
+  border-bottom: none;
+}
+
+.no-tailwind tbody tr:hover {
+  background-color: #f1f5f9;
 }
 
 .nav-link.active {
