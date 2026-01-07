@@ -4,43 +4,53 @@
 
 @section('content')
 
-{{-- Icon --}}
-<div class="flex items-center gap-3 mb-6">
-    <div class="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center">
-        <x-lucide-graduation-cap class="w-14 h-14 text-blue-600" />
-    </div>
-    <div>
-        {{-- Course Name --}}
-        <p class="text-3xl font-semibold text-gray-900">
-            {{ $course->display_name }}
-        </p>
+{{-- HERO --}}
+<div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-blue-600 to-purple-600 p-8 mb-8 shadow-xl">
+    <div class="absolute inset-0 bg-white/10 backdrop-blur-2xl"></div>
 
-        {{-- Affiliation --}}
-        <p class="mt-1 text-lg text-gray-700">
-            {{ $course->affiliation->name }}
-        </p>
+    <div class="relative flex items-center gap-6 text-white">
+        <div class="w-24 h-24 rounded-2xl bg-white/90 flex items-center justify-center shadow-lg">
+            <x-lucide-graduation-cap class="w-14 h-14 text-indigo-600" />
+        </div>
 
-        {{-- Level · Duration --}}
-        <p class="mt-1 text-sm text-gray-500">
-            {{ $course->level->name }} · {{ $course->duration }}
-        </p>
+        <div>
+            <h1 class="text-4xl font-bold leading-tight">
+                {{ $course->display_name }}
+            </h1>
+
+            <p class="mt-1 text-lg text-indigo-100">
+                {{ $course->affiliation->name }}
+            </p>
+
+            <p class="mt-2 inline-flex items-center gap-2 text-sm text-indigo-100">
+                <span class="px-3 py-1 bg-white/20 rounded-full">
+                    {{ $course->level->name }}
+                </span>
+                <span class="px-3 py-1 bg-white/20 rounded-full">
+                    {{ $course->duration }}
+                </span>
+            </p>
+        </div>
     </div>
 </div>
 
-<div class="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
+<div class="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
     {{-- LEFT SIDEBAR --}}
     <aside class="lg:col-span-3">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sticky top-24">
-            {{-- Dynamic Section Menu --}}
-            <ul class="space-y-2 text-base" id="course-nav">
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 sticky top-24">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase mb-4">
+                Course Sections
+            </h3>
+
+            <ul class="space-y-1" id="course-nav">
                 @foreach($course->descriptions->sortBy('order')->values() as $key => $section)
                 <li>
                     <a href="#section-{{ $key + 1 }}"
                         data-section-link
-                        class="nav-link block px-3 py-2 rounded-lg
-                            text-gray-700 hover:text-blue-600 hover:bg-blue-50
-                            transition">
+                        class="nav-link group flex items-center gap-3 px-4 py-2 rounded-xl
+                          text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
+                        <span class="w-1 h-1 rounded-full bg-gray-300 group-hover:bg-indigo-600"></span>
                         {{ $section->title }}
                     </a>
                 </li>
@@ -48,6 +58,7 @@
             </ul>
         </div>
     </aside>
+
 
     {{-- MAIN CONTENT --}}
     <main class="lg:col-span-6 space-y-5">
@@ -177,8 +188,6 @@
 
         // Scroll event triggers activation
         window.addEventListener('scroll', activateLink);
-
-        // Do NOT run activateLink on load — so no link is active initially
     });
 </script>
 
