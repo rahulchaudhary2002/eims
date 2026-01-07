@@ -64,7 +64,7 @@
     <main class="lg:col-span-6 space-y-5">
 
         {{-- COURSE HEADER --}}
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="bg-white">
             <h1 class="text-3xl font-bold text-gray-900">
                 {{ $course->name }}
             </h1>
@@ -75,7 +75,7 @@
             </p>
 
             @if($course->description)
-            <p class="mt-4 text-gray-700 leading-relaxed">
+            <p class="mt-4 text-lg leading-relaxed">
                 {{ $course->description }}
             </p>
             @endif
@@ -84,16 +84,10 @@
         {{-- COURSE SECTIONS --}}
         @forelse($course->descriptions->sortBy('order')->values() as $key => $section)
         <section id="section-{{ $key + 1 }}"
-            class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 scroll-mt-28">
-
-            <h2 class="text-2xl font-semibold text-gray-900 mb-4">
-                {{ $section->title }}
-            </h2>
-
+            class="bg-white border border-gray-200 rounded-xl px-6 scroll-mt-28">
             <div class="prose max-w-none prose-blue no-tailwind">
                 {!! $section->content !!}
             </div>
-
         </section>
         @empty
         <div class="bg-white rounded-xl border border-gray-200 p-6 text-center text-gray-500">
