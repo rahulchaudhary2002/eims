@@ -50,7 +50,15 @@ class InstitutionController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $institution = Institution::create([$validated, 'is_active' => $request->is_active ?? false]);
+        $institution = Institution::create([
+            'name' => $validated['name'],
+            'address' => $validated['address'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'established_year' => $validated['established_year'] ?? null,
+            'type' => $validated['type'],
+            'is_active' => $request->is_active ?? false
+        ]);
 
         // Sync affiliations if provided
         if ($request->has('affiliations')) {
@@ -106,7 +114,15 @@ class InstitutionController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $institution->update([$validated, 'is_active' => $request->is_active ?? false]);
+        $institution->update([
+            'name' => $validated['name'],
+            'address' => $validated['address'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'established_year' => $validated['established_year'] ?? null,
+            'type' => $validated['type'],
+            'is_active' => $request->is_active ?? false
+        ]);
 
         // Sync affiliations
         if ($request->has('affiliations')) {
