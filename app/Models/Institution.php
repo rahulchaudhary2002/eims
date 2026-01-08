@@ -35,4 +35,9 @@ class Institution extends Model
     {
         return $this->belongsToMany(Affiliation::class, 'affiliation_institution');
     }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'institution_course');
+    }
 }

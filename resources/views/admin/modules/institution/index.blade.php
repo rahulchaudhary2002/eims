@@ -34,9 +34,11 @@
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Type</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Affiliations</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Courses</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Email</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Phone</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Established Year</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
@@ -66,6 +68,22 @@
                                 <span class="text-gray-400 text-sm">None</span>
                                 @endif
                             </td>
+                            <td class="px-6 py-4 text-sm text-gray-900">
+                                @if($institution->courses->count() > 0)
+                                @foreach($institution->courses->take(2) as $course)
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded mr-1 mb-1">
+                                    {{ $course->name }}
+                                </span>
+                                @endforeach
+                                @if($institution->courses->count() > 2)
+                                <span class="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">
+                                    +{{ $institution->courses->count() - 2 }} more
+                                </span>
+                                @endif
+                                @else
+                                <span class="text-gray-400 text-sm">None</span>
+                                @endif
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 @if($institution->email)
                                 <a href="mailto:{{ $institution->email }}" class="text-blue-600 hover:text-blue-800">
@@ -85,6 +103,11 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $institution->established_year ?: 'N/A' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $institution->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                    {{ $institution->is_active ? 'Active' : 'Inactive' }}
+                                </span>
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-2">
                                     <a href="{{ route('admin.institution.show', $institution) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-colors duration-150 flex items-center shadow-sm hover:shadow">
@@ -108,7 +131,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="10" class="px-6 py-12 text-center text-gray-500">
                                 <x-lucide-inbox class="w-16 h-16 mx-auto mb-4 text-gray-300" />
                                 <p class="text-lg font-medium">No institutions found</p>
                                 <p class="text-sm mt-1">Get started by adding your first institution.</p>

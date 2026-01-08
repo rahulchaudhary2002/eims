@@ -33,7 +33,8 @@ class DatabaseSeeder extends Seeder
             VendorInstitutionSeeder::class,
             CourseDescriptionSeeder::class,
             QuestionSeeder::class,
-            ReplySeeder::class
+            ReplySeeder::class,
+            InstitutionCourseSeeder::class,
         ]);
     }
 }

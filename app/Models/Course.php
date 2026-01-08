@@ -71,4 +71,9 @@ class Course extends Model
         return $this->hasMany(CourseDescription::class)
             ->orderBy('order');
     }
+
+    public function institutions()
+    {
+        return $this->belongsToMany(Institution::class, 'institution_course');
+    }
 }

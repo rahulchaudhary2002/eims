@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Institution;
 use App\Models\Affiliation;
+use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -16,8 +17,7 @@ class InstitutionController extends Controller
      */
     public function index(): View
     {
-        $institutions = Institution::with('affiliations')->paginate(10);
-
+        $institutions = Institution::with(['affiliations', 'courses'])->paginate(10);
         return view('admin.modules.institution.index', compact('institutions'));
     }
 
@@ -27,7 +27,8 @@ class InstitutionController extends Controller
     public function create(): View
     {
         $affiliations = Affiliation::active()->get();
-        return view('admin.modules.institution.create', compact('affiliations'));
+        $courses = Course::active()->get();
+        return view('admin.modules.institution.create', compact('affiliations', 'courses'));
     }
 
     /**
@@ -44,6 +45,8 @@ class InstitutionController extends Controller
             'type' => 'required|in:college,school',
             'affiliations' => 'nullable|array',
             'affiliations.*' => 'exists:affiliations,id',
+            'courses' => 'nullable|array',
+            'courses.*' => 'exists:courses,id',
             'is_active' => 'boolean',
         ]);
 
@@ -52,6 +55,11 @@ class InstitutionController extends Controller
         // Sync affiliations if provided
         if ($request->has('affiliations')) {
             $institution->affiliations()->sync($request->affiliations);
+        }
+
+        // Sync courses if provided
+        if ($request->has('courses')) {
+            $institution->courses()->sync($request->courses);
         }
 
         return redirect()->route('admin.institution.index')
@@ -63,7 +71,7 @@ class InstitutionController extends Controller
      */
     public function show(Institution $institution): View
     {
-        $institution->load('affiliations');
+        $institution->load(['affiliations', 'courses']);
         return view('admin.modules.institution.show', compact('institution'));
     }
 
@@ -73,9 +81,10 @@ class InstitutionController extends Controller
     public function edit(Institution $institution): View
     {
         $affiliations = Affiliation::active()->get();
-        $institution->load('affiliations');
+        $courses = Course::active()->get();
+        $institution->load(['affiliations', 'courses']);
 
-        return view('admin.modules.institution.edit', compact('institution', 'affiliations'));
+        return view('admin.modules.institution.edit', compact('institution', 'affiliations', 'courses'));
     }
 
     /**
@@ -92,6 +101,8 @@ class InstitutionController extends Controller
             'type' => 'required|in:college,school',
             'affiliations' => 'nullable|array',
             'affiliations.*' => 'exists:affiliations,id',
+            'courses' => 'nullable|array',
+            'courses.*' => 'exists:courses,id',
             'is_active' => 'boolean',
         ]);
 
@@ -104,6 +115,13 @@ class InstitutionController extends Controller
             $institution->affiliations()->detach();
         }
 
+        // Sync courses
+        if ($request->has('courses')) {
+            $institution->courses()->sync($request->courses);
+        } else {
+            $institution->courses()->detach();
+        }
+
         return redirect()->route('admin.institution.index')
             ->with('success', 'Institution updated successfully.');
     }
@@ -113,8 +131,9 @@ class InstitutionController extends Controller
      */
     public function destroy(Institution $institution): RedirectResponse
     {
-        // Detach all affiliations before deleting
+        // Detach all relations before deleting
         $institution->affiliations()->detach();
+        $institution->courses()->detach();
         $institution->delete();
 
         return redirect()->route('admin.institution.index')
