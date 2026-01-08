@@ -13,9 +13,7 @@
     .choices__inner {
         background-color: #ffffff !important;
         border-radius: 0.5rem !important;
-        /* rounded-lg */
         border: 1px solid #d1d5db !important;
-        /* gray-300 */
         padding: 4px 8px !important;
         min-height: 48px;
         display: flex;
@@ -24,7 +22,6 @@
 
     .choices__list--multiple .choices__item {
         background-color: #3b82f6 !important;
-        /* blue-500 */
         border: 1px solid #2563eb !important;
         border-radius: 4px !important;
         padding: 2px 8px !important;
@@ -33,7 +30,6 @@
 
     .choices__list--multiple .choices__item.is-highlighted {
         background-color: #2563eb !important;
-        /* blue-600 */
     }
 
     .choices[data-type*="select-one"] .choices__inner {
@@ -121,11 +117,10 @@
                     <div class="md:col-span-2">
                         <label for="affiliations" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
                             <x-lucide-layers class="w-5 h-5 mr-2 text-blue-500" />
-                            Affiliations *
+                            Affiliations
                         </label>
                         <select name="affiliations[]" id="affiliations" multiple
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg @error('affiliations') border-red-500 @enderror"
-                            required>
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg @error('affiliations') border-red-500 @enderror">
                             @foreach($affiliations as $affiliation)
                             <option value="{{ $affiliation->id }}" {{ (collect(old('affiliations'))->contains($affiliation->id)) ? 'selected' : '' }}>
                                 {{ $affiliation->name }}
@@ -133,6 +128,27 @@
                             @endforeach
                         </select>
                         @error('affiliations')
+                        <p class="text-red-500 text-sm mt-1 flex items-center">
+                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label for="courses" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                            <x-lucide-book-open class="w-5 h-5 mr-2 text-blue-500" />
+                            Courses
+                        </label>
+                        <select name="courses[]" id="courses" multiple
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg @error('courses') border-red-500 @enderror">
+                            @foreach($courses as $course)
+                            <option value="{{ $course->id }}" {{ (collect(old('courses'))->contains($course->id)) ? 'selected' : '' }}>
+                                {{ $course->name }} ({{ $course->code }})
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('courses')
                         <p class="text-red-500 text-sm mt-1 flex items-center">
                             <x-lucide-alert-circle class="w-4 h-4 mr-1" />
                             {{ $message }}
@@ -239,11 +255,25 @@
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const element = document.getElementById('affiliations');
-        if (element) {
-            const choices = new Choices(element, {
+        // Initialize affiliations select
+        const affiliationsElement = document.getElementById('affiliations');
+        if (affiliationsElement) {
+            const affiliationsChoices = new Choices(affiliationsElement, {
                 removeItemButton: true,
                 placeholderValue: 'Select affiliations...',
+                searchEnabled: true,
+                shouldSort: false,
+                itemSelectText: '',
+                noResultsText: 'No matches found',
+            });
+        }
+
+        // Initialize courses select
+        const coursesElement = document.getElementById('courses');
+        if (coursesElement) {
+            const coursesChoices = new Choices(coursesElement, {
+                removeItemButton: true,
+                placeholderValue: 'Select courses...',
                 searchEnabled: true,
                 shouldSort: false,
                 itemSelectText: '',
