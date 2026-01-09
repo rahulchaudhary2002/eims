@@ -55,6 +55,17 @@
                     </a>
                 </li>
                 @endforeach
+                @if($course->institutions->count() > 0)
+                <li>
+                    <a href="#section-offered-by"
+                        data-section-link
+                        class="nav-link group flex items-center gap-3 px-4 py-2 rounded-xl
+                          text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition">
+                        <span class="w-1 h-1 rounded-full bg-gray-300 group-hover:bg-indigo-600"></span>
+                        Offered By
+                    </a>
+                </li>
+                @endif
             </ul>
         </div>
     </aside>
@@ -80,6 +91,64 @@
             </p>
             @endif
         </div>
+
+        {{-- OFFERED BY SECTION --}}
+        @if($course->institutions->count() > 0)
+        <section id="section-offered-by">
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    Institution Offering This Course
+                </h2>
+
+                <div class="space-y-4">
+                    @foreach($course->institutions as $institution)
+                    <div class="flex max-sm:flex-col sm:items-center sm:justify-between gap-4 p-4 rounded-xl border border-gray-200 hover:shadow-sm transition">
+
+                        {{-- Left: Logo + Info --}}
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
+                                @if($institution->logo)
+                                <img
+                                    src="{{ Storage::url($institution->logo) }}"
+                                    alt="{{ $institution->name }} Logo"
+                                    class="object-contain h-full w-full">
+                                @else
+                                <x-lucide-building class="w-8 h-8 text-gray-400" />
+                                @endif
+                            </div>
+
+                            <div class="flex flex-col">
+                                <a
+                                    href="{{ route('institution.show', [$institution->type, $institution->slug]) }}"
+                                    class="text-base font-semibold text-gray-800 hover:text-indigo-600 transition">
+                                    {{ $institution->name }}
+                                </a>
+                                <span class="text-sm text-gray-500">
+                                    {{ $institution->address }}
+                                </span>
+                            </div>
+                        </div>
+
+                        @php
+                        $admission = $institution->admissions()->whereHas('courses', function($query) use ($course) {
+                        $query->where('courses.id', $course->id);
+                        })->first()
+                        @endphp
+
+                        @if($admission)
+                        <a
+                            href="{{ route('admission.apply', $admission) }}"
+                            class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition whitespace-nowrap self-start sm:self-auto">
+                            Apply Now
+                            <x-lucide-arrow-right class="w-4 h-4" />
+                        </a>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+        @endif
 
         {{-- COURSE SECTIONS --}}
         @forelse($course->descriptions->sortBy('order')->values() as $key => $section)
