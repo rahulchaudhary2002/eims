@@ -53,4 +53,9 @@ class Institution extends Model
     {
         return $this->belongsToMany(Course::class, 'institution_course');
     }
+
+    public function admissions()
+    {
+        return $this->hasMany(Admission::class);
+    }
 }
