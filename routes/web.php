@@ -51,6 +51,7 @@ Route::prefix('forum/question')->name('forum.')->group(function () {
 });
 
 Route::prefix('admission')->name('admission.')->group(function () {
+    Route::get('/application', [AdmissionController::class, 'myApplications'])->name('application')->middleware('auth');
     Route::get('/', [AdmissionController::class, 'index'])->name('index');
     Route::get('/{admission:slug}', [AdmissionController::class, 'show'])->name('show');
     Route::get('/apply/{admission:slug}', [AdmissionController::class, 'apply'])->name('apply')->middleware('auth');

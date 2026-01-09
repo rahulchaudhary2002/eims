@@ -50,4 +50,14 @@ class AdmissionController extends Controller
         return redirect()->route('admission.show', $admission->slug)
             ->with('success', 'Your application has been submitted successfully.');
     }
+
+    public function myApplications()
+    {
+        $applications = AdmissionApplication::where('user_id', Auth::id())
+            ->with('admission')
+            ->latest()
+            ->paginate(10);
+
+        return view('modules.admission.my_applications', compact('applications'));
+    }
 }

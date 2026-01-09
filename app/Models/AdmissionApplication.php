@@ -20,4 +20,19 @@ class AdmissionApplication extends Model
         'course_id',
         'grade',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function admission()
+    {
+        return $this->belongsTo(Admission::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
 }
