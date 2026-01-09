@@ -3,6 +3,7 @@
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReplyController;
@@ -41,6 +42,10 @@ Route::prefix('forum/question')->name('forum.')->group(function () {
 
     Route::get('/{question}', [QuestionController::class, 'show'])->name('question.show');
 });
+
+Route::get('/{institution_type}/{institution_slug}', [InstitutionController::class, 'show'])->name('institution.show');
+Route::get('/{institution_type}/{institution_slug}/query', [InstitutionController::class, 'query'])->name('institution.query');
+Route::post('/{institution_type}/{institution_slug}/query/store', [InstitutionController::class, 'storeQuery'])->name('institution.query.store');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin/auth.php';

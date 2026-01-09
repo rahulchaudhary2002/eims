@@ -17,7 +17,7 @@
 <!-- Schools Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     @forelse ($schools as $school)
-    <a href="#" class="bg-white border rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
+    <a href="{{ route('institution.show', [$school->type, $school->slug]) }}" class="bg-white border rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
 
         <!-- Cover Image -->
         <div class="h-32 bg-gray-100">
