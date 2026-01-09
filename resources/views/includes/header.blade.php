@@ -95,7 +95,7 @@ return $currentRoute === $routeName
 <nav class="bg-white shadow-sm border-b">
     <div class="container max-w-7xl mx-auto px-4">
         <div class="flex justify-center">
-            <ul class="flex space-x-8 py-2">
+            <ul class="flex space-x-4 py-2">
                 <li>
                     <a href="{{ url('/') }}"
                         class="px-3 py-2 {{ $isActive('home') }} transition-colors flex items-center gap-2">
@@ -133,6 +133,14 @@ return $currentRoute === $routeName
                         class="px-3 py-2 {{ $isActive('forum.question.index') }} transition-colors flex items-center gap-2">
                         <x-lucide-message-square class="w-4 h-4" />
                         Forum
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('admission.index') }}"
+                        class="px-3 py-2 {{ $isActive('admission.index') }} transition-colors flex items-center gap-2">
+                        <x-lucide-clipboard-list class="w-4 h-4" />
+                        Admission
                     </a>
                 </li>
             </ul>
