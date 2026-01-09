@@ -66,4 +66,9 @@ class Admission extends Model
     {
         return $this->admission_type === 'grade';
     }
+
+    public function applications()
+    {
+        return $this->hasMany(AdmissionApplication::class);
+    }
 }

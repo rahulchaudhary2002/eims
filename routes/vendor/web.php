@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Vendor\AdmissionApplicationController;
 use App\Http\Controllers\Vendor\AdmissionController;
 use App\Http\Controllers\Vendor\EnquiryController;
 use App\Http\Controllers\Vendor\InstitutionController;
@@ -27,4 +28,8 @@ Route::prefix('vendor')->name('vendor.')->middleware(['auth:vendor'])->group(fun
     });
 
     Route::resource('admission', AdmissionController::class);
+
+    Route::prefix('admission/{admission}')->name('admission.')->group(function () {
+        Route::resource('application', AdmissionApplicationController::class)->only(['index', 'show']);
+    });
 });
