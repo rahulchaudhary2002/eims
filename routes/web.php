@@ -10,6 +10,12 @@ use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Route;
 
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin/auth.php';
+require __DIR__ . '/admin/web.php';
+require __DIR__ . '/vendor/auth.php';
+require __DIR__ . '/vendor/web.php';
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
@@ -46,9 +52,3 @@ Route::prefix('forum/question')->name('forum.')->group(function () {
 Route::get('/{institution_type}/{institution_slug}', [InstitutionController::class, 'show'])->name('institution.show');
 Route::get('/{institution_type}/{institution_slug}/query', [InstitutionController::class, 'query'])->name('institution.query');
 Route::post('/{institution_type}/{institution_slug}/query/store', [InstitutionController::class, 'storeQuery'])->name('institution.query.store');
-
-require __DIR__ . '/auth.php';
-require __DIR__ . '/admin/auth.php';
-require __DIR__ . '/admin/web.php';
-require __DIR__ . '/vendor/auth.php';
-require __DIR__ . '/vendor/web.php';

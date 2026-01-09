@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Vendor\EnquiryController;
 use App\Http\Controllers\Vendor\InstitutionController;
 use App\Http\Controllers\Vendor\SettingController;
 use Illuminate\Support\Facades\Route;
@@ -16,5 +17,11 @@ Route::prefix('vendor')->name('vendor.')->middleware(['auth:vendor'])->group(fun
         Route::get('profile', [InstitutionController::class, 'profile'])->name('profile');
         Route::get('edit', [InstitutionController::class, 'edit'])->name('edit');
         Route::put('update', [InstitutionController::class, 'update'])->name('update');
+    });
+
+    Route::prefix('enquiry')->name('enquiry.')->group(function () {
+        Route::get('/', [EnquiryController::class, 'index'])->name('index');
+        Route::get('/{enquiry}', [EnquiryController::class, 'show'])->name('show');
+        Route::post('/{enquiry}/reply', [EnquiryController::class, 'reply'])->name('reply');
     });
 });

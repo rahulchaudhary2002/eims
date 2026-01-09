@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('phone');
             $table->text('message');
             $table->enum('type', ['general', 'admission', 'course', 'fee', 'scholarship', 'other'])->default('general');
-            $table->enum('status', ['pending', 'read', 'replied', 'closed'])->default('pending');
+            $table->enum('status', ['pending', 'read', 'replied'])->default('pending');
+            $table->longText('reply_message')->nullable();
+            $table->timestamp('replied_at')->nullable();
             $table->timestamps();
         });
     }
