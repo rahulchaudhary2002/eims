@@ -42,7 +42,7 @@
                 Ask Question
             </a>
             @else
-            <a href="{{ route('login') }}"
+            <a href="{{ route('forum.question.create') }}"
                 class="inline-flex items-center px-4 py-2 rounded-full bg-indigo-50 text-indigo-700 text-sm font-medium hover:bg-indigo-100">
                 Log in to ask a question
             </a>
