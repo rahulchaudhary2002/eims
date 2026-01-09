@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Vendor\AdmissionController;
 use App\Http\Controllers\Vendor\EnquiryController;
 use App\Http\Controllers\Vendor\InstitutionController;
 use App\Http\Controllers\Vendor\SettingController;
@@ -24,4 +25,6 @@ Route::prefix('vendor')->name('vendor.')->middleware(['auth:vendor'])->group(fun
         Route::get('/{enquiry}', [EnquiryController::class, 'show'])->name('show');
         Route::post('/{enquiry}/reply', [EnquiryController::class, 'reply'])->name('reply');
     });
+
+    Route::resource('admission', AdmissionController::class);
 });
