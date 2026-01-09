@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Institution;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class InstitutionSeeder extends Seeder
 {
@@ -165,6 +166,7 @@ class InstitutionSeeder extends Seeder
 
             Institution::create([
                 'name' => $data['name'],
+                'slug' => Str::slug($data['name']),
                 'address' => $data['address'],
                 'phone' => $data['phone'],
                 'email' => $data['email'],
