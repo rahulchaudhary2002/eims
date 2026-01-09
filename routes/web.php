@@ -54,6 +54,7 @@ Route::prefix('admission')->name('admission.')->group(function () {
     Route::get('/', [AdmissionController::class, 'index'])->name('index');
     Route::get('/{admission:slug}', [AdmissionController::class, 'show'])->name('show');
     Route::get('/apply/{admission:slug}', [AdmissionController::class, 'apply'])->name('apply')->middleware('auth');
+    Route::post('/apply/{admission:slug}', [AdmissionController::class, 'storeApplication'])->name('apply.store')->middleware('auth');
 });
 
 Route::get('/{institution_type}/{institution_slug}', [InstitutionController::class, 'show'])->name('institution.show');
