@@ -35,6 +35,7 @@
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Type</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Start Date</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">End Date</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Applications</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -47,6 +48,7 @@
                             <td class="px-6 py-4 text-sm text-gray-900">{{ ucfirst($admission->admission_type) }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ \Carbon\Carbon::parse($admission->start_date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ \Carbon\Carbon::parse($admission->end_date)->format('Y-m-d') }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $admission->applications->count() }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">
                                 @if($admission->is_open)
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -60,6 +62,9 @@
                             </td>
                             <td class="px-6 py-4 text-sm font-medium">
                                 <div class="flex space-x-2">
+                                    <a href="{{ route('vendor.admission.application.index', $admission) }}" class="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded-md text-xs flex items-center">
+                                        <x-lucide-file-text class="w-4 h-4 mr-1" /> Applications
+                                    </a>
                                     <a href="{{ route('vendor.admission.show', $admission) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs flex items-center">
                                         <x-lucide-eye class="w-4 h-4 mr-1" /> View
                                     </a>
