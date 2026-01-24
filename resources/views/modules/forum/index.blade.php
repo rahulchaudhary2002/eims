@@ -9,7 +9,7 @@
 
     {{-- Sidebar Categories --}}
     <aside class="w-full lg:w-64">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sticky top-28">
             <h2 class="text-sm font-semibold text-gray-700 mb-3">Categories</h2>
 
             <nav class="space-y-1 text-sm">
