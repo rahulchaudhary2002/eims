@@ -43,11 +43,20 @@
                 <x-lucide-map-pin class="w-4 h-4 text-gray-400" />
                 {{ $institution->address }}
             </p>
-            <a
-                href="{{ route('institution.query', ['institution_type' => $institution->type, 'institution_slug' => $institution->slug]) }}"
-                class="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-blue-600 text-white font-medium shadow hover:bg-blue-700 transition">
-                Ask a Question
-            </a>
+            <div class="flex flex-wrap items-center gap-4">
+                <a
+                    href="{{ route('institution.query', ['institution_type' => $institution->type, 'institution_slug' => $institution->slug]) }}"
+                    class="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-blue-600 text-white font-medium shadow hover:bg-blue-700 transition">
+                    Ask a Question
+                </a>
+                @if($institution->admissions->count() > 0)
+                <a
+                    href="{{ route('institution.admissions', ['institution_type' => $institution->type, 'institution_slug' => $institution->slug]) }}"
+                    class="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 transition">
+                    Apply for Admissions
+                </a>
+                @endif
+            </div>
         </div>
 
     </div>
