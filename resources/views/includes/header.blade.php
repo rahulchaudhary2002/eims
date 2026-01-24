@@ -143,6 +143,14 @@ return $currentRoute === $routeName
                         Admission
                     </a>
                 </li>
+
+                <li>
+                    <a href="{{ route('event.index') }}"
+                        class="px-3 py-2 {{ $isActive('event.index') }} transition-colors flex items-center gap-2">
+                        <x-lucide-calendar class="w-4 h-4" />
+                        Events
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

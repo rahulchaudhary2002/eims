@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\ProfileController;
@@ -56,6 +57,11 @@ Route::prefix('admission')->name('admission.')->group(function () {
     Route::get('/{admission:slug}', [AdmissionController::class, 'show'])->name('show');
     Route::get('/apply/{admission:slug}', [AdmissionController::class, 'apply'])->name('apply')->middleware('auth');
     Route::post('/apply/{admission:slug}', [AdmissionController::class, 'storeApplication'])->name('apply.store')->middleware('auth');
+});
+
+Route::prefix('event')->name('event.')->group(function () {
+    Route::get('/', [EventController::class, 'index'])->name('index');
+    Route::get('/{event:slug}', [EventController::class, 'show'])->name('show');
 });
 
 Route::prefix('{institution_type}/{institution_slug}')->name('institution.')->group(function () {
