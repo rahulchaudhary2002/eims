@@ -4,14 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::latest()->paginate(10);
+        $now = now();
+        $status = $request->query('status', 'All');
 
-        return view('modules.event.index', compact('events'));
+        $eventsQuery = Event::query()->latest();
+
+        if ($status === 'Upcoming') {
+            $eventsQuery->where('start_date', '>', $now);
+        } elseif ($status === 'Ongoing') {
+            $eventsQuery->where('start_date', '<=', $now)
+                ->where('end_date', '>=', $now);
+        } elseif ($status === 'Past') {
+            $eventsQuery->where('end_date', '<', $now);
+        }
+
+        $events = $eventsQuery->paginate(10)->withQueryString();
+
+        return view('modules.event.index', compact('events', 'status'));
     }
 
     public function show(Event $event)
