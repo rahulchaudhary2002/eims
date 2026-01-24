@@ -12,7 +12,7 @@ return $currentRoute === $routeName
 @endphp
 
 <!-- Top Header -->
-<div class="sticky top-0 w-full bg-white z-50 border-b">
+<div class="sticky top-0 w-full bg-white z-50 shadow-sm border-b">
     <div class="container max-w-7xl mx-auto py-3 px-4">
         <div class="flex items-center justify-between relative" x-data="{ mobileOpen: false }">
 
@@ -113,7 +113,6 @@ return $currentRoute === $routeName
                 <div class="p-6 flex flex-col space-y-4">
 
                     <!-- Nav Links -->
-                    <a href="{{ url('/') }}" class="block px-4 py-2 rounded hover:bg-gray-100">Home</a>
                     <a href="{{ route('course') }}" class="block px-4 py-2 rounded hover:bg-gray-100">Course</a>
                     <a href="{{ route('school') }}" class="block px-4 py-2 rounded hover:bg-gray-100">School</a>
                     <a href="{{ route('college') }}" class="block px-4 py-2 rounded hover:bg-gray-100">College</a>
@@ -150,69 +149,55 @@ return $currentRoute === $routeName
 
         </div>
     </div>
-</div>
-
-<!-- Desktop Navigation Menu -->
-<nav class="bg-white shadow-sm border-b hidden md:block">
-    <div class="container max-w-7xl mx-auto px-4">
-        <div class="flex justify-center">
-            <ul class="flex space-x-4 py-2">
-                <li>
-                    <a href="{{ url('/') }}"
-                        class="px-3 py-2 {{ $isActive('home') }} transition-colors flex items-center gap-2">
-                        <x-lucide-home class="w-4 h-4" />
-                        Home
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('course') }}"
-                        class="px-3 py-2 {{ $isActive('course') }} transition-colors flex items-center gap-2">
-                        <x-lucide-book-open class="w-4 h-4" />
-                        Course
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('school') }}"
-                        class="px-3 py-2 {{ $isActive('school') }} transition-colors flex items-center gap-2">
-                        <x-lucide-school class="w-4 h-4" />
-                        School
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('college') }}"
-                        class="px-3 py-2 {{ $isActive('college') }} transition-colors flex items-center gap-2">
-                        <x-lucide-building-2 class="w-4 h-4" />
-                        College
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('forum.question.index') }}"
-                        class="px-3 py-2 {{ $isActive('forum.question.index') }} transition-colors flex items-center gap-2">
-                        <x-lucide-message-square class="w-4 h-4" />
-                        Forum
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('admission.index') }}"
-                        class="px-3 py-2 {{ $isActive('admission.index') }} transition-colors flex items-center gap-2">
-                        <x-lucide-clipboard-list class="w-4 h-4" />
-                        Admission
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('event.index') }}"
-                        class="px-3 py-2 {{ $isActive('event.index') }} transition-colors flex items-center gap-2">
-                        <x-lucide-calendar class="w-4 h-4" />
-                        Events
-                    </a>
-                </li>
-            </ul>
+    
+    <!-- Desktop Navigation Menu -->
+    <nav class="bg-white hidden md:block">
+        <div class="container max-w-7xl mx-auto px-4">
+            <div class="flex justify-center">
+                <ul class="flex space-x-4 py-2">
+                    <li>
+                        <a href="{{ route('course') }}"
+                            class="text-base px-3 py-2 {{ $isActive('course') }} transition-colors">
+                            Course
+                        </a>
+                    </li>
+    
+                    <li>
+                        <a href="{{ route('school') }}"
+                            class="text-base px-3 py-2 {{ $isActive('school') }} transition-colors">
+                            School
+                        </a>
+                    </li>
+    
+                    <li>
+                        <a href="{{ route('college') }}"
+                            class="text-base px-3 py-2 {{ $isActive('college') }} transition-colors">
+                            College
+                        </a>
+                    </li>
+    
+                    <li>
+                        <a href="{{ route('forum.question.index') }}"
+                            class="text-base px-3 py-2 {{ $isActive('forum.question.index') }} transition-colors">
+                            Forum
+                        </a>
+                    </li>
+    
+                    <li>
+                        <a href="{{ route('admission.index') }}"
+                            class="text-base px-3 py-2 {{ $isActive('admission.index') }} transition-colors">
+                            Admission
+                        </a>
+                    </li>
+    
+                    <li>
+                        <a href="{{ route('event.index') }}"
+                            class="text-base px-3 py-2 {{ $isActive('event.index') }} transition-colors">
+                            Events
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</div>
