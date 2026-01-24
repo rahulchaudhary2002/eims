@@ -58,4 +58,9 @@ class Institution extends Model
     {
         return $this->hasMany(Admission::class);
     }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Vendor\AdmissionApplicationController;
 use App\Http\Controllers\Vendor\AdmissionController;
 use App\Http\Controllers\Vendor\EnquiryController;
+use App\Http\Controllers\Vendor\EventController;
 use App\Http\Controllers\Vendor\InstitutionController;
 use App\Http\Controllers\Vendor\SettingController;
 use Illuminate\Support\Facades\Route;
@@ -32,4 +33,6 @@ Route::prefix('institution')->name('vendor.')->middleware(['auth:vendor'])->grou
     Route::prefix('admission/{admission}')->name('admission.')->group(function () {
         Route::resource('application', AdmissionApplicationController::class)->only(['index', 'show']);
     });
+
+    Route::resource('event', EventController::class);
 });
