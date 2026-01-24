@@ -29,17 +29,17 @@ class InstitutionController extends Controller
     public function storeQuery($institution_type, $institution_slug, Request $request)
     {
         $institution = Institution::where('type', $institution_type)
-        ->where('slug', $institution_slug)
+            ->where('slug', $institution_slug)
             ->firstOrFail();
 
-            $validated = $request->validate([
-                'full_name' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'phone' => 'required|string|max:20',
-                'type' => 'required|string|max:100',
-                'message' => 'required|string|max:2000',
-            ]);
-            
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'type' => 'required|string|max:100',
+            'message' => 'required|string|max:2000',
+        ]);
+
         Enquiry::create([
             'institution_id' => $institution->id,
             'full_name' => $validated['full_name'],
@@ -51,5 +51,16 @@ class InstitutionController extends Controller
 
         return redirect()->route('institution.query', ['institution_type' => $institution_type, 'institution_slug' => $institution_slug])
             ->with('success', 'Your question has been submitted successfully.');
+    }
+
+    public function admissions($institution_type, $institution_slug)
+    {
+        $institution = Institution::where('type', $institution_type)
+            ->where('slug', $institution_slug)
+            ->firstOrFail();
+
+        $admissions = $institution->admissions()->latest()->paginate(12);
+
+        return view('modules.institution.admission', compact('admissions', 'institution'));
     }
 }

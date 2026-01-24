@@ -58,6 +58,9 @@ Route::prefix('admission')->name('admission.')->group(function () {
     Route::post('/apply/{admission:slug}', [AdmissionController::class, 'storeApplication'])->name('apply.store')->middleware('auth');
 });
 
-Route::get('/{institution_type}/{institution_slug}', [InstitutionController::class, 'show'])->name('institution.show');
-Route::get('/{institution_type}/{institution_slug}/query', [InstitutionController::class, 'query'])->name('institution.query');
-Route::post('/{institution_type}/{institution_slug}/query/store', [InstitutionController::class, 'storeQuery'])->name('institution.query.store');
+Route::prefix('{institution_type}/{institution_slug}')->name('institution.')->group(function () {
+    Route::get('/', [InstitutionController::class, 'show'])->name('show');
+    Route::get('/query', [InstitutionController::class, 'query'])->name('query');
+    Route::post('/query/store', [InstitutionController::class, 'storeQuery'])->name('query.store');
+    Route::get('/admissions', [InstitutionController::class, 'admissions'])->name('admissions');
+});
