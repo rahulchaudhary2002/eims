@@ -7,11 +7,11 @@ use App\Http\Controllers\Vendor\InstitutionController;
 use App\Http\Controllers\Vendor\SettingController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/vendor/dashboard', function () {
+Route::get('/institution/dashboard', function () {
     return view('vendor.modules.dashboard.index');
 })->middleware(['auth:vendor', 'verified:vendor'])->name('vendor.dashboard');
 
-Route::prefix('vendor')->name('vendor.')->middleware(['auth:vendor'])->group(function () {
+Route::prefix('institution')->name('vendor.')->middleware(['auth:vendor'])->group(function () {
     Route::post('/set-current-institution', [SettingController::class, 'setCurrentInstitution'])
         ->name('set-current-institution');
 
