@@ -115,34 +115,7 @@
                     </li>
                 </ul>
             </div>
-
         </div>
-
-        <!-- Newsletter Subscription -->
-        <div class="mt-12 pt-8 border-t border-gray-800">
-            <div class="max-w-xl mx-auto text-center">
-                <h3 class="text-xl font-semibold mb-2">Stay Updated</h3>
-                <p class="text-gray-400 text-sm mb-4">
-                    Subscribe to our newsletter for the latest updates on courses and educational news.
-                </p>
-                <form class="flex gap-2 max-w-md mx-auto">
-                    <input
-                        type="email"
-                        placeholder="Enter your email"
-                        class="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-colors text-white"
-                        required
-                    />
-                    <button
-                        type="submit"
-                        class="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
-                    >
-                        <x-lucide-send class="w-4 h-4" />
-                        Subscribe
-                    </button>
-                </form>
-            </div>
-        </div>
-
     </div>
 
     <!-- Bottom Bar -->
