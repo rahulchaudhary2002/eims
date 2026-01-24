@@ -27,6 +27,19 @@ class Event extends Model
             ->saveSlugsTo('slug');
     }
 
+    public function getStatusAttribute()
+    {
+        $now = now();
+
+        if ($this->end_date < $now) {
+            return 'Past';
+        } elseif ($this->start_date > $now) {
+            return 'Upcoming';
+        } else {
+            return 'Ongoing';
+        }
+    }
+
     public function institution()
     {
         return $this->belongsTo(Institution::class);
