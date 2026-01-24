@@ -10,7 +10,7 @@ use App\Http\Controllers\Vendor\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Vendor\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('vendor')->name('vendor.')->group(function () {
+Route::prefix('institution')->name('vendor.')->group(function () {
     Route::middleware('guest:vendor')->group(function () {
 
         Route::get('login', [AuthenticatedSessionController::class, 'create'])
