@@ -35,4 +35,27 @@ class AdmissionApplicationController extends Controller
 
         return view('vendor.modules.admission.application.show', compact('admission', 'application'));
     }
+
+    public function updateStatus(Request $request, Admission $admission, AdmissionApplication $application)
+    {
+        $institution = session('current_institution');
+
+        if ($institution->id !== $admission->institution_id) {
+            abort(404);
+        }
+
+        if ($application->admission_id !== $admission->id) {
+            abort(404);
+        }
+
+        $request->validate([
+            'status' => 'required|in:pending,approved,rejected',
+        ]);
+
+        $application->status = $request->input('status');
+        $application->save();
+
+        return redirect()->route('vendor.admission.application.index', $admission->id)
+            ->with('success', 'Application status updated successfully.');
+    }
 }

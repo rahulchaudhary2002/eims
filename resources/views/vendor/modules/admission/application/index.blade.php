@@ -58,6 +58,24 @@
                                     <a href="{{ route('vendor.admission.application.show', [$admission, $application]) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs flex items-center">
                                         <x-lucide-eye class="w-4 h-4 mr-1" /> View
                                     </a>
+                                    @if($application->status === 'pending')
+                                    <form action="{{ route('vendor.admission.application.update-status', [$admission, $application]) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="status" value="approved">
+                                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-xs flex items-center">
+                                            <x-lucide-check class="w-4 h-4 mr-1" /> Approve
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('vendor.admission.application.update-status', [$admission, $application]) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="status" value="rejected">
+                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs flex items-center">
+                                            <x-lucide-x class="w-4 h-4 mr-1" /> Reject
+                                        </button>
+                                    </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

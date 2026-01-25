@@ -32,6 +32,8 @@ Route::prefix('institution')->name('vendor.')->middleware(['auth:vendor'])->grou
 
     Route::prefix('admission/{admission}')->name('admission.')->group(function () {
         Route::resource('application', AdmissionApplicationController::class)->only(['index', 'show']);
+        Route::put('application/{application}/update-status', [AdmissionApplicationController::class, 'updateStatus'])
+            ->name('application.update-status');
     });
 
     Route::resource('event', EventController::class);
