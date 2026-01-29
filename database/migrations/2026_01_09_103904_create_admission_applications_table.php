@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone');
             $table->foreignId('course_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('grade')->nullable();
+            $table->json('academic_documents');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->text('notes')->nullable();
             $table->timestamps();

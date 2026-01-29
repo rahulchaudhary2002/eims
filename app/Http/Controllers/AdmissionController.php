@@ -33,7 +33,20 @@ class AdmissionController extends Controller
             'phone'     => 'required|string|max:20',
             'course_id' => $admission->isForCourse() ? 'required|exists:courses,id' : 'nullable',
             'grade'     => $admission->isForGrade() ? 'required|string' : 'nullable',
+            'notes'     => 'nullable|string|max:1000',
+            'academic_documents'   => 'required|array|min:1',
+            'academic_documents.*' => 'file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
+
+        $documents = [];
+
+        if ($request->hasFile('academic_documents')) {
+            foreach ($request->file('academic_documents') as $file) {
+                $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('academic_documents', $filename, 'public');
+                $documents[] = $path;
+            }
+        }
 
         AdmissionApplication::create([
             'admission_id' => $admission->id,
@@ -45,6 +58,7 @@ class AdmissionController extends Controller
             'notes'        => $request->notes,
             'course_id'    => $request->course_id,
             'grade'        => $request->grade,
+            'academic_documents' => json_encode($documents),
         ]);
 
         return redirect()->route('admission.show', $admission->slug)
