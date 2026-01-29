@@ -12,4 +12,14 @@ class InstitutionAdmissionComission extends Model
         'comission_amount',
         'is_paid',
     ];
+
+    public function institution()
+    {
+        return $this->belongsTo(Institution::class);
+    }
+
+    public function admissionReward()
+    {
+        return $this->belongsTo(AdmissionReward::class);
+    }
 }
