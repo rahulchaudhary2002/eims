@@ -12,7 +12,7 @@ return $currentRoute === $routeName
 @endphp
 
 <!-- Top Header -->
-<div class="sticky top-0 w-full bg-white z-50 shadow-sm border-b">
+<div class="sticky top-0 w-full bg-white z-40 shadow-sm border-b">
     <div class="container max-w-7xl mx-auto py-3 px-4">
         <div class="flex items-center justify-between relative" x-data="{ mobileOpen: false }">
 

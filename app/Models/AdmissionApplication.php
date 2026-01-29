@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class AdmissionApplication extends Model
 {
@@ -36,5 +37,10 @@ class AdmissionApplication extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function reward()
+    {
+        return $this->hasOne(AdmissionReward::class)->where('user_id', Auth::id());
     }
 }

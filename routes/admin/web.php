@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdmissionRewardController;
 use App\Http\Controllers\Admin\AffiliationController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\InstitutionController;
@@ -17,4 +18,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::resource('affiliation', AffiliationController::class)->except('show');
     Route::resource('level', LevelController::class)->except('show');
     Route::resource('course', CourseController::class);
+
+    Route::prefix('admission/reward')->name('admission.reward.')->group(function () {
+        Route::get('/', [AdmissionRewardController::class, 'index'])->name('index');
+        Route::put('/status/{reward}/approve', [AdmissionRewardController::class, 'approve'])->name('approve');
+        Route::put('/status/{reward}/reject', [AdmissionRewardController::class, 'reject'])->name('reject');
+    });
 });

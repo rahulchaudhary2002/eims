@@ -53,10 +53,12 @@ Route::prefix('forum/question')->name('forum.')->group(function () {
 
 Route::prefix('admission')->name('admission.')->group(function () {
     Route::get('/application', [AdmissionController::class, 'myApplications'])->name('application')->middleware('auth');
+    Route::get('/reward', [AdmissionController::class, 'myRewards'])->name('reward')->middleware('auth');
     Route::get('/', [AdmissionController::class, 'index'])->name('index');
     Route::get('/{admission:slug}', [AdmissionController::class, 'show'])->name('show');
     Route::get('/apply/{admission:slug}', [AdmissionController::class, 'apply'])->name('apply')->middleware('auth');
     Route::post('/apply/{admission:slug}', [AdmissionController::class, 'storeApplication'])->name('apply.store')->middleware('auth');
+    Route::post('/application/{application:application_uuid}/reward', [AdmissionController::class, 'storeReward'])->name('application.reward.store')->middleware('auth');
 });
 
 Route::prefix('event')->name('event.')->group(function () {

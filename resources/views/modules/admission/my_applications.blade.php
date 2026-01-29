@@ -33,11 +33,17 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $index + 1 }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                <div class="mb-2">
-                                    {{ $application->admission->title ?? 'N/A' }}
-                                </div>
+                                <div class="mb-2">{{ $application->admission->title ?? 'N/A' }}</div>
                                 @if($application->status === 'approved')
-                                <a href="#" class="bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-900">Collect Reward</a>
+                                @if(!$application->reward)
+                                <button type="button"
+                                    class="bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-900 collect-reward-btn"
+                                    data-application-uuid="{{ $application->application_uuid }}">
+                                    Collect Reward
+                                </button>
+                                @else
+                                <span class="text-sm text-gray-500">Reward Requested</span>
+                                @endif
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $application->course->name ?? $application->grade ?? 'N/A' }}</td>
@@ -62,7 +68,6 @@
             </div>
             @endif
         </section>
-
     </div>
 </div>
 @endsection
