@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdmissionReward;
 use App\Models\Institution;
-use App\Models\InstitutionAdmissionComission;
+use App\Models\InstitutionAdmissionCommission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,16 +29,16 @@ class AdmissionRewardController extends Controller
             $reward->update(['status' => 'approved', 'reward' => $request->reward]);
 
             $institution = Institution::where('id', $reward->admissionApplication->admission->institution_id)->first();
-            $comission = $institution->courses()
+            $commission = $institution->courses()
                 ->where('course_id', $reward->admissionApplication->course_id)
                 ->first()
                 ->pivot
-                ->comission_amount;
+                ->commission_amount;
 
-            InstitutionAdmissionComission::create([
+            InstitutionAdmissionCommission::create([
                 'institution_id' => $institution->id,
                 'admission_reward_id' => $reward->id,
-                'comission_amount' => $comission,
+                'commission_amount' => $commission,
             ]);
 
             DB::commit();

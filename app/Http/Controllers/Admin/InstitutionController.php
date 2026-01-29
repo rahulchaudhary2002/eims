@@ -47,8 +47,8 @@ class InstitutionController extends Controller
             'affiliations.*' => 'exists:affiliations,id',
             'courses' => 'nullable|array',
             'courses.*' => 'exists:courses,id',
-            'comissions' => 'nullable|array',
-            'comissions.*' => 'nullable|numeric',
+            'commissions' => 'nullable|array',
+            'commissions.*' => 'nullable|numeric',
             'is_active' => 'boolean',
         ]);
 
@@ -73,7 +73,7 @@ class InstitutionController extends Controller
 
             foreach ($request->courses as $index => $courseId) {
                 $syncData[$courseId] = [
-                    'comission_amount' => $request->comissions[$index] ?? 0
+                    'commission_amount' => $request->commissions[$index] ?? 0
                 ];
             }
 
@@ -147,7 +147,7 @@ class InstitutionController extends Controller
 
             foreach ($request->courses as $index => $courseId) {
                 $syncData[$courseId] = [
-                    'comission_amount' => $request->comissions[$index] ?? 0
+                    'commission_amount' => $request->commissions[$index] ?? 0
                 ];
             }
 
