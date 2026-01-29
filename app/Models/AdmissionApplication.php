@@ -11,6 +11,7 @@ class AdmissionApplication extends Model
 
     protected $fillable = [
         'admission_id',
+        'application_uuid',
         'user_id',
         'full_name',
         'email',
