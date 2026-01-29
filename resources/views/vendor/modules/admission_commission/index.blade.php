@@ -35,7 +35,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course/Grade</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commission</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th> -->
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -58,9 +58,9 @@
                                     {{ $commission->is_paid ? 'Paid' : 'Pending' }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex gap-2">
+                            <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex gap-2">
                                 @if(!$commission->is_paid)
-                                <form method="POST" action="{{ route('vendor.admission.commission.pay', $commission) }}">
+                                <form method="POST" action="{{ route('vendor.admission-commission.pay', $commission) }}">
                                     @csrf
                                     @method('PUT')
                                     <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-xs flex items-center">
@@ -68,7 +68,7 @@
                                     </button>
                                 </form>
                                 @endif
-                            </td>
+                            </td> -->
                         </tr>
                         @endforeach
                     </tbody>
