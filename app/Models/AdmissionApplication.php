@@ -19,6 +19,7 @@ class AdmissionApplication extends Model
         'notes',
         'course_id',
         'grade',
+        'academic_documents',
     ];
 
     public function user()
