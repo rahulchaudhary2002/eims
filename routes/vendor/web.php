@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Vendor\AdmissionApplicationController;
+use App\Http\Controllers\Vendor\AdmissionCommissionController;
 use App\Http\Controllers\Vendor\AdmissionController;
 use App\Http\Controllers\Vendor\EnquiryController;
 use App\Http\Controllers\Vendor\EventController;
@@ -26,6 +27,11 @@ Route::prefix('institution')->name('vendor.')->middleware(['auth:vendor'])->grou
         Route::get('/', [EnquiryController::class, 'index'])->name('index');
         Route::get('/{enquiry}', [EnquiryController::class, 'show'])->name('show');
         Route::post('/{enquiry}/reply', [EnquiryController::class, 'reply'])->name('reply');
+    });
+
+    Route::prefix('admission/commission')->name('admission-commission.')->group(function () {
+        Route::get('/', [AdmissionCommissionController::class, 'index'])->name('index');
+        Route::put('/pay/{commission}', [AdmissionCommissionController::class, 'pay'])->name('pay');
     });
 
     Route::resource('admission', AdmissionController::class);

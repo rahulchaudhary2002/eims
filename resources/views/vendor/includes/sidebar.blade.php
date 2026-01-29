@@ -50,5 +50,15 @@ $sidebarOpen = session('sidebarOpen', true);
                 <span>{{ $sidebarOpen ? 'Events' : '' }}</span>
             </a>
         </li>
+
+        {{-- Admission Commission --}}
+        <li class="text-gray-600 font-semibold text-sm">
+            <a href="{{ route('vendor.admission-commission.index') }}"
+                class="flex items-center px-4 py-3 h-12 transition-all duration-300
+                {{ request()->routeIs('vendor.admission-commission.*') ? 'text-blue-500' : 'hover:text-blue-500' }}">
+                <x-lucide-percent class="w-5 h-5 mr-2" />
+                <span>{{ $sidebarOpen ? 'Admission Commission' : '' }}</span>
+            </a>
+        </li>
     </ul>
 </div>
