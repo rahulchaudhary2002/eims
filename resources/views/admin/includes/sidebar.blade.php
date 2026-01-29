@@ -74,5 +74,15 @@ $sidebarOpen = session('sidebarOpen', true);
                 <span>{{ $sidebarOpen ? 'Vendors' : '' }}</span>
             </a>
         </li>
+
+        {{-- Admission Reward --}}
+        <li class="text-gray-600 font-semibold text-sm">
+            <a href="{{ route('admin.admission.reward.index') }}"
+                class="flex items-center px-4 py-3 h-12 transition-all duration-300
+                    {{ request()->routeIs('admin.admission.reward.*') ? 'text-blue-500' : 'hover:text-blue-500' }}">
+                <x-lucide-award class="w-5 h-5 mr-2" />
+                <span>{{ $sidebarOpen ? 'Admission Reward' : '' }}</span>
+            </a>
+        </li>
     </ul>
 </div>

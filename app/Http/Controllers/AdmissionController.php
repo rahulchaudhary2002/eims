@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admission;
 use App\Models\AdmissionApplication;
+use App\Models\AdmissionReward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -87,5 +88,46 @@ class AdmissionController extends Controller
             ->paginate(10);
 
         return view('modules.admission.my_applications', compact('applications'));
+    }
+
+    public function myRewards()
+    {
+        $rewards = AdmissionReward::where('user_id', Auth::id())
+            ->latest()
+            ->paginate(10);
+        return view('modules.admission.my_rewards', compact('rewards'));
+    }
+
+    public function storeReward(Request $request, AdmissionApplication $application)
+    {
+        $existingReward = AdmissionReward::where('admission_application_id', $application->id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if ($existingReward) {
+            return redirect()->route('admission.application', 'application')
+                ->with('error', 'You have already submitted a reward request for this application.');
+        }
+
+        $request->validate([
+            'admission_receipt' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+
+        if ($request->hasFile('admission_receipt')) {
+            $file = $request->file('admission_receipt');
+            $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('admission_receipts', $filename, 'public');
+
+            // Create AdmissionReward record
+            AdmissionReward::create([
+                'user_id' => Auth::id(),
+                'admission_application_id' => $application->id,
+                'admission_receipt' => $path,
+                'status' => 'pending',
+            ]);
+
+            return redirect()->route('admission.application', 'application')
+                ->with('success', 'Your admission receipt has been submitted successfully.');
+        }
     }
 }

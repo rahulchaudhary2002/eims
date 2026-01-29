@@ -14,6 +14,7 @@
 </head>
 
 <body class="flex flex-col min-h-screen relative">
+    @yield('page-specific-modal')
     @include('includes.header')
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4">
