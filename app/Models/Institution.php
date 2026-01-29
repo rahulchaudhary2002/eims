@@ -51,7 +51,7 @@ class Institution extends Model
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'institution_course');
+        return $this->belongsToMany(Course::class, 'institution_course')->withPivot('commission_amount');
     }
 
     public function admissions()

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('institution_course', function (Blueprint $table) {
             $table->foreignId('institution_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
+            $table->decimal('commission_amount', 10, 2)->default(0);
 
             $table->unique(['institution_id', 'course_id']);
         });
