@@ -27,6 +27,18 @@ class AdmissionController extends Controller
 
     public function storeApplication(Request $request, Admission $admission)
     {
+        // Check if an application with the same admission_id, user_id, course_id, and grade already exists
+        $existing = AdmissionApplication::where('admission_id', $admission->id)
+            ->where('user_id', Auth::id())
+            ->where('course_id', $request->course_id)
+            ->where('grade', $request->grade)
+            ->first();
+
+        if ($existing) {
+            return redirect()->route('admission.show', $admission->slug)
+                ->with('error', 'You have already submitted an application for this admission with the same course and grade.');
+        }
+
         $request->validate([
             'full_name' => 'required|string|max:255',
             'email'     => 'required|email',

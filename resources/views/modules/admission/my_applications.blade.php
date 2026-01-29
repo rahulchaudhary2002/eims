@@ -32,16 +32,22 @@
                         @foreach($applications as $index => $application)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $index + 1 }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $application->admission->title ?? 'N/A' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                <div class="mb-2">
+                                    {{ $application->admission->title ?? 'N/A' }}
+                                </div>
+                                @if($application->status === 'approved')
+                                <a href="#" class="bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-900">Collect Reward</a>
+                                @endif
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $application->course->name ?? $application->grade ?? 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $application->admission->institution->name ?? 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @php
                                 $statusClasses = [
                                 'pending' => 'bg-yellow-100 text-yellow-800',
-                                'confirmed' => 'bg-blue-100 text-blue-800',
                                 'rejected' => 'bg-red-100 text-red-800',
-                                'accepted' => 'bg-green-100 text-green-800',
+                                'approved' => 'bg-green-100 text-green-800',
                                 ];
                                 @endphp
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClasses[$application->status] ?? 'bg-gray-100 text-gray-800' }}">
