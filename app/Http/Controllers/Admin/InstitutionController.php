@@ -47,6 +47,8 @@ class InstitutionController extends Controller
             'affiliations.*' => 'exists:affiliations,id',
             'courses' => 'nullable|array',
             'courses.*' => 'exists:courses,id',
+            'commissions' => 'nullable|array',
+            'commissions.*' => 'nullable|numeric',
             'is_active' => 'boolean',
         ]);
 
@@ -67,7 +69,15 @@ class InstitutionController extends Controller
 
         // Sync courses if provided
         if ($request->has('courses')) {
-            $institution->courses()->sync($request->courses);
+            $syncData = [];
+
+            foreach ($request->courses as $index => $courseId) {
+                $syncData[$courseId] = [
+                    'commission_amount' => $request->commissions[$index] ?? 0
+                ];
+            }
+
+            $institution->courses()->sync($syncData);
         }
 
         return redirect()->route('admin.institution.index')
@@ -133,7 +143,15 @@ class InstitutionController extends Controller
 
         // Sync courses
         if ($request->has('courses')) {
-            $institution->courses()->sync($request->courses);
+            $syncData = [];
+
+            foreach ($request->courses as $index => $courseId) {
+                $syncData[$courseId] = [
+                    'commission_amount' => $request->commissions[$index] ?? 0
+                ];
+            }
+
+            $institution->courses()->sync($syncData);
         } else {
             $institution->courses()->detach();
         }
