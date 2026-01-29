@@ -74,6 +74,6 @@ class Course extends Model
 
     public function institutions()
     {
-        return $this->belongsToMany(Institution::class, 'institution_course')->withPivot('comission_amount');
+        return $this->belongsToMany(Institution::class, 'institution_course')->withPivot('commission_amount');
     }
 }

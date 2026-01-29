@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('institution_admission_comissions', function (Blueprint $table) {
+        Schema::create('institution_admission_commissions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('institution_id');
             $table->unsignedBigInteger('admission_reward_id');
-            $table->decimal('comission_amount', 10, 2);
+            $table->decimal('commission_amount', 10, 2);
             $table->boolean('is_paid')->default(false);
             $table->timestamps();
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('institution_admission_comissions');
+        Schema::dropIfExists('institution_admission_commissions');
     }
 };

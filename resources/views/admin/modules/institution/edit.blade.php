@@ -104,7 +104,7 @@
 
                 <!-- Courses -->
                 <div class="md:col-span-2">
-                    <label class="block mb-2">Courses & Comission</label>
+                    <label class="block mb-2">Courses & Commission</label>
 
                     <div id="course-rows" class="space-y-4"></div>
 
@@ -119,9 +119,9 @@
                                 @endforeach
                             </select>
 
-                            <input type="number" name="comissions[]"
+                            <input type="number" name="commissions[]"
                                 class="border rounded-lg px-4 py-2"
-                                placeholder="Comission" required>
+                                placeholder="Commission" required>
 
                             <button type="button" class="remove-course text-red-500 hover:text-red-700">
                                 <x-lucide-trash class="w-5 h-5" />
@@ -194,14 +194,14 @@ if (old('courses')) {
 foreach (old('courses') as $i => $id) {
 $existingCourses[] = [
 'course_id' => $id,
-'comission' => old('comissions')[$i] ?? ''
+'commission' => old('commissions')[$i] ?? ''
 ];
 }
 } else {
 foreach ($institution->courses as $c) {
 $existingCourses[] = [
 'course_id' => $c->id,
-'comission' => $c->pivot->comission_amount
+'commission' => $c->pivot->commission_amount
 ];
 }
 }
@@ -233,14 +233,14 @@ $existingCourses[] = [
             });
         }
 
-        function addRow(courseId = '', comission = '') {
+        function addRow(courseId = '', commission = '') {
             const clone = template.content.cloneNode(true);
             const row = clone.querySelector('.course-row');
             const select = row.querySelector('.course-select');
-            const comissionInput = row.querySelector('input');
+            const commissionInput = row.querySelector('input');
 
             select.value = courseId;
-            comissionInput.value = comission;
+            commissionInput.value = commission;
 
             select.addEventListener('change', refresh);
             row.querySelector('.remove-course').onclick = () => {
@@ -253,7 +253,7 @@ $existingCourses[] = [
         }
 
         if (existingCourses.length) {
-            existingCourses.forEach(c => addRow(c.course_id, c.comission));
+            existingCourses.forEach(c => addRow(c.course_id, c.commission));
         } else {
             addRow();
         }

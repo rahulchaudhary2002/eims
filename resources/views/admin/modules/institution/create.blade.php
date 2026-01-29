@@ -137,7 +137,7 @@
 
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Courses & Comission
+                            Courses & Commission
                         </label>
 
                         <div id="course-rows" class="w-full space-y-4"></div>
@@ -151,7 +151,7 @@
                                     <option value="{{ $course->id }}">{{ $course->name }} ({{ $course->code }})</option>
                                     @endforeach
                                 </select>
-                                <input type="number" name="comissions[]" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="Comission Amount" required>
+                                <input type="number" name="commissions[]" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="Commission Amount" required>
                                 <button type="button" class="remove-course text-red-500 hover:text-red-700">
                                     <x-lucide-trash class="w-5 h-5" />
                                 </button>

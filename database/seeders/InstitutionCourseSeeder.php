@@ -28,7 +28,7 @@ class InstitutionCourseSeeder extends Seeder
                 $pivotData[] = [
                     'institution_id' => $institution->id,
                     'course_id' => $courseId,
-                    'comission_amount' => rand(5000, 30000),
+                    'commission_amount' => rand(5000, 30000),
                 ];
             }
         }
