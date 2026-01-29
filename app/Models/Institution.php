@@ -51,7 +51,7 @@ class Institution extends Model
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'institution_course')->withPivot('commission_amount');
+        return $this->belongsToMany(Course::class, 'institution_course')->withPivot('comission_amount');
     }
 
     public function admissions()
@@ -62,5 +62,18 @@ class Institution extends Model
     public function events()
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function comissions()
+    {
+        return $this->hasMany(InstitutionComission::class);
+    }
+
+    public function getDueComissionAttribute()
+    {
+        $totalComission = $this->comissions()->sum('comission_amount');
+        $totalPaid = $this->comissions()->where('is_paid', true)->sum('comission_amount');
+
+        return $totalComission - $totalPaid;
     }
 }
