@@ -6,6 +6,7 @@ use App\Models\Admission;
 use App\Models\AdmissionApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AdmissionController extends Controller
 {
@@ -61,6 +62,7 @@ class AdmissionController extends Controller
         }
 
         AdmissionApplication::create([
+            'application_uuid' => (string) Str::uuid(),
             'admission_id' => $admission->id,
             'user_id'      => Auth::id(),
             'full_name'    => $request->full_name,
