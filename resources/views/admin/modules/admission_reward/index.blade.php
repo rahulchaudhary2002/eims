@@ -5,7 +5,7 @@
 <div class="bg-white rounded-lg shadow-lg border border-gray-200">
     <div class="p-6 flex justify-between items-center mb-4 bg-white bg-opacity-80 backdrop-blur-sm rounded-t-lg">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">🏢 Admission Rewards Management</h1>
+            <h1 class="text-3xl font-bold text-gray-800">💰 Admission Rewards Management</h1>
             <p class="text-gray-600 mt-1">Manage admission rewards</p>
         </div>
     </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdmissionComissionController;
 use App\Http\Controllers\Admin\AdmissionRewardController;
 use App\Http\Controllers\Admin\AffiliationController;
 use App\Http\Controllers\Admin\CourseController;
@@ -23,5 +24,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
         Route::get('/', [AdmissionRewardController::class, 'index'])->name('index');
         Route::put('/status/{reward}/approve', [AdmissionRewardController::class, 'approve'])->name('approve');
         Route::put('/status/{reward}/reject', [AdmissionRewardController::class, 'reject'])->name('reject');
+    });
+
+    Route::prefix('admission/comission')->name('admission.comission.')->group(function () {
+        Route::get('/', [AdmissionComissionController::class, 'index'])->name('index');
+        Route::put('/mark-paid/{comission}', [AdmissionComissionController::class, 'markAsPaid'])->name('markPaid');
     });
 });
