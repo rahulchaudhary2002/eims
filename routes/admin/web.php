@@ -4,17 +4,16 @@ use App\Http\Controllers\Admin\AdmissionCommissionController;
 use App\Http\Controllers\Admin\AdmissionRewardController;
 use App\Http\Controllers\Admin\AffiliationController;
 use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstitutionController;
 use App\Http\Controllers\Admin\LevelController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VendorController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('admin/dashboard', function () {
-    return view('admin.modules.dashboard.index');
-})->middleware(['auth:admin', 'verified:admin'])->name('admin.dashboard');
-
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->middleware(['auth:admin', 'verified:admin'])->name('dashboard');
+
     Route::resource('institution', InstitutionController::class);
     Route::resource('vendor', VendorController::class);
     Route::resource('affiliation', AffiliationController::class)->except('show');
