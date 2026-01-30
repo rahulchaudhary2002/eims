@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Admission;
 use App\Models\AdmissionApplication;
 use App\Models\AdmissionReward;
+use App\Models\Vendor;
+use App\Notifications\AdmissionApplicationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 class AdmissionController extends Controller
@@ -62,7 +65,7 @@ class AdmissionController extends Controller
             }
         }
 
-        AdmissionApplication::create([
+        $application = AdmissionApplication::create([
             'application_uuid' => (string) Str::uuid(),
             'admission_id' => $admission->id,
             'user_id'      => Auth::id(),
@@ -75,6 +78,12 @@ class AdmissionController extends Controller
             'grade'        => $request->grade,
             'academic_documents' => json_encode($documents),
         ]);
+
+        $users = Vendor::whereHas('institutions', function ($query) use ($admission) {
+            $query->where('institution_id', $admission->institution_id);
+        })->get();
+
+        Notification::send($users, new AdmissionApplicationRequest($application));
 
         return redirect()->route('admission.show', $admission->slug)
             ->with('success', 'Your application has been submitted successfully.');
