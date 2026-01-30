@@ -43,4 +43,7 @@ Route::prefix('institution')->name('vendor.')->middleware(['auth:vendor'])->grou
     });
 
     Route::resource('event', EventController::class);
+
+    Route::post('notification/read-all', [SettingController::class, 'readAllNotifications'])
+        ->name('notification.read-all');
 });

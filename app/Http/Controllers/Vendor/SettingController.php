@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Institution;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 
 class SettingController extends Controller
@@ -47,5 +48,18 @@ class SettingController extends Controller
                 'message' => 'An error occurred: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function readAllNotifications(Request $request)
+    {
+        $vendor = Vendor::find(auth()->guard('vendor')->user()->id);
+
+        $vendor->notifications()
+            ->whereNull('read_at')
+            ->where('data->institution_id', session('current_institution')?->id)
+            ->get()
+            ->markAsRead();
+
+        return redirect()->back();
     }
 }

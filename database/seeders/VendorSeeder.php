@@ -15,8 +15,8 @@ class VendorSeeder extends Seeder
     public function run(): void
     {
         Vendor::create([
-            'name' => 'Vendor',
-            'email' => 'vendor@app.com',
+            'name' => 'Institution Admin',
+            'email' => 'institutionadmin@app.com',
             'phone' => '1234567890',
             'email_verified_at' => now(),
             'phone_verified_at' => now(),
