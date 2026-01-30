@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AffiliationController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\InstitutionController;
 use App\Http\Controllers\Admin\LevelController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VendorController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,4 +31,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
         Route::get('/', [AdmissionCommissionController::class, 'index'])->name('index');
         Route::put('/mark-paid/{commission}', [AdmissionCommissionController::class, 'markAsPaid'])->name('markPaid');
     });
+
+    Route::post('notification/read-all', [SettingController::class, 'readAllNotifications'])
+        ->name('notification.read-all');
 });

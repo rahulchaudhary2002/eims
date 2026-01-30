@@ -39,6 +39,7 @@ $vendorInstitutions = $user->institutions ?? collect(); // Assuming vendor has i
         $q->where('data->institution_id', $institutionId)
         )
         ->latest()
+        ->take(5)
         ->get()
         : collect();
         @endphp
