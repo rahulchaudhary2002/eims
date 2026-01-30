@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Admission;
 use App\Models\AdmissionApplication;
 use App\Models\AdmissionReward;
 use App\Models\Vendor;
 use App\Notifications\AdmissionApplicationRequest;
+use App\Notifications\CollectAdmissionRewardRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -135,8 +137,14 @@ class AdmissionController extends Controller
                 'status' => 'pending',
             ]);
 
+            $users = Admin::get();
+            Notification::send($users, new CollectAdmissionRewardRequest());
+
             return redirect()->route('admission.application', 'application')
                 ->with('success', 'Your admission receipt has been submitted successfully.');
         }
+
+        return redirect()->route('admission.application', 'application')
+            ->with('error', 'There was an error uploading your admission receipt. Please try again.');
     }
 }
