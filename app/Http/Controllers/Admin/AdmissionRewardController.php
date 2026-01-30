@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\AdmissionReward;
 use App\Models\Institution;
 use App\Models\InstitutionAdmissionCommission;
+use App\Models\Vendor;
+use App\Notifications\AdmissionRewardApproved;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class AdmissionRewardController extends Controller
 {
@@ -40,6 +43,11 @@ class AdmissionRewardController extends Controller
                 'admission_reward_id' => $reward->id,
                 'commission_amount' => $commission,
             ]);
+
+            $users = Vendor::whereHas('institutions', function ($query) use ($institution) {
+                $query->where('institution_id', $institution->id);
+            })->get();
+            Notification::send($users, new AdmissionRewardApproved($institution->id, $commission));
 
             DB::commit();
         } catch (\Exception $e) {
