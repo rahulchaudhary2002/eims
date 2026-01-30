@@ -35,10 +35,53 @@ $vendorInstitutions = $user->institutions ?? collect(); // Assuming vendor has i
                 <span class="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full"></span>
             </button>
             <div id="notificationDropdown" class="absolute hidden top-10 right-0 w-80 bg-white border rounded-md shadow-lg">
-                <div class="bg-gray-100 py-2 text-center font-bold">Notifications</div>
-                <ul>
-                    <li class="px-4 py-2 hover:bg-gray-200">New Order Received</li>
-                    <li class="px-4 py-2 hover:bg-gray-200">New User Registered</li>
+                <div class="flex items-center justify-between bg-gray-100 py-2 px-4 font-bold border-b">
+                    <span>Notifications</span>
+                    <form method="POST" action="{{-- route('vendor.notification.markAllRead') --}}">
+                        @csrf
+                        <button type="submit" class="text-xs text-blue-600 hover:underline focus:outline-none">Mark all as read</button>
+                    </form>
+                </div>
+                @php
+                $vendor = auth('vendor')->user();
+                $institutionId = session('current_institution')?->id;
+
+                $notifications = $vendor
+                ? $vendor->notifications()
+                ->when($institutionId, fn ($q) =>
+                $q->where('data->institution_id', $institutionId)
+                )
+                ->latest()
+                ->get()
+                : collect();
+                @endphp
+
+                <ul class="max-h-80 overflow-y-auto divide-y">
+                    @forelse($notifications as $notification)
+                    <li class="px-4 py-3 hover:bg-gray-50 flex items-start gap-2 {{ $notification->read_at ? 'opacity-60' : '' }}">
+                        <div class="mt-1">
+                            @if($notification->read_at)
+                            <x-lucide-circle class="w-3 h-3 text-gray-300" />
+                            @else
+                            <x-lucide-dot class="w-3 h-3 text-blue-500" />
+                            @endif
+                        </div>
+
+                        <div>
+                            <div class="text-sm">
+                                {{ $notification->data['message'] ?? 'Notification' }}
+                            </div>
+
+                            <div class="text-xs text-gray-400 mt-1">
+                                {{ $notification->created_at->diffForHumans() }}
+                            </div>
+                        </div>
+                    </li>
+                    @empty
+                    <li class="px-4 py-6 text-center text-gray-400">
+                        No notifications
+                    </li>
+                    @endforelse
                 </ul>
             </div>
         </div>
