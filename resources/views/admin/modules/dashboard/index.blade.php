@@ -4,6 +4,16 @@
 <div class="space-y-4">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="bg-white rounded-md p-5 shadow-sm flex items-center transition duration-300 hover:-translate-y-2">
+            <div class="w-[60px] h-[60px] rounded-full flex items-center justify-center mr-4 text-2xl bg-[rgba(67,97,238,0.1)] text-primary">
+                <x-lucide-users class="w-8 h-8" />
+            </div>
+
+            <div class="flex flex-col">
+                <div class="text-dark text-3xl font-bold">{{ $studentCount }}</div>
+                <div class="mt-2 text-gray-700 text-lg">Total Students</div>
+            </div>
+        </div>
+        <div class="bg-white rounded-md p-5 shadow-sm flex items-center transition duration-300 hover:-translate-y-2">
             <div class="w-[60px] h-[60px] rounded-full flex items-center justify-center mr-4 text-2xl bg-[rgba(76,201,240,0.1)] text-success">
                 <x-lucide-landmark class="w-8 h-8" />
             </div>
