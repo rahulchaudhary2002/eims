@@ -17,7 +17,7 @@
 <body class="bg-gray-50 font-sans">
     @yield('page-specific-modal')
     @include('includes.header')
-    @if(request()->routeIs('home'))
+    @if(request()->routeIs('home') || request()->routeIs('login') || request()->routeIs('register'))
     @yield('content')
     @else
     <div class="max-w-7xl mx-auto px-4 mt-24">
