@@ -4,7 +4,7 @@ $currentInstitution = session('current_institution');
 $vendorInstitutions = $user->institutions ?? collect(); // Assuming vendor has institutions relationship
 @endphp
 
-<div class="fixed bg-white border-b flex items-center justify-between h-[70px] left-[250px] w-[calc(100%-250px)] px-5 z-20 transition-all duration-300">
+<div class="fixed border-b flex items-center justify-between h-[70px] left-[250px] w-[calc(100%-250px)] px-5 z-20 transition-all duration-300">
     <div class="flex items-center">
         <button id="toggleSidebar" class="hidden h-6 w-6">
             <x-lucide-chevron-left class="w-6 h-6" />

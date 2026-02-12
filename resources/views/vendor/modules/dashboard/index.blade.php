@@ -1,18 +1,98 @@
 @extends('vendor.layouts.app')
 @section('title', 'Dashboard')
 @section('content')
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-        <div class="text-blue-600 text-3xl font-bold">{{ $courseCount }}</div>
-        <div class="mt-2 text-gray-700 text-lg">Courses</div>
+<div class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-md p-5 shadow-sm flex items-center transition duration-300 hover:-translate-y-2">
+            <div class="w-[60px] h-[60px] rounded-full flex items-center justify-center mr-4 text-2xl bg-[rgba(76,201,240,0.1)] text-success">
+                <x-lucide-book class="w-8 h-8" />
+            </div>
+
+            <div class="flex flex-col">
+                <div class="text-dark text-3xl font-bold">{{ $courseCount }}</div>
+                <div class="mt-2 text-gray-700 text-lg">Active Courses</div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-md p-5 shadow-sm flex items-center transition duration-300 hover:-translate-y-2">
+            <div class="w-[60px] h-[60px] rounded-full flex items-center justify-center mr-4 text-2xl bg-[rgba(247,37,133,0.1)] text-warning">
+                <x-lucide-dollar-sign class="w-8 h-8" />
+            </div>
+
+            <div class="flex flex-col">
+                <div class="text-dark text-3xl font-bold">Rs. {{ number_format($paidComission, 2) }}</div>
+                <div class="mt-2 text-gray-700 text-lg">Paid Commission</div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-md p-5 shadow-sm flex items-center transition duration-300 hover:-translate-y-2">
+            <div class="w-[60px] h-[60px] rounded-full flex items-center justify-center mr-4 text-2xl bg-[rgba(58,12,163,0.1)] text-secondary">
+                <x-lucide-hand-coins class="w-8 h-8" />
+            </div>
+
+            <div class="flex flex-col">
+                <div class="text-dark text-3xl font-bold">Rs. {{ number_format($dueComission, 2) }}</div>
+                <div class="mt-2 text-gray-700 text-lg">Due Commissions</div>
+            </div>
+        </div>
     </div>
-    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-        <div class="text-red-600 text-3xl font-bold">Rs. {{ number_format($dueComission, 2) }}</div>
-        <div class="mt-2 text-gray-700 text-lg">Due Commission</div>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-        <div class="text-emerald-600 text-3xl font-bold">Rs. {{ number_format($paidComission, 2) }}</div>
-        <div class="mt-2 text-gray-700 text-lg">Paid Commission</div>
+
+    <div class="bg-white rounded-md p-5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between flex-wrap border-b gap-4 pb-4">
+            <h2 class="text-primary text-xl font-bold">Recent Admissions Application</h2>
+            <a href="#" class="text-primary text-sm">View All</a>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Applicant Name</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Phone</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Course</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Submitted At</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse($recentAdmissionApplications as $application)
+                        <tr class="hover:bg-blue-50 transition-colors duration-150">
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->full_name ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->email ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->phone ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->grade ?? $application->course->name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->created_at->format('Y-m-d') }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">
+                                @if($application->status === 'approved')
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <x-lucide-check-circle class="w-3 h-3 mr-1" /> Approved
+                                </span>
+                                @elseif($application->status === 'rejected')
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    <x-lucide-x-circle class="w-3 h-3 mr-1" /> Rejected
+                                </span>
+                                @else
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    <x-lucide-clock class="w-3 h-3 mr-1" /> Pending
+                                </span>
+                                @endif
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                                <x-lucide-inbox class="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                                <p class="text-lg">No applications found</p>
+                                <p class="text-sm">No one has applied for admission yet.</p>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
