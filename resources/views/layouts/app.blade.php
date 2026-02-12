@@ -17,11 +17,13 @@
 <body class="bg-gray-50 font-sans">
     @yield('page-specific-modal')
     @include('includes.header')
-    <div class="py-6 pt-[100px]">
-        <div class="max-w-7xl mx-auto px-4">
-            @yield('content')
-        </div>
+    @if(request()->routeIs('home'))
+    @yield('content')
+    @else
+    <div class="max-w-7xl mx-auto px-4 mt-24">
+        @yield('content')
     </div>
+    @endif
     @include('includes.footer')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
