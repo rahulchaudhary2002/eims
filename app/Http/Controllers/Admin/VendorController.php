@@ -26,7 +26,7 @@ class VendorController extends Controller
      */
     public function create(): View
     {
-        $institutions = Institution::active()->get();
+        $institutions = Institution::active()->with('institutionType')->get();
         return view('admin.modules.vendor.create', compact('institutions'));
     }
 
@@ -66,6 +66,7 @@ class VendorController extends Controller
      */
     public function show(Vendor $vendor): View
     {
+        $vendor->load('institutions.institutionType');
         return view('admin.modules.vendor.show', compact('vendor'));
     }
 
@@ -74,8 +75,8 @@ class VendorController extends Controller
      */
     public function edit(Vendor $vendor): View
     {
-        $institutions = Institution::active()->get();
-        $vendor->load('institutions');
+        $institutions = Institution::active()->with('institutionType')->get();
+        $vendor->load('institutions.institutionType');
 
         return view('admin.modules.vendor.edit', compact('vendor', 'institutions'));
     }

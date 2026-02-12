@@ -103,8 +103,11 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 @error('type') border-red-500 @enderror"
                             required>
                             <option value="">Select Type</option>
-                            <option value="college" {{ old('type') == 'college' ? 'selected' : '' }}>College</option>
-                            <option value="school" {{ old('type') == 'school' ? 'selected' : '' }}>School</option>
+                            @foreach($institutionTypes as $institutionType)
+                            <option value="{{ $institutionType->slug }}" {{ old('type') == $institutionType->slug ? 'selected' : '' }}>
+                                {{ $institutionType->name }}
+                            </option>
+                            @endforeach
                         </select>
                         @error('type')
                         <p class="text-red-500 text-sm mt-1 flex items-center">

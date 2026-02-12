@@ -10,7 +10,8 @@ class CollegeController extends Controller
     public function index()
     {
         $colleges = Institution::active()
-            ->where('type', 'college')
+            ->with('institutionType')
+            ->ofType('college')
             ->paginate(12);
 
         return view('modules.college.index', compact('colleges'));

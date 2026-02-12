@@ -84,8 +84,11 @@
                     <label class="block mb-1">Institution Type *</label>
                     <select name="type" class="w-full border rounded-lg px-4 py-2" required>
                         <option value="">Select Type</option>
-                        <option value="college" {{ old('type', $institution->type) == 'college' ? 'selected' : '' }}>College</option>
-                        <option value="school" {{ old('type', $institution->type) == 'school' ? 'selected' : '' }}>School</option>
+                        @foreach($institutionTypes as $institutionType)
+                        <option value="{{ $institutionType->slug }}" {{ old('type', $institution->type) == $institutionType->slug ? 'selected' : '' }}>
+                            {{ $institutionType->name }}
+                        </option>
+                        @endforeach
                     </select>
                 </div>
 

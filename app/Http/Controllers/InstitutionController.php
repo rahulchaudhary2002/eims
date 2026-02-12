@@ -10,7 +10,8 @@ class InstitutionController extends Controller
 {
     public function show($institution_type, $institution_slug)
     {
-        $institution = Institution::where('type', $institution_type)
+        $institution = Institution::with('institutionType')
+            ->ofType($institution_type)
             ->where('slug', $institution_slug)
             ->firstOrFail();
 
@@ -19,7 +20,8 @@ class InstitutionController extends Controller
 
     public function query($institution_type, $institution_slug, Request $request)
     {
-        $institution = Institution::where('type', $institution_type)
+        $institution = Institution::with('institutionType')
+            ->ofType($institution_type)
             ->where('slug', $institution_slug)
             ->firstOrFail();
 
@@ -28,7 +30,8 @@ class InstitutionController extends Controller
 
     public function storeQuery($institution_type, $institution_slug, Request $request)
     {
-        $institution = Institution::where('type', $institution_type)
+        $institution = Institution::with('institutionType')
+            ->ofType($institution_type)
             ->where('slug', $institution_slug)
             ->firstOrFail();
 
@@ -55,7 +58,8 @@ class InstitutionController extends Controller
 
     public function admissions($institution_type, $institution_slug)
     {
-        $institution = Institution::where('type', $institution_type)
+        $institution = Institution::with('institutionType')
+            ->ofType($institution_type)
             ->where('slug', $institution_slug)
             ->firstOrFail();
 

@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->year('established_year')->nullable();
-            $table->enum('type', ['college', 'school']);
+            $table->foreignId('institution_type_id')
+                ->constrained('institution_types');
             $table->string('logo')->nullable();
             $table->string('cover_image')->nullable();
             $table->boolean('is_active')->default(true);

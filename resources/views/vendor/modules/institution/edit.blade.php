@@ -67,12 +67,11 @@
                 </label>
                 <select name="type"
                     class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition">
-                    <option value="college" {{ old('type', $institution->type) == 'college' ? 'selected' : '' }}>
-                        College
+                    @foreach($institutionTypes as $institutionType)
+                    <option value="{{ $institutionType->slug }}" {{ old('type', $institution->type) == $institutionType->slug ? 'selected' : '' }}>
+                        {{ $institutionType->name }}
                     </option>
-                    <option value="school" {{ old('type', $institution->type) == 'school' ? 'selected' : '' }}>
-                        School
-                    </option>
+                    @endforeach
                 </select>
                 @error('type')
                 <p class="mt-1 text-sm text-red-600 flex items-center">

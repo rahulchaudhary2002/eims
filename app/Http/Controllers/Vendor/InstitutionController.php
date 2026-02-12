@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Institution;
+use App\Models\InstitutionType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class InstitutionController extends Controller
 {
@@ -40,8 +40,9 @@ class InstitutionController extends Controller
         }
 
         $institution = Institution::where('id', $current_institution->id)->first();
+        $institutionTypes = InstitutionType::orderBy('name')->get();
 
-        return view('vendor.modules.institution.edit', compact('institution'));
+        return view('vendor.modules.institution.edit', compact('institution', 'institutionTypes'));
     }
 
     public function update(Request $request)
@@ -58,9 +59,9 @@ class InstitutionController extends Controller
             'name' => 'required|string|max:255',
             'address' => 'nullable|string',
             'phone' => 'nullable|string|max:20',
-            'email' => ['nullable', 'email', Rule::unique('institutions')->ignore($institution->id)],
+            'email' => 'nullable|email|unique:institutions,email,' . $institution->id,
             'established_year' => 'nullable|integer|min:1900|max:' . date('Y'),
-            'type' => ['required', Rule::in(['college', 'school'])],
+            'type' => 'required|exists:institution_types,slug',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
