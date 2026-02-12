@@ -20,9 +20,14 @@ class UserSeeder extends Seeder
         $users = [
             // Original user
             [
-                'name' => 'User',
+                'first_name' => 'Student',
+                'last_name' => 'User',
                 'email' => 'user@app.com',
                 'phone' => '1234567890',
+                'dob' => '2000-01-01',
+                'address' => '123 Main St',
+                'education_level' => 'Bachelor',
+                'field_of_interest' => 'Computer Science',
                 'email_verified_at' => now(),
                 'phone_verified_at' => now(),
                 'password' => Hash::make('123456789'),
@@ -32,9 +37,14 @@ class UserSeeder extends Seeder
 
             // Additional user 1
             [
-                'name' => 'John Doe',
+                'first_name' => 'John',
+                'last_name' => 'Doe',
                 'email' => 'john.doe@app.com',
                 'phone' => '9876543210',
+                'dob' => '1990-05-15',
+                'address' => '456 Elm St',
+                'education_level' => 'Master',
+                'field_of_interest' => 'Data Science',
                 'email_verified_at' => now(),
                 'phone_verified_at' => now(),
                 'password' => Hash::make('password123'),
@@ -44,9 +54,14 @@ class UserSeeder extends Seeder
 
             // Additional user 2
             [
-                'name' => 'Jane Smith',
+                'first_name' => 'Jane',
+                'last_name' => 'Smith',
                 'email' => 'jane.smith@app.com',
                 'phone' => '9841234567',
+                'dob' => '1992-07-20',
+                'address' => '789 Pine St',
+                'education_level' => 'Bachelor',
+                'field_of_interest' => 'Software Engineering',
                 'email_verified_at' => now(),
                 'phone_verified_at' => now(),
                 'password' => Hash::make('password123'),
@@ -56,9 +71,14 @@ class UserSeeder extends Seeder
 
             // Additional user 3
             [
-                'name' => 'Rajesh Sharma',
+                'first_name' => 'Rajesh',
+                'last_name' => 'Sharma',
                 'email' => 'rajesh.sharma@app.com',
                 'phone' => '9851122334',
+                'dob' => '1988-03-10',
+                'address' => '321 Oak St',
+                'education_level' => 'PhD',
+                'field_of_interest' => 'Artificial Intelligence',
                 'email_verified_at' => now(),
                 'phone_verified_at' => now(),
                 'password' => Hash::make('password123'),
@@ -68,9 +88,14 @@ class UserSeeder extends Seeder
 
             // Additional user 4
             [
-                'name' => 'Sita Gurung',
+                'first_name' => 'Sita',
+                'last_name' => 'Gurung',
                 'email' => 'sita.gurung@app.com',
                 'phone' => '9863344556',
+                'dob' => '1995-09-25',
+                'address' => '654 Maple St',
+                'education_level' => 'Master',
+                'field_of_interest' => 'Cybersecurity',
                 'email_verified_at' => now(),
                 'phone_verified_at' => now(),
                 'password' => Hash::make('password123'),

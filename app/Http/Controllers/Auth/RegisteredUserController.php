@@ -30,15 +30,26 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            // 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'phone' => ['required', 'string', 'regex:/^(?:\+?\d{1,3}[- ]?)?\d{10}$/', 'unique:' . User::class],
+            'dob' => ['required', 'date'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'education_level' => ['required', 'string', 'max:255'],
+            'field_of_interest' => ['nullable', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
             'phone' => $request->phone,
+            'dob' => $request->dob,
+            'address' => $request->address,
+            'education_level' => $request->education_level,
+            'field_of_interest' => $request->field_of_interest,
             'password' => Hash::make($request->password),
         ]);
 
