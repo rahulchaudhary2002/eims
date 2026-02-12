@@ -10,7 +10,8 @@ class SchoolController extends Controller
     public function index()
     {
         $schools = Institution::active()
-            ->where('type', 'school')
+            ->with('institutionType')
+            ->ofType('school')
             ->paginate(12);
 
         return view('modules.school.index', compact('schools'));

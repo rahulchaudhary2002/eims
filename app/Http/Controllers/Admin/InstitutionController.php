@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Institution;
+use App\Models\InstitutionType;
 use App\Models\Affiliation;
 use App\Models\Course;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class InstitutionController extends Controller
      */
     public function index(): View
     {
-        $institutions = Institution::with(['affiliations', 'courses'])->paginate(10);
+        $institutions = Institution::with(['affiliations', 'courses', 'institutionType'])->paginate(10);
         return view('admin.modules.institution.index', compact('institutions'));
     }
 
@@ -28,7 +29,8 @@ class InstitutionController extends Controller
     {
         $affiliations = Affiliation::active()->get();
         $courses = Course::active()->get();
-        return view('admin.modules.institution.create', compact('affiliations', 'courses'));
+        $institutionTypes = InstitutionType::orderBy('name')->get();
+        return view('admin.modules.institution.create', compact('affiliations', 'courses', 'institutionTypes'));
     }
 
     /**
@@ -42,7 +44,7 @@ class InstitutionController extends Controller
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'established_year' => 'nullable|integer|min:1800|max:' . (date('Y') + 1),
-            'type' => 'required|in:college,school',
+            'type' => 'required|exists:institution_types,slug',
             'affiliations' => 'nullable|array',
             'affiliations.*' => 'exists:affiliations,id',
             'courses' => 'nullable|array',
@@ -89,7 +91,7 @@ class InstitutionController extends Controller
      */
     public function show(Institution $institution): View
     {
-        $institution->load(['affiliations', 'courses']);
+        $institution->load(['affiliations', 'courses', 'institutionType']);
         return view('admin.modules.institution.show', compact('institution'));
     }
 
@@ -100,9 +102,10 @@ class InstitutionController extends Controller
     {
         $affiliations = Affiliation::active()->get();
         $courses = Course::active()->get();
-        $institution->load(['affiliations', 'courses']);
+        $institutionTypes = InstitutionType::orderBy('name')->get();
+        $institution->load(['affiliations', 'courses', 'institutionType']);
 
-        return view('admin.modules.institution.edit', compact('institution', 'affiliations', 'courses'));
+        return view('admin.modules.institution.edit', compact('institution', 'affiliations', 'courses', 'institutionTypes'));
     }
 
     /**
@@ -116,7 +119,7 @@ class InstitutionController extends Controller
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'established_year' => 'nullable|integer|min:1800|max:' . (date('Y') + 1),
-            'type' => 'required|in:college,school',
+            'type' => 'required|exists:institution_types,slug',
             'affiliations' => 'nullable|array',
             'affiliations.*' => 'exists:affiliations,id',
             'courses' => 'nullable|array',

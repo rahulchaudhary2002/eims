@@ -18,7 +18,7 @@ class Institution extends Model
         'phone',
         'email',
         'established_year',
-        'type',
+        'institution_type_id',
         'logo',
         'cover_image',
         'is_active'
@@ -37,6 +37,18 @@ class Institution extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopeOfType($query, string $typeSlug)
+    {
+        return $query->whereHas('institutionType', function ($q) use ($typeSlug) {
+            $q->where('slug', $typeSlug);
+        });
+    }
+
+    public function institutionType()
+    {
+        return $this->belongsTo(InstitutionType::class);
     }
 
     public function vendors()
@@ -75,5 +87,30 @@ class Institution extends Model
         $totalPaid = $this->commissions()->where('is_paid', true)->sum('commission_amount');
 
         return $totalCommission - $totalPaid;
+    }
+
+    public function getTypeAttribute(): ?string
+    {
+        if (array_key_exists('type', $this->attributes)) {
+            return $this->attributes['type'];
+        }
+
+        if ($this->relationLoaded('institutionType')) {
+            return optional($this->institutionType)->slug;
+        }
+
+        return $this->institutionType()->value('slug');
+    }
+
+    public function setTypeAttribute(?string $value): void
+    {
+        if (!$value) {
+            $this->attributes['institution_type_id'] = null;
+            return;
+        }
+
+        $this->attributes['institution_type_id'] = InstitutionType::query()
+            ->where('slug', $value)
+            ->value('id');
     }
 }

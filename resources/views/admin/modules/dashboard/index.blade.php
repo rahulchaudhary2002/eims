@@ -47,6 +47,44 @@
         </div>
     </div>
 
+    <div class="bg-white rounded-md p-5 shadow-sm">
+        <div class="flex items-center justify-between flex-wrap border-b gap-4 pb-4">
+            <h2 class="text-primary text-xl font-bold">Institution Types Overview</h2>
+            <a href="{{ route('admin.institution.index') }}" class="text-primary text-sm">View All Institutions</a>
+        </div>
+        <div class="flex flex-wrap gap-4 mt-4">
+            @foreach($institutionTypes as $type)
+                <div class="flex-1 min-w-[220px] max-w-xs bg-gray-50 rounded-lg p-4 flex flex-col items-start shadow-sm border-l-4 border-primary/70 hover:shadow transition">
+                    <div class="flex items-center mb-2">
+                        <span class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/10 text-primary mr-2">
+                            @switch($type->name)
+                                @case('College')
+                                    <x-lucide-landmark class="w-6 h-6" />
+                                    @break
+                                @case('Training Center')
+                                    <x-lucide-monitor class="w-6 h-6" />
+                                    @break
+                                @case('School')
+                                    <x-lucide-school class="w-6 h-6" />
+                                    @break
+                                @case('Montessori')
+                                    <x-lucide-baby class="w-6 h-6" />
+                                    @break
+                                @default
+                                    <x-lucide-graduation-cap class="w-6 h-6" />
+                            @endswitch
+                        </span>
+                        <span class="font-bold text-primary text-lg">{{ $type->name }}</span>
+                    </div>
+                    <div class="text-gray-700 text-sm">{{ $type->institutions_count }} Institutions</div>
+                    <div class="text-gray-700 text-sm">
+                        {{ number_format($type->institutions->sum('students_count') ?? 0) }} Students
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
     <div class="bg-white rounded-md p-5 shadow-sm space-y-4">
         <div class="flex items-center justify-between flex-wrap border-b gap-4 pb-4">
             <h2 class="text-primary text-xl font-bold">Recent Admissions Application</h2>

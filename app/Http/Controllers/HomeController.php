@@ -10,7 +10,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $colleges = Institution::active()->where('type', 'college')->limit(6)->get();
+        $colleges = Institution::active()
+            ->with('institutionType')
+            ->ofType('college')
+            ->limit(6)
+            ->get();
         $courses = Course::active()->limit(6)->get();
 
         return view('modules.home.index', compact('colleges', 'courses'));
