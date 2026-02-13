@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('levels', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('slug')->unique();
             $table->string('code')->unique()->nullable();
             $table->text('description')->nullable();
             $table->integer('order')->default(0);

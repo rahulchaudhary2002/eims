@@ -17,33 +17,68 @@ class InstitutionController extends Controller
             ->withCount('institutions')
             ->latest()
             ->get();
+
         $affiliations = Affiliation::whereHas('institutions')
             ->withCount('institutions')
             ->latest()
             ->get();
+
         $institutionCategories = InstitutionCategory::whereHas('institutions')
             ->withCount('institutions')
             ->latest()
             ->get();
-        $institutions = Institution::query()->when($request->college_name, function ($query) use ($request) {
-            $query->where('name', 'like', '%' . $request->input('college_name') . '%');
-        })->when($request->institution_type, function ($query) use ($request) {
-            $query->whereHas('institutionType', function ($q) use ($request) {
-                $q->where('slug', $request->input('institution_type'));
-            });
-        })->when($request->affiliated_university, function ($query) use ($request) {
-            $query->whereHas('affiliations', function ($q) use ($request) {
-                $q->where('slug', $request->input('affiliated_university'));
-            });
-        })->when($request->institution_category, function ($query) use ($request) {
-            $query->whereHas('institutionCategory', function ($q) use ($request) {
-                $q->where('slug', $request->input('institution_category'));
-            });
-        })->with('institutionType')->withCount(['courses'])
-            ->orderBy($request->input('sort', 'name'), 'asc')->paginate(4);
 
-        return view('modules.institution.index', compact('institutions', 'institutionTypes', 'affiliations', 'institutionCategories'));
+        $typeSlugs = (array) $request->input('institutionTypes', []);
+        $affSlugs  = (array) $request->input('affiliatedUniversities', []);
+        $catSlugs  = (array) $request->input('categories', []);
+        $locations = (array) $request->input('locations', []);
+
+        $institutions = Institution::query()
+            ->when($request->filled('college_name'), function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->college_name . '%');
+            })
+            ->when($request->filled('institution_type'), function ($q) use ($request) {
+                $q->whereHas('institutionType', fn($qq) => $qq->where('slug', $request->institution_type));
+            })
+            ->when($request->filled('affiliated_university'), function ($q) use ($request) {
+                $q->whereHas('affiliations', fn($qq) => $qq->where('slug', $request->affiliated_university));
+            })
+            ->when($request->filled('institution_category'), function ($q) use ($request) {
+                $q->whereHas('category', fn($qq) => $qq->where('slug', $request->institution_category));
+            })
+            ->when(count($typeSlugs), function ($q) use ($typeSlugs) {
+                $q->whereHas('institutionType', fn($qq) => $qq->whereIn('slug', $typeSlugs));
+            })
+            ->when(count($affSlugs), function ($q) use ($affSlugs) {
+                $q->whereHas('affiliations', fn($qq) => $qq->whereIn('slug', $affSlugs));
+            })
+            ->when(count($catSlugs), function ($q) use ($catSlugs) {
+                $q->whereHas('category', fn($qq) => $qq->whereIn('slug', $catSlugs));
+            })
+            ->when(count($locations), function ($q) use ($locations) {
+                $q->whereIn('location_slug', $locations);
+            })
+            ->with(['institutionType', 'affiliations', 'category'])
+            ->withCount('courses')
+
+            ->when($request->filled('sort'), function ($q) use ($request) {
+                $allowed = ['name', 'established_year'];
+                $sort = in_array($request->sort, $allowed) ? $request->sort : 'name';
+                $q->orderBy($sort, 'asc');
+            }, function ($q) {
+                $q->orderBy('name', 'asc');
+            })
+            ->paginate(4)
+            ->withQueryString();
+
+        return view('modules.institution.index', compact(
+            'institutions',
+            'institutionTypes',
+            'affiliations',
+            'institutionCategories'
+        ));
     }
+
 
     public function show($institution_slug)
     {

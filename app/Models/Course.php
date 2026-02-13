@@ -18,6 +18,7 @@ class Course extends Model
         'description',
         'level_id',
         'affiliation_id',
+        'category_id',
         'duration',
         'is_active',
     ];
@@ -75,5 +76,10 @@ class Course extends Model
     public function institutions()
     {
         return $this->belongsToMany(Institution::class, 'institution_course')->withPivot('commission_amount');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(CourseCategory::class, 'category_id');
     }
 }

@@ -129,7 +129,7 @@
                         <div class="flex flex-col gap-3">
                             @foreach($institutionTypes as $type)
                             <div class="flex items-center gap-3">
-                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="checkbox" id="type-{{ $type->slug }}" name="institutionType" value="{{ $type->slug }}">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="checkbox" id="type-{{ $type->slug }}" name="institutionTypes[]" value="{{ $type->slug }}" {{ in_array($type->slug, request()->get('institutionTypes', [])) ? 'checked' : '' }}>
                                 <label class="flex-1 cursor-pointer text-dark" for="type-{{ $type->slug }}">{{ $type->name }}</label>
                                 <span class="text-[0.85rem] text-grayx">({{ $type->institutions_count }})</span>
                             </div>
@@ -147,7 +147,7 @@
                         <div class="flex flex-col gap-3">
                             @foreach($affiliations as $affiliation)
                             <div class="flex items-center gap-3">
-                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="checkbox" id="aff-{{ $affiliation->slug }}" name="affiliatedUniversity" value="{{ $affiliation->slug }}">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="checkbox" id="aff-{{ $affiliation->slug }}" name="affiliatedUniversities[]" value="{{ $affiliation->slug }}" {{ in_array($affiliation->slug, request()->get('affiliatedUniversities', [])) ? 'checked' : '' }}>
                                 <label class="flex-1 cursor-pointer text-dark" for="aff-{{ $affiliation->slug }}">{{ $affiliation->name }}</label>
                                 <span class="text-[0.85rem] text-grayx">({{ $affiliation->institutions_count }})</span>
                             </div>
@@ -164,7 +164,7 @@
                         <div class="flex flex-col gap-3">
                             @foreach($institutionCategories as $category)
                             <div class="flex items-center gap-3">
-                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="checkbox" id="cat-{{ $category->slug }}" name="category" value="{{ $category->slug }}">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="checkbox" id="cat-{{ $category->slug }}" name="categories[]" value="{{ $category->slug }}" {{ in_array($category->slug, request()->get('categories', [])) ? 'checked' : '' }}>
                                 <label class="flex-1 cursor-pointer text-dark" for="cat-{{ $category->slug }}">{{ $category->name }}</label>
                                 <span class="text-[0.85rem] text-grayx">({{ $category->institutions_count }})</span>
                             </div>
