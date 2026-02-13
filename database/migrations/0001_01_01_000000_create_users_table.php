@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->date('dob');
             $table->string('address')->nullable();
-            $table->string('education_level');
+            $table->foreignId('education_level_id')->constrained('levels');
             $table->string('field_of_interest')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();

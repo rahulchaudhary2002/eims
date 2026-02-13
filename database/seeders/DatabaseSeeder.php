@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
+            LevelSeeder::class,
             UserSeeder::class,
             VendorSeeder::class,
             AffiliationSeeder::class,
-            LevelSeeder::class,
             InstitutionSeeder::class,
             CourseSeeder::class,
             AffiliationInstitutionSeeder::class,

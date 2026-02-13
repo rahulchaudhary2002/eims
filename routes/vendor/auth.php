@@ -7,16 +7,16 @@ use App\Http\Controllers\Vendor\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Vendor\Auth\NewPasswordController;
 use App\Http\Controllers\Vendor\Auth\PasswordController;
 use App\Http\Controllers\Vendor\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Vendor\Auth\RegisteredUserController;
 use App\Http\Controllers\Vendor\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('institution')->name('vendor.')->group(function () {
     Route::middleware('guest:vendor')->group(function () {
 
-        Route::get('login', [AuthenticatedSessionController::class, 'create'])
-            ->name('login');
+        Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
-        Route::post('login', [AuthenticatedSessionController::class, 'store']);
+        Route::post('register', [RegisteredUserController::class, 'store']) ->name('register');
 
         Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
             ->name('password.request');

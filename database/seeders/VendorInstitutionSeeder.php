@@ -29,6 +29,7 @@ class VendorInstitutionSeeder extends Seeder
             $pivotData[] = [
                 'vendor_id' => $vendorId,
                 'institution_id' => $institutionId,
+                'is_main' => true,
                 'created_at' => $now,
                 'updated_at' => $now,
             ];

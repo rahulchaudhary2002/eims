@@ -146,15 +146,15 @@
                             <label for="studentEducation" class="block text-sm font-semibold text-gray-700 mb-1.5">
                                 Education Level <span class="text-[#ed8936]">*</span>
                             </label>
-                            <select id="studentEducation" name="education_level"
+                            <select id="studentEducation" name="education_level_id"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition appearance-none bg-no-repeat bg-right-4 bg-[length:16px]"
                                 style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23718096\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e'); background-position: right 1rem center;" required>
                                 <option value="">Select education level</option>
-                                <option value="+2" {{ old('education_level') == '+2' ? 'selected' : '' }}>+2 / Intermediate</option>
-                                <option value="bachelor" {{ old('education_level') == 'bachelor' ? 'selected' : '' }}>Bachelor's Degree</option>
-                                <option value="master" {{ old('education_level') == 'master' ? 'selected' : '' }}>Master's Degree</option>
-                                <option value="phd" {{ old('education_level') == 'phd' ? 'selected' : '' }}>PhD</option>
-                                <option value="other" {{ old('education_level') == 'other' ? 'selected' : '' }}>Other</option>
+                                @foreach($educationLevels as $educationLevel)
+                                <option value="{{ $educationLevel->id }}" {{ old('education_level_id') == $educationLevel->id ? 'selected' : '' }}>
+                                    {{ $educationLevel->name }}
+                                </option>
+                                @endforeach
                             </select>
                         </div>
                         <div>
@@ -165,15 +165,15 @@
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition appearance-none bg-no-repeat bg-right-4 bg-[length:16px]"
                                 style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23718096\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e'); background-position: right 1rem center;">
                                 <option value="">Select field</option>
-                                <option value="science" {{ old('field_of_interest') == 'science' ? 'selected' : '' }}>Science</option>
-                                <option value="engineering" {{ old('field_of_interest') == 'engineering' ? 'selected' : '' }}>Engineering</option>
-                                <option value="medicine" {{ old('field_of_interest') == 'medicine' ? 'selected' : '' }}>Medicine</option>
-                                <option value="management" {{ old('field_of_interest') == 'management' ? 'selected' : '' }}>Management</option>
-                                <option value="humanities" {{ old('field_of_interest') == 'humanities' ? 'selected' : '' }}>Humanities</option>
-                                <option value="arts" {{ old('field_of_interest') == 'arts' ? 'selected' : '' }}>Arts</option>
-                                <option value="law" {{ old('field_of_interest') == 'law' ? 'selected' : '' }}>Law</option>
-                                <option value="education" {{ old('field_of_interest') == 'education' ? 'selected' : '' }}>Education</option>
+                                @foreach($educationFields as $educationField)
+                                <option value="{{ $educationField->name }}" {{ old('field_of_interest') == $educationField->name ? 'selected' : '' }}>
+                                    {{ $educationField->name }}
+                                </option>
+                                @endforeach
                             </select>
+                            @error('field_of_interest')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -258,7 +258,7 @@
                 </form>
 
                 <!-- Institution Registration Form -->
-                <form method="POST" action="{{ route('register') }}" class="auth-form hidden space-y-5" id="institutionRegistrationForm">
+                <form method="POST" action="{{ route('vendor.register') }}" class="auth-form hidden space-y-5" id="institutionRegistrationForm">
                     @csrf
                     <div>
                         <label for="institutionName" class="block text-sm font-semibold text-gray-700 mb-1.5">
@@ -277,11 +277,11 @@
                             class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition appearance-none bg-no-repeat bg-right-4 bg-[length:16px]"
                             style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23718096\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e'); background-position: right 1rem center;" required>
                             <option value="">Select institution type</option>
-                            <option value="college" {{ old('institution_type') == 'college' ? 'selected' : '' }}>College</option>
-                            <option value="university" {{ old('institution_type') == 'university' ? 'selected' : '' }}>University</option>
-                            <option value="school" {{ old('institution_type') == 'school' ? 'selected' : '' }}>School</option>
-                            <option value="training" {{ old('institution_type') == 'training' ? 'selected' : '' }}>Training Center</option>
-                            <option value="other" {{ old('institution_type') == 'other' ? 'selected' : '' }}>Other</option>
+                            @foreach($institutionTypes as $institutionType)
+                            <option value="{{ $institutionType->id }}" {{ old('institution_type') == $institutionType->id ? 'selected' : '' }}>
+                                {{ $institutionType->name }}
+                            </option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -291,7 +291,7 @@
                             <i class="fas fa-info-circle"></i> Contact Person Details
                         </h4>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 gap-4">
                             <div>
                                 <label for="contactName" class="block text-sm font-semibold text-gray-700 mb-1.5">
                                     Contact Person Name <span class="text-[#ed8936]">*</span>
@@ -299,14 +299,6 @@
                                 <input type="text" id="contactName" name="contact_name" value="{{ old('contact_name') }}"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition"
                                     placeholder="Enter contact name" required>
-                            </div>
-                            <div>
-                                <label for="contactPosition" class="block text-sm font-semibold text-gray-700 mb-1.5">
-                                    Position <span class="text-[#ed8936]">*</span>
-                                </label>
-                                <input type="text" id="contactPosition" name="contact_position" value="{{ old('contact_position') }}"
-                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition"
-                                    placeholder="e.g., Admission Officer" required>
                             </div>
                         </div>
 
