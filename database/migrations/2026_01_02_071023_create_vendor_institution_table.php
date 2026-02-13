@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('vendor_id')->constrained()->onDelete('cascade');
             $table->foreignId('institution_id')->constrained()->onDelete('cascade');
+            $table->boolean('is_main')->default(false);
             $table->unique(['vendor_id', 'institution_id']);
             $table->timestamps();
         });

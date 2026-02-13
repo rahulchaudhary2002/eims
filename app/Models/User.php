@@ -25,7 +25,7 @@ class User extends Authenticatable
         'phone',
         'dob',
         'address',
-        'education_level',
+        'education_level_id',
         'field_of_interest',
         'email_verified_at',
         'phone_verified_at',

@@ -225,16 +225,12 @@
                                 {{ $institution->is_active ? 'Active and Visible' : 'Inactive and Hidden' }}
                             </p>
                         </div>
-                        <form action="{{-- route('vendor.institution.toggle-status') --}}" method="POST" class="inline">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit"
-                                class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors 
+                        <button
+                            class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors 
                                                {{ $institution->is_active ? 'bg-green-500' : 'bg-gray-300' }}">
-                                <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform 
+                            <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform 
                                           {{ $institution->is_active ? 'translate-x-6' : 'translate-x-1' }}" />
-                            </button>
-                        </form>
+                        </button>
                     </div>
                 </div>
             </div>

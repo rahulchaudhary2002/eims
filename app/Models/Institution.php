@@ -17,6 +17,7 @@ class Institution extends Model
         'address',
         'phone',
         'email',
+        'website',
         'established_year',
         'institution_type_id',
         'logo',

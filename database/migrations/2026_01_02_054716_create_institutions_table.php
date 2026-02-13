@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
+            $table->string('website')->nullable();
             $table->year('established_year')->nullable();
             $table->foreignId('institution_type_id')
                 ->constrained('institution_types');
