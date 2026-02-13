@@ -7,6 +7,7 @@ use App\Models\Institution;
 use App\Models\InstitutionType;
 use App\Models\Affiliation;
 use App\Models\Course;
+use App\Models\InstitutionCategory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -30,7 +31,8 @@ class InstitutionController extends Controller
         $affiliations = Affiliation::active()->get();
         $courses = Course::active()->get();
         $institutionTypes = InstitutionType::orderBy('name')->get();
-        return view('admin.modules.institution.create', compact('affiliations', 'courses', 'institutionTypes'));
+        $institutionCategories = InstitutionCategory::orderBy('name')->get();
+        return view('admin.modules.institution.create', compact('affiliations', 'courses', 'institutionTypes', 'institutionCategories'));
     }
 
     /**
@@ -44,13 +46,14 @@ class InstitutionController extends Controller
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'established_year' => 'nullable|integer|min:1800|max:' . (date('Y') + 1),
-            'type' => 'required|exists:institution_types,slug',
+            'type' => 'required|exists:institution_types,id',
             'affiliations' => 'nullable|array',
             'affiliations.*' => 'exists:affiliations,id',
             'courses' => 'nullable|array',
             'courses.*' => 'exists:courses,id',
             'commissions' => 'nullable|array',
             'commissions.*' => 'nullable|numeric',
+            'institution_category' => 'required|exists:institution_categories,id',
             'is_active' => 'boolean',
         ]);
 
@@ -60,7 +63,8 @@ class InstitutionController extends Controller
             'phone' => $validated['phone'] ?? null,
             'email' => $validated['email'] ?? null,
             'established_year' => $validated['established_year'] ?? null,
-            'type' => $validated['type'],
+            'institution_type_id' => $validated['type'],
+            'institution_category_id' => $validated['institution_category'],
             'is_active' => $request->is_active ?? false
         ]);
 
@@ -91,7 +95,7 @@ class InstitutionController extends Controller
      */
     public function show(Institution $institution): View
     {
-        $institution->load(['affiliations', 'courses', 'institutionType']);
+        $institution->load(['affiliations', 'courses', 'institutionType', 'category']);
         return view('admin.modules.institution.show', compact('institution'));
     }
 
@@ -103,9 +107,10 @@ class InstitutionController extends Controller
         $affiliations = Affiliation::active()->get();
         $courses = Course::active()->get();
         $institutionTypes = InstitutionType::orderBy('name')->get();
-        $institution->load(['affiliations', 'courses', 'institutionType']);
+        $institutionCategories = InstitutionCategory::orderBy('name')->get();
+        $institution->load(['affiliations', 'courses', 'institutionType', 'category']);
 
-        return view('admin.modules.institution.edit', compact('institution', 'affiliations', 'courses', 'institutionTypes'));
+        return view('admin.modules.institution.edit', compact('institution', 'affiliations', 'courses', 'institutionTypes', 'institutionCategories'));
     }
 
     /**
@@ -119,11 +124,12 @@ class InstitutionController extends Controller
             'phone' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255',
             'established_year' => 'nullable|integer|min:1800|max:' . (date('Y') + 1),
-            'type' => 'required|exists:institution_types,slug',
+            'type' => 'required|exists:institution_types,id',
             'affiliations' => 'nullable|array',
             'affiliations.*' => 'exists:affiliations,id',
             'courses' => 'nullable|array',
             'courses.*' => 'exists:courses,id',
+            'institution_category' => 'required|exists:institution_categories,id',
             'is_active' => 'boolean',
         ]);
 
@@ -133,7 +139,8 @@ class InstitutionController extends Controller
             'phone' => $validated['phone'] ?? null,
             'email' => $validated['email'] ?? null,
             'established_year' => $validated['established_year'] ?? null,
-            'type' => $validated['type'],
+            'institution_type_id' => $validated['type'],
+            'institution_category_id' => $validated['institution_category'],
             'is_active' => $request->is_active ?? false
         ]);
 

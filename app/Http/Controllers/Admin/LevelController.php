@@ -41,7 +41,7 @@ class LevelController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        Level::create([$validated, 'is_active' => $request->is_active ?? false]);
+        Level::create([...$validated, 'is_active' => $request->is_active ?? false]);
 
         return redirect()->route('admin.level.index')
             ->with('success', 'Level created successfully.');
@@ -68,7 +68,7 @@ class LevelController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $level->update([$validated, 'is_active' => $request->is_active ?? false]);
+        $level->update([...$validated, 'is_active' => $request->is_active ?? false]);
 
         return redirect()->route('admin.level.index')
             ->with('success', 'Level updated successfully.');

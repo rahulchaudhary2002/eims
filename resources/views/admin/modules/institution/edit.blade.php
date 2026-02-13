@@ -85,8 +85,21 @@
                     <select name="type" class="w-full border rounded-lg px-4 py-2" required>
                         <option value="">Select Type</option>
                         @foreach($institutionTypes as $institutionType)
-                        <option value="{{ $institutionType->slug }}" {{ old('type', $institution->type) == $institutionType->slug ? 'selected' : '' }}>
+                        <option value="{{ $institutionType->id }}" {{ old('type', $institution->institution_type_id) == $institutionType->id ? 'selected' : '' }}>
                             {{ $institutionType->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Category -->
+                <div class="md:col-span-2">
+                    <label class="block mb-1">Institution Category *</label>
+                    <select name="institution_category" class="w-full border rounded-lg px-4 py-2" required>
+                        <option value="">Select Category</option>
+                        @foreach($institutionCategories as $category)
+                        <option value="{{ $category->id }}" {{ old('institution_category', $institution->institution_category_id) == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
                         </option>
                         @endforeach
                     </select>
