@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdmissionController;
-use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
@@ -9,7 +8,6 @@ use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReplyController;
-use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
@@ -29,14 +27,6 @@ Route::middleware('auth')->group(function () {
 Route::prefix('course')->name('course')->group(function () {
     Route::get('/', [CourseController::class, 'index']);
     Route::get('/{course}', [CourseController::class, 'show'])->name('.show');
-});
-
-Route::prefix('college')->name('college')->group(function () {
-    Route::get('/', [CollegeController::class, 'index']);
-});
-
-Route::prefix('school')->name('school')->group(function () {
-    Route::get('/', [SchoolController::class, 'index']);
 });
 
 Route::prefix('forum/question')->name('forum.')->group(function () {
@@ -66,9 +56,10 @@ Route::prefix('event')->name('event.')->group(function () {
     Route::get('/{event:slug}', [EventController::class, 'show'])->name('show');
 });
 
-Route::prefix('{institution_type}/{institution_slug}')->name('institution.')->group(function () {
-    Route::get('/', [InstitutionController::class, 'show'])->name('show');
-    Route::get('/query', [InstitutionController::class, 'query'])->name('query');
-    Route::post('/query/store', [InstitutionController::class, 'storeQuery'])->name('query.store');
-    Route::get('/admissions', [InstitutionController::class, 'admissions'])->name('admissions');
+Route::prefix('institution')->name('institution.')->group(function () {
+    Route::get('/', [InstitutionController::class, 'index'])->name('index');
+    Route::get('/{institution_slug}', [InstitutionController::class, 'show'])->name('show');
+    Route::get('/{institution_slug}/query', [InstitutionController::class, 'query'])->name('query');
+    Route::post('/{institution_slug}/query/store', [InstitutionController::class, 'storeQuery'])->name('query.store');
+    Route::get('/{institution_slug}/admissions', [InstitutionController::class, 'admissions'])->name('admissions');
 });
