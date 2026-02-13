@@ -289,11 +289,11 @@
                     <img src="{{ Storage::url($college->cover_image) }}" alt="{{ $college->name }}" class="w-full h-full object-cover transition-all hover:scale-105">
                 </div>
                 <div class="p-7">
-                    <span class="inline-block px-4 py-1.5 bg-teal-500/10 text-teal-500 rounded-full text-xs font-semibold mb-4">Management</span>
+                    <span class="inline-block px-4 py-1.5 bg-teal-500/10 text-teal-500 rounded-full text-xs font-semibold mb-4">{{ $college->category->name }}</span>
                     <h3 class="text-2xl text-[#2c5aa0] mb-2.5 leading-tight font-bold">{{ $college->name }}</h3>
                     <div class="text-gray-600 mb-4 flex items-center gap-1.5 text-sm">
                         <i class="fas fa-map-marker-alt text-[#4299e1]"></i>
-                        <span>Nayabazar, Kathmandu</span>
+                        <span>{{ $college->address }}</span>
                     </div>
                     <div class="flex justify-between pt-4 border-t border-gray-200">
                         <div class="text-center">
@@ -430,7 +430,7 @@
                         {{ $course->description }}
                     </p>
                     <div class="flex justify-between items-center">
-                        <div class="text-2xl font-bold text-[#2c5aa0] whitespace-nowrap">NPR 1,25,000<small class="text-sm text-gray-600 font-normal">/year</small></div>
+                        <!-- <div class="text-2xl font-bold text-[#2c5aa0] whitespace-nowrap">NPR 1,25,000<small class="text-sm text-gray-600 font-normal">/year</small></div> -->
                         <a href="{{ route('course.show', $course) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold cursor-pointer transition-all bg-[#4299e1] text-white text-sm hover:bg-[#2c5aa0] hover:-translate-y-1 hover:shadow-lg">Details</a>
                     </div>
                 </div>

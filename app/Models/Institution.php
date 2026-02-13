@@ -82,6 +82,11 @@ class Institution extends Model
         return $this->hasMany(InstitutionAdmissionCommission::class);
     }
 
+    public function category()
+    {
+        return $this->belongsTo(InstitutionCategory::class, 'institution_category_id');
+    }
+
     public function getDueCommissionAttribute()
     {
         $totalCommission = $this->commissions()->sum('commission_amount');

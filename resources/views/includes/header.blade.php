@@ -27,15 +27,9 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('college') }}"
-                                        class="text-base py-2 {{ request()->routeIs('college') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }} transition-colors no-underline">
+                                    <a href="{{ route('institution.index') }}"
+                                        class="text-base py-2 {{ request()->routeIs('institution.index') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }} transition-colors no-underline">
                                         Colleges
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('school') }}"
-                                        class="text-base py-2 {{ request()->routeIs('school') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }} transition-colors no-underline">
-                                        Schools
                                     </a>
                                 </li>
                                 <li>
@@ -130,13 +124,9 @@
                                 class="text-base py-3 px-4 {{ request()->routeIs('home') ? 'text-[#4299e1] font-semibold border-l-4 border-[#4299e1] bg-[rgba(66,153,225,0.05)]' : 'text-[#2d3748] hover:text-[#4299e1] hover:bg-[rgba(66,153,225,0.05)]' }} transition-all duration-200 no-underline block">
                                 Home
                             </a>
-                            <a href="{{ route('college') }}"
-                                class="text-base py-3 px-4 {{ request()->routeIs('college') ? 'text-[#4299e1] font-semibold border-l-4 border-[#4299e1] bg-[rgba(66,153,225,0.05)]' : 'text-[#2d3748] hover:text-[#4299e1] hover:bg-[rgba(66,153,225,0.05)]' }} transition-all duration-200 no-underline block">
+                            <a href="{{ route('institution.index') }}"
+                                class="text-base py-3 px-4 {{ request()->routeIs('institution.index') ? 'text-[#4299e1] font-semibold border-l-4 border-[#4299e1] bg-[rgba(66,153,225,0.05)]' : 'text-[#2d3748] hover:text-[#4299e1] hover:bg-[rgba(66,153,225,0.05)]' }} transition-all duration-200 no-underline block">
                                 Colleges
-                            </a>
-                            <a href="{{ route('school') }}"
-                                class="text-base py-3 px-4 {{ request()->routeIs('school') ? 'text-[#4299e1] font-semibold border-l-4 border-[#4299e1] bg-[rgba(66,153,225,0.05)]' : 'text-[#2d3748] hover:text-[#4299e1] hover:bg-[rgba(66,153,225,0.05)]' }} transition-all duration-200 no-underline block">
-                                Schools
                             </a>
                             <a href="{{ route('course') }}"
                                 class="text-base py-3 px-4 {{ request()->routeIs('course') ? 'text-[#4299e1] font-semibold border-l-4 border-[#4299e1] bg-[rgba(66,153,225,0.05)]' : 'text-[#2d3748] hover:text-[#4299e1] hover:bg-[rgba(66,153,225,0.05)]' }} transition-all duration-200 no-underline block">

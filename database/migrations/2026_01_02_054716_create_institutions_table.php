@@ -22,6 +22,8 @@ return new class extends Migration
             $table->year('established_year')->nullable();
             $table->foreignId('institution_type_id')
                 ->constrained('institution_types');
+            $table->foreignId('institution_category_id')
+                ->constrained('institution_categories');
             $table->string('logo')->nullable();
             $table->string('cover_image')->nullable();
             $table->boolean('is_active')->default(true);

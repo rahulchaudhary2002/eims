@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Sluggable\SlugOptions;
 
 class Affiliation extends Model
 {
@@ -13,6 +14,7 @@ class Affiliation extends Model
      */
     protected $fillable = [
         'name',
+        'slug',
         'code',
         'description',
         'is_active',
@@ -26,6 +28,13 @@ class Affiliation extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
 
     /**
      * Scope a query to only include active affiliations.
