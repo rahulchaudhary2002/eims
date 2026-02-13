@@ -104,12 +104,35 @@
                             required>
                             <option value="">Select Type</option>
                             @foreach($institutionTypes as $institutionType)
-                            <option value="{{ $institutionType->slug }}" {{ old('type') == $institutionType->slug ? 'selected' : '' }}>
+                            <option value="{{ $institutionType->id }}" {{ old('type') == $institutionType->id ? 'selected' : '' }}>
                                 {{ $institutionType->name }}
                             </option>
                             @endforeach
                         </select>
                         @error('type')
+                        <p class="text-red-500 text-sm mt-1 flex items-center">
+                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label for="institution_category" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                            <x-lucide-chart-bar-stacked class="w-5 h-5 mr-2 text-blue-500" />
+                            Institution Category *
+                        </label>
+                        <select name="institution_category" id="institution_category"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 @error('institution_category') border-red-500 @enderror"
+                            required>
+                            <option value="">Select Category</option>
+                            @foreach($institutionCategories as $category)
+                            <option value="{{ $category->id }}" {{ old('institution_category') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('institution_category')
                         <p class="text-red-500 text-sm mt-1 flex items-center">
                             <x-lucide-alert-circle class="w-4 h-4 mr-1" />
                             {{ $message }}

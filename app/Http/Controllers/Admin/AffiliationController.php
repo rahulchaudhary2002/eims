@@ -39,8 +39,7 @@ class AffiliationController extends Controller
             'description' => 'nullable|string',
             'is_active' => 'boolean',
         ]);
-
-        Affiliation::create([$validated, 'is_active' => $request->is_active ?? false]);
+        Affiliation::create([...$validated, 'is_active' => $request->is_active ?? false]);
 
         return redirect()->route('admin.affiliation.index')
             ->with('success', 'Affiliation created successfully.');
@@ -66,7 +65,7 @@ class AffiliationController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $affiliation->update([$validated, 'is_active' => $request->is_active ?? false]);
+        $affiliation->update([...$validated, 'is_active' => $request->is_active ?? false]);
 
         return redirect()->route('admin.affiliation.index')
             ->with('success', 'Affiliation updated successfully.');

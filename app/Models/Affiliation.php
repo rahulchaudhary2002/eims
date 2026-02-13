@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Affiliation extends Model
 {
+    use HasSlug;
     /**
      * The attributes that are mass assignable.
      *

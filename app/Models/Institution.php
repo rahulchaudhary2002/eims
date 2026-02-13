@@ -20,6 +20,7 @@ class Institution extends Model
         'website',
         'established_year',
         'institution_type_id',
+        'institution_category_id',
         'logo',
         'cover_image',
         'is_active'
@@ -106,17 +107,5 @@ class Institution extends Model
         }
 
         return $this->institutionType()->value('slug');
-    }
-
-    public function setTypeAttribute(?string $value): void
-    {
-        if (!$value) {
-            $this->attributes['institution_type_id'] = null;
-            return;
-        }
-
-        $this->attributes['institution_type_id'] = InstitutionType::query()
-            ->where('slug', $value)
-            ->value('id');
     }
 }
