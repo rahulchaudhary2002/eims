@@ -119,30 +119,27 @@
             <button class="px-8 py-3 bg-white/10 border-none font-semibold text-white/80 cursor-pointer rounded-xl transition-all hover:text-white hover:bg-white/20 backdrop-blur-sm" data-tab="institutions">Colleges</button>
             <button class="px-8 py-3 bg-white/10 border-none font-semibold text-white/80 cursor-pointer rounded-xl transition-all hover:text-white hover:bg-white/20 backdrop-blur-sm" data-tab="scholarships">Scholarships</button>
         </div>
-        <form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 bg-white/10 p-8 rounded-xl backdrop-blur-sm" id="searchForm">
+        <form method="get" action="{{ route('course') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 bg-white/10 p-8 rounded-xl backdrop-blur-sm" id="searchForm">
             <div class="flex flex-col">
                 <label for="searchKeyword" class="mb-2 font-semibold text-white">What do you want to study?</label>
-                <input type="text" id="searchKeyword" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50" placeholder="e.g., BIM, MBBS, Computer Engineering">
+                <input type="text" name="search" id="searchKeyword" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50" placeholder="e.g., BIM, MBBS, Computer Engineering">
             </div>
             <div class="flex flex-col">
-                <label for="searchLocation" class="mb-2 font-semibold text-white">Location</label>
-                <select id="searchLocation" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
-                    <option value="">All Locations</option>
-                    <option value="kathmandu">Kathmandu</option>
-                    <option value="pokhara">Pokhara</option>
-                    <option value="biratnagar">Biratnagar</option>
-                    <option value="lalitpur">Lalitpur</option>
-                    <option value="online">Online</option>
+                <label for="searchCategory" class="mb-2 font-semibold text-white">Category</label>
+                <select id="searchCategory" name="category" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
+                    <option value="">Any Categories</option>
+                    @foreach($courseCategories as $category)
+                    <option value="{{ $category->slug }}">{{ $category->name }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="flex flex-col">
                 <label for="searchLevel" class="mb-2 font-semibold text-white">Level</label>
-                <select id="searchLevel" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
+                <select id="searchLevel" name="level" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
                     <option value="">Any Level</option>
-                    <option value="plus2">+2/Intermediate</option>
-                    <option value="bachelor">Bachelor's</option>
-                    <option value="master">Master's</option>
-                    <option value="phd">PhD</option>
+                    @foreach($levels as $level)
+                    <option value="{{ $level->slug }}">{{ $level->name }}</option>
+                    @endforeach
                 </select>
             </div>
             <button type="submit" class="self-end h-[50px] bg-white text-[#2c5aa0] font-bold text-lg rounded-xl hover:bg-[#4299e1] hover:text-white inline-flex items-center gap-2 justify-center transition-all">
@@ -802,5 +799,24 @@
         // Show modal on page load (remove this if you don't want it to show automatically)
         setTimeout(showModal, 1000);
     })();
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.getElementById('searchForm');
+        if (searchForm) {
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const keyword = document.getElementById('searchKeyword').value;
+                const category = document.getElementById('searchCategory').value;
+                const level = document.getElementById('searchLevel').value;
+                const params = new URLSearchParams();
+                if (keyword) params.append('search', keyword);
+                if (category) params.append('category', category);
+                if (level) params.append('level', level);
+                window.location.href = "{{ route('course') }}" + (params.toString() ? '?' + params.toString() : '');
+            });
+        }
+    });
 </script>
 @endsection
