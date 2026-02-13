@@ -18,12 +18,14 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->unsignedBigInteger('level_id')->nullable();
             $table->unsignedBigInteger('affiliation_id')->nullable();
+            $table->unsignedBigInteger('category_id');
             $table->string('duration')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
             $table->foreign('level_id')->references('id')->on('levels')->onDelete('set null');
             $table->foreign('affiliation_id')->references('id')->on('affiliations')->onDelete('set null');
+            $table->foreign('category_id')->references('id')->on('course_categories')->onDelete('cascade');
         });
     }
 

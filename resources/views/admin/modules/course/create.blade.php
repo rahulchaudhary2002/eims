@@ -72,6 +72,29 @@
                         @enderror
                     </div>
 
+                    {{-- Category --}}
+                    <div>
+                        <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                            <x-lucide-layers class="w-5 h-5 mr-2 text-blue-500" />
+                            Course Category *
+                        </label>
+                        <select name="category_id" id="category_id"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('category_id') border-red-500 @enderror">
+                            <option value="">Select Category</option>
+                            @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
+                        <p class="text-red-500 text-sm mt-1 flex items-center">
+                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
                     {{-- Level --}}
                     <div>
                         <label for="level_id" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">

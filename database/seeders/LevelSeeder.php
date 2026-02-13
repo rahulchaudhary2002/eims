@@ -12,6 +12,7 @@ class LevelSeeder extends Seeder
         $levels = [
             [
                 'name' => 'Certificate Level',
+                'slug' => 'certificate-level',
                 'code' => 'CERT',
                 'description' => 'Basic certificate level programs typically lasting 6 months to 1 year.',
                 'order' => 1,
@@ -19,6 +20,7 @@ class LevelSeeder extends Seeder
             ],
             [
                 'name' => 'Diploma Level',
+                'slug' => 'diploma-level',
                 'code' => 'DIP',
                 'description' => 'Diploma programs usually 1-2 years in duration with practical focus.',
                 'order' => 2,
@@ -26,6 +28,7 @@ class LevelSeeder extends Seeder
             ],
             [
                 'name' => 'Bachelor Level',
+                'slug' => 'bachelor-level',
                 'code' => 'BACHELOR',
                 'description' => 'Undergraduate degree programs typically 3-4 years in duration.',
                 'order' => 3,
@@ -33,6 +36,7 @@ class LevelSeeder extends Seeder
             ],
             [
                 'name' => 'Master Level',
+                'slug' => 'master-level',
                 'code' => 'MASTER',
                 'description' => 'Postgraduate degree programs usually 1-2 years after bachelor.',
                 'order' => 4,
@@ -40,6 +44,7 @@ class LevelSeeder extends Seeder
             ],
             [
                 'name' => 'PhD Level',
+                'slug' => 'phd-level',
                 'code' => 'PHD',
                 'description' => 'Doctoral research programs for advanced academic studies.',
                 'order' => 5,
