@@ -17,10 +17,10 @@
 <body class="bg-gray-50 font-sans">
     @yield('page-specific-modal')
     @include('includes.header')
-    @if(request()->routeIs('home') || request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('institution.index'))
+    @if(request()->routeIs('home') || request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('institution.index') || request()->routeIs('course'))
     @yield('content')
     @else
-    <div class="max-w-7xl mx-auto px-4 mt-24">
+    <div class="max-w-7xl mx-auto px-4 mt-24 pb-8">
         @yield('content')
     </div>
     @endif

@@ -284,7 +284,7 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
             @forelse ($colleges as $college)
-            <a href="{{ route('institution.show', [$college->type, $college->slug]) }}" class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl border border-gray-200">
+            <a href="{{ route('institution.show', [$college->slug]) }}" class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl border border-gray-200">
                 <div class="h-44 overflow-hidden">
                     <img src="{{ Storage::url($college->cover_image) }}" alt="{{ $college->name }}" class="w-full h-full object-cover transition-all hover:scale-105">
                 </div>
@@ -315,7 +315,7 @@
             @endforelse
         </div>
         <div class="text-center mt-12">
-            <a href="{{ route('college') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold cursor-pointer transition-all bg-white text-[#4299e1] border-2 border-[#4299e1] hover:bg-[#4299e1]/10 hover:-translate-y-1">
+            <a href="{{ route('institution.index') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold cursor-pointer transition-all bg-white text-[#4299e1] border-2 border-[#4299e1] hover:bg-[#4299e1]/10 hover:-translate-y-1">
                 View All Colleges
                 <i class="fas fa-arrow-right"></i>
             </a>
