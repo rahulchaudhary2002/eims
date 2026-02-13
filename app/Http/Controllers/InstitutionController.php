@@ -34,8 +34,8 @@ class InstitutionController extends Controller
         $locations = (array) $request->input('locations', []);
 
         $institutions = Institution::query()
-            ->when($request->filled('college_name'), function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->college_name . '%');
+            ->when($request->filled('search'), function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
             })
             ->when($request->filled('institution_type'), function ($q) use ($request) {
                 $q->whereHas('institutionType', fn($qq) => $qq->where('slug', $request->institution_type));

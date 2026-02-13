@@ -54,8 +54,8 @@
             <div class="flex flex-col">
                 <label class="mb-2 font-semibold text-dark text-[0.95rem]" for="collegeName">College Name</label>
                 <input id="collegeName" type="text" placeholder="Search by college name"
-                    name="college_name"
-                    value="{{ request('college_name') }}"
+                    name="search"
+                    value="{{ request('search') }}"
                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition" />
             </div>
 
