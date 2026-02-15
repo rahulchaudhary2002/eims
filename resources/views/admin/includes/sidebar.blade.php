@@ -5,8 +5,7 @@ $sidebarOpen = session('sidebarOpen', true);
 <div class="fixed left-0 top-0 h-full bg-gradient-to-b from-primary to-secondary border-r transition-all duration-300 {{ $sidebarOpen ? 'w-[250px]' : 'w-[70px]' }}">
     <div class="flex items-center justify-center text-white text-3xl h-[70px] px-4">
         <a class="flex items-center font-bold" href="{{ route('admin.dashboard') }}">
-            <x-lucide-graduation-cap class="w-10 h-10 mr-2 text-success" />
-            <span>Sikuna.com</span>
+            <img src="{{ asset('assets/images/logo.png') }}" alt="Sikuna" class="h-16 w-auto">
         </a>
     </div>
 

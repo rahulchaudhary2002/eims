@@ -9,8 +9,7 @@
                 <div class="flex items-center justify-center">
                     <!-- route: home -->
                     <a href="{{ route('home') }}" class="flex items-center font-semibold group no-underline">
-                        <i class="fas fa-graduation-cap mr-2 text-[#4299e1] text-3xl"></i>
-                        <span class="text-[#2c5aa0] text-3xl">Sikuna.com</span>
+                        <img src="{{ asset('assets/images/logo.png') }}" alt="Sikuna" class="h-16 w-auto group-hover:animate-pulse">
                     </a>
                 </div>
 

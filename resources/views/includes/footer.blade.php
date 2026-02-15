@@ -6,8 +6,7 @@
             <!-- Footer About -->
             <div>
                 <div class="flex items-center gap-2.5 text-[1.8rem] font-bold mb-5">
-                    <i class="fas fa-graduation-cap text-[#4299e1]"></i>
-                    <span>Sikuna.com</span>
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Sikuna">
                 </div>
                 <p class="opacity-80 mb-5 leading-relaxed">
                     We connect students with the best educational opportunities in Nepal. Our platform helps you find courses, institutions, and scholarships tailored to your goals.
