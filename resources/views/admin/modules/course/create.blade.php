@@ -113,30 +113,6 @@
                         @enderror
                     </div>
 
-                    {{-- Category --}}
-                    <div>
-                        <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                            <x-lucide-layers class="w-5 h-5 mr-2 text-blue-500" />
-                            Course Category *
-                        </label>
-                        <select name="category_id" id="category_id"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('category_id') border-red-500 @enderror">
-                            <option value="">Select Category</option>
-                            @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                        @error('category_id')
-                        <p class="text-red-500 text-sm mt-1 flex items-center">
-                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
-                            {{ $message }}
-                        </p>
-                        @enderror
-                    </div>
-
-                    {{-- Level --}}
                     <div>
                         <label for="program_ids" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
                             <x-lucide-layers class="w-5 h-5 mr-2 text-blue-500" />
@@ -159,69 +135,6 @@
                         </p>
                         @enderror
                         @error('program_ids.*')
-                        <p class="text-red-500 text-sm mt-1 flex items-center">
-                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
-                            {{ $message }}
-                        </p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="level_id" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                            <x-lucide-graduation-cap class="w-5 h-5 mr-2 text-blue-500" />
-                            Level *
-                        </label>
-                        <select name="level_id" id="level_id"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('level_id') border-red-500 @enderror" required>
-                            <option value="">Select Level</option>
-                            @foreach($levels as $level)
-                            <option value="{{ $level->id }}" {{ old('level_id') == $level->id ? 'selected' : '' }}>
-                                {{ $level->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                        @error('level_id')
-                        <p class="text-red-500 text-sm mt-1 flex items-center">
-                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
-                            {{ $message }}
-                        </p>
-                        @enderror
-                    </div>
-
-                    {{-- Affiliation --}}
-                    <div>
-                        <label for="affiliation_id" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                            <x-lucide-building class="w-5 h-5 mr-2 text-blue-500" />
-                            Affiliation
-                        </label>
-                        <select name="affiliation_id" id="affiliation_id"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('affiliation_id') border-red-500 @enderror">
-                            <option value="">Select Affiliation (Optional)</option>
-                            @foreach($affiliations as $affiliation)
-                            <option value="{{ $affiliation->id }}" {{ old('affiliation_id') == $affiliation->id ? 'selected' : '' }}>
-                                {{ $affiliation->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                        @error('affiliation_id')
-                        <p class="text-red-500 text-sm mt-1 flex items-center">
-                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
-                            {{ $message }}
-                        </p>
-                        @enderror
-                    </div>
-
-                    {{-- Duration --}}
-                    <div>
-                        <label for="duration" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                            <x-lucide-calendar class="w-5 h-5 mr-2 text-blue-500" />
-                            Duration
-                        </label>
-                        <input type="text" name="duration" id="duration"
-                            value="{{ old('duration') }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('duration') border-red-500 @enderror"
-                            placeholder="e.g., 3 years, 6 months">
-                        @error('duration')
                         <p class="text-red-500 text-sm mt-1 flex items-center">
                             <x-lucide-alert-circle class="w-4 h-4 mr-1" />
                             {{ $message }}

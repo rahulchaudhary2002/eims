@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
-use App\Models\Level;
-use App\Models\Affiliation;
-use App\Models\CourseCategory;
 use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +16,7 @@ class CourseController extends Controller
      */
     public function index(): View
     {
-        $courses = Course::with(['level', 'affiliation', 'programs'])->latest()->paginate(10);
+        $courses = Course::with(['programs.level', 'programs.affiliation', 'programs.category'])->latest()->paginate(10);
 
         return view('admin.modules.course.index', compact('courses'));
     }
@@ -29,12 +26,9 @@ class CourseController extends Controller
      */
     public function create(): View
     {
-        $levels = Level::active()->ordered()->get();
-        $affiliations = Affiliation::active()->get();
-        $categories = CourseCategory::get();
         $programs = Program::active()->get();
 
-        return view('admin.modules.course.create', compact('levels', 'affiliations', 'categories', 'programs'));
+        return view('admin.modules.course.create', compact('programs'));
     }
 
     /**
@@ -46,12 +40,8 @@ class CourseController extends Controller
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:courses,code',
             'description' => 'nullable|string',
-            'level_id' => 'required|exists:levels,id',
-            'category_id' => 'required|exists:course_categories,id',
             'program_ids' => 'required|array|min:1',
             'program_ids.*' => 'exists:programs,id',
-            'affiliation_id' => 'nullable|exists:affiliations,id',
-            'duration' => 'nullable|string|max:50',
             'is_active' => 'boolean',
             'sections.*.title' => 'required|string|max:255',
             'sections.*.content' => 'required|string',
@@ -61,10 +51,6 @@ class CourseController extends Controller
             'name' => $validated['name'],
             'code' => $validated['code'],
             'description' => $validated['description'] ?? null,
-            'level_id' => $validated['level_id'],
-            'category_id' => $validated['category_id'],
-            'affiliation_id' => $validated['affiliation_id'] ?? null,
-            'duration' => $validated['duration'] ?? null,
             'is_active' => $request->is_active ?? false,
         ]);
 
@@ -90,17 +76,14 @@ class CourseController extends Controller
     public function edit(Course $course): View
     {
         $course->load('programs');
-        $levels = Level::active()->ordered()->get();
-        $affiliations = Affiliation::active()->get();
-        $categories = CourseCategory::get();
         $programs = Program::active()->get();
 
-        return view('admin.modules.course.edit', compact('course', 'levels', 'affiliations', 'categories', 'programs'));
+        return view('admin.modules.course.edit', compact('course', 'programs'));
     }
 
     public function show(Course $course)
     {
-        $course->load(['level', 'affiliation', 'programs', 'descriptions']);
+        $course->load(['programs.level', 'programs.affiliation', 'programs.category', 'descriptions']);
         return view('admin.modules.course.show', compact('course'));
     }
 
@@ -113,12 +96,8 @@ class CourseController extends Controller
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:courses,code,' . $course->id,
             'description' => 'nullable|string',
-            'level_id' => 'required|exists:levels,id',
-            'category_id' => 'required|exists:course_categories,id',
             'program_ids' => 'required|array|min:1',
             'program_ids.*' => 'exists:programs,id',
-            'affiliation_id' => 'nullable|exists:affiliations,id',
-            'duration' => 'nullable|string|max:50',
             'is_active' => 'boolean',
             'sections.*.title' => 'required|string|max:255',
             'sections.*.content' => 'required|string',
@@ -128,10 +107,6 @@ class CourseController extends Controller
             'name' => $validated['name'],
             'code' => $validated['code'],
             'description' => $validated['description'] ?? null,
-            'level_id' => $validated['level_id'],
-            'category_id' => $validated['category_id'],
-            'affiliation_id' => $validated['affiliation_id'] ?? null,
-            'duration' => $validated['duration'] ?? null,
             'is_active' => $request->is_active ?? false,
         ]);
 

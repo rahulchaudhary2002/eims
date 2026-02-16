@@ -125,9 +125,9 @@
                 <input type="text" name="search" id="searchKeyword" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50" placeholder="e.g., BIM, MBBS, Computer Engineering">
             </div>
             <div class="flex flex-col">
-                <label for="searchCategory" class="mb-2 font-semibold text-white">Category</label>
+                <label for="searchCategory" class="mb-2 font-semibold text-white">Program Category</label>
                 <select id="searchCategory" name="category" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
-                    <option value="">Any Categories</option>
+                    <option value="">Any Program Categories</option>
                     @foreach($courseCategories as $category)
                     <option value="{{ $category->slug }}">{{ $category->name }}</option>
                     @endforeach
@@ -413,13 +413,14 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
             @forelse ($courses as $course)
+            @php $primaryProgram = $course->programs->first(); @endphp
             <div class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl border border-gray-200">
                 <div class="p-7 pb-4 border-b border-gray-200">
-                    <span class="inline-block px-4 py-1.5 bg-orange-500/10 text-orange-500 rounded-full text-xs font-semibold mb-4">{{ $course->affiliation->name }}</span>
+                    <span class="inline-block px-4 py-1.5 bg-orange-500/10 text-orange-500 rounded-full text-xs font-semibold mb-4">{{ $primaryProgram?->affiliation?->name ?? '—' }}</span>
                     <h3 class="text-2xl text-[#2c5aa0] mb-2.5 leading-tight font-bold">{{ $course->display_name }}</h3>
                     <div class="flex gap-4 text-gray-600 text-sm">
-                        <span><i class="fas fa-clock"></i> {{ $course->duration }}</span>
-                        <span><i class="fas fa-university"></i> {{ $course->level->name }}</span>
+                        <span><i class="fas fa-clock"></i> {{ $primaryProgram?->duration ?? '—' }}</span>
+                        <span><i class="fas fa-university"></i> {{ $primaryProgram?->level?->name ?? '—' }}</span>
                     </div>
                 </div>
                 <div class="p-5 pt-5">

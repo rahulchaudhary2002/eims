@@ -3,6 +3,9 @@
 @section('title', $course->name)
 
 @section('content')
+@php
+$primaryProgram = $course->programs->first();
+@endphp
 
 {{-- HERO --}}
 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-blue-600 to-purple-600 p-8 mb-8 shadow-xl">
@@ -19,15 +22,15 @@
             </h1>
 
             <p class="mt-1 text-lg text-indigo-100">
-                {{ $course->affiliation->name }}
+                {{ $primaryProgram?->affiliation?->name ?? '—' }}
             </p>
 
             <p class="mt-2 inline-flex items-center gap-2 text-sm text-indigo-100">
                 <span class="px-3 py-1 bg-white/20 rounded-full">
-                    {{ $course->level->name }}
+                    {{ $primaryProgram?->level?->name ?? '—' }}
                 </span>
                 <span class="px-3 py-1 bg-white/20 rounded-full">
-                    {{ $course->duration }}
+                    {{ $primaryProgram?->duration ?? '—' }}
                 </span>
             </p>
         </div>
@@ -81,8 +84,8 @@
             </h1>
 
             <p class="text-gray-600 mt-2">
-                {{ $course->level?->name }} ·
-                {{ $course->duration ?? '—' }}
+                {{ $primaryProgram?->level?->name ?? '—' }} ·
+                {{ $primaryProgram?->duration ?? '—' }}
             </p>
 
             @if($course->description)

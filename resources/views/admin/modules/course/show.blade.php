@@ -49,21 +49,21 @@
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-sm text-gray-500">Level</p>
         <p class="text-lg font-semibold text-gray-800">
-            {{ $course->level?->name ?? '—' }}
+            {{ $course->programs->pluck('level.name')->filter()->unique()->join(', ') ?: '—' }}
         </p>
     </div>
 
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-sm text-gray-500">Affiliation</p>
         <p class="text-lg font-semibold text-gray-800">
-            {{ $course->affiliation?->name ?? '—' }}
+            {{ $course->programs->pluck('affiliation.name')->filter()->unique()->join(', ') ?: '—' }}
         </p>
     </div>
 
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-sm text-gray-500">Duration</p>
         <p class="text-lg font-semibold text-gray-800">
-            {{ $course->duration ?? '—' }}
+            {{ $course->programs->pluck('duration')->filter()->unique()->join(', ') ?: '—' }}
         </p>
     </div>
 </div>

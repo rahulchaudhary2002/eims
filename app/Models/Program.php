@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -21,6 +22,10 @@ class Program extends Model
         'slug',
         'code',
         'description',
+        'level_id',
+        'affiliation_id',
+        'category_id',
+        'duration',
         'is_active',
     ];
 
@@ -43,6 +48,21 @@ class Program extends Model
     public function courses(): BelongsToMany
     {
         return $this->belongsToMany(Course::class, 'course_program');
+    }
+
+    public function level(): BelongsTo
+    {
+        return $this->belongsTo(Level::class);
+    }
+
+    public function affiliation(): BelongsTo
+    {
+        return $this->belongsTo(Affiliation::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(ProgramCategory::class, 'category_id');
     }
 
     public function scopeActive($query)

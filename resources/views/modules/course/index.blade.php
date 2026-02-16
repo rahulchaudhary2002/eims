@@ -43,11 +43,11 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <label class="mb-2 font-semibold" for="searchCategory">Category</label>
+                    <label class="mb-2 font-semibold" for="searchCategory">Program Category</label>
                     <select id="searchCategory"
                         name="category"
                         class="px-5 py-4 rounded-[12px] bg-white text-[#2d3748] text-[1rem] focus:outline-none focus:ring-4 focus:ring-white/30">
-                        <option value="">All Categories</option>
+                        <option value="">All Program Categories</option>
                         @foreach ($courseCategories as $category)
                         <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
                         @endforeach
@@ -94,7 +94,7 @@
                 <!-- Filter Group -->
                 <div class="mb-6">
                     <div class="flex items-center justify-between font-semibold text-[#2d3748] mb-4">
-                        <span>Category</span>
+                        <span>Program Category</span>
                     </div>
 
                     <div class="flex flex-col gap-3">
@@ -102,7 +102,7 @@
                         <label class="flex items-center gap-3 text-[#718096] hover:text-[#2d3748] transition cursor-pointer">
                             <input class="w-[18px] h-[18px] cursor-pointer" type="checkbox" name="categories[]" value="{{ $category->slug }}" {{ in_array($category->slug, request()->get('categories', [])) ? 'checked' : '' }}>
                             <span>{{ $category->name }}</span>
-                            <span class="ml-auto bg-[#4299e1]/10 text-[#4299e1] px-2 py-[2px] rounded-full text-[0.8rem] font-semibold">{{ $category->courses_count }}</span>
+                            <span class="ml-auto bg-[#4299e1]/10 text-[#4299e1] px-2 py-[2px] rounded-full text-[0.8rem] font-semibold">{{ $category->programs_count }}</span>
                         </label>
                         @endforeach
                     </div>
@@ -175,13 +175,16 @@
                 <div class="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-7 mb-10 max-lg:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] max-sm:grid-cols-1">
 
                     @forelse ($courses as $course)
+                    @php
+                    $primaryProgram = $course->programs->first();
+                    @endphp
                     <div class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl border border-gray-200">
                         <div class="p-7 pb-4 border-b border-gray-200">
-                            <span class="inline-block px-4 py-1.5 bg-orange-500/10 text-orange-500 rounded-full text-xs font-semibold mb-4">{{ $course->affiliation->name }}</span>
+                            <span class="inline-block px-4 py-1.5 bg-orange-500/10 text-orange-500 rounded-full text-xs font-semibold mb-4">{{ $primaryProgram?->affiliation?->name ?? '—' }}</span>
                             <h3 class="text-2xl text-[#2c5aa0] mb-2.5 leading-tight font-bold">{{ $course->display_name }}</h3>
                             <div class="flex gap-4 text-gray-600 text-sm">
-                                <span><i class="fas fa-clock"></i> {{ $course->duration }}</span>
-                                <span><i class="fas fa-university"></i> {{ $course->level->name }}</span>
+                                <span><i class="fas fa-clock"></i> {{ $primaryProgram?->duration ?? '—' }}</span>
+                                <span><i class="fas fa-university"></i> {{ $primaryProgram?->level?->name ?? '—' }}</span>
                             </div>
                         </div>
                         <div class="p-5 pt-5">
