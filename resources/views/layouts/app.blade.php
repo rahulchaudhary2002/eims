@@ -18,7 +18,7 @@
 <body class="bg-gray-50 font-sans">
     @yield('page-specific-modal')
     @include('includes.header')
-    @if(request()->routeIs('home') || request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('institution.index') || request()->routeIs('course'))
+    @if(request()->routeIs('home') || request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('institution.index') || request()->routeIs('course') || request()->routeIs('program.index') || request()->routeIs('program.show'))
     @yield('content')
     @else
     <div class="max-w-7xl mx-auto px-4 mt-24 pb-8">

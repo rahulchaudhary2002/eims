@@ -43,13 +43,13 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <label class="mb-2 font-semibold" for="searchCategory">Program Category</label>
-                    <select id="searchCategory"
-                        name="category"
+                    <label class="mb-2 font-semibold" for="searchProgram">Program</label>
+                    <select id="searchProgram"
+                        name="program"
                         class="px-5 py-4 rounded-[12px] bg-white text-[#2d3748] text-[1rem] focus:outline-none focus:ring-4 focus:ring-white/30">
-                        <option value="">All Program Categories</option>
-                        @foreach ($courseCategories as $category)
-                        <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
+                        <option value="">All Programs</option>
+                        @foreach ($programs as $program)
+                        <option value="{{ $program->slug }}" {{ request('program') == $program->slug ? 'selected' : '' }}>{{ $program->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -94,15 +94,15 @@
                 <!-- Filter Group -->
                 <div class="mb-6">
                     <div class="flex items-center justify-between font-semibold text-[#2d3748] mb-4">
-                        <span>Program Category</span>
+                        <span>Program</span>
                     </div>
 
                     <div class="flex flex-col gap-3">
-                        @foreach ($courseCategories as $category)
+                        @foreach ($programs as $program)
                         <label class="flex items-center gap-3 text-[#718096] hover:text-[#2d3748] transition cursor-pointer">
-                            <input class="w-[18px] h-[18px] cursor-pointer" type="checkbox" name="categories[]" value="{{ $category->slug }}" {{ in_array($category->slug, request()->get('categories', [])) ? 'checked' : '' }}>
-                            <span>{{ $category->name }}</span>
-                            <span class="ml-auto bg-[#4299e1]/10 text-[#4299e1] px-2 py-[2px] rounded-full text-[0.8rem] font-semibold">{{ $category->programs_count }}</span>
+                            <input class="w-[18px] h-[18px] cursor-pointer" type="checkbox" name="programs[]" value="{{ $program->slug }}" {{ in_array($program->slug, request()->get('programs', [])) ? 'checked' : '' }}>
+                            <span>{{ $program->name }}</span>
+                            <span class="ml-auto bg-[#4299e1]/10 text-[#4299e1] px-2 py-[2px] rounded-full text-[0.8rem] font-semibold">{{ $program->courses_count }}</span>
                         </label>
                         @endforeach
                     </div>

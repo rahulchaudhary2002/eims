@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Vendor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admission;
-use App\Models\AdmissionGrade;
 use App\Models\Institution;
 use Illuminate\Support\Facades\DB;
 
@@ -28,9 +27,9 @@ class AdmissionController extends Controller
     public function create()
     {
         $institution = session('current_institution');
-        $courses = Institution::find($institution->id)->courses;
+        $programs = Institution::find($institution->id)->programs;
 
-        return view('vendor.modules.admission.create', compact('courses'));
+        return view('vendor.modules.admission.create', compact('programs'));
     }
 
     /**
@@ -40,12 +39,11 @@ class AdmissionController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'admission_type' => 'required|in:course,grade',
             'description' => 'nullable|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'courses' => 'required_if:admission_type,course|array',
-            'grades' => 'required_if:admission_type,grade|array',
+            'programs' => 'required|array',
+            'programs.*' => 'exists:programs,id',
         ]);
 
         $institution = session('current_institution');
@@ -60,7 +58,7 @@ class AdmissionController extends Controller
                 'end_date' => $request->end_date,
             ]);
 
-            $this->handleTypeData($admission, $request);
+            $admission->programs()->attach($request->programs ?? []);
         });
 
         return redirect()->route('vendor.admission.index')->with('success', 'Admission created successfully.');
@@ -72,14 +70,13 @@ class AdmissionController extends Controller
     public function edit(Admission $admission)
     {
         $institution = session('current_institution');
-        $courses = Institution::find($institution->id)->courses;
+        $programs = Institution::find($institution->id)->programs;
 
-        $selectedCourseIds = $admission->courses()
-            ->pluck('courses.id')
+        $selectedProgramIds = $admission->programs()
+            ->pluck('programs.id')
             ->toArray();
-        $grades = $admission->grades->sortBy('order')->pluck('name')->toArray();
 
-        return view('vendor.modules.admission.edit', compact('admission', 'courses', 'grades', 'selectedCourseIds'));
+        return view('vendor.modules.admission.edit', compact('admission', 'programs','selectedProgramIds'));
     }
 
     /**
@@ -89,12 +86,11 @@ class AdmissionController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'admission_type' => 'required|in:course,grade',
             'description' => 'nullable|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'courses' => 'required_if:admission_type,course|array',
-            'grades' => 'required_if:admission_type,grade|array',
+            'programs' => 'required|array',
+            'programs.*' => 'exists:programs,id',
         ]);
 
         DB::transaction(function () use ($request, $admission) {
@@ -106,7 +102,7 @@ class AdmissionController extends Controller
                 'end_date' => $request->end_date,
             ]);
 
-            $this->handleTypeData($admission, $request);
+            $admission->programs()->sync($request->programs ?? []);
         });
 
         return redirect()->route('vendor.admission.index')->with('success', 'Admission updated successfully.');
@@ -119,7 +115,7 @@ class AdmissionController extends Controller
     {
         DB::transaction(function () use ($admission) {
             $admission->grades()->delete();
-            $admission->courses()->detach();
+            $admission->programs()->detach();
             $admission->delete();
         });
 
@@ -127,39 +123,12 @@ class AdmissionController extends Controller
     }
 
     /**
-     * Handle courses or grades depending on admission type.
-     */
-    private function handleTypeData(Admission $admission, Request $request)
-    {
-        if ($request->admission_type === 'course') {
-            // Sync selected courses
-            $admission->courses()->sync($request->courses);
-            // Remove old grades if any
-            $admission->grades()->delete();
-        } elseif ($request->admission_type === 'grade') {
-            // Remove old grades
-            $admission->grades()->delete();
-            // Create new grades with order
-            foreach ($request->grades as $index => $grade) {
-                AdmissionGrade::create([
-                    'admission_id' => $admission->id,
-                    'name' => $grade,
-                    'order' => $index,
-                ]);
-            }
-            // Detach courses if any
-            $admission->courses()->detach();
-        }
-    }
-
-    /**
      * Show admission details.
      */
     public function show(Admission $admission)
     {
-        $grades = $admission->grades->sortBy('order')->pluck('name')->toArray();
-        $courses = $admission->courses;
+        $programs = $admission->programs;
 
-        return view('vendor.modules.admission.show', compact('admission', 'grades', 'courses'));
+        return view('vendor.modules.admission.show', compact('admission', 'programs'));
     }
 }

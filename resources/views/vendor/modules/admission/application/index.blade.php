@@ -23,7 +23,7 @@
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Applicant Name</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Email</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Phone</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Grade/Course</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Program</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Submitted At</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
@@ -36,7 +36,7 @@
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $application->full_name ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $application->email ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $application->phone ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->grade ?? $application->course->name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->program->name ?? 'N/A' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $application->created_at->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">
                                 @if($application->status === 'approved')

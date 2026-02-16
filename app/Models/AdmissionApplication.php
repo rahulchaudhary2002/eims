@@ -19,8 +19,7 @@ class AdmissionApplication extends Model
         'phone',
         'status',
         'notes',
-        'course_id',
-        'grade',
+        'program_id',
         'academic_documents',
     ];
 
@@ -34,9 +33,9 @@ class AdmissionApplication extends Model
         return $this->belongsTo(Admission::class);
     }
 
-    public function course()
+    public function program()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Program::class);
     }
 
     public function reward()

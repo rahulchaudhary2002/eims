@@ -32,6 +32,12 @@
                                     </a>
                                 </li>
                                 <li>
+                                    <a href="{{ route('program.index') }}"
+                                        class="text-base py-2 {{ request()->routeIs('program.*') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }} transition-colors no-underline">
+                                        Programs
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="{{ route('course') }}"
                                         class="text-base py-2 {{ request()->routeIs('course') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }} transition-colors no-underline">
                                         Courses
@@ -47,6 +53,12 @@
                                     <a href="{{ route('event.index') }}"
                                         class="text-base py-2 {{ request()->routeIs('event.index') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }} transition-colors no-underline">
                                         Events
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admission.index') }}"
+                                        class="text-base py-2 {{ request()->routeIs('admission.index') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }} transition-colors no-underline">
+                                        Admissions
                                     </a>
                                 </li>
                             </ul>
@@ -130,6 +142,10 @@
                             <a href="{{ route('course') }}"
                                 class="text-base py-3 px-4 {{ request()->routeIs('course') ? 'text-[#4299e1] font-semibold border-l-4 border-[#4299e1] bg-[rgba(66,153,225,0.05)]' : 'text-[#2d3748] hover:text-[#4299e1] hover:bg-[rgba(66,153,225,0.05)]' }} transition-all duration-200 no-underline block">
                                 Courses
+                            </a>
+                            <a href="{{ route('program.index') }}"
+                                class="text-base py-3 px-4 {{ request()->routeIs('program.*') ? 'text-[#4299e1] font-semibold border-l-4 border-[#4299e1] bg-[rgba(66,153,225,0.05)]' : 'text-[#2d3748] hover:text-[#4299e1] hover:bg-[rgba(66,153,225,0.05)]' }} transition-all duration-200 no-underline block">
+                                Programs
                             </a>
                             <a href="{{ route('forum.question.index') }}"
                                 class="text-base py-3 px-4 {{ request()->routeIs('forum.question.index') ? 'text-[#4299e1] font-semibold border-l-4 border-[#4299e1] bg-[rgba(66,153,225,0.05)]' : 'text-[#2d3748] hover:text-[#4299e1] hover:bg-[rgba(66,153,225,0.05)]' }} transition-all duration-200 no-underline block">

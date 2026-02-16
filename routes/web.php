@@ -6,6 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReplyController;
 use Illuminate\Support\Facades\Route;
@@ -62,4 +63,9 @@ Route::prefix('institution')->name('institution.')->group(function () {
     Route::get('/{institution_slug}/query', [InstitutionController::class, 'query'])->name('query');
     Route::post('/{institution_slug}/query/store', [InstitutionController::class, 'storeQuery'])->name('query.store');
     Route::get('/{institution_slug}/admissions', [InstitutionController::class, 'admissions'])->name('admissions');
+});
+
+Route::prefix('program')->name('program.')->group(function () {
+    Route::get('/', [ProgramController::class, 'index'])->name('index');
+    Route::get('/{program:slug}', [ProgramController::class, 'show'])->name('show');
 });

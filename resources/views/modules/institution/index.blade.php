@@ -296,7 +296,7 @@
                             <div class="grid grid-cols-2 gap-3 mb-5 max-sm:grid-cols-1">
                                 <div class="flex items-center gap-2 text-[0.9rem] text-grayx">
                                     <i class="fas fa-graduation-cap text-[#4299e1] w-4"></i>
-                                    <span>{{ $institution->courses_count }}+ Programs</span>
+                                    <span>{{ $institution->programs_count }} Programs</span>
                                 </div>
                                 <!-- <div class="flex items-center gap-2 text-[0.9rem] text-grayx">
                                     <i class="fas fa-users text-[#4299e1] w-4"></i>

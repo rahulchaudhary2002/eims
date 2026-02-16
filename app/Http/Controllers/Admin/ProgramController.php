@@ -47,6 +47,7 @@ class ProgramController extends Controller
             'level_id' => 'required|exists:levels,id',
             'affiliation_id' => 'nullable|exists:affiliations,id',
             'category_id' => 'required|exists:program_categories,id',
+            'fee' => 'required|numeric|min:0',
             'duration' => 'nullable|string|max:50',
             'is_active' => 'boolean',
         ]);
@@ -81,6 +82,7 @@ class ProgramController extends Controller
             'level_id' => 'required|exists:levels,id',
             'affiliation_id' => 'nullable|exists:affiliations,id',
             'category_id' => 'required|exists:program_categories,id',
+            'fee' => 'required|numeric|min:0',
             'duration' => 'nullable|string|max:50',
             'is_active' => 'boolean',
         ]);

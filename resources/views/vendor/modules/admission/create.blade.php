@@ -96,20 +96,6 @@
                         @enderror
                     </div>
 
-                    {{-- Admission Type --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                            <x-lucide-layers class="w-5 h-5 mr-2 text-purple-500" />
-                            Admission Type *
-                        </label>
-                        <select name="admission_type" x-model="admissionType"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
-                            <option value="">Select type</option>
-                            <option value="course">Course Based</option>
-                            <option value="grade">Grade Based</option>
-                        </select>
-                    </div>
-
                     {{-- Dates --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
@@ -141,44 +127,20 @@
                         class="w-full px-4 py-3 border rounded-lg">{{ old('description') }}</textarea>
                 </div>
 
-                {{-- COURSE --}}
-                <div x-show="admissionType === 'course'" x-cloak class="mt-6">
+                {{-- PROGRAM --}}
+                <div class="mt-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
                         <x-lucide-book-open class="w-5 h-5 mr-2 text-purple-500" />
-                        Select Courses *
+                        Select Programs *
                     </label>
-                    <select id="courses" name="courses[]" multiple class="w-full">
-                        @foreach($courses as $course)
-                        <option value="{{ $course->id }}"
-                            {{ in_array($course->id, old('courses', [])) ? 'selected' : '' }}>
-                            {{ $course->name }} ({{ $course->code }})
+                    <select id="programs" name="programs[]" multiple class="w-full">
+                        @foreach($programs as $program)
+                        <option value="{{ $program->id }}"
+                            {{ in_array($program->id, old('programs', [])) ? 'selected' : '' }}>
+                            {{ $program->name }} ({{ $program->code }})
                         </option>
                         @endforeach
                     </select>
-                </div>
-
-                {{-- GRADES --}}
-                <div x-show="admissionType === 'grade'" x-cloak class="mt-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3 flex items-center">
-                        <x-lucide-list-ordered class="w-5 h-5 mr-2 text-purple-500" />
-                        Grades *
-                    </label>
-
-                    <div class="sortable-container space-y-3">
-                        <template x-for="(grade, index) in grades" :key="index">
-                            <div class="flex items-center gap-3 p-3 border rounded-lg bg-gray-50">
-                                <span class="handle text-gray-500">☰</span>
-                                <input type="text" name="grades[]" x-model="grade.name"
-                                    class="flex-1 px-3 py-2 border rounded" required>
-                                <button type="button" @click="removeGrade(index)" class="text-red-600">✕</button>
-                            </div>
-                        </template>
-                    </div>
-
-                    <button type="button" @click="addGrade()"
-                        class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg">
-                        + Add Grade
-                    </button>
                 </div>
 
                 {{-- Buttons --}}
@@ -201,65 +163,17 @@
 
 @section('page-specific-script')
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
 <script>
-    function admissionForm() {
-        return {
-            admissionType: "{{ old('admission_type', '') }}",
-            grades: [],
-
-            init() {
-                const oldGrades = "{!! json_encode(old('grades', [])) !!}";
-
-                this.grades = oldGrades.length ?
-                    oldGrades.map(g => ({
-                        name: g
-                    })) : [{
-                        name: ''
-                    }];
-
-                this.$nextTick(() => this.initSortable());
-            },
-
-            addGrade() {
-                this.grades.push({
-                    name: ''
-                });
-                this.$nextTick(() => this.initSortable());
-            },
-
-            removeGrade(i) {
-                this.grades.length > 1 ?
-                    this.grades.splice(i, 1) :
-                    this.grades[0].name = '';
-            },
-
-            initSortable() {
-                const el = this.$el.querySelector('.sortable-container');
-                if (el) {
-                    new Sortable(el, {
-                        handle: '.handle',
-                        animation: 150,
-                        onEnd: e => {
-                            const moved = this.grades.splice(e.oldIndex, 1)[0];
-                            this.grades.splice(e.newIndex, 0, moved);
-                        }
-                    });
-                }
-            }
-        }
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-        if (document.getElementById('courses')) {
-            new Choices('#courses', {
+        if (document.getElementById('programs')) {
+            new Choices('#programs', {
                 removeItemButton: true,
-                placeholderValue: 'Select courses...',
+                placeholderValue: 'Select programs...',
                 searchEnabled: true,
                 shouldSort: false,
                 itemSelectText: '',
-                noResultsText: 'No courses found',
+                noResultsText: 'No programs found',
                 searchResultLimit: 10,
             });
         }

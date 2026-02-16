@@ -22,27 +22,14 @@
                 <p class="text-gray-800">{{ $admission->title }}</p>
             </div>
 
-            <div>
-                <p class="text-gray-500 font-medium">Admission Type</p>
-                <p class="text-gray-800 capitalize">{{ $admission->admission_type }}</p>
-            </div>
-
             <div class="md:col-span-2">
-                <p class="text-gray-500 font-medium">Courses / Grades</p>
+                <p class="text-gray-500 font-medium">Programs</p>
 
-                @if($admission->admission_type === 'course')
                 <ul class="list-disc list-inside text-gray-800 mt-1">
-                    @foreach($admission->courses as $course)
-                    <li>{{ $course->name }}</li>
+                    @foreach($admission->programs as $program)
+                    <li>{{ $program->name }}</li>
                     @endforeach
                 </ul>
-                @elseif($admission->admission_type === 'grade')
-                <div x-data="{ grades: @json($admission->grades) }">
-                    <template x-for="(grade, index) in grades" :key="index">
-                        <p class="text-gray-800" x-text="grade"></p>
-                    </template>
-                </div>
-                @endif
             </div>
 
             <div>
