@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Institution;
 use App\Models\InstitutionType;
 use App\Models\Affiliation;
-use App\Models\Course;
+use App\Models\Program;
 use App\Models\InstitutionCategory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -19,7 +19,7 @@ class InstitutionController extends Controller
      */
     public function index(): View
     {
-        $institutions = Institution::with(['affiliations', 'courses', 'institutionType'])->paginate(10);
+        $institutions = Institution::with(['affiliations', 'programs', 'institutionType'])->paginate(10);
         return view('admin.modules.institution.index', compact('institutions'));
     }
 
@@ -29,10 +29,10 @@ class InstitutionController extends Controller
     public function create(): View
     {
         $affiliations = Affiliation::active()->get();
-        $courses = Course::active()->get();
+        $programs = Program::active()->get();
         $institutionTypes = InstitutionType::orderBy('name')->get();
         $institutionCategories = InstitutionCategory::orderBy('name')->get();
-        return view('admin.modules.institution.create', compact('affiliations', 'courses', 'institutionTypes', 'institutionCategories'));
+        return view('admin.modules.institution.create', compact('affiliations', 'programs', 'institutionTypes', 'institutionCategories'));
     }
 
     /**
@@ -49,8 +49,8 @@ class InstitutionController extends Controller
             'type' => 'required|exists:institution_types,id',
             'affiliations' => 'nullable|array',
             'affiliations.*' => 'exists:affiliations,id',
-            'courses' => 'nullable|array',
-            'courses.*' => 'exists:courses,id',
+            'programs' => 'nullable|array',
+            'programs.*' => 'exists:programs,id',
             'commissions' => 'nullable|array',
             'commissions.*' => 'nullable|numeric',
             'institution_category' => 'required|exists:institution_categories,id',
@@ -73,17 +73,17 @@ class InstitutionController extends Controller
             $institution->affiliations()->sync($request->affiliations);
         }
 
-        // Sync courses if provided
-        if ($request->has('courses')) {
+        // Sync programs if provided
+        if ($request->has('programs')) {
             $syncData = [];
 
-            foreach ($request->courses as $index => $courseId) {
-                $syncData[$courseId] = [
+            foreach ($request->programs as $index => $programId) {
+                $syncData[$programId] = [
                     'commission_amount' => $request->commissions[$index] ?? 0
                 ];
             }
 
-            $institution->courses()->sync($syncData);
+            $institution->programs()->sync($syncData);
         }
 
         return redirect()->route('admin.institution.index')
@@ -95,7 +95,7 @@ class InstitutionController extends Controller
      */
     public function show(Institution $institution): View
     {
-        $institution->load(['affiliations', 'courses.programs', 'institutionType', 'category']);
+        $institution->load(['affiliations', 'programs', 'institutionType', 'category']);
         return view('admin.modules.institution.show', compact('institution'));
     }
 
@@ -105,12 +105,12 @@ class InstitutionController extends Controller
     public function edit(Institution $institution): View
     {
         $affiliations = Affiliation::active()->get();
-        $courses = Course::active()->get();
+        $programs = Program::active()->get();
         $institutionTypes = InstitutionType::orderBy('name')->get();
         $institutionCategories = InstitutionCategory::orderBy('name')->get();
-        $institution->load(['affiliations', 'courses', 'institutionType', 'category']);
+        $institution->load(['affiliations', 'programs', 'institutionType', 'category']);
 
-        return view('admin.modules.institution.edit', compact('institution', 'affiliations', 'courses', 'institutionTypes', 'institutionCategories'));
+        return view('admin.modules.institution.edit', compact('institution', 'affiliations', 'programs', 'institutionTypes', 'institutionCategories'));
     }
 
     /**
@@ -127,8 +127,8 @@ class InstitutionController extends Controller
             'type' => 'required|exists:institution_types,id',
             'affiliations' => 'nullable|array',
             'affiliations.*' => 'exists:affiliations,id',
-            'courses' => 'nullable|array',
-            'courses.*' => 'exists:courses,id',
+            'programs' => 'nullable|array',
+            'programs.*' => 'exists:programs,id',
             'institution_category' => 'required|exists:institution_categories,id',
             'is_active' => 'boolean',
         ]);
@@ -151,19 +151,19 @@ class InstitutionController extends Controller
             $institution->affiliations()->detach();
         }
 
-        // Sync courses
-        if ($request->has('courses')) {
+        // Sync programs
+        if ($request->has('programs')) {
             $syncData = [];
 
-            foreach ($request->courses as $index => $courseId) {
-                $syncData[$courseId] = [
+            foreach ($request->programs as $index => $programId) {
+                $syncData[$programId] = [
                     'commission_amount' => $request->commissions[$index] ?? 0
                 ];
             }
 
-            $institution->courses()->sync($syncData);
+            $institution->programs()->sync($syncData);
         } else {
-            $institution->courses()->detach();
+            $institution->programs()->detach();
         }
 
         return redirect()->route('admin.institution.index')
@@ -177,7 +177,7 @@ class InstitutionController extends Controller
     {
         // Detach all relations before deleting
         $institution->affiliations()->detach();
-        $institution->courses()->detach();
+        $institution->programs()->detach();
         $institution->delete();
 
         return redirect()->route('admin.institution.index')

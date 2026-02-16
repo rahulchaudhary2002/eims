@@ -34,7 +34,7 @@
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Type</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Affiliations</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Courses</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Programs</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Email</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Phone</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Established Year</th>
@@ -70,15 +70,15 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-900">
-                                @if($institution->courses->count() > 0)
-                                @foreach($institution->courses->take(2) as $course)
+                                @if($institution->programs->count() > 0)
+                                @foreach($institution->programs->take(2) as $course)
                                 <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded mr-1 mb-1">
                                     {{ $course->name }}
                                 </span>
                                 @endforeach
-                                @if($institution->courses->count() > 2)
+                                @if($institution->programs->count() > 2)
                                 <span class="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">
-                                    +{{ $institution->courses->count() - 2 }} more
+                                    +{{ $institution->programs->count() - 2 }} more
                                 </span>
                                 @endif
                                 @else
