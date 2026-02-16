@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Affiliation;
+use App\Models\Level;
 use App\Models\Program;
+use App\Models\ProgramCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -15,7 +18,7 @@ class ProgramController extends Controller
      */
     public function index(): View
     {
-        $programs = Program::latest()->paginate(10);
+        $programs = Program::with(['level', 'affiliation', 'category'])->latest()->paginate(10);
 
         return view('admin.modules.program.index', compact('programs'));
     }
@@ -25,7 +28,11 @@ class ProgramController extends Controller
      */
     public function create(): View
     {
-        return view('admin.modules.program.create');
+        $levels = Level::active()->ordered()->get();
+        $affiliations = Affiliation::active()->get();
+        $categories = ProgramCategory::all();
+
+        return view('admin.modules.program.create', compact('levels', 'affiliations', 'categories'));
     }
 
     /**
@@ -37,6 +44,10 @@ class ProgramController extends Controller
             'name' => 'required|string|max:255|unique:programs,name',
             'code' => 'nullable|string|max:50|unique:programs,code',
             'description' => 'nullable|string',
+            'level_id' => 'required|exists:levels,id',
+            'affiliation_id' => 'nullable|exists:affiliations,id',
+            'category_id' => 'required|exists:program_categories,id',
+            'duration' => 'nullable|string|max:50',
             'is_active' => 'boolean',
         ]);
 
@@ -51,7 +62,11 @@ class ProgramController extends Controller
      */
     public function edit(Program $program): View
     {
-        return view('admin.modules.program.edit', compact('program'));
+        $levels = Level::active()->ordered()->get();
+        $affiliations = Affiliation::active()->get();
+        $categories = ProgramCategory::all();
+
+        return view('admin.modules.program.edit', compact('program', 'levels', 'affiliations', 'categories'));
     }
 
     /**
@@ -63,6 +78,10 @@ class ProgramController extends Controller
             'name' => 'required|string|max:255|unique:programs,name,' . $program->id,
             'code' => 'nullable|string|max:50|unique:programs,code,' . $program->id,
             'description' => 'nullable|string',
+            'level_id' => 'required|exists:levels,id',
+            'affiliation_id' => 'nullable|exists:affiliations,id',
+            'category_id' => 'required|exists:program_categories,id',
+            'duration' => 'nullable|string|max:50',
             'is_active' => 'boolean',
         ]);
 

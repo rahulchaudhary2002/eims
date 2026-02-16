@@ -29,9 +29,9 @@ class Level extends Model
             ->saveSlugsTo('slug');
     }
 
-    public function courses()
+    public function programs()
     {
-        return $this->hasMany(Course::class);
+        return $this->hasMany(Program::class);
     }
 
     public function scopeActive($query)

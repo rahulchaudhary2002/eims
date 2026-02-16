@@ -95,7 +95,7 @@ class InstitutionController extends Controller
      */
     public function show(Institution $institution): View
     {
-        $institution->load(['affiliations', 'courses', 'institutionType', 'category']);
+        $institution->load(['affiliations', 'courses.programs', 'institutionType', 'category']);
         return view('admin.modules.institution.show', compact('institution'));
     }
 

@@ -33,7 +33,10 @@
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">ID</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Code</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Description</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Program Category</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Level</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Affiliation</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Duration</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -53,7 +56,10 @@
                                 <span class="text-gray-400 text-sm">-</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ Str::limit($program->description, 60) ?: '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $program->category?->name ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $program->level?->name ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $program->affiliation?->name ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $program->duration ?? '-' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium {{ $program->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                     <x-lucide-circle class="w-2 h-2 mr-1 {{ $program->is_active ? 'text-green-500' : 'text-red-500' }}" />
@@ -82,7 +88,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="10" class="px-6 py-12 text-center text-gray-500">
                                 <x-lucide-layers class="w-16 h-16 mx-auto mb-4 text-gray-300" />
                                 <p class="text-lg font-medium">No programs found</p>
                                 <p class="text-sm mt-1">Get started by adding your first program.</p>

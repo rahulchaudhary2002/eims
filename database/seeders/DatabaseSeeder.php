@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             ReplySeeder::class,
             InstitutionCourseSeeder::class,
             EnquirySeeder::class,
+            ProgramSeeder::class,
         ]);
     }
 }

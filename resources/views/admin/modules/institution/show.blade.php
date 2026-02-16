@@ -303,8 +303,9 @@
                                 <div>
                                     <h4 class="font-semibold text-gray-900">{{ $course->name }}</h4>
                                     <p class="text-xs text-gray-500 mt-0.5">Code: {{ $course->code }}</p>
-                                    @if($course->duration)
-                                    <p class="text-xs text-gray-500">Duration: {{ $course->duration }}</p>
+                                    @php $durations = $course->programs->pluck('duration')->filter()->unique(); @endphp
+                                    @if($durations->isNotEmpty())
+                                    <p class="text-xs text-gray-500">Duration: {{ $durations->join(', ') }}</p>
                                     @endif
                                 </div>
                             </div>

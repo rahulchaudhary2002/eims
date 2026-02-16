@@ -50,4 +50,9 @@ class Affiliation extends Model
     {
         return $this->belongsToMany(Institution::class, 'affiliation_institution');
     }
+
+    public function programs()
+    {
+        return $this->hasMany(Program::class);
+    }
 }

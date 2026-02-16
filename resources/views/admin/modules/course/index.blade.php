@@ -34,9 +34,6 @@
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Code</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Programs</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Level</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Affiliation</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Duration</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -64,28 +61,6 @@
                                 @empty
                                 <span class="text-gray-400 text-sm">-</span>
                                 @endforelse
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                @if($course->level)
-                                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800">
-                                    {{ $course->level->name }}
-                                </span>
-                                @else
-                                <span class="text-gray-400 text-sm">-</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 text-sm text-gray-900">
-                                {{ $course->affiliation->name ?? '-' }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                @if($course->duration)
-                                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    <x-lucide-calendar class="w-3 h-3 mr-1" />
-                                    {{ $course->duration }}
-                                </span>
-                                @else
-                                <span class="text-gray-400 text-sm">-</span>
-                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium {{ $course->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends Model
@@ -17,10 +16,6 @@ class Course extends Model
         'name',
         'code',
         'description',
-        'level_id',
-        'affiliation_id',
-        'category_id',
-        'duration',
         'is_active',
     ];
 
@@ -33,22 +28,6 @@ class Course extends Model
         'is_active' => 'boolean',
     ];
 
-    /**
-     * Get the level that owns the course.
-     */
-    public function level(): BelongsTo
-    {
-        return $this->belongsTo(Level::class);
-    }
-
-    /**
-     * Get the affiliation that owns the course.
-     */
-    public function affiliation(): BelongsTo
-    {
-        return $this->belongsTo(Affiliation::class);
-    }
-
     public function programs(): BelongsToMany
     {
         return $this->belongsToMany(Program::class, 'course_program');
@@ -59,7 +38,7 @@ class Course extends Model
      */
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+        return $query->where($this->qualifyColumn('is_active'), true);
     }
 
     /**
@@ -82,10 +61,5 @@ class Course extends Model
     public function institutions()
     {
         return $this->belongsToMany(Institution::class, 'institution_course')->withPivot('commission_amount');
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(CourseCategory::class, 'category_id');
     }
 }
