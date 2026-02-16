@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Level;
 use App\Models\Affiliation;
 use App\Models\CourseCategory;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -18,7 +19,7 @@ class CourseController extends Controller
      */
     public function index(): View
     {
-        $courses = Course::with(['level', 'affiliation'])->latest()->paginate(10);
+        $courses = Course::with(['level', 'affiliation', 'programs'])->latest()->paginate(10);
 
         return view('admin.modules.course.index', compact('courses'));
     }
@@ -31,8 +32,9 @@ class CourseController extends Controller
         $levels = Level::active()->ordered()->get();
         $affiliations = Affiliation::active()->get();
         $categories = CourseCategory::get();
+        $programs = Program::active()->get();
 
-        return view('admin.modules.course.create', compact('levels', 'affiliations', 'categories'));
+        return view('admin.modules.course.create', compact('levels', 'affiliations', 'categories', 'programs'));
     }
 
     /**
@@ -46,6 +48,8 @@ class CourseController extends Controller
             'description' => 'nullable|string',
             'level_id' => 'required|exists:levels,id',
             'category_id' => 'required|exists:course_categories,id',
+            'program_ids' => 'required|array|min:1',
+            'program_ids.*' => 'exists:programs,id',
             'affiliation_id' => 'nullable|exists:affiliations,id',
             'duration' => 'nullable|string|max:50',
             'is_active' => 'boolean',
@@ -63,6 +67,8 @@ class CourseController extends Controller
             'duration' => $validated['duration'] ?? null,
             'is_active' => $request->is_active ?? false,
         ]);
+
+        $course->programs()->sync($validated['program_ids']);
 
         // Save sections
         if (!empty($request->sections)) {
@@ -83,16 +89,18 @@ class CourseController extends Controller
      */
     public function edit(Course $course): View
     {
+        $course->load('programs');
         $levels = Level::active()->ordered()->get();
         $affiliations = Affiliation::active()->get();
         $categories = CourseCategory::get();
+        $programs = Program::active()->get();
 
-        return view('admin.modules.course.edit', compact('course', 'levels', 'affiliations', 'categories'));
+        return view('admin.modules.course.edit', compact('course', 'levels', 'affiliations', 'categories', 'programs'));
     }
 
     public function show(Course $course)
     {
-        $course->load(['level', 'affiliation', 'descriptions']);
+        $course->load(['level', 'affiliation', 'programs', 'descriptions']);
         return view('admin.modules.course.show', compact('course'));
     }
 
@@ -107,6 +115,8 @@ class CourseController extends Controller
             'description' => 'nullable|string',
             'level_id' => 'required|exists:levels,id',
             'category_id' => 'required|exists:course_categories,id',
+            'program_ids' => 'required|array|min:1',
+            'program_ids.*' => 'exists:programs,id',
             'affiliation_id' => 'nullable|exists:affiliations,id',
             'duration' => 'nullable|string|max:50',
             'is_active' => 'boolean',
@@ -124,6 +134,8 @@ class CourseController extends Controller
             'duration' => $validated['duration'] ?? null,
             'is_active' => $request->is_active ?? false,
         ]);
+
+        $course->programs()->sync($validated['program_ids']);
 
         // Delete old sections
         $course->descriptions()->delete();

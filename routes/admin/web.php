@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstitutionController;
 use App\Http\Controllers\Admin\LevelController;
+use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\VendorController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::resource('vendor', VendorController::class);
     Route::resource('affiliation', AffiliationController::class)->except('show');
     Route::resource('level', LevelController::class)->except('show');
+    Route::resource('program', ProgramController::class)->except('show');
     Route::resource('course', CourseController::class);
 
     Route::prefix('admission/reward')->name('admission.reward.')->group(function () {
