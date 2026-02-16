@@ -19,14 +19,13 @@ return new class extends Migration
             $table->string('full_name');
             $table->string('email');
             $table->string('phone');
-            $table->foreignId('course_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('grade')->nullable();
+            $table->foreignId('program_id')->constrained()->cascadeOnDelete();
             $table->json('academic_documents');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->unique(['admission_id', 'user_id', 'course_id', 'grade']);
+            $table->unique(['admission_id', 'user_id', 'program_id']);
         });
     }
 

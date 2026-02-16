@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('institution_course', function (Blueprint $table) {
+        Schema::create('institution_program', function (Blueprint $table) {
             $table->foreignId('institution_id')->constrained()->onDelete('cascade');
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
+            $table->foreignId('program_id')->constrained()->onDelete('cascade');
             $table->decimal('commission_amount', 10, 2)->default(0);
 
-            $table->unique(['institution_id', 'course_id']);
+            $table->unique(['institution_id', 'program_id']);
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('institution_course');
+        Schema::dropIfExists('institution_program');
     }
 };

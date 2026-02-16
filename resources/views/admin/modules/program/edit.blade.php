@@ -133,6 +133,22 @@
                     </div>
 
                     <div>
+                        <label for="fee" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                            <x-lucide-dollar-sign class="w-5 h-5 mr-2 text-blue-500" />
+                            Fee
+                        </label>
+                        <input type="text" name="fee" id="fee" value="{{ old('fee', $program->fee) }}"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 @error('fee') border-red-500 @enderror"
+                            placeholder="e.g., 50000">
+                        @error('fee')
+                        <p class="text-red-500 text-sm mt-1 flex items-center">
+                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <div>
                         <label for="duration" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
                             <x-lucide-calendar class="w-5 h-5 mr-2 text-blue-500" />
                             Duration

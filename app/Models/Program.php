@@ -25,6 +25,7 @@ class Program extends Model
         'level_id',
         'affiliation_id',
         'category_id',
+        'fee',
         'duration',
         'is_active',
     ];
@@ -65,8 +66,23 @@ class Program extends Model
         return $this->belongsTo(ProgramCategory::class, 'category_id');
     }
 
+    public function institutions()
+    {
+        return $this->belongsToMany(Institution::class, 'institution_program')->withPivot('commission_amount');
+    }
+
+    public function admissions()
+    {
+        return $this->hasMany(Admission::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function getDisplayNameAttribute(): string
+    {
+        return "{$this->name} ({$this->code})";
     }
 }

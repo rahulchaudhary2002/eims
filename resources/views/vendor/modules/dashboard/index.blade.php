@@ -9,8 +9,8 @@
             </div>
 
             <div class="flex flex-col">
-                <div class="text-dark text-3xl font-bold">{{ $courseCount }}</div>
-                <div class="mt-2 text-gray-700 text-lg">Active Courses</div>
+                <div class="text-dark text-3xl font-bold">{{ $programCount }}</div>
+                <div class="mt-2 text-gray-700 text-lg">Active Programs</div>
             </div>
         </div>
 
@@ -51,7 +51,7 @@
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Applicant Name</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Email</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Phone</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Course</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Program</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Submitted At</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
                         </tr>
@@ -62,7 +62,7 @@
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $application->full_name ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $application->email ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $application->phone ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->grade ?? $application->course->name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->program->name ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $application->created_at->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">
                                 @if($application->status === 'approved')

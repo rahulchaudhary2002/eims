@@ -10,73 +10,82 @@ class CourseSeeder extends Seeder
     public function run(): void
     {
         $courses = [
-            // === Technical/Engineering Courses ===
             [
-                'name' => 'Bachelor in Computer Engineering',
-                'code' => 'BCT',
-                'description' => 'Four-year undergraduate program focusing on computer hardware and software engineering.',
+                'name' => 'C Programming',
+                'code' => 'CPROG',
+                'description' => 'Introductory course on C programming language and software development.',
                 'is_active' => true,
             ],
             [
-                'name' => 'Bachelor in Civil Engineering',
-                'code' => 'BCE',
-                'description' => 'Four-year undergraduate program in civil engineering and infrastructure development.',
+                'name' => 'Data Structures',
+                'code' => 'DS',
+                'description' => 'Course covering fundamental data structures and their applications.',
                 'is_active' => true,
             ],
             [
-                'name' => 'Bachelor in Information Technology',
-                'code' => 'BIT',
-                'description' => 'Four-year undergraduate program focusing on information technology and software development.',
-                'is_active' => true,
-            ],
-
-            // === Management Courses ===
-            [
-                'name' => 'Bachelor of Business Studies',
-                'code' => 'BBS',
-                'description' => 'Four-year undergraduate program in business administration and management.',
+                'name' => 'Database Management Systems',
+                'code' => 'DBMS',
+                'description' => 'Course on database design, SQL, and database management systems.',
                 'is_active' => true,
             ],
             [
-                'name' => 'Master of Business Administration',
-                'code' => 'MBA',
-                'description' => 'Two-year postgraduate program in business administration and management.',
-                'is_active' => true,
-            ],
-
-            // === Science Courses ===
-            [
-                'name' => 'Bachelor of Science in Physics',
-                'code' => 'BSC-PHYSICS',
-                'description' => 'Four-year undergraduate program in physics and applied sciences.',
+                'name' => 'Operating Systems',
+                'code' => 'OS',
+                'description' => 'Course on operating system concepts, design, and implementation.',
                 'is_active' => true,
             ],
             [
-                'name' => 'Bachelor of Science in Mathematics',
-                'code' => 'BSC-MATH',
-                'description' => 'Four-year undergraduate program in pure and applied mathematics.',
-                'is_active' => true,
-            ],
-
-            // === Diploma/Certificate Courses ===
-            [
-                'name' => 'Diploma in Computer Engineering',
-                'code' => 'DCTEVT',
-                'description' => 'Three-year diploma program in computer engineering under CTEVT.',
+                'name' => 'Computer Networks',
+                'code' => 'CN',
+                'description' => 'Course on computer networking principles, protocols, and technologies.',
                 'is_active' => true,
             ],
             [
-                'name' => 'Certificate in Hotel Management',
-                'code' => 'CHM',
-                'description' => 'One-year certificate program in hotel management and hospitality.',
+                'name' => 'Software Engineering',
+                'code' => 'SE',
+                'description' => 'Course on software development methodologies, project management, and best practices.',
                 'is_active' => true,
             ],
-
-            // === Master Level Courses ===
             [
-                'name' => 'Master of Science in Computer Science',
-                'code' => 'MSC-CS',
-                'description' => 'Two-year postgraduate program in computer science and research.',
+                'name' => 'Web Development',
+                'code' => 'WEBDEV',
+                'description' => 'Course on web development technologies, frameworks, and best practices.',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Mobile App Development',
+                'code' => 'MOBILEDEV',
+                'description' => 'Course on mobile application development for Android and iOS platforms.',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Artificial Intelligence',
+                'code' => 'AI',
+                'description' => 'Course on artificial intelligence concepts, techniques, and applications.',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Machine Learning',
+                'code' => 'ML',
+                'description' => 'Course on machine learning algorithms, models, and applications.',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Cybersecurity',
+                'code' => 'CYBERSEC',
+                'description' => 'Course on cybersecurity principles, threats, and defense mechanisms.',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Cloud Computing',
+                'code' => 'CLOUD',
+                'description' => 'Course on cloud computing concepts, services, and deployment models.',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Data Science',
+                'code' => 'DATASCI',
+                'description' => 'Course on data science techniques, tools, and applications.',
                 'is_active' => true,
             ],
         ];

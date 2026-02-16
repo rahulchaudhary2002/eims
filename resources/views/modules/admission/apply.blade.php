@@ -106,41 +106,21 @@
                 @enderror
             </div>
 
-            <!-- Course Selection (if applicable) -->
-            @if($admission->isForCourse() && $admission->courses->count())
+            <!-- Program Selection (if applicable) -->
+            @if($admission->programs->count())
             <div>
-                <label class="block text-gray-700 font-medium mb-2" for="course_id">Select Course *</label>
-                <select name="course_id" id="course_id"
+                <label class="block text-gray-700 font-medium mb-2" for="program_id">Select Program *</label>
+                <select name="program_id" id="program_id"
                     class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     required>
-                    <option value="">-- Choose a course --</option>
-                    @foreach($admission->courses as $course)
-                    <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
-                        {{ $course->display_name }}
+                    <option value="">-- Choose a program --</option>
+                    @foreach($admission->programs as $program)
+                    <option value="{{ $program->id }}" {{ old('program_id') == $program->id ? 'selected' : '' }}>
+                        {{ $program->display_name }}
                     </option>
                     @endforeach
                 </select>
-                @error('course_id')
-                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-            @endif
-
-            <!-- Grade Selection (if applicable) -->
-            @if($admission->isForGrade() && $admission->grades->count())
-            <div>
-                <label class="block text-gray-700 font-medium mb-2" for="grade">Select Grade *</label>
-                <select name="grade" id="grade"
-                    class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    required>
-                    <option value="">-- Choose a grade --</option>
-                    @foreach($admission->grades as $grade)
-                    <option value="{{ $grade->name }}" {{ old('grade') == $grade->name ? 'selected' : '' }}>
-                        {{ $grade->name }}
-                    </option>
-                    @endforeach
-                </select>
-                @error('grade')
+                @error('program_id')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>

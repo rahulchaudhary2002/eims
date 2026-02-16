@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('institution_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->enum('admission_type', ['course', 'grade'])->default('course');
             $table->longText('description')->nullable();
             $table->date('start_date');
             $table->date('end_date');

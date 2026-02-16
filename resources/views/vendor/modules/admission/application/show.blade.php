@@ -55,17 +55,10 @@
                 <p class="text-gray-500 font-medium">Status</p>
                 <span class="inline-block px-2 py-1 rounded bg-gray-100 text-gray-800 capitalize">{{ $application->status }}</span>
             </div>
-            @if($admission->isForCourse())
             <div>
-                <p class="text-gray-500 font-medium">Course</p>
-                <p class="text-gray-800">{{ optional($application->course)->name }}</p>
+                <p class="text-gray-500 font-medium">Program</p>
+                <p class="text-gray-800">{{ optional($application->program)->name }}</p>
             </div>
-            @elseif($admission->isForGrade())
-            <div>
-                <p class="text-gray-500 font-medium">Grade</p>
-                <p class="text-gray-800">{{ $application->grade }}</p>
-            </div>
-            @endif
             <div class="md:col-span-2">
                 <p class="text-gray-500 font-medium">Notes</p>
                 <div class="text-gray-800 mt-1 no-tailwind">

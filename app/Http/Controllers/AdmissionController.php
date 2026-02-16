@@ -37,21 +37,19 @@ class AdmissionController extends Controller
         // Check if an application with the same admission_id, user_id, course_id, and grade already exists
         $existing = AdmissionApplication::where('admission_id', $admission->id)
             ->where('user_id', Auth::id())
-            ->where('course_id', $request->course_id)
-            ->where('grade', $request->grade)
+            ->where('program_id', $request->program_id)
             ->first();
 
         if ($existing) {
             return redirect()->route('admission.show', $admission->slug)
-                ->with('error', 'You have already submitted an application for this admission with the same course and grade.');
+                ->with('error', 'You have already submitted an application for this admission with the same program.');
         }
 
         $request->validate([
             'full_name' => 'required|string|max:255',
             'email'     => 'required|email',
             'phone'     => 'required|string|max:20',
-            'course_id' => $admission->isForCourse() ? 'required|exists:courses,id' : 'nullable',
-            'grade'     => $admission->isForGrade() ? 'required|string' : 'nullable',
+            'program_id' => 'required|exists:programs,id',
             'notes'     => 'nullable|string|max:1000',
             'academic_documents'   => 'required|array|min:1',
             'academic_documents.*' => 'file|mimes:pdf,jpg,jpeg,png|max:5120',
@@ -76,8 +74,7 @@ class AdmissionController extends Controller
             'phone'        => $request->phone,
             'status'       => 'pending',
             'notes'        => $request->notes,
-            'course_id'    => $request->course_id,
-            'grade'        => $request->grade,
+            'program_id'    => $request->program_id,
             'academic_documents' => json_encode($documents),
         ]);
 

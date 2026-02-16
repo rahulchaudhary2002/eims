@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('code')->unique()->nullable();
             $table->string('duration')->nullable();
-            $table->decimal('fee', 10, 2)->nullable();
+            $table->decimal('fee', 10, 2);
             $table->text('description')->nullable();
             $table->foreignId('level_id')->constrained('levels')->restrictOnDelete();
             $table->foreignId('affiliation_id')->nullable()->constrained('affiliations')->nullOnDelete();

@@ -15,7 +15,6 @@ class Admission extends Model
         'title',
         'slug',
         'institution_id',
-        'admission_type',
         'description',
         'start_date',
         'end_date',
@@ -41,30 +40,15 @@ class Admission extends Model
         return $this->belongsTo(Institution::class);
     }
 
-    public function courses()
+    public function programs()
     {
-        return $this->belongsToMany(Course::class, 'admission_course');
-    }
-
-    public function grades()
-    {
-        return $this->hasMany(AdmissionGrade::class)->orderBy('order');
+        return $this->belongsToMany(Program::class, 'admission_program');
     }
 
     public function getIsOpenAttribute(): bool
     {
         $now = now();
         return $now->between($this->start_date, $this->end_date);
-    }
-
-    public function isForCourse(): bool
-    {
-        return $this->admission_type === 'course';
-    }
-
-    public function isForGrade(): bool
-    {
-        return $this->admission_type === 'grade';
     }
 
     public function applications()

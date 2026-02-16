@@ -32,7 +32,6 @@
                         <tr>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">ID</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Title</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Type</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Start Date</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">End Date</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Applications</th>
@@ -45,7 +44,6 @@
                         <tr class="hover:bg-blue-50 transition-colors duration-150">
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $admission->id }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $admission->title }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ ucfirst($admission->admission_type) }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ \Carbon\Carbon::parse($admission->start_date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ \Carbon\Carbon::parse($admission->end_date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $admission->applications->count() }}</td>

@@ -32,8 +32,8 @@ class AdmissionRewardController extends Controller
             $reward->update(['status' => 'approved', 'reward' => $request->reward]);
 
             $institution = Institution::where('id', $reward->admissionApplication->admission->institution_id)->first();
-            $commission = $institution->courses()
-                ->where('course_id', $reward->admissionApplication->course_id)
+            $commission = $institution->programs()
+                ->where('program_id', $reward->admissionApplication->program_id)
                 ->first()
                 ->pivot
                 ->commission_amount;

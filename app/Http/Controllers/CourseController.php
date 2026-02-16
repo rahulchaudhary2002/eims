@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Level;
-use App\Models\ProgramCategory;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,31 +12,38 @@ class CourseController extends Controller
 {
     public function index(Request $request)
     {
-        $categorySlugs = (array) $request->input('categories', []);
+        $programSlugs = (array) $request->input('programs', []);
         $levelSlugs    = (array) $request->input('levels', []);
         $durations     = (array) $request->input('durations', []);
 
-        $courses = Course::active()
-            ->whereHas('programs', fn($q) => $q->where('is_active', true))
+        $courses = Course::query()
+            ->active()
             ->when($request->filled('search'), function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%');
+                $q->where('name', 'like', '%' . trim($request->search) . '%');
             })
-            ->when($request->filled('category'), function ($q) use ($request) {
-                $q->whereHas('programs.category', fn($qq) => $qq->where('slug', $request->category));
+            ->whereHas('programs', function ($p) use ($request, $programSlugs, $levelSlugs, $durations) {
+                $p->where('is_active', 1);
+
+                $p->when($request->filled('program'), function ($pp) use ($request) {
+                    $pp->where('slug', $request->program);
+                });
+
+                $p->when($request->filled('level'), function ($pp) use ($request) {
+                    $pp->whereHas('level', fn($l) => $l->where('slug', $request->level));
+                });
+
+                $p->when(!empty($programSlugs), function ($pp) use ($programSlugs) {
+                    $pp->whereIn('slug', $programSlugs);
+                });
+
+                $p->when(!empty($levelSlugs), function ($pp) use ($levelSlugs) {
+                    $pp->whereHas('level', fn($l) => $l->whereIn('slug', $levelSlugs));
+                });
+
+                $p->when(!empty($durations), function ($pp) use ($durations) {
+                    $pp->whereIn('duration', $durations);
+                });
             })
-            ->when($request->filled('level'), function ($q) use ($request) {
-                $q->whereHas('programs.level', fn($qq) => $qq->where('slug', $request->level));
-            })
-            ->when(count($categorySlugs), function ($q) use ($categorySlugs) {
-                $q->whereHas('programs.category', fn($qq) => $qq->whereIn('slug', $categorySlugs));
-            })
-            ->when(count($levelSlugs), function ($q) use ($levelSlugs) {
-                $q->whereHas('programs.level', fn($qq) => $qq->whereIn('slug', $levelSlugs));
-            })
-            ->when(count($durations), function ($q) use ($durations) {
-                $q->whereHas('programs', fn($qq) => $qq->whereIn('duration', $durations));
-            })
-            ->with(['programs.level', 'programs.affiliation', 'programs.category'])
             ->paginate(6)
             ->withQueryString();
 
@@ -63,11 +70,9 @@ class CourseController extends Controller
             ->groupBy('programs.duration')
             ->pluck('total', 'programs.duration');
 
-        $courseCategories = ProgramCategory::whereHas('programs')->withCount('programs')->get();
+        $programs = Program::whereHas('courses')->withCount('courses')->get();
 
-        $categoryCourseCounts = Course::active()->get();
-
-        return view('modules.course.index', compact('courses', 'levels', 'coursesByDuration', 'courseCategories'));
+        return view('modules.course.index', compact('courses', 'levels', 'coursesByDuration', 'programs'));
     }
 
     public function show(Course $course)

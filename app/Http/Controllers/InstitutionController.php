@@ -59,7 +59,7 @@ class InstitutionController extends Controller
                 $q->whereIn('location_slug', $locations);
             })
             ->with(['institutionType', 'affiliations', 'category'])
-            ->withCount('courses')
+            ->withCount('programs')
 
             ->when($request->filled('sort'), function ($q) use ($request) {
                 $allowed = ['name', 'established_year'];

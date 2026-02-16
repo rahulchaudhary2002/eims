@@ -47,7 +47,7 @@ $primaryProgram = $course->programs->first();
             </h3>
 
             <ul class="space-y-1" id="course-nav">
-                @if($course->institutions->count() > 0)
+                @if($course->programs->flatMap->institutions->count() > 0)
                 <li>
                     <a href="#section-offered-by"
                         data-section-link
@@ -96,14 +96,14 @@ $primaryProgram = $course->programs->first();
         </div>
 
         {{-- OFFERED BY SECTION --}}
-        @if($course->institutions->count() > 0)
+        @if($course->programs->flatMap->institutions->count() > 0)
         <section id="section-offered-by">
             <h2 class="text-xl font-bold text-gray-800 mb-4">
                 Institution Offering This Course
             </h2>
 
             <div class="space-y-4">
-                @foreach($course->institutions as $institution)
+                @foreach($course->programs->flatMap->institutions->unique('id') as $institution)
                 <div class="flex max-sm:flex-col sm:items-center sm:justify-between gap-4 p-4 rounded-xl border border-gray-200 hover:shadow-sm transition">
 
                     {{-- Left: Logo + Info --}}
@@ -132,8 +132,8 @@ $primaryProgram = $course->programs->first();
                     </div>
 
                     @php
-                    $admission = $institution->admissions()->whereHas('courses', function($query) use ($course) {
-                    $query->where('courses.id', $course->id);
+                    $admission = $institution->admissions()->whereHas('programs', function($query) use ($course) {
+                    $query->where('programs.id', $course->id);
                     })->first()
                     @endphp
 
