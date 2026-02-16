@@ -40,6 +40,16 @@ $sidebarOpen = session('sidebarOpen', true);
             </a>
         </li>
 
+        {{-- Institution Types --}}
+        <li class="text-white font-semibold text-sm">
+            <a href="{{ route('admin.institution-type.index') }}"
+                class="flex items-center px-4 py-3 h-12 transition-all duration-300 border-l-4
+                  {{ request()->routeIs('admin.institution-type.*') ? 'bg-[rgba(255,255,255,0.1)] border-success' : 'border-transparent hover:bg-[rgba(255,255,255,0.1)] hover:border-success' }}">
+                <x-lucide-building-2 class="w-5 h-5 mr-2" />
+                <span>{{ $sidebarOpen ? 'Institution Types' : '' }}</span>
+            </a>
+        </li>
+
         {{-- Levels --}}
         <li class="text-white font-semibold text-sm">
             <a href="{{ route('admin.level.index') }}"
