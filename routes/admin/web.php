@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AffiliationController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstitutionController;
+use App\Http\Controllers\Admin\InstitutionTypeController;
 use App\Http\Controllers\Admin\LevelController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\SettingController;
@@ -16,6 +17,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::get('dashboard', [DashboardController::class, 'index'])->middleware(['auth:admin', 'verified:admin'])->name('dashboard');
 
     Route::resource('institution', InstitutionController::class);
+    Route::resource('institution-type', InstitutionTypeController::class)->except('show');
     Route::resource('vendor', VendorController::class);
     Route::resource('affiliation', AffiliationController::class)->except('show');
     Route::resource('level', LevelController::class)->except('show');
