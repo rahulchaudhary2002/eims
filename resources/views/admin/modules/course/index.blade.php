@@ -33,6 +33,7 @@
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">ID</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Code</th>
+                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Programs</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Level</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Affiliation</th>
                             <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Duration</th>
@@ -54,6 +55,15 @@
                                 @else
                                 <span class="text-gray-400 text-sm">-</span>
                                 @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                @forelse($course->programs as $program)
+                                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-indigo-100 text-indigo-800 mr-1">
+                                    {{ $program->name }}
+                                </span>
+                                @empty
+                                <span class="text-gray-400 text-sm">-</span>
+                                @endforelse
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 @if($course->level)
@@ -109,7 +119,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="9" class="px-6 py-12 text-center text-gray-500">
                                 <x-lucide-book class="w-16 h-16 mx-auto mb-4 text-gray-300" />
                                 <p class="text-lg font-medium">No courses found</p>
                                 <p class="text-sm mt-1">Get started by adding your first course.</p>

@@ -1,6 +1,50 @@
 @extends('admin.layouts.app')
 @section('title', 'Edit Course')
+
+@section('page-specific-style')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<style>
+    .choices {
+        margin-bottom: 0;
+    }
+
+    .choices__inner {
+        background-color: #ffffff !important;
+        border-radius: 0.5rem !important;
+        border: 1px solid #d1d5db !important;
+        padding: 4px 8px !important;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+
+    .choices__list--multiple .choices__item {
+        background-color: #3b82f6 !important;
+        border: 1px solid #2563eb !important;
+        border-radius: 4px !important;
+        padding: 2px 8px !important;
+        font-size: 0.875rem !important;
+    }
+
+    .choices__list--multiple .choices__item.is-highlighted {
+        background-color: #2563eb !important;
+    }
+
+    .choices__input {
+        background-color: transparent !important;
+    }
+
+    .is-focused .choices__inner {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
+    }
+</style>
+@endsection
+
 @section('content')
+@php
+$selectedProgramIds = old('program_ids', $course->programs->pluck('id')->all());
+@endphp
 
 <div class="bg-white rounded-lg shadow-lg border border-gray-200">
     {{-- Header --}}
@@ -87,6 +131,35 @@
                             @endforeach
                         </select>
                         @error('category_id')
+                        <p class="text-red-500 text-sm mt-1 flex items-center">
+                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="program_ids" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                            <x-lucide-layers class="w-5 h-5 mr-2 text-blue-500" />
+                            Programs *
+                        </label>
+                        <select name="program_ids[]" id="program_ids" multiple
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg @error('program_ids') border-red-500 @enderror @error('program_ids.*') border-red-500 @enderror"
+                            required>
+                            @foreach($programs as $program)
+                            <option value="{{ $program->id }}" {{ in_array($program->id, $selectedProgramIds) ? 'selected' : '' }}>
+                                {{ $program->name }}
+                            </option>
+                            @endforeach
+                        </select>
+                        <p class="text-gray-500 text-sm mt-1">Select one or more programs.</p>
+                        @error('program_ids')
+                        <p class="text-red-500 text-sm mt-1 flex items-center">
+                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
+                            {{ $message }}
+                        </p>
+                        @enderror
+                        @error('program_ids.*')
                         <p class="text-red-500 text-sm mt-1 flex items-center">
                             <x-lucide-alert-circle class="w-4 h-4 mr-1" />
                             {{ $message }}
@@ -230,6 +303,9 @@
     </div>
 </div>
 
+@endsection
+@section('page-specific-script')
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 <script>
     function sectionsForm(initial = []) {
         return {
@@ -291,6 +367,19 @@
             }
         }
     }
-</script>
 
+    document.addEventListener('DOMContentLoaded', function() {
+        const programIdsElement = document.getElementById('program_ids');
+        if (programIdsElement) {
+            new Choices(programIdsElement, {
+                removeItemButton: true,
+                placeholderValue: 'Select programs...',
+                searchEnabled: true,
+                shouldSort: false,
+                itemSelectText: '',
+                noResultsText: 'No programs found',
+            });
+        }
+    });
+</script>
 @endsection

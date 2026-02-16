@@ -32,7 +32,20 @@
 </div>
 
 {{-- Course Info --}}
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <p class="text-sm text-gray-500 mb-2">Programs</p>
+        <div class="text-lg font-semibold text-gray-800">
+            @forelse($course->programs as $program)
+            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-indigo-100 text-indigo-800 mr-1 mb-1">
+                {{ $program->name }}
+            </span>
+            @empty
+            —
+            @endforelse
+        </div>
+    </div>
+
     <div class="bg-white rounded-xl border border-gray-200 p-5">
         <p class="text-sm text-gray-500">Level</p>
         <p class="text-lg font-semibold text-gray-800">
