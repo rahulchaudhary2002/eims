@@ -182,8 +182,8 @@
                         <div class="text-sm text-indigo-100">Affiliations</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-3xl font-bold mb-1">{{ $institution->courses->count() }}</div>
-                        <div class="text-sm text-indigo-100">Courses</div>
+                        <div class="text-3xl font-bold mb-1">{{ $institution->programs->count() }}</div>
+                        <div class="text-sm text-indigo-100">Programs</div>
                     </div>
                 </div>
             </div>
@@ -277,23 +277,23 @@
                 @endif
             </div>
 
-            {{-- Courses Card --}}
+            {{-- Programs Card --}}
             <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
                 <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-green-50 rounded-lg">
                             <x-lucide-book-open class="w-5 h-5 text-green-600" />
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900">Courses</h3>
+                        <h3 class="text-lg font-semibold text-gray-900">Programs</h3>
                     </div>
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                        {{ $institution->courses->count() }} Total
+                        {{ $institution->programs->count() }} Total
                     </span>
                 </div>
 
-                @if($institution->courses->isNotEmpty())
+                @if($institution->programs->isNotEmpty())
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    @foreach($institution->courses as $course)
+                    @foreach($institution->programs as $program)
                     <div class="border border-gray-200 rounded-xl p-4 hover:border-green-300 hover:shadow-sm transition-all duration-200">
                         <div class="flex justify-between items-start mb-3">
                             <div class="flex items-center gap-3">
@@ -301,21 +301,21 @@
                                     <x-lucide-book class="w-4 h-4 text-gray-600" />
                                 </div>
                                 <div>
-                                    <h4 class="font-semibold text-gray-900">{{ $course->name }}</h4>
-                                    <p class="text-xs text-gray-500 mt-0.5">Code: {{ $course->code }}</p>
-                                    @php $durations = $course->programs->pluck('duration')->filter()->unique(); @endphp
+                                    <h4 class="font-semibold text-gray-900">{{ $program->name }}</h4>
+                                    <p class="text-xs text-gray-500 mt-0.5">Code: {{ $program->code }}</p>
+                                    @php $durations = $program->pluck('duration')->filter()->unique(); @endphp
                                     @if($durations->isNotEmpty())
                                     <p class="text-xs text-gray-500">Duration: {{ $durations->join(', ') }}</p>
                                     @endif
                                 </div>
                             </div>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                        {{ $course->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                {{ $course->is_active ? 'Active' : 'Inactive' }}
+                                        {{ $program->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                {{ $program->is_active ? 'Active' : 'Inactive' }}
                             </span>
                         </div>
-                        @if($course->description)
-                        <p class="text-sm text-gray-600 mt-2">{{ Str::limit($course->description, 100) }}</p>
+                        @if($program->description)
+                        <p class="text-sm text-gray-600 mt-2">{{ Str::limit($program->description, 100) }}</p>
                         @endif
                     </div>
                     @endforeach
@@ -323,8 +323,8 @@
                 @else
                 <div class="text-center py-10 border-2 border-dashed border-gray-200 rounded-xl">
                     <x-lucide-book class="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                    <p class="text-gray-400 mb-2">No courses assigned yet</p>
-                    <p class="text-sm text-gray-500">Add courses from the edit page</p>
+                    <p class="text-gray-400 mb-2">No programs assigned yet</p>
+                    <p class="text-sm text-gray-500">Add programs from the edit page</p>
                 </div>
                 @endif
             </div>

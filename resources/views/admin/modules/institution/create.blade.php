@@ -163,30 +163,30 @@
 
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Courses & Commission
+                            Programs & Commission
                         </label>
 
-                        <div id="course-rows" class="w-full space-y-4"></div>
+                        <div id="program-rows" class="w-full space-y-4"></div>
 
-                        <!-- Course Row Template -->
-                        <template id="course-row-template">
-                            <div class="w-full course-row flex items-center space-x-4">
-                                <select name="courses[]" class="course-select px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" required>
-                                    <option value="">Select Course</option>
-                                    @foreach($courses as $course)
-                                    <option value="{{ $course->id }}">{{ $course->name }} ({{ $course->code }})</option>
+                        <!-- Program Row Template -->
+                        <template id="program-row-template">
+                            <div class="w-full program-row flex items-center space-x-4">
+                                <select name="programs[]" class="program-select px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" required>
+                                    <option value="">Select Program</option>
+                                    @foreach($programs as $program)
+                                    <option value="{{ $program->id }}">{{ $program->name }} ({{ $program->code }})</option>
                                     @endforeach
                                 </select>
                                 <input type="number" name="commissions[]" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="Commission Amount" required>
-                                <button type="button" class="remove-course text-red-500 hover:text-red-700">
+                                <button type="button" class="remove-program text-red-500 hover:text-red-700">
                                     <x-lucide-trash class="w-5 h-5" />
                                 </button>
                             </div>
                         </template>
 
-                        <button type="button" id="add-course"
+                        <button type="button" id="add-program"
                             class="mt-3 text-sm font-semibold text-blue-600 hover:text-blue-800">
-                            Add Course
+                            Add Program
                         </button>
                     </div>
 
@@ -302,16 +302,16 @@
             });
         }
 
-        const container = document.getElementById('course-rows');
-        const addBtn = document.getElementById('add-course');
-        const template = document.getElementById('course-row-template');
+        const container = document.getElementById('program-rows');
+        const addBtn = document.getElementById('add-program');
+        const template = document.getElementById('program-row-template');
 
         function refresh() {
-            const selected = Array.from(container.querySelectorAll('.course-select'))
+            const selected = Array.from(container.querySelectorAll('.program-select'))
                 .map(s => s.value)
                 .filter(Boolean);
 
-            container.querySelectorAll('.course-select').forEach(select => {
+            container.querySelectorAll('.program-select').forEach(select => {
                 Array.from(select.options).forEach(option => {
                     if (!option.value) return;
                     option.disabled = selected.includes(option.value) && option.value !== select.value;
@@ -321,12 +321,12 @@
 
         function addRow() {
             const clone = template.content.cloneNode(true);
-            const row = clone.querySelector('.course-row');
-            const select = row.querySelector('.course-select');
+            const row = clone.querySelector('.program-row');
+            const select = row.querySelector('.program-select');
 
             select.addEventListener('change', refresh);
 
-            row.querySelector('.remove-course').addEventListener('click', function() {
+            row.querySelector('.remove-program').addEventListener('click', function() {
                 row.remove();
                 refresh();
             });

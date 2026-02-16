@@ -118,19 +118,19 @@
                     </select>
                 </div>
 
-                <!-- Courses -->
+                <!-- Programs -->
                 <div class="md:col-span-2">
-                    <label class="block mb-2">Courses & Commission</label>
+                    <label class="block mb-2">Programs & Commission</label>
 
-                    <div id="course-rows" class="space-y-4"></div>
+                    <div id="program-rows" class="space-y-4"></div>
 
-                    <template id="course-row-template">
-                        <div class="course-row flex gap-4 items-center">
-                            <select name="courses[]" class="course-select border rounded-lg px-4 py-2" required>
-                                <option value="">Select Course</option>
-                                @foreach($courses as $course)
-                                <option value="{{ $course->id }}">
-                                    {{ $course->name }} ({{ $course->code }})
+                    <template id="program-row-template">
+                        <div class="program-row flex gap-4 items-center">
+                            <select name="programs[]" class="program-select border rounded-lg px-4 py-2" required>
+                                <option value="">Select Program</option>
+                                @foreach($programs as $program)
+                                <option value="{{ $program->id }}">
+                                    {{ $program->name }} ({{ $program->code }})
                                 </option>
                                 @endforeach
                             </select>
@@ -139,15 +139,15 @@
                                 class="border rounded-lg px-4 py-2"
                                 placeholder="Commission" required>
 
-                            <button type="button" class="remove-course text-red-500 hover:text-red-700">
+                            <button type="button" class="remove-program text-red-500 hover:text-red-700">
                                 <x-lucide-trash class="w-5 h-5" />
                             </button>
                         </div>
                     </template>
 
-                    <button type="button" id="add-course"
+                    <button type="button" id="add-program"
                         class="mt-3 text-blue-600 font-semibold">
-                        + Add Course
+                        + Add Program
                     </button>
                 </div>
 
@@ -206,15 +206,15 @@
 
 @php
 $existingCourses = [];
-if (old('courses')) {
-foreach (old('courses') as $i => $id) {
+if (old('programs')) {
+foreach (old('programs') as $i => $id) {
 $existingCourses[] = [
 'course_id' => $id,
 'commission' => old('commissions')[$i] ?? ''
 ];
 }
 } else {
-foreach ($institution->courses as $c) {
+foreach ($institution->programs as $c) {
 $existingCourses[] = [
 'course_id' => $c->id,
 'commission' => $c->pivot->commission_amount
@@ -233,15 +233,15 @@ $existingCourses[] = [
             shouldSort: false
         });
 
-        const container = document.getElementById('course-rows');
-        const template = document.getElementById('course-row-template');
-        const addBtn = document.getElementById('add-course');
+        const container = document.getElementById('program-rows');
+        const template = document.getElementById('program-row-template');
+        const addBtn = document.getElementById('add-program');
 
         function refresh() {
-            const selected = [...container.querySelectorAll('.course-select')]
+            const selected = [...container.querySelectorAll('.program-select')]
                 .map(s => s.value).filter(Boolean);
 
-            container.querySelectorAll('.course-select').forEach(select => {
+            container.querySelectorAll('.program-select').forEach(select => {
                 [...select.options].forEach(opt => {
                     if (!opt.value) return;
                     opt.disabled = selected.includes(opt.value) && opt.value !== select.value;
@@ -251,15 +251,15 @@ $existingCourses[] = [
 
         function addRow(courseId = '', commission = '') {
             const clone = template.content.cloneNode(true);
-            const row = clone.querySelector('.course-row');
-            const select = row.querySelector('.course-select');
+            const row = clone.querySelector('.program-row');
+            const select = row.querySelector('.program-select');
             const commissionInput = row.querySelector('input');
 
             select.value = courseId;
             commissionInput.value = commission;
 
             select.addEventListener('change', refresh);
-            row.querySelector('.remove-course').onclick = () => {
+            row.querySelector('.remove-program').onclick = () => {
                 row.remove();
                 refresh();
             };
