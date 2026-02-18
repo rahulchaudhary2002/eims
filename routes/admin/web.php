@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdmissionCommissionController;
 use App\Http\Controllers\Admin\AdmissionRewardController;
 use App\Http\Controllers\Admin\AffiliationController;
+use App\Http\Controllers\Admin\BulkModuleImportController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InstitutionCategoryController;
@@ -25,6 +26,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(functi
     Route::resource('level', LevelController::class)->except('show');
     Route::resource('program', ProgramController::class)->except('show');
     Route::resource('course', CourseController::class);
+    Route::get('bulk-import', [BulkModuleImportController::class, 'index'])->name('bulk-import.index');
+    Route::post('bulk-import', [BulkModuleImportController::class, 'store'])->name('bulk-import.store');
+    Route::get('bulk-import/template', [BulkModuleImportController::class, 'template'])->name('bulk-import.template');
 
     Route::prefix('admission/reward')->name('admission.reward.')->group(function () {
         Route::get('/', [AdmissionRewardController::class, 'index'])->name('index');
