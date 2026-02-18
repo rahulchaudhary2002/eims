@@ -25,6 +25,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'institution_name' => ['required', 'string', 'max:255'],
             'institution_type' => ['required', Rule::exists('institution_types', 'id')],
+            'institution_category' => ['required', Rule::exists('institution_categories', 'id')],
             'contact_name' => ['required', 'string', 'max:255'],
             'contact_email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . Vendor::class . ',email'],
             'contact_phone' => ['required', 'string', 'regex:/^(?:\+?\d{1,3}[- ]?)?\d{10}$/', 'unique:' . Vendor::class . ',phone'],
@@ -37,6 +38,7 @@ class RegisteredUserController extends Controller
         $institution = Institution::create([
             'name' => $request->institution_name,
             'institution_type_id' => $request->institution_type,
+            'institution_category_id' => $request->institution_category,
             'address' => $request->address,
             'website' => $request->website,
             'established_year' => $request->established_year,

@@ -285,6 +285,22 @@
                         </select>
                     </div>
 
+                    <div>
+                        <label for="institutionCategory" class="block text-sm font-semibold text-gray-700 mb-1.5">
+                            Institution Category <span class="text-[#ed8936]">*</span>
+                        </label>
+                        <select id="institutionCategory" name="institution_category"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition appearance-none bg-no-repeat bg-right-4 bg-[length:16px]"
+                            style="background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23718096\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e'); background-position: right 1rem center;" required>
+                            <option value="">Select institution category</option>
+                            @foreach($institutionCategories as $institutionCategory)
+                            <option value="{{ $institutionCategory->id }}" {{ old('institution_category') == $institutionCategory->id ? 'selected' : '' }}>
+                                {{ $institutionCategory->name }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <!-- Institution Contact Details Block -->
                     <div class="bg-gray-50/80 p-5 rounded-xl border-l-4 border-[#4299e1] space-y-4">
                         <h4 class="text-[#2c5aa0] font-semibold flex items-center gap-2">
