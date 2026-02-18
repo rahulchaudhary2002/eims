@@ -8,14 +8,15 @@
 
     {{-- Cover --}}
     <div class="relative h-32 sm:h-40 md:h-48">
-        @if($institution->cover_image)
+        @php
+            $coverImage = ($institution->cover_image && Storage::disk('public')->exists($institution->cover_image))
+                ? Storage::url($institution->cover_image)
+                : asset('assets/images/logo.png');
+        @endphp
         <img
-            src="{{ Storage::url($institution->cover_image) }}"
+            src="{{ $coverImage }}"
             class="h-full w-full object-cover"
             alt="Cover">
-        @else
-        <div class="h-full w-full bg-gradient-to-r from-orange-100 to-orange-200"></div>
-        @endif
     </div>
 
     {{-- Content --}}

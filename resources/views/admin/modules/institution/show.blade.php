@@ -6,14 +6,17 @@
 
     {{-- Header / Cover --}}
     <div class="relative rounded-2xl overflow-hidden border border-gray-200 shadow-lg">
+        @php
+            $coverImage = ($institution->cover_image && Storage::disk('public')->exists($institution->cover_image))
+                ? Storage::url($institution->cover_image)
+                : asset('assets/images/logo.png');
+        @endphp
         <div class="h-80 bg-gradient-to-r from-indigo-700 to-blue-700 relative">
-            @if($institution->cover_image)
             <img
-                src="{{ Storage::url($institution->cover_image) }}"
+                src="{{ $coverImage }}"
                 alt="Cover Image"
                 class="h-full w-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-            @endif
         </div>
 
         <div class="relative -mt-40 px-8 pb-6">

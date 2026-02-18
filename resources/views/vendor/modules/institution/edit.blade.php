@@ -297,16 +297,19 @@
 
                 <div class="space-y-4">
                     <!-- Current Cover Preview -->
-                    @if($institution->cover_image)
+                    @php
+                        $coverImage = ($institution->cover_image && Storage::disk('public')->exists($institution->cover_image))
+                            ? Storage::url($institution->cover_image)
+                            : asset('assets/images/logo.png');
+                    @endphp
                     <div class="mb-4">
                         <p class="text-sm text-gray-600 mb-2">Current Cover:</p>
                         <div class="h-32 rounded-lg overflow-hidden border border-gray-200">
-                            <img src="{{ Storage::url($institution->cover_image) }}"
+                            <img src="{{ $coverImage }}"
                                 alt="Current Cover"
                                 class="w-full h-full object-cover">
                         </div>
                     </div>
-                    @endif
 
                     <!-- Cover Upload Area -->
                     <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors">

@@ -4,13 +4,16 @@
 
 @section('content')
 <!-- Cover Photo Section -->
+@php
+    $coverImage = ($institution->cover_image && Storage::disk('public')->exists($institution->cover_image))
+        ? Storage::url($institution->cover_image)
+        : asset('assets/images/logo.png');
+@endphp
 <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
     <div class="relative h-64 md:h-80 bg-gradient-to-r from-blue-500 to-indigo-600">
-        @if($institution->cover_image)
-        <img src="{{ Storage::url($institution->cover_image) }}"
+        <img src="{{ $coverImage }}"
             alt="Cover Image"
             class="w-full h-full object-cover">
-        @endif
 
         <!-- Edit Button -->
         <div class="absolute top-4 right-4">

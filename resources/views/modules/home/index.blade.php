@@ -215,7 +215,12 @@
             @forelse ($colleges as $college)
             <a href="{{ route('institution.show', [$college->slug]) }}" class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl border border-gray-200">
                 <div class="h-44 overflow-hidden">
-                    <img src="{{ Storage::url($college->cover_image) }}" alt="{{ $college->name }}" class="w-full h-full object-cover transition-all hover:scale-105">
+                    @php
+                        $coverImage = ($college->cover_image && Storage::disk('public')->exists($college->cover_image))
+                            ? Storage::url($college->cover_image)
+                            : asset('assets/images/logo.png');
+                    @endphp
+                    <img src="{{ $coverImage }}" alt="{{ $college->name }}" class="w-full h-full object-cover transition-all hover:scale-105">
                 </div>
                 <div class="p-7">
                     <span class="inline-block px-4 py-1.5 bg-teal-500/10 text-teal-500 rounded-full text-xs font-semibold mb-4">{{ $college->category->name }}</span>
