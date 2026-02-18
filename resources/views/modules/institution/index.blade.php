@@ -252,9 +252,14 @@
                     <div class="group bg-white rounded-xl overflow-hidden shadow-card border border-lightgray flex flex-col h-full hover:-translate-y-1 hover:shadow-hover transition"
                         data-college-id="{{ $institution->id }}">
                         <div class="relative h-[180px] overflow-hidden">
+                            @php
+                                $coverImage = ($institution->cover_image && Storage::disk('public')->exists($institution->cover_image))
+                                    ? Storage::url($institution->cover_image)
+                                    : asset('assets/images/logo.png');
+                            @endphp
                             <a href="{{ route('institution.show', ['institution_slug' => $institution->slug]) }}" class="block w-full h-full">
                                 <img class="w-full h-full object-cover transition group-hover:scale-[1.05]"
-                                    src="{{ Storage::url($institution->cover_image) }}"
+                                    src="{{ $coverImage }}"
                                     alt="{{ $institution->name }}">
                             </a>
 

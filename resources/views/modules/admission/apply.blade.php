@@ -8,13 +8,16 @@
 <div class="relative rounded-3xl overflow-hidden border border-gray-200 shadow-lg mb-10">
     <!-- Cover Image -->
     <div class="h-48 sm:h-60 bg-gray-100 relative">
-        @if($admission->institution && $admission->institution->cover_image)
-        <img src="{{ Storage::url($admission->institution->cover_image) }}"
+        @php
+            $coverImage = (
+                $admission->institution &&
+                $admission->institution->cover_image &&
+                Storage::disk('public')->exists($admission->institution->cover_image)
+            ) ? Storage::url($admission->institution->cover_image) : asset('assets/images/logo.png');
+        @endphp
+        <img src="{{ $coverImage }}"
             alt="Cover Image"
             class="h-full w-full object-cover">
-        @else
-        <div class="h-full w-full bg-gradient-to-r from-orange-100 to-orange-200"></div>
-        @endif
     </div>
 
     <!-- Logo and Info -->
