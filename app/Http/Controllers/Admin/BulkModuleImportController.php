@@ -31,7 +31,7 @@ class BulkModuleImportController extends Controller
     public function store(Request $request, SimpleXlsxReader $reader): RedirectResponse
     {
         $request->validate([
-            'file' => 'required|file|mimes:xlsx|max:10240',
+            'file' => 'required|file|extensions:xlsx|max:10240',
         ]);
 
         try {
