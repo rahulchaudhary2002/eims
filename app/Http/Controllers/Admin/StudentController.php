@@ -69,6 +69,12 @@ class StudentController extends Controller
             'scholarshipApplications' => fn ($q) => $q->with('scholarship.institution')->latest(),
             'scholarshipCashbacks' => fn ($q) => $q->with('commissionInvoice')->latest(),
             'favoriteInstitutions' => fn ($q) => $q->with('institution')->latest(),
+            'compareItems' => fn ($q) => $q->with(['institution', 'institutionProgram.program'])->latest(),
+            'recommendations' => fn ($q) => $q->with(['institution', 'institutionProgram.program'])->orderByDesc('score'),
+            'followedInstitutions' => fn ($q) => $q->with('institution')->latest(),
+            'counselingSessions' => fn ($q) => $q->with(['institution', 'counselor'])->orderBy('scheduled_at'),
+            'reviews' => fn ($q) => $q->with('institution')->latest(),
+            'conversations' => fn ($q) => $q->with('institution')->latest(),
         ]);
 
         return view('admin.modules.student.show', compact('student'));

@@ -736,5 +736,398 @@
         @endif
     </div>
 
+    {{-- Compare Items --}}
+    <div class="eims-card overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h2 class="text-base font-semibold text-slate-800">Compare Items</h2>
+                <p class="text-xs text-slate-500 mt-0.5">Institutions and programs in this student's comparison list</p>
+            </div>
+            <div class="flex items-center gap-2">
+                @if($student->compareItems->count() > 0)
+                    <a href="{{ route('admin.student-compare-items.index', ['student_id' => $student->id]) }}" class="btn btn-secondary text-sm">View All</a>
+                @endif
+                <a href="{{ route('admin.student-compare-items.create', ['student_id' => $student->id]) }}" class="btn btn-primary text-sm">Add Item</a>
+            </div>
+        </div>
+
+        @if($student->compareItems->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="eims-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Institution</th>
+                            <th>Program</th>
+                            <th>Added At</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($student->compareItems->take(5) as $item)
+                            <tr>
+                                <td>
+                                    @if($item->institution)
+                                        <a href="{{ route('admin.institutions.show', $item->institution) }}" class="font-medium text-blue-600 hover:underline text-sm">
+                                            {{ $item->institution->name }}
+                                        </a>
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td class="text-sm text-slate-600">
+                                    @if($item->institutionProgram)
+                                        {{ $item->institutionProgram->title ?: ($item->institutionProgram->program->name ?? '—') }}
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td class="text-xs text-slate-500">{{ $item->created_at->format('d M Y') }}</td>
+                                <td>
+                                    <div class="flex justify-center gap-1">
+                                        <a href="{{ route('admin.student-compare-items.show', $item) }}" class="btn-icon btn-icon-view" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </a>
+                                        <form action="{{ route('admin.student-compare-items.destroy', $item) }}" method="POST" onsubmit="return confirm('Remove this compare item?')">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="btn-icon btn-icon-delete" title="Remove">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="px-6 py-10 text-center text-slate-400">
+                <p class="mb-3">No compare items yet.</p>
+                <a href="{{ route('admin.student-compare-items.create', ['student_id' => $student->id]) }}" class="btn btn-primary text-sm">Add First</a>
+            </div>
+        @endif
+    </div>
+
+    {{-- Recommendations --}}
+    <div class="eims-card overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h2 class="text-base font-semibold text-slate-800">Recommendations</h2>
+                <p class="text-xs text-slate-500 mt-0.5">Institution and program recommendations for this student</p>
+            </div>
+            <div class="flex items-center gap-2">
+                @if($student->recommendations->count() > 0)
+                    <a href="{{ route('admin.student-recommendations.index', ['student_id' => $student->id]) }}" class="btn btn-secondary text-sm">View All</a>
+                @endif
+                <a href="{{ route('admin.student-recommendations.create', ['student_id' => $student->id]) }}" class="btn btn-primary text-sm">Add</a>
+            </div>
+        </div>
+
+        @if($student->recommendations->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="eims-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Institution</th>
+                            <th>Program</th>
+                            <th>Score</th>
+                            <th>Viewed</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($student->recommendations->take(5) as $rec)
+                            <tr>
+                                <td>
+                                    @if($rec->institution)
+                                        <a href="{{ route('admin.institutions.show', $rec->institution) }}" class="font-medium text-blue-600 hover:underline text-sm">{{ $rec->institution->name }}</a>
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td class="text-sm text-slate-600">
+                                    {{ $rec->institutionProgram?->title ?: ($rec->institutionProgram?->program?->name ?? '—') }}
+                                </td>
+                                <td>
+                                    @if($rec->score !== null)
+                                        <span class="font-mono font-semibold text-sm {{ (float) $rec->score >= 80 ? 'text-green-600' : ((float) $rec->score >= 50 ? 'text-amber-600' : 'text-red-500') }}">
+                                            {{ number_format((float) $rec->score, 2) }}
+                                        </span>
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($rec->is_viewed)
+                                        <span class="badge badge-green text-xs">Viewed</span>
+                                    @else
+                                        <span class="badge text-xs">Not Viewed</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="flex justify-center gap-1">
+                                        <a href="{{ route('admin.student-recommendations.show', $rec) }}" class="btn-icon btn-icon-view" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="px-6 py-10 text-center text-slate-400">
+                <p class="mb-3">No recommendations yet.</p>
+                <a href="{{ route('admin.student-recommendations.create', ['student_id' => $student->id]) }}" class="btn btn-primary text-sm">Add First</a>
+            </div>
+        @endif
+    </div>
+
+    {{-- Followed Institutions --}}
+    <div class="eims-card overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h2 class="text-base font-semibold text-slate-800">Followed Institutions</h2>
+                <p class="text-xs text-slate-500 mt-0.5">Institutions this student follows</p>
+            </div>
+            @if($student->followedInstitutions->count() > 0)
+                <a href="{{ route('admin.institution-followers.index', ['student_id' => $student->id]) }}" class="btn btn-secondary text-sm">View All</a>
+            @endif
+        </div>
+
+        @if($student->followedInstitutions->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="eims-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Institution</th>
+                            <th>Followed At</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($student->followedInstitutions->take(5) as $follow)
+                            <tr>
+                                <td>
+                                    @if($follow->institution)
+                                        <a href="{{ route('admin.institutions.show', $follow->institution) }}" class="font-medium text-blue-600 hover:underline text-sm">
+                                            {{ $follow->institution->name }}
+                                        </a>
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td class="text-xs text-slate-500">{{ $follow->created_at->format('d M Y') }}</td>
+                                <td>
+                                    <div class="flex justify-center gap-1">
+                                        <a href="{{ route('admin.institution-followers.show', $follow) }}" class="btn-icon btn-icon-view" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </a>
+                                        <form action="{{ route('admin.institution-followers.destroy', $follow) }}" method="POST" onsubmit="return confirm('Remove this follow?')">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="btn-icon btn-icon-delete" title="Remove">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="px-6 py-10 text-center text-slate-400">
+                <p>No followed institutions yet.</p>
+            </div>
+        @endif
+    </div>
+
+    {{-- Counseling Sessions --}}
+    <div class="eims-card overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h2 class="text-base font-semibold text-slate-800">Counseling Sessions</h2>
+                <p class="text-xs text-slate-500 mt-0.5">Scheduled counseling sessions for this student</p>
+            </div>
+            <div class="flex items-center gap-2">
+                @if($student->counselingSessions->count() > 0)
+                    <a href="{{ route('admin.counseling-sessions.index', ['student_id' => $student->id]) }}" class="btn btn-secondary text-sm">View All</a>
+                @endif
+                <a href="{{ route('admin.counseling-sessions.create', ['student_id' => $student->id]) }}" class="btn btn-primary text-sm">Schedule</a>
+            </div>
+        </div>
+
+        @if($student->counselingSessions->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="eims-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Scheduled At</th>
+                            <th>Institution</th>
+                            <th>Counselor</th>
+                            <th>Mode</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($student->counselingSessions->take(5) as $cs)
+                            <tr>
+                                <td class="text-sm {{ $cs->scheduled_at->isPast() && $cs->status === 'scheduled' ? 'text-red-600 font-medium' : 'text-slate-700' }}">
+                                    {{ $cs->scheduled_at->format('d M Y, H:i') }}
+                                </td>
+                                <td class="text-sm">{{ $cs->institution->name ?? '—' }}</td>
+                                <td class="text-sm">{{ $cs->counselor->name ?? '—' }}</td>
+                                <td class="text-sm">{{ \App\Models\CounselingSession::MODES[$cs->mode] ?? $cs->mode }}</td>
+                                <td><span class="badge">{{ \App\Models\CounselingSession::STATUSES[$cs->status] ?? $cs->status }}</span></td>
+                                <td>
+                                    <div class="flex justify-center gap-1">
+                                        <a href="{{ route('admin.counseling-sessions.show', $cs) }}" class="btn-icon btn-icon-view" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="px-6 py-10 text-center text-slate-400">
+                <p class="mb-3">No counseling sessions yet.</p>
+                <a href="{{ route('admin.counseling-sessions.create', ['student_id' => $student->id]) }}" class="btn btn-primary text-sm">Schedule First</a>
+            </div>
+        @endif
+    </div>
+
+    {{-- Reviews --}}
+    <div class="card">
+        <div class="card-header flex items-center justify-between">
+            <h2 class="card-title">Institution Reviews</h2>
+            <div class="flex items-center gap-3">
+                <span class="text-sm text-slate-500">{{ $student->reviews->count() }} total</span>
+                <a href="{{ route('admin.institution-reviews.create', ['student_id' => $student->id]) }}" class="btn btn-primary btn-sm">Add Review</a>
+            </div>
+        </div>
+        @if($student->reviews->isEmpty())
+            <div class="px-6 py-8 text-center text-slate-400">
+                <p>No reviews submitted yet.</p>
+            </div>
+        @else
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Institution</th>
+                            <th>Rating</th>
+                            <th>Review</th>
+                            <th>Approved</th>
+                            <th>Date</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($student->reviews->take(5) as $review)
+                            <tr>
+                                <td class="text-sm">
+                                    <a href="{{ route('admin.institutions.show', $review->institution) }}" class="text-blue-600 hover:underline">{{ $review->institution->name }}</a>
+                                </td>
+                                <td>
+                                    <span class="font-semibold text-amber-500">{{ $review->rating }}</span>
+                                    <span class="text-slate-400 text-xs">/ 5</span>
+                                </td>
+                                <td class="text-sm max-w-xs truncate text-slate-600">{{ $review->review ? \Illuminate\Support\Str::limit($review->review, 50) : '—' }}</td>
+                                <td>
+                                    @if($review->is_approved)
+                                        <span class="badge badge-success">Approved</span>
+                                    @else
+                                        <span class="badge badge-warning">Pending</span>
+                                    @endif
+                                </td>
+                                <td class="text-xs text-slate-500">{{ $review->created_at->format('d M Y') }}</td>
+                                <td>
+                                    <div class="flex justify-center gap-1">
+                                        <a href="{{ route('admin.institution-reviews.show', $review) }}" class="btn-icon btn-icon-view" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @if($student->reviews->count() > 5)
+                <div class="px-6 py-3 border-t border-slate-100 text-right">
+                    <a href="{{ route('admin.institution-reviews.index', ['student_id' => $student->id]) }}" class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                        View all reviews by this student →
+                    </a>
+                </div>
+            @endif
+        @endif
+    </div>
+
+    {{-- Conversations --}}
+    <div class="card">
+        <div class="card-header flex items-center justify-between">
+            <h2 class="card-title">Conversations</h2>
+            <div class="flex items-center gap-3">
+                <span class="text-sm text-slate-500">{{ $student->conversations->count() }} total</span>
+                <a href="{{ route('admin.conversations.create', ['student_id' => $student->id]) }}" class="btn btn-primary btn-sm">New Conversation</a>
+            </div>
+        </div>
+        @if($student->conversations->isEmpty())
+            <div class="px-6 py-8 text-center text-slate-400">
+                <p>No conversations yet.</p>
+            </div>
+        @else
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Institution</th>
+                            <th>Type</th>
+                            <th>Started</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($student->conversations->take(5) as $conv)
+                            <tr>
+                                <td class="text-sm">
+                                    @if($conv->institution)
+                                        <a href="{{ route('admin.institutions.show', $conv->institution) }}" class="text-blue-600 hover:underline">{{ $conv->institution->name }}</a>
+                                    @else
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="badge">{{ \App\Models\Conversation::TYPES[$conv->type] ?? $conv->type }}</span>
+                                </td>
+                                <td class="text-xs text-slate-500">{{ $conv->created_at->format('d M Y, H:i') }}</td>
+                                <td>
+                                    <div class="flex justify-center gap-1">
+                                        <a href="{{ route('admin.conversations.show', $conv) }}" class="btn-icon btn-icon-view" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @if($student->conversations->count() > 5)
+                <div class="px-6 py-3 border-t border-slate-100 text-right">
+                    <a href="{{ route('admin.conversations.index', ['student_id' => $student->id]) }}" class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                        View all conversations →
+                    </a>
+                </div>
+            @endif
+        @endif
+    </div>
+
 </div>
 @endsection
