@@ -309,7 +309,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td>{{ $usr->pivot->role_name ?: '—' }}</td>
+                        <td>{{ \App\Models\UserInstitution::ROLES[$usr->pivot->role_name] ?? $usr->pivot->role_name ?? '—' }}</td>
                         <td>{{ $usr->pivot->position ?: '—' }}</td>
                         <td class="text-sm text-slate-500">
                             {{ $usr->pivot->joined_at ? \Carbon\Carbon::parse($usr->pivot->joined_at)->format('d M Y') : '—' }}

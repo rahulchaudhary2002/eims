@@ -66,7 +66,7 @@ class ApplicationController extends Controller
         $sources = Application::SOURCES;
         $statuses = Application::STATUSES;
 
-        return view('admin.applications.index', compact(
+        return view('admin.modules.applications.index', compact(
             'applications',
             'students',
             'institutions',
@@ -100,7 +100,7 @@ class ApplicationController extends Controller
             $this->authorizeScholarship((int) $selectedScholarshipId);
         }
 
-        return view('admin.applications.create', compact(
+        return view('admin.modules.applications.create', compact(
             'students',
             'institutions',
             'institutionPrograms',
@@ -134,7 +134,7 @@ class ApplicationController extends Controller
         $this->authorizeApplicationAccess($application);
         $application->load(['student', 'institution', 'institutionProgram.program.faculty', 'scholarship', 'statusLogs.changedBy', 'admission.verifiedBy', 'referral.referredBy']);
 
-        return view('admin.applications.show', compact('application'));
+        return view('admin.modules.applications.show', compact('application'));
     }
 
     public function edit(Application $application): View
@@ -152,7 +152,7 @@ class ApplicationController extends Controller
         $selectedInstitutionProgramId = null;
         $selectedScholarshipId = null;
 
-        return view('admin.applications.edit', compact(
+        return view('admin.modules.applications.edit', compact(
             'application',
             'students',
             'institutions',

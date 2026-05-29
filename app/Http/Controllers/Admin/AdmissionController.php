@@ -62,7 +62,7 @@ class AdmissionController extends Controller
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $verificationStatuses = Admission::VERIFICATION_STATUSES;
 
-        return view('admin.admissions.index', compact(
+        return view('admin.modules.admissions.index', compact(
             'admissions',
             'students',
             'institutions',
@@ -96,7 +96,7 @@ class AdmissionController extends Controller
             $this->authorizeInstitutionProgram((int) $selectedInstitutionProgramId);
         }
 
-        return view('admin.admissions.create', compact(
+        return view('admin.modules.admissions.create', compact(
             'students',
             'institutions',
             'institutionPrograms',
@@ -127,7 +127,7 @@ class AdmissionController extends Controller
         $this->authorizeAdmissionAccess($admission);
         $admission->load(['application.statusLogs.changedBy', 'student', 'institution', 'institutionProgram.program.faculty', 'verifiedBy', 'commissionInvoice']);
 
-        return view('admin.admissions.show', compact('admission'));
+        return view('admin.modules.admissions.show', compact('admission'));
     }
 
     public function edit(Admission $admission): View
@@ -145,7 +145,7 @@ class AdmissionController extends Controller
         $selectedInstitutionId = null;
         $selectedInstitutionProgramId = null;
 
-        return view('admin.admissions.edit', compact(
+        return view('admin.modules.admissions.edit', compact(
             'admission',
             'students',
             'institutions',

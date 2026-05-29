@@ -49,7 +49,7 @@ class MessageController extends Controller
         $conversations = $this->conversationDropdownQuery()->get(['id']);
         $senderTypes   = Message::SENDER_TYPES;
 
-        return view('admin.messages.index', compact('messages', 'conversations', 'senderTypes'));
+        return view('admin.modules.messages.index', compact('messages', 'conversations', 'senderTypes'));
     }
 
     public function show(Message $message): View
@@ -57,7 +57,7 @@ class MessageController extends Controller
         $this->authorizeMessageAccess($message);
         $message->load(['conversation.student', 'conversation.institution', 'sender']);
 
-        return view('admin.messages.show', compact('message'));
+        return view('admin.modules.messages.show', compact('message'));
     }
 
     public function store(StoreMessageRequest $request, Conversation $conversation): RedirectResponse

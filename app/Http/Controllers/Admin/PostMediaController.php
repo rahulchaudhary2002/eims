@@ -34,7 +34,7 @@ class PostMediaController extends Controller
         $posts = $this->postDropdownQuery()->get(['id', 'title', 'institution_id']);
         $types = PostMedia::TYPES;
 
-        return view('admin.post-media.index', compact('media', 'posts', 'types'));
+        return view('admin.modules.post-media.index', compact('media', 'posts', 'types'));
     }
 
     public function create(Request $request): View
@@ -48,7 +48,7 @@ class PostMediaController extends Controller
             $this->authorizePost($post);
         }
 
-        return view('admin.post-media.create', compact('posts', 'types', 'selectedPostId'));
+        return view('admin.modules.post-media.create', compact('posts', 'types', 'selectedPostId'));
     }
 
     public function store(StorePostMediaRequest $request): RedirectResponse
@@ -71,7 +71,7 @@ class PostMediaController extends Controller
         $this->authorizeMediaAccess($postMedium);
         $postMedium->load('post.institution');
 
-        return view('admin.post-media.show', compact('postMedium'));
+        return view('admin.modules.post-media.show', compact('postMedium'));
     }
 
     public function edit(PostMedia $postMedium): View
@@ -82,7 +82,7 @@ class PostMediaController extends Controller
         $posts = $this->postDropdownQuery()->get(['id', 'title', 'institution_id']);
         $types = PostMedia::TYPES;
 
-        return view('admin.post-media.edit', compact('postMedium', 'posts', 'types'));
+        return view('admin.modules.post-media.edit', compact('postMedium', 'posts', 'types'));
     }
 
     public function update(UpdatePostMediaRequest $request, PostMedia $postMedium): RedirectResponse

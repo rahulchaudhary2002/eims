@@ -39,7 +39,7 @@ class StudentCompareItemController extends Controller
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $institutionPrograms = $this->institutionProgramDropdownQuery()->get(['id', 'title', 'institution_id', 'program_id']);
 
-        return view('admin.student-compare-items.index', compact(
+        return view('admin.modules.student-compare-items.index', compact(
             'compareItems',
             'students',
             'institutions',
@@ -59,7 +59,7 @@ class StudentCompareItemController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.student-compare-items.create', compact(
+        return view('admin.modules.student-compare-items.create', compact(
             'students',
             'institutions',
             'institutionPrograms',
@@ -84,7 +84,7 @@ class StudentCompareItemController extends Controller
         $this->authorizeItemAccess($studentCompareItem);
         $studentCompareItem->load(['student', 'institution', 'institutionProgram.program']);
 
-        return view('admin.student-compare-items.show', compact('studentCompareItem'));
+        return view('admin.modules.student-compare-items.show', compact('studentCompareItem'));
     }
 
     public function edit(StudentCompareItem $studentCompareItem): View
@@ -96,7 +96,7 @@ class StudentCompareItemController extends Controller
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $institutionPrograms = $this->institutionProgramDropdownQuery()->get(['id', 'title', 'institution_id', 'program_id']);
 
-        return view('admin.student-compare-items.edit', compact(
+        return view('admin.modules.student-compare-items.edit', compact(
             'studentCompareItem',
             'students',
             'institutions',

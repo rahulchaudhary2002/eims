@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -45,6 +46,11 @@ class User extends Authenticatable
             ->using(InstitutionUser::class)
             ->withPivot(['role_name', 'position', 'is_primary', 'is_active', 'joined_at'])
             ->withTimestamps();
+    }
+
+    public function userInstitutions(): HasMany
+    {
+        return $this->hasMany(UserInstitution::class);
     }
 
     public function activeInstitutions(): BelongsToMany

@@ -50,7 +50,7 @@ class PromotionController extends Controller
         $types = Promotion::TYPES;
         $statuses = Promotion::STATUSES;
 
-        return view('admin.promotions.index', compact('promotions', 'institutions', 'types', 'statuses'));
+        return view('admin.modules.promotions.index', compact('promotions', 'institutions', 'types', 'statuses'));
     }
 
     public function create(Request $request): View
@@ -64,7 +64,7 @@ class PromotionController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.promotions.create', compact('institutions', 'types', 'statuses', 'selectedInstitutionId'));
+        return view('admin.modules.promotions.create', compact('institutions', 'types', 'statuses', 'selectedInstitutionId'));
     }
 
     public function store(StorePromotionRequest $request): RedirectResponse
@@ -90,7 +90,7 @@ class PromotionController extends Controller
         $this->authorizePromotionAccess($promotion);
         $promotion->load('institution');
 
-        return view('admin.promotions.show', compact('promotion'));
+        return view('admin.modules.promotions.show', compact('promotion'));
     }
 
     public function edit(Promotion $promotion): View
@@ -102,7 +102,7 @@ class PromotionController extends Controller
         $types = Promotion::TYPES;
         $statuses = Promotion::STATUSES;
 
-        return view('admin.promotions.edit', compact('promotion', 'institutions', 'types', 'statuses'));
+        return view('admin.modules.promotions.edit', compact('promotion', 'institutions', 'types', 'statuses'));
     }
 
     public function update(UpdatePromotionRequest $request, Promotion $promotion): RedirectResponse

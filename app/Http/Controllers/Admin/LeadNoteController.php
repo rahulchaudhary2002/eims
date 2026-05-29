@@ -40,7 +40,7 @@ class LeadNoteController extends Controller
         $inquiries = $this->inquiryDropdownQuery()->get(['id', 'name', 'email', 'institution_id']);
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
 
-        return view('admin.lead-notes.index', compact('leadNotes', 'inquiries', 'users'));
+        return view('admin.modules.lead-notes.index', compact('leadNotes', 'inquiries', 'users'));
     }
 
     public function create(Request $request): View
@@ -50,7 +50,7 @@ class LeadNoteController extends Controller
         $selectedInquiryId = $request->input('inquiry_id');
         $defaultUserId = auth('web')->id();
 
-        return view('admin.lead-notes.create', compact(
+        return view('admin.modules.lead-notes.create', compact(
             'inquiries',
             'users',
             'selectedInquiryId',
@@ -82,7 +82,7 @@ class LeadNoteController extends Controller
         $this->authorizeNoteAccess($leadNote);
         $leadNote->load(['inquiry', 'user']);
 
-        return view('admin.lead-notes.show', compact('leadNote'));
+        return view('admin.modules.lead-notes.show', compact('leadNote'));
     }
 
     public function edit(LeadNote $leadNote): View
@@ -93,7 +93,7 @@ class LeadNoteController extends Controller
         $inquiries = $this->inquiryDropdownQuery()->get(['id', 'name', 'email', 'institution_id']);
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
 
-        return view('admin.lead-notes.edit', compact('leadNote', 'inquiries', 'users'));
+        return view('admin.modules.lead-notes.edit', compact('leadNote', 'inquiries', 'users'));
     }
 
     public function update(UpdateLeadNoteRequest $request, LeadNote $leadNote): RedirectResponse

@@ -54,7 +54,7 @@ class ReferralController extends Controller
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $statuses = Referral::STATUSES;
 
-        return view('admin.referrals.index', compact(
+        return view('admin.modules.referrals.index', compact(
             'referrals',
             'institutions',
             'applications',
@@ -78,7 +78,7 @@ class ReferralController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.referrals.create', compact(
+        return view('admin.modules.referrals.create', compact(
             'institutions',
             'applications',
             'students',
@@ -108,7 +108,7 @@ class ReferralController extends Controller
         $this->authorizeReferralAccess($referral);
         $referral->load(['application.institutionProgram.program', 'student', 'institution', 'referredBy']);
 
-        return view('admin.referrals.show', compact('referral'));
+        return view('admin.modules.referrals.show', compact('referral'));
     }
 
     public function edit(Referral $referral): View
@@ -122,7 +122,7 @@ class ReferralController extends Controller
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $statuses = Referral::STATUSES;
 
-        return view('admin.referrals.edit', compact(
+        return view('admin.modules.referrals.edit', compact(
             'referral',
             'institutions',
             'applications',

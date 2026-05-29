@@ -44,7 +44,7 @@ class ConversationController extends Controller
         $students      = Student::orderBy('name')->get(['id', 'name']);
         $types         = Conversation::TYPES;
 
-        return view('admin.conversations.index', compact('conversations', 'institutions', 'students', 'types'));
+        return view('admin.modules.conversations.index', compact('conversations', 'institutions', 'students', 'types'));
     }
 
     public function create(Request $request): View
@@ -59,7 +59,7 @@ class ConversationController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.conversations.create', compact(
+        return view('admin.modules.conversations.create', compact(
             'institutions', 'students', 'types', 'selectedInstitutionId', 'selectedStudentId'
         ));
     }
@@ -83,7 +83,7 @@ class ConversationController extends Controller
         $this->authorizeConversationAccess($conversation);
         $conversation->load(['student', 'institution', 'messages' => fn ($q) => $q->with('sender')->oldest()]);
 
-        return view('admin.conversations.show', compact('conversation'));
+        return view('admin.modules.conversations.show', compact('conversation'));
     }
 
     public function edit(Conversation $conversation): View
@@ -95,7 +95,7 @@ class ConversationController extends Controller
         $students     = Student::orderBy('name')->get(['id', 'name']);
         $types        = Conversation::TYPES;
 
-        return view('admin.conversations.edit', compact('conversation', 'institutions', 'students', 'types'));
+        return view('admin.modules.conversations.edit', compact('conversation', 'institutions', 'students', 'types'));
     }
 
     public function update(UpdateConversationRequest $request, Conversation $conversation): RedirectResponse

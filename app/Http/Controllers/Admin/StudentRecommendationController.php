@@ -47,7 +47,7 @@ class StudentRecommendationController extends Controller
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $institutionPrograms = $this->institutionProgramDropdownQuery()->get(['id', 'title', 'institution_id', 'program_id']);
 
-        return view('admin.student-recommendations.index', compact(
+        return view('admin.modules.student-recommendations.index', compact(
             'recommendations',
             'students',
             'institutions',
@@ -67,7 +67,7 @@ class StudentRecommendationController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.student-recommendations.create', compact(
+        return view('admin.modules.student-recommendations.create', compact(
             'students',
             'institutions',
             'institutionPrograms',
@@ -96,7 +96,7 @@ class StudentRecommendationController extends Controller
         $this->authorizeRecommendationAccess($studentRecommendation);
         $studentRecommendation->load(['student', 'institution', 'institutionProgram.program']);
 
-        return view('admin.student-recommendations.show', compact('studentRecommendation'));
+        return view('admin.modules.student-recommendations.show', compact('studentRecommendation'));
     }
 
     public function edit(StudentRecommendation $studentRecommendation): View
@@ -108,7 +108,7 @@ class StudentRecommendationController extends Controller
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $institutionPrograms = $this->institutionProgramDropdownQuery()->get(['id', 'title', 'institution_id', 'program_id']);
 
-        return view('admin.student-recommendations.edit', compact(
+        return view('admin.modules.student-recommendations.edit', compact(
             'studentRecommendation',
             'students',
             'institutions',

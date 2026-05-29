@@ -44,7 +44,7 @@ class ReferralAgreementController extends Controller
         $commissionTypes = ReferralAgreement::COMMISSION_TYPES;
         $statuses = ReferralAgreement::STATUSES;
 
-        return view('admin.referral-agreements.index', compact(
+        return view('admin.modules.referral-agreements.index', compact(
             'agreements',
             'institutions',
             'commissionTypes',
@@ -63,7 +63,7 @@ class ReferralAgreementController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.referral-agreements.create', compact(
+        return view('admin.modules.referral-agreements.create', compact(
             'institutions',
             'commissionTypes',
             'statuses',
@@ -92,7 +92,7 @@ class ReferralAgreementController extends Controller
         $this->authorizeAgreementAccess($referralAgreement);
         $referralAgreement->load(['institution', 'commissionInvoices' => fn ($q) => $q->latest()]);
 
-        return view('admin.referral-agreements.show', compact('referralAgreement'));
+        return view('admin.modules.referral-agreements.show', compact('referralAgreement'));
     }
 
     public function edit(ReferralAgreement $referralAgreement): View
@@ -103,7 +103,7 @@ class ReferralAgreementController extends Controller
         $commissionTypes = ReferralAgreement::COMMISSION_TYPES;
         $statuses = ReferralAgreement::STATUSES;
 
-        return view('admin.referral-agreements.edit', compact(
+        return view('admin.modules.referral-agreements.edit', compact(
             'referralAgreement',
             'institutions',
             'commissionTypes',

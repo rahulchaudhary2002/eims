@@ -60,7 +60,7 @@ class ScholarshipController extends Controller
         $benefitTypes = Scholarship::BENEFIT_TYPES;
         $statuses = Scholarship::STATUSES;
 
-        return view('admin.scholarships.index', compact(
+        return view('admin.modules.scholarships.index', compact(
             'scholarships',
             'institutions',
             'institutionPrograms',
@@ -87,7 +87,7 @@ class ScholarshipController extends Controller
             $this->authorizeInstitutionProgram((int) $selectedInstitutionProgramId);
         }
 
-        return view('admin.scholarships.create', compact(
+        return view('admin.modules.scholarships.create', compact(
             'institutions',
             'institutionPrograms',
             'types',
@@ -121,7 +121,7 @@ class ScholarshipController extends Controller
             'scholarshipApplications' => fn ($q) => $q->with('student')->latest(),
         ]);
 
-        return view('admin.scholarships.show', compact('scholarship'));
+        return view('admin.modules.scholarships.show', compact('scholarship'));
     }
 
     public function edit(Scholarship $scholarship): View
@@ -137,7 +137,7 @@ class ScholarshipController extends Controller
         $selectedInstitutionId = null;
         $selectedInstitutionProgramId = null;
 
-        return view('admin.scholarships.edit', compact(
+        return view('admin.modules.scholarships.edit', compact(
             'scholarship',
             'institutions',
             'institutionPrograms',

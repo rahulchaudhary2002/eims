@@ -42,7 +42,7 @@ class ConsultancyServiceController extends Controller
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $serviceTypes = ConsultancyService::SERVICE_TYPES;
 
-        return view('admin.consultancy-services.index', compact('services', 'institutions', 'serviceTypes'));
+        return view('admin.modules.consultancy-services.index', compact('services', 'institutions', 'serviceTypes'));
     }
 
     public function create(Request $request): View
@@ -55,7 +55,7 @@ class ConsultancyServiceController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.consultancy-services.create', compact('institutions', 'serviceTypes', 'selectedInstitutionId'));
+        return view('admin.modules.consultancy-services.create', compact('institutions', 'serviceTypes', 'selectedInstitutionId'));
     }
 
     public function store(StoreConsultancyServiceRequest $request): RedirectResponse
@@ -74,7 +74,7 @@ class ConsultancyServiceController extends Controller
         $this->authorizeServiceAccess($consultancyService);
         $consultancyService->load('institution');
 
-        return view('admin.consultancy-services.show', compact('consultancyService'));
+        return view('admin.modules.consultancy-services.show', compact('consultancyService'));
     }
 
     public function edit(ConsultancyService $consultancyService): View
@@ -84,7 +84,7 @@ class ConsultancyServiceController extends Controller
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $serviceTypes = ConsultancyService::SERVICE_TYPES;
 
-        return view('admin.consultancy-services.edit', compact('consultancyService', 'institutions', 'serviceTypes'));
+        return view('admin.modules.consultancy-services.edit', compact('consultancyService', 'institutions', 'serviceTypes'));
     }
 
     public function update(UpdateConsultancyServiceRequest $request, ConsultancyService $consultancyService): RedirectResponse

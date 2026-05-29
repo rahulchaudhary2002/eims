@@ -49,7 +49,7 @@ class InstitutionDocumentController extends Controller
         $documentTypes  = InstitutionDocument::DOCUMENT_TYPES;
         $statuses       = InstitutionDocument::STATUSES;
 
-        return view('admin.institution-documents.index', compact(
+        return view('admin.modules.institution-documents.index', compact(
             'documents', 'institutions', 'documentTypes', 'statuses'
         ));
     }
@@ -65,7 +65,7 @@ class InstitutionDocumentController extends Controller
         $documentTypes = InstitutionDocument::DOCUMENT_TYPES;
         $statuses      = InstitutionDocument::STATUSES;
 
-        return view('admin.institution-documents.create', compact(
+        return view('admin.modules.institution-documents.create', compact(
             'institutions', 'documentTypes', 'statuses'
         ));
     }
@@ -91,7 +91,7 @@ class InstitutionDocumentController extends Controller
         $this->authorizeDocumentAccess($institutionDocument);
         $institutionDocument->load('institution');
 
-        return view('admin.institution-documents.show', [
+        return view('admin.modules.institution-documents.show', [
             'document'     => $institutionDocument,
             'documentTypes'=> InstitutionDocument::DOCUMENT_TYPES,
             'statuses'     => InstitutionDocument::STATUSES,
@@ -111,7 +111,7 @@ class InstitutionDocumentController extends Controller
         $documentTypes = InstitutionDocument::DOCUMENT_TYPES;
         $statuses      = InstitutionDocument::STATUSES;
 
-        return view('admin.institution-documents.edit', [
+        return view('admin.modules.institution-documents.edit', [
             'document'     => $institutionDocument,
             'institutions' => $institutions,
             'documentTypes'=> $documentTypes,

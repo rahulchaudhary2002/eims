@@ -88,6 +88,11 @@ class Institution extends Model
             ->withTimestamps();
     }
 
+    public function userInstitutions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserInstitution::class);
+    }
+
     public function activeUsers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->users()->wherePivot('is_active', true);

@@ -39,12 +39,12 @@ class SubscriptionPlanController extends Controller
 
         $plans = $query->orderBy('price_monthly')->paginate(20)->withQueryString();
 
-        return view('admin.subscription-plans.index', compact('plans'));
+        return view('admin.modules.subscription-plans.index', compact('plans'));
     }
 
     public function create(): View
     {
-        return view('admin.subscription-plans.create');
+        return view('admin.modules.subscription-plans.create');
     }
 
     public function store(StoreSubscriptionPlanRequest $request): RedirectResponse
@@ -64,14 +64,14 @@ class SubscriptionPlanController extends Controller
         $this->requireSuperAdmin();
         $subscriptionPlan->load(['institutionSubscriptions' => fn ($q) => $q->with('institution')->latest('starts_at')]);
 
-        return view('admin.subscription-plans.show', compact('subscriptionPlan'));
+        return view('admin.modules.subscription-plans.show', compact('subscriptionPlan'));
     }
 
     public function edit(SubscriptionPlan $subscriptionPlan): View
     {
         $this->requireSuperAdmin();
 
-        return view('admin.subscription-plans.edit', compact('subscriptionPlan'));
+        return view('admin.modules.subscription-plans.edit', compact('subscriptionPlan'));
     }
 
     public function update(UpdateSubscriptionPlanRequest $request, SubscriptionPlan $subscriptionPlan): RedirectResponse

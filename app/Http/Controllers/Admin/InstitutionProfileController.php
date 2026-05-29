@@ -49,7 +49,7 @@ class InstitutionProfileController extends Controller
         }
         $institutions = $institutionsQuery->get(['id', 'name']);
 
-        return view('admin.institution-profiles.index', compact('profiles', 'institutions'));
+        return view('admin.modules.institution-profiles.index', compact('profiles', 'institutions'));
     }
 
     public function create(): View
@@ -61,7 +61,7 @@ class InstitutionProfileController extends Controller
         }
         $institutions = $institutionsQuery->get(['id', 'name']);
 
-        return view('admin.institution-profiles.create', compact('institutions'));
+        return view('admin.modules.institution-profiles.create', compact('institutions'));
     }
 
     public function store(StoreInstitutionProfileRequest $request): RedirectResponse
@@ -94,7 +94,7 @@ class InstitutionProfileController extends Controller
         $this->authorizeProfileAccess($institutionProfile);
         $institutionProfile->load('institution');
 
-        return view('admin.institution-profiles.show', compact('institutionProfile'));
+        return view('admin.modules.institution-profiles.show', compact('institutionProfile'));
     }
 
     public function edit(InstitutionProfile $institutionProfile): View
@@ -108,7 +108,7 @@ class InstitutionProfileController extends Controller
         }
         $institutions = $institutionsQuery->get(['id', 'name']);
 
-        return view('admin.institution-profiles.edit', compact('institutionProfile', 'institutions'));
+        return view('admin.modules.institution-profiles.edit', compact('institutionProfile', 'institutions'));
     }
 
     public function update(UpdateInstitutionProfileRequest $request, InstitutionProfile $institutionProfile): RedirectResponse

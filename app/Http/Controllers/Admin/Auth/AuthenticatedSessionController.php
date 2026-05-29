@@ -38,10 +38,13 @@ class AuthenticatedSessionController extends Controller
         // Set current institution for institution users
         $firstInstitution = $user->activeInstitutions()->first();
         if ($firstInstitution) {
-            session(['current_institution_id' => $firstInstitution->id]);
+            session([
+                'current_institution_id' => $firstInstitution->id,
+                'active_institution_id' => $firstInstitution->id,
+            ]);
         }
 
-        return redirect()->intended(route('vendor.dashboard', absolute: false));
+        return redirect()->intended(route('institution.dashboard', absolute: false));
     }
 
     /**
@@ -55,7 +58,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        session()->forget('current_institution_id');
+        session()->forget(['current_institution_id', 'active_institution_id']);
 
         return redirect()->route('admin.login');
     }

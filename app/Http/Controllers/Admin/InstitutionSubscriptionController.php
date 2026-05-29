@@ -48,7 +48,7 @@ class InstitutionSubscriptionController extends Controller
         $billingCycles = InstitutionSubscription::BILLING_CYCLES;
         $statuses = InstitutionSubscription::STATUSES;
 
-        return view('admin.institution-subscriptions.index', compact(
+        return view('admin.modules.institution-subscriptions.index', compact(
             'subscriptions',
             'institutions',
             'plans',
@@ -70,7 +70,7 @@ class InstitutionSubscriptionController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.institution-subscriptions.create', compact(
+        return view('admin.modules.institution-subscriptions.create', compact(
             'institutions',
             'plans',
             'billingCycles',
@@ -96,7 +96,7 @@ class InstitutionSubscriptionController extends Controller
         $this->authorizeSubscriptionAccess($institutionSubscription);
         $institutionSubscription->load(['institution', 'subscriptionPlan']);
 
-        return view('admin.institution-subscriptions.show', compact('institutionSubscription'));
+        return view('admin.modules.institution-subscriptions.show', compact('institutionSubscription'));
     }
 
     public function edit(InstitutionSubscription $institutionSubscription): View
@@ -109,7 +109,7 @@ class InstitutionSubscriptionController extends Controller
         $billingCycles = InstitutionSubscription::BILLING_CYCLES;
         $statuses = InstitutionSubscription::STATUSES;
 
-        return view('admin.institution-subscriptions.edit', compact(
+        return view('admin.modules.institution-subscriptions.edit', compact(
             'institutionSubscription',
             'institutions',
             'plans',

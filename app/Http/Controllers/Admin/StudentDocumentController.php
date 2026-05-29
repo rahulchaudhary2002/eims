@@ -33,7 +33,7 @@ class StudentDocumentController extends Controller
         $documentTypes = StudentDocument::DOCUMENT_TYPES;
         $statuses      = StudentDocument::STATUSES;
 
-        return view('admin.student-documents.index', compact(
+        return view('admin.modules.student-documents.index', compact(
             'documents', 'students', 'documentTypes', 'statuses'
         ));
     }
@@ -44,7 +44,7 @@ class StudentDocumentController extends Controller
         $documentTypes = StudentDocument::DOCUMENT_TYPES;
         $statuses      = StudentDocument::STATUSES;
 
-        return view('admin.student-documents.create', compact(
+        return view('admin.modules.student-documents.create', compact(
             'students', 'documentTypes', 'statuses'
         ));
     }
@@ -68,7 +68,7 @@ class StudentDocumentController extends Controller
         $documentTypes = StudentDocument::DOCUMENT_TYPES;
         $statuses      = StudentDocument::STATUSES;
 
-        return view('admin.student-documents.show', compact(
+        return view('admin.modules.student-documents.show', compact(
             'studentDocument', 'documentTypes', 'statuses'
         ));
     }
@@ -80,7 +80,7 @@ class StudentDocumentController extends Controller
         $documentTypes = StudentDocument::DOCUMENT_TYPES;
         $statuses      = StudentDocument::STATUSES;
 
-        return view('admin.student-documents.edit', compact(
+        return view('admin.modules.student-documents.edit', compact(
             'studentDocument', 'students', 'documentTypes', 'statuses'
         ));
     }

@@ -51,7 +51,7 @@ class PostController extends Controller
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $types = Post::TYPES;
 
-        return view('admin.posts.index', compact('posts', 'institutions', 'users', 'types'));
+        return view('admin.modules.posts.index', compact('posts', 'institutions', 'users', 'types'));
     }
 
     public function create(Request $request): View
@@ -66,7 +66,7 @@ class PostController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.posts.create', compact(
+        return view('admin.modules.posts.create', compact(
             'institutions',
             'users',
             'types',
@@ -110,7 +110,7 @@ class PostController extends Controller
             'comments' => fn ($q) => $q->with(['commentable', 'replies.commentable'])->whereNull('parent_id')->latest(),
         ]);
 
-        return view('admin.posts.show', compact('post'));
+        return view('admin.modules.posts.show', compact('post'));
     }
 
     public function edit(Post $post): View
@@ -122,7 +122,7 @@ class PostController extends Controller
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $types = Post::TYPES;
 
-        return view('admin.posts.edit', compact('post', 'institutions', 'users', 'types'));
+        return view('admin.modules.posts.edit', compact('post', 'institutions', 'users', 'types'));
     }
 
     public function update(UpdatePostRequest $request, Post $post): RedirectResponse

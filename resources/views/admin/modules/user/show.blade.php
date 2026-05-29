@@ -190,7 +190,7 @@
                             <a href="{{ route('admin.institutions.show', $inst) }}"
                                class="font-medium text-blue-600 hover:underline">{{ $inst->name }}</a>
                         </td>
-                        <td>{{ $inst->pivot->role_name ?: '—' }}</td>
+                        <td>{{ \App\Models\UserInstitution::ROLES[$inst->pivot->role_name] ?? $inst->pivot->role_name ?? '—' }}</td>
                         <td>{{ $inst->pivot->position ?: '—' }}</td>
                         <td class="text-sm text-slate-500">
                             {{ $inst->pivot->joined_at ? \Carbon\Carbon::parse($inst->pivot->joined_at)->format('d M Y') : '—' }}

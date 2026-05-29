@@ -36,7 +36,7 @@ class PostCommentController extends Controller
         $posts = $this->postDropdownQuery()->get(['id', 'title', 'institution_id']);
         $commentableTypes = PostComment::COMMENTABLE_TYPES;
 
-        return view('admin.post-comments.index', compact('comments', 'posts', 'commentableTypes'));
+        return view('admin.modules.post-comments.index', compact('comments', 'posts', 'commentableTypes'));
     }
 
     public function create(Request $request): View
@@ -51,7 +51,7 @@ class PostCommentController extends Controller
             $this->authorizePost($post);
         }
 
-        return view('admin.post-comments.create', compact(
+        return view('admin.modules.post-comments.create', compact(
             'posts',
             'commentableTypes',
             'selectedPostId',
@@ -76,7 +76,7 @@ class PostCommentController extends Controller
         $this->authorizeCommentAccess($postComment);
         $postComment->load(['post.institution', 'commentable', 'parent.commentable', 'replies.commentable']);
 
-        return view('admin.post-comments.show', compact('postComment'));
+        return view('admin.modules.post-comments.show', compact('postComment'));
     }
 
     public function edit(PostComment $postComment): View
@@ -87,7 +87,7 @@ class PostCommentController extends Controller
         $posts = $this->postDropdownQuery()->get(['id', 'title', 'institution_id']);
         $commentableTypes = PostComment::COMMENTABLE_TYPES;
 
-        return view('admin.post-comments.edit', compact('postComment', 'posts', 'commentableTypes'));
+        return view('admin.modules.post-comments.edit', compact('postComment', 'posts', 'commentableTypes'));
     }
 
     public function update(UpdatePostCommentRequest $request, PostComment $postComment): RedirectResponse
