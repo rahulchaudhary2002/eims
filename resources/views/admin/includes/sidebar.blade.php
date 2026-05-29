@@ -161,7 +161,7 @@
         </div>
 
         {{-- ── Applications & Admissions ── --}}
-        @php $isApplicationsGroup = request()->routeIs('admin.applications.*') || request()->routeIs('admin.admissions.*') || request()->routeIs('admin.application-status-logs.*'); @endphp
+        @php $isApplicationsGroup = request()->routeIs('admin.applications.*') || request()->routeIs('admin.admissions.*') || request()->routeIs('admin.application-status-logs.*') || request()->routeIs('admin.scholarship-applications.*') || request()->routeIs('admin.scholarship-cashbacks.*'); @endphp
         <div class="px-3 pt-2">
             <p class="sidebar-section-label">Applications & Admissions</p>
 
@@ -180,6 +180,10 @@
                            class="{{ request()->routeIs('admin.admissions.*') ? 'active' : '' }}">Admissions</a>
                         <a href="{{ route('admin.application-status-logs.index') }}"
                            class="{{ request()->routeIs('admin.application-status-logs.*') ? 'active' : '' }}">Application Status Logs</a>
+                        <a href="{{ route('admin.scholarship-applications.index') }}"
+                           class="{{ request()->routeIs('admin.scholarship-applications.*') ? 'active' : '' }}">Scholarship Applications</a>
+                        <a href="{{ route('admin.scholarship-cashbacks.index') }}"
+                           class="{{ request()->routeIs('admin.scholarship-cashbacks.*') ? 'active' : '' }}">Scholarship Cashbacks</a>
                     @endauth
                 </div>
                 <template x-teleport="body">
@@ -189,6 +193,8 @@
                             <a href="{{ route('admin.applications.index') }}" class="{{ request()->routeIs('admin.applications.*') ? 'active' : '' }}">Applications</a>
                             <a href="{{ route('admin.admissions.index') }}" class="{{ request()->routeIs('admin.admissions.*') ? 'active' : '' }}">Admissions</a>
                             <a href="{{ route('admin.application-status-logs.index') }}" class="{{ request()->routeIs('admin.application-status-logs.*') ? 'active' : '' }}">Application Status Logs</a>
+                            <a href="{{ route('admin.scholarship-applications.index') }}" class="{{ request()->routeIs('admin.scholarship-applications.*') ? 'active' : '' }}">Scholarship Applications</a>
+                            <a href="{{ route('admin.scholarship-cashbacks.index') }}" class="{{ request()->routeIs('admin.scholarship-cashbacks.*') ? 'active' : '' }}">Scholarship Cashbacks</a>
                         @endauth
                     </div>
                 </template>
@@ -223,25 +229,97 @@
             </div>
         </div>
 
-        {{-- ── Referral ── --}}
-        @php $isReferralGroup = request()->routeIs('admin.vendor.*'); @endphp
+        {{-- ── Referral & Commission ── --}}
+        @php $isReferralGroup = request()->routeIs('admin.vendor.*') || request()->routeIs('admin.referral-agreements.*') || request()->routeIs('admin.referrals.*') || request()->routeIs('admin.commission-invoices.*') || request()->routeIs('admin.commission-payments.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Referral</p>
+            <p class="sidebar-section-label">Referral & Commission</p>
 
             <div x-data="sidebarGroup('referral', {{ $isReferralGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isReferralGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
                     <svg class="sidebar-item-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span class="sidebar-label flex-1">Referral</span>
+                    <span class="sidebar-label flex-1">Referral & Commission</span>
                     <svg class="sidebar-chevron sidebar-label" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" :class="open ? 'rotate-180' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
                 </div>
                 <div class="sidebar-children" x-show="open && !isIconOnly()" x-collapse>
                     <a href="{{ route('admin.vendor.index') }}" class="{{ request()->routeIs('admin.vendor.*') ? 'active' : '' }}">Vendors / Agents</a>
+                    @auth('web')
+                        <a href="{{ route('admin.referral-agreements.index') }}" class="{{ request()->routeIs('admin.referral-agreements.*') ? 'active' : '' }}">Referral Agreements</a>
+                        <a href="{{ route('admin.referrals.index') }}" class="{{ request()->routeIs('admin.referrals.*') ? 'active' : '' }}">Referrals</a>
+                        <a href="{{ route('admin.commission-invoices.index') }}" class="{{ request()->routeIs('admin.commission-invoices.*') ? 'active' : '' }}">Commission Invoices</a>
+                        <a href="{{ route('admin.commission-payments.index') }}" class="{{ request()->routeIs('admin.commission-payments.*') ? 'active' : '' }}">Commission Payments</a>
+                    @endauth
                 </div>
                 <template x-teleport="body">
                     <div x-show="droprightOpen" x-cloak @click.outside="hideDropright()" class="sidebar-dropright" :style="`top:${droprightTop}px;left:${droprightLeft}px`">
-                        <div class="sidebar-dropright-title">Referral</div>
+                        <div class="sidebar-dropright-title">Referral & Commission</div>
                         <a href="{{ route('admin.vendor.index') }}" class="{{ request()->routeIs('admin.vendor.*') ? 'active' : '' }}">Vendors / Agents</a>
+                        @auth('web')
+                            <a href="{{ route('admin.referral-agreements.index') }}" class="{{ request()->routeIs('admin.referral-agreements.*') ? 'active' : '' }}">Referral Agreements</a>
+                            <a href="{{ route('admin.referrals.index') }}" class="{{ request()->routeIs('admin.referrals.*') ? 'active' : '' }}">Referrals</a>
+                            <a href="{{ route('admin.commission-invoices.index') }}" class="{{ request()->routeIs('admin.commission-invoices.*') ? 'active' : '' }}">Commission Invoices</a>
+                            <a href="{{ route('admin.commission-payments.index') }}" class="{{ request()->routeIs('admin.commission-payments.*') ? 'active' : '' }}">Commission Payments</a>
+                        @endauth
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        {{-- ── Lead & Inquiry ── --}}
+        @php $isLeadGroup = request()->routeIs('admin.inquiries.*') || request()->routeIs('admin.lead-notes.*') || request()->routeIs('admin.lead-follow-ups.*'); @endphp
+        <div class="px-3 pt-2">
+            <p class="sidebar-section-label">Lead & Inquiry</p>
+
+            <div x-data="sidebarGroup('lead-inquiry', {{ $isLeadGroup ? 'true' : 'false' }})" class="relative">
+                <div class="sidebar-group-header rounded-lg {{ $isLeadGroup ? 'group-active' : '' }}"
+                     @click="isIconOnly() ? showDropright($event) : toggle()">
+                    <svg class="sidebar-item-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/></svg>
+                    <span class="sidebar-label flex-1">Lead & Inquiry</span>
+                    <svg class="sidebar-chevron sidebar-label" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" :class="open ? 'rotate-180' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+                </div>
+                <div class="sidebar-children" x-show="open && !isIconOnly()" x-collapse>
+                    @auth('web')
+                        <a href="{{ route('admin.inquiries.index') }}" class="{{ request()->routeIs('admin.inquiries.*') ? 'active' : '' }}">Inquiries</a>
+                        <a href="{{ route('admin.lead-notes.index') }}" class="{{ request()->routeIs('admin.lead-notes.*') ? 'active' : '' }}">Lead Notes</a>
+                        <a href="{{ route('admin.lead-follow-ups.index') }}" class="{{ request()->routeIs('admin.lead-follow-ups.*') ? 'active' : '' }}">Lead Follow Ups</a>
+                    @endauth
+                </div>
+                <template x-teleport="body">
+                    <div x-show="droprightOpen" x-cloak @click.outside="hideDropright()" class="sidebar-dropright" :style="`top:${droprightTop}px;left:${droprightLeft}px`">
+                        <div class="sidebar-dropright-title">Lead & Inquiry</div>
+                        @auth('web')
+                            <a href="{{ route('admin.inquiries.index') }}" class="{{ request()->routeIs('admin.inquiries.*') ? 'active' : '' }}">Inquiries</a>
+                            <a href="{{ route('admin.lead-notes.index') }}" class="{{ request()->routeIs('admin.lead-notes.*') ? 'active' : '' }}">Lead Notes</a>
+                            <a href="{{ route('admin.lead-follow-ups.index') }}" class="{{ request()->routeIs('admin.lead-follow-ups.*') ? 'active' : '' }}">Lead Follow Ups</a>
+                        @endauth
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        {{-- ── Student Activity ── --}}
+        @php $isStudentActivityGroup = request()->routeIs('admin.student-favorite-institutions.*'); @endphp
+        <div class="px-3 pt-2">
+            <p class="sidebar-section-label">Student Activity</p>
+
+            <div x-data="sidebarGroup('student-activity', {{ $isStudentActivityGroup ? 'true' : 'false' }})" class="relative">
+                <div class="sidebar-group-header rounded-lg {{ $isStudentActivityGroup ? 'group-active' : '' }}"
+                     @click="isIconOnly() ? showDropright($event) : toggle()">
+                    <svg class="sidebar-item-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+                    <span class="sidebar-label flex-1">Student Activity</span>
+                    <svg class="sidebar-chevron sidebar-label" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" :class="open ? 'rotate-180' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+                </div>
+                <div class="sidebar-children" x-show="open && !isIconOnly()" x-collapse>
+                    @auth('web')
+                        <a href="{{ route('admin.student-favorite-institutions.index') }}" class="{{ request()->routeIs('admin.student-favorite-institutions.*') ? 'active' : '' }}">Favorite Institutions</a>
+                    @endauth
+                </div>
+                <template x-teleport="body">
+                    <div x-show="droprightOpen" x-cloak @click.outside="hideDropright()" class="sidebar-dropright" :style="`top:${droprightTop}px;left:${droprightLeft}px`">
+                        <div class="sidebar-dropright-title">Student Activity</div>
+                        @auth('web')
+                            <a href="{{ route('admin.student-favorite-institutions.index') }}" class="{{ request()->routeIs('admin.student-favorite-institutions.*') ? 'active' : '' }}">Favorite Institutions</a>
+                        @endauth
                     </div>
                 </template>
             </div>

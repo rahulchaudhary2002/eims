@@ -122,4 +122,24 @@ class Institution extends Model
     {
         return $this->hasMany(\App\Models\Application::class);
     }
+
+    public function referralAgreements(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\ReferralAgreement::class);
+    }
+
+    public function referrals(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Referral::class);
+    }
+
+    public function commissionInvoices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\CommissionInvoice::class);
+    }
+
+    public function inquiries(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Inquiry::class);
+    }
 }

@@ -116,6 +116,10 @@ class InstitutionController extends Controller
             'scholarships' => fn ($q) => $q->with('institutionProgram.program')->latest(),
             'applications' => fn ($q) => $q->with(['student', 'institutionProgram.program', 'scholarship'])->latest(),
             'programs' => fn ($q) => $q->with('program.faculty')->orderBy('created_at', 'desc'),
+            'referralAgreements' => fn ($q) => $q->latest(),
+            'referrals' => fn ($q) => $q->with(['student', 'referredBy'])->latest(),
+            'commissionInvoices' => fn ($q) => $q->with('admission')->latest(),
+            'inquiries' => fn ($q) => $q->with('assignedTo')->latest(),
         ]);
 
         return view('admin.modules.institution.show', compact('institution'));

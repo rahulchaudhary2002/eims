@@ -57,4 +57,19 @@ class Student extends Authenticatable
     {
         return $this->hasMany(\App\Models\Application::class);
     }
+
+    public function scholarshipApplications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\ScholarshipApplication::class);
+    }
+
+    public function scholarshipCashbacks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\ScholarshipCashback::class);
+    }
+
+    public function favoriteInstitutions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\StudentFavoriteInstitution::class);
+    }
 }

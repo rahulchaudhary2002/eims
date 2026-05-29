@@ -154,6 +154,51 @@
                 @endif
             </div>
 
+            <div class="eims-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wide">Referral</h3>
+                    @if($application->referral)
+                        <a href="{{ route('admin.referrals.show', $application->referral) }}" class="text-xs text-indigo-600 hover:underline">View referral</a>
+                    @else
+                        <a href="{{ route('admin.referrals.create', [
+                            'application_id'  => $application->id,
+                            'institution_id'  => $application->institution_id,
+                        ]) }}" class="btn btn-primary btn-sm text-xs py-1 px-3">Create Referral</a>
+                    @endif
+                </div>
+
+                @if($application->referral)
+                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <dt class="text-slate-400 text-xs mb-1">Referral Number</dt>
+                            <dd class="font-mono font-medium">
+                                <a href="{{ route('admin.referrals.show', $application->referral) }}" class="text-blue-600 hover:underline">
+                                    {{ $application->referral->referral_number }}
+                                </a>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="text-slate-400 text-xs mb-1">Referred By</dt>
+                            <dd>{{ $application->referral->referredBy->name ?? '—' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-slate-400 text-xs mb-1">Referred At</dt>
+                            <dd>{{ $application->referral->referred_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-slate-400 text-xs mb-1">Viewed At</dt>
+                            <dd>{{ $application->referral->viewed_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-slate-400 text-xs mb-1">Status</dt>
+                            <dd><span class="badge">{{ \App\Models\Referral::STATUSES[$application->referral->status] ?? $application->referral->status }}</span></dd>
+                        </div>
+                    </dl>
+                @else
+                    <p class="text-slate-400 text-sm">No referral record has been created for this application.</p>
+                @endif
+            </div>
+
             <div class="eims-card p-6 border border-red-100">
                 <h3 class="font-semibold text-red-700 text-sm uppercase tracking-wide mb-4">Danger Zone</h3>
                 <form action="{{ route('admin.applications.destroy', $application) }}" method="POST" onsubmit="return confirm('Delete this application? This cannot be undone.')">

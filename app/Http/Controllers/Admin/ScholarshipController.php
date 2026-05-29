@@ -114,7 +114,12 @@ class ScholarshipController extends Controller
     public function show(Scholarship $scholarship): View
     {
         $this->authorizeScholarshipAccess($scholarship);
-        $scholarship->load(['institution', 'institutionProgram.program.faculty', 'applications.student']);
+        $scholarship->load([
+            'institution',
+            'institutionProgram.program.faculty',
+            'applications.student',
+            'scholarshipApplications' => fn ($q) => $q->with('student')->latest(),
+        ]);
 
         return view('admin.scholarships.show', compact('scholarship'));
     }

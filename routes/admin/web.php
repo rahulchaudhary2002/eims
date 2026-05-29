@@ -4,6 +4,16 @@ use App\Http\Controllers\Admin\AdmissionController;
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\ApplicationStatusLogController;
 use App\Http\Controllers\Admin\AffiliationController;
+use App\Http\Controllers\Admin\CommissionInvoiceController;
+use App\Http\Controllers\Admin\CommissionPaymentController;
+use App\Http\Controllers\Admin\InquiryController;
+use App\Http\Controllers\Admin\LeadFollowUpController;
+use App\Http\Controllers\Admin\LeadNoteController;
+use App\Http\Controllers\Admin\StudentFavoriteInstitutionController;
+use App\Http\Controllers\Admin\ScholarshipApplicationController;
+use App\Http\Controllers\Admin\ScholarshipCashbackController;
+use App\Http\Controllers\Admin\ReferralAgreementController;
+use App\Http\Controllers\Admin\ReferralController;
 use App\Http\Controllers\Admin\BulkModuleImportController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\CurrentInstitutionController;
@@ -85,6 +95,41 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web'])->group(function
     Route::resource('institution-type', InstitutionTypeController::class)->except('show');
     Route::resource('institution-category', InstitutionCategoryController::class)->except('show');
     Route::resource('vendor', VendorController::class);
+
+    Route::resource('referral-agreements', ReferralAgreementController::class);
+    Route::patch('referral-agreements/{referralAgreement}/status', [ReferralAgreementController::class, 'updateStatus'])
+        ->name('referral-agreements.update-status');
+
+    Route::resource('referrals', ReferralController::class);
+    Route::patch('referrals/{referral}/status', [ReferralController::class, 'updateStatus'])
+        ->name('referrals.update-status');
+
+    Route::resource('commission-invoices', CommissionInvoiceController::class);
+    Route::patch('commission-invoices/{commissionInvoice}/status', [CommissionInvoiceController::class, 'updateStatus'])
+        ->name('commission-invoices.update-status');
+
+    Route::resource('commission-payments', CommissionPaymentController::class);
+
+    Route::resource('scholarship-applications', ScholarshipApplicationController::class);
+    Route::patch('scholarship-applications/{scholarshipApplication}/status', [ScholarshipApplicationController::class, 'updateStatus'])
+        ->name('scholarship-applications.update-status');
+
+    Route::resource('scholarship-cashbacks', ScholarshipCashbackController::class);
+    Route::patch('scholarship-cashbacks/{scholarshipCashback}/status', [ScholarshipCashbackController::class, 'updateStatus'])
+        ->name('scholarship-cashbacks.update-status');
+
+    Route::resource('inquiries', InquiryController::class);
+    Route::patch('inquiries/{inquiry}/status', [InquiryController::class, 'updateStatus'])
+        ->name('inquiries.update-status');
+
+    Route::resource('lead-notes', LeadNoteController::class);
+
+    Route::resource('lead-follow-ups', LeadFollowUpController::class);
+    Route::patch('lead-follow-ups/{leadFollowUp}/status', [LeadFollowUpController::class, 'updateStatus'])
+        ->name('lead-follow-ups.update-status');
+
+    Route::resource('student-favorite-institutions', StudentFavoriteInstitutionController::class);
+
     Route::resource('affiliation', AffiliationController::class)->except('show');
     Route::resource('level', LevelController::class)->except('show');
     Route::resource('programs', ProgramController::class);

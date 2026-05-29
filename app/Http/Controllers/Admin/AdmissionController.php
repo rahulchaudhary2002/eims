@@ -125,7 +125,7 @@ class AdmissionController extends Controller
     public function show(Admission $admission): View
     {
         $this->authorizeAdmissionAccess($admission);
-        $admission->load(['application.statusLogs.changedBy', 'student', 'institution', 'institutionProgram.program.faculty', 'verifiedBy']);
+        $admission->load(['application.statusLogs.changedBy', 'student', 'institution', 'institutionProgram.program.faculty', 'verifiedBy', 'commissionInvoice']);
 
         return view('admin.admissions.show', compact('admission'));
     }

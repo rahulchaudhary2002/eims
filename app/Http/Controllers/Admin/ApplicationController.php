@@ -132,7 +132,7 @@ class ApplicationController extends Controller
     public function show(Application $application): View
     {
         $this->authorizeApplicationAccess($application);
-        $application->load(['student', 'institution', 'institutionProgram.program.faculty', 'scholarship', 'statusLogs.changedBy', 'admission.verifiedBy']);
+        $application->load(['student', 'institution', 'institutionProgram.program.faculty', 'scholarship', 'statusLogs.changedBy', 'admission.verifiedBy', 'referral.referredBy']);
 
         return view('admin.applications.show', compact('application'));
     }
