@@ -125,14 +125,4 @@ class InstitutionController extends Controller
             ->with('success', 'Your question has been submitted successfully.');
     }
 
-    public function admissions($institution_slug)
-    {
-        $institution = Institution::with('institutionType')
-            ->where('slug', $institution_slug)
-            ->firstOrFail();
-
-        $admissions = $institution->admissions()->latest()->paginate(12);
-
-        return view('modules.institution.admission', compact('admissions', 'institution'));
-    }
 }

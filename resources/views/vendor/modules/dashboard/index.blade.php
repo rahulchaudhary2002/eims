@@ -57,12 +57,12 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($recentAdmissionApplications as $application)
+                        @forelse($recentApplications as $application)
                         <tr class="hover:bg-blue-50 transition-colors duration-150">
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->full_name ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->email ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->phone ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->program->name ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->student->name ?? $application->student->full_name ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->student->email ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->student->phone ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $application->institutionProgram->program->name ?? $application->institutionProgram->title ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $application->created_at->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">
                                 @if($application->status === 'approved')

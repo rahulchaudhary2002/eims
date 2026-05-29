@@ -55,12 +55,6 @@
                                         Events
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="{{ route('admission.index') }}"
-                                        class="text-base py-2 {{ request()->routeIs('admission.index') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }} transition-colors no-underline">
-                                        Admissions
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </div>

@@ -131,20 +131,6 @@ $primaryProgram = $course->programs->first();
                         </div>
                     </div>
 
-                    @php
-                    $admission = $institution->admissions()->whereHas('programs', function($query) use ($course) {
-                    $query->where('programs.id', $course->id);
-                    })->first()
-                    @endphp
-
-                    @if($admission)
-                    <a
-                        href="{{ route('admission.apply', $admission) }}"
-                        class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition whitespace-nowrap self-start sm:self-auto">
-                        Apply Now
-                        <x-lucide-arrow-right class="w-4 h-4" />
-                    </a>
-                    @endif
                 </div>
                 @endforeach
             </div>

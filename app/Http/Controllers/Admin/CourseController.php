@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ScopesForInstitution;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Program;
@@ -11,12 +12,20 @@ use Illuminate\View\View;
 
 class CourseController extends Controller
 {
+    use ScopesForInstitution;
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $courses = Course::with(['programs.level', 'programs.affiliation', 'programs.category'])->latest()->paginate(10);
+        $query = Course::with(['programs.level', 'programs.affiliation', 'programs.category']);
+
+        $scope = $this->institutionScope();
+        if ($scope !== null) {
+            $query->whereHas('programs.institutions', fn($q) => $q->where('institutions.id', $scope));
+        }
+
+        $courses = $query->latest()->paginate(10);
 
         return view('admin.modules.course.index', compact('courses'));
     }

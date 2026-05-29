@@ -4,31 +4,70 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Institution extends Model
 {
-    use HasFactory, HasSlug;
+    use HasFactory, SoftDeletes, HasSlug;
 
-    protected $fillable = [
-        'name',
-        'slug',
-        'address',
-        'phone',
-        'email',
-        'website',
-        'established_year',
-        'institution_type_id',
-        'institution_category_id',
-        'logo',
-        'cover_image',
-        'is_active'
+    const TYPES = [
+        'university'       => 'University',
+        'college'          => 'College',
+        'school'           => 'School',
+        'consultancy'      => 'Consultancy',
+        'institute'        => 'Institute',
+        'training_center'  => 'Training Center',
+        'platform_partner' => 'Platform Partner',
+        'other'            => 'Other',
     ];
 
-    /**
-     * Get the options for generating the slug.
-     */
+    const STATUSES = [
+        'active'    => 'Active',
+        'inactive'  => 'Inactive',
+        'pending'   => 'Pending',
+        'suspended' => 'Suspended',
+    ];
+
+    protected $fillable = [
+        'parent_id',
+        'type',
+        'name',
+        'slug',
+        'code',
+        'email',
+        'phone',
+        'website',
+        'logo',
+        'cover_image',
+        'short_description',
+        'description',
+        'established_year',
+        'country',
+        'province',
+        'district',
+        'city',
+        'address',
+        'latitude',
+        'longitude',
+        'is_verified',
+        'verified_at',
+        'status',
+        'is_featured',
+        'sort_order',
+    ];
+
+    protected $casts = [
+        'latitude'     => 'decimal:8',
+        'longitude'    => 'decimal:8',
+        'is_verified'  => 'boolean',
+        'verified_at'  => 'datetime',
+        'is_featured'  => 'boolean',
+        'sort_order'   => 'integer',
+        'established_year' => 'integer',
+    ];
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
@@ -38,74 +77,49 @@ class Institution extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('status', 'active');
     }
 
-    public function scopeOfType($query, string $typeSlug)
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $query->whereHas('institutionType', function ($q) use ($typeSlug) {
-            $q->where('slug', $typeSlug);
-        });
+        return $this->belongsToMany(User::class, 'institution_user')
+            ->using(InstitutionUser::class)
+            ->withPivot(['role_name', 'position', 'is_primary', 'is_active', 'joined_at'])
+            ->withTimestamps();
     }
 
-    public function institutionType()
+    public function activeUsers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsTo(InstitutionType::class);
+        return $this->users()->wherePivot('is_active', true);
     }
 
-    public function vendors()
+    public function institutionType(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsToMany(Vendor::class);
+        return $this->belongsTo(\App\Models\InstitutionType::class, 'type', 'slug');
     }
 
-    public function affiliations()
+    public function profile(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->belongsToMany(Affiliation::class, 'affiliation_institution');
+        return $this->hasOne(\App\Models\InstitutionProfile::class);
     }
 
-    public function programs()
+    public function documents(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsToMany(Program::class, 'institution_program')->withPivot('commission_amount');
+        return $this->hasMany(\App\Models\InstitutionDocument::class);
     }
 
-    public function admissions()
+    public function programs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Admission::class);
+        return $this->hasMany(\App\Models\InstitutionProgram::class);
     }
 
-    public function events()
+    public function scholarships(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Event::class);
+        return $this->hasMany(\App\Models\Scholarship::class);
     }
 
-    public function commissions()
+    public function applications(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(InstitutionAdmissionCommission::class);
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(InstitutionCategory::class, 'institution_category_id');
-    }
-
-    public function getDueCommissionAttribute()
-    {
-        $totalCommission = $this->commissions()->sum('commission_amount');
-        $totalPaid = $this->commissions()->where('is_paid', true)->sum('commission_amount');
-
-        return $totalCommission - $totalPaid;
-    }
-
-    public function getTypeAttribute(): ?string
-    {
-        if (array_key_exists('type', $this->attributes)) {
-            return $this->attributes['type'];
-        }
-
-        if ($this->relationLoaded('institutionType')) {
-            return optional($this->institutionType)->slug;
-        }
-
-        return $this->institutionType()->value('slug');
+        return $this->hasMany(\App\Models\Application::class);
     }
 }

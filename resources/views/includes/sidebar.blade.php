@@ -10,15 +10,5 @@ $currentRoute = request()->route()?->getName();
            {{ $currentRoute === 'profile.edit' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-700' }}">
             Profile
         </a>
-        <a href="{{ route('admission.application') }}"
-            class="px-4 py-2 rounded-lg font-medium transition
-           {{ $currentRoute === 'admission.application' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-700' }}">
-            Admission Applications
-        </a>
-        <a href="{{ route('admission.reward') }}"
-            class="px-4 py-2 rounded-lg font-medium transition
-           {{ $currentRoute === 'admission.reward' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-indigo-50 hover:text-indigo-700' }}">
-            Admission Rewards
-        </a>
     </nav>
 </aside>

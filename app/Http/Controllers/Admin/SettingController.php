@@ -9,8 +9,8 @@ class SettingController extends Controller
 {
     public function readAllNotifications(Request $request)
     {
-        $admin = auth('admin')->user();
-        $admin->unreadNotifications->markAsRead();
+        $user = auth('web')->user();
+        $user->unreadNotifications->markAsRead();
 
         return redirect()->back()->with('success', 'All notifications marked as read.');
     }

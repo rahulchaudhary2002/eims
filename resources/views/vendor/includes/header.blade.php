@@ -1,7 +1,7 @@
 @php
-$user = auth()->guard('vendor')->user();
-$currentInstitution = session('current_institution');
-$vendorInstitutions = $user->institutions ?? collect(); // Assuming vendor has institutions relationship
+$user = auth('web')->user();
+$currentInstitutionId = session('current_institution_id');
+$userInstitutions = $user ? $user->activeInstitutions()->get() : collect();
 @endphp
 
 <div class="fixed border-b flex items-center justify-between h-[70px] left-[250px] w-[calc(100%-250px)] px-5 z-20 transition-all duration-300">
@@ -10,15 +10,15 @@ $vendorInstitutions = $user->institutions ?? collect(); // Assuming vendor has i
             <x-lucide-chevron-left class="w-6 h-6" />
         </button>
 
-        {{-- Institution Selector --}}
-        @if($vendorInstitutions->count() > 0)
+        {{-- Institution Selector (only shown when user has multiple active institutions) --}}
+        @if($userInstitutions->count() > 1)
         <div class="ml-4 relative" id="institutionWrapper">
-            <select id="institutionSelect" name="current_institution"
+            <select id="institutionSelect" name="current_institution_id"
                 class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
                 <option value="">Select Institution</option>
-                @foreach($vendorInstitutions as $institution)
+                @foreach($userInstitutions as $institution)
                 <option value="{{ $institution->id }}"
-                    {{ $currentInstitution && $currentInstitution->id == $institution->id ? 'selected' : '' }}>
+                    {{ (int)$currentInstitutionId === $institution->id ? 'selected' : '' }}>
                     {{ $institution->name }}
                 </option>
                 @endforeach
@@ -30,11 +30,10 @@ $vendorInstitutions = $user->institutions ?? collect(); // Assuming vendor has i
     <div class="flex items-center gap-5">
         {{-- Notifications --}}
         @php
-        $vendor = auth('vendor')->user();
-        $institutionId = session('current_institution')?->id;
+        $institutionId = session('current_institution_id');
 
-        $notifications = $vendor
-        ? $vendor->notifications()
+        $notifications = $user
+        ? $user->notifications()
         ->when($institutionId, fn ($q) =>
         $q->where('data->institution_id', $institutionId)
         )

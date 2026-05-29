@@ -10,7 +10,7 @@ class EventController extends Controller
 {
     public function index()
     {
-        $institution = session('current_institution');
+        $institution = Institution::find(session('current_institution_id'));
         $events = Event::where('institution_id', $institution->id)->latest()->paginate(10);
 
         return view('vendor.modules.event.index', compact('events'));
@@ -30,7 +30,7 @@ class EventController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $institution = session('current_institution');
+        $institution = Institution::find(session('current_institution_id'));
 
         Event::create([
             'title' => $validated['title'],
@@ -46,7 +46,7 @@ class EventController extends Controller
 
     public function show(Event $event)
     {
-        $institution = session('current_institution');
+        $institution = Institution::find(session('current_institution_id'));
 
         if ($institution->id !== $event->institution_id) {
             abort(404);
@@ -57,7 +57,7 @@ class EventController extends Controller
 
     public function edit(Event $event)
     {
-        $institution = session('current_institution');
+        $institution = Institution::find(session('current_institution_id'));
 
         if ($institution->id !== $event->institution_id) {
             abort(404);
@@ -68,7 +68,7 @@ class EventController extends Controller
 
     public function update(Request $request, Event $event)
     {
-        $institution = session('current_institution');
+        $institution = Institution::find(session('current_institution_id'));
 
         if ($institution->id !== $event->institution_id) {
             abort(404);
@@ -89,7 +89,7 @@ class EventController extends Controller
 
     public function destroy(Event $event)
     {
-        $institution = session('current_institution');
+        $institution = Institution::find(session('current_institution_id'));
 
         if ($institution->id !== $event->institution_id) {
             abort(404);
