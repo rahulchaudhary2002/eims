@@ -72,4 +72,34 @@ class Student extends Authenticatable
     {
         return $this->hasMany(\App\Models\StudentFavoriteInstitution::class);
     }
+
+    public function compareItems(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\StudentCompareItem::class);
+    }
+
+    public function recommendations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\StudentRecommendation::class);
+    }
+
+    public function followedInstitutions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\InstitutionFollower::class);
+    }
+
+    public function counselingSessions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\CounselingSession::class);
+    }
+
+    public function reviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\InstitutionReview::class);
+    }
+
+    public function conversations(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Conversation::class);
+    }
 }

@@ -120,6 +120,15 @@ class InstitutionController extends Controller
             'referrals' => fn ($q) => $q->with(['student', 'referredBy'])->latest(),
             'commissionInvoices' => fn ($q) => $q->with('admission')->latest(),
             'inquiries' => fn ($q) => $q->with('assignedTo')->latest(),
+            'posts' => fn ($q) => $q->with('creator')->latest(),
+            'followers' => fn ($q) => $q->with('student')->latest(),
+            'consultancyDestinations' => fn ($q) => $q->orderBy('country')->orderBy('city'),
+            'consultancyServices' => fn ($q) => $q->orderBy('title'),
+            'counselingSessions' => fn ($q) => $q->with(['student', 'counselor'])->orderBy('scheduled_at'),
+            'subscriptions' => fn ($q) => $q->with('subscriptionPlan')->latest('starts_at'),
+            'promotions' => fn ($q) => $q->latest(),
+            'reviews' => fn ($q) => $q->with('student')->latest(),
+            'conversations' => fn ($q) => $q->with('student')->latest(),
         ]);
 
         return view('admin.modules.institution.show', compact('institution'));
