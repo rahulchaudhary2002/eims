@@ -1,116 +1,58 @@
 @extends('admin.layouts.app')
 @section('title', 'Programs')
+@section('page-title', 'Programs')
 @section('content')
-<div class="bg-white rounded-lg shadow-lg border border-gray-200">
-    <div class="p-6 flex justify-between items-center mb-4 bg-white bg-opacity-80 backdrop-blur-sm rounded-t-lg">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">🧩 Programs Management</h1>
-            <p class="text-gray-600 mt-1">Manage all programs</p>
-        </div>
-        <a href="{{ route('admin.program.create') }}" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 flex items-center">
-            <x-lucide-plus class="w-5 h-5 mr-2" />
-            Add Program
-        </a>
-    </div>
-
-    @if(session('success'))
-    <div class="px-6 pb-4">
-        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 px-4 py-3 rounded-r-lg shadow-sm">
-            <div class="flex items-center">
-                <x-lucide-check-circle class="w-5 h-5 mr-2 text-green-600" />
-                {{ session('success') }}
-            </div>
-        </div>
-    </div>
-    @endif
-
-    <div class="px-6 pb-6">
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
-                        <tr>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Code</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Program Category</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Level</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Affiliation</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Fee</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Duration</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($programs as $program)
-                        <tr class="hover:bg-blue-50 transition-colors duration-150">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $program->id }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $program->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                @if($program->code)
-                                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                                    <x-lucide-hash class="w-3 h-3 mr-1" />
-                                    {{ $program->code }}
-                                </span>
-                                @else
-                                <span class="text-gray-400 text-sm">-</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $program->category?->name ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $program->level?->name ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $program->affiliation?->name ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">NPR {{ number_format($program->fee) }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $program->duration ?? '-' }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium {{ $program->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    <x-lucide-circle class="w-2 h-2 mr-1 {{ $program->is_active ? 'text-green-500' : 'text-red-500' }}" />
-                                    {{ $program->is_active ? 'Active' : 'Inactive' }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('admin.program.edit', $program) }}"
-                                        class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 transform hover:-translate-y-0.5 flex items-center shadow-sm hover:shadow">
-                                        <x-lucide-edit class="w-4 h-4 mr-1" />
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('admin.program.destroy', $program) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 transform hover:-translate-y-0.5 flex items-center shadow-sm hover:shadow"
-                                            onclick="return confirm('Are you sure you want to delete this program?')">
-                                            <x-lucide-trash-2 class="w-4 h-4 mr-1" />
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="10" class="px-6 py-12 text-center text-gray-500">
-                                <x-lucide-layers class="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                                <p class="text-lg font-medium">No programs found</p>
-                                <p class="text-sm mt-1">Get started by adding your first program.</p>
-                                <a href="{{ route('admin.program.create') }}"
-                                    class="mt-4 inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-md transition-colors duration-150">
-                                    <x-lucide-plus class="w-4 h-4 mr-2" />
-                                    Create First Program
+<div class="space-y-5">
+    <x-admin.page-header title="Programs" subtitle="Manage all academic programs"
+        :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Programs']]">
+        <x-slot:actions>
+            <a href="{{ route('admin.program.create') }}" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                Add Program
+            </a>
+        </x-slot:actions>
+    </x-admin.page-header>
+    <x-admin.alert type="success" :message="session('success')" />
+    <x-admin.alert type="danger"  :message="session('error')" />
+    <div class="eims-card p-0 overflow-hidden">
+        <div class="eims-table-wrapper">
+            <table class="eims-table">
+                <thead><tr>
+                    <th>Name</th><th>Code</th><th>Category</th><th>Level</th><th>Affiliation</th><th>Fee</th><th>Duration</th><th>Status</th><th class="text-right">Actions</th>
+                </tr></thead>
+                <tbody>
+                    @forelse($programs as $program)
+                    <tr>
+                        <td class="font-medium text-slate-800">{{ $program->name }}</td>
+                        <td>@if($program->code)<span class="badge badge-secondary font-mono">{{ $program->code }}</span>@else<span class="text-slate-400">-</span>@endif</td>
+                        <td class="text-slate-600">{{ $program->category?->name ?? '-' }}</td>
+                        <td class="text-slate-600">{{ $program->level?->name ?? '-' }}</td>
+                        <td class="text-slate-600">{{ $program->affiliation?->name ?? '-' }}</td>
+                        <td class="text-slate-600">NPR {{ number_format($program->fee) }}</td>
+                        <td class="text-slate-600">{{ $program->duration ?? '-' }}</td>
+                        <td><x-admin.status-badge :status="$program->is_active ? 'active' : 'inactive'" /></td>
+                        <td class="actions-cell">
+                            <div class="flex items-center justify-end gap-1.5">
+                                <a href="{{ route('admin.program.edit', $program) }}" class="btn-icon btn-icon-edit" title="Edit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
                                 </a>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                                <form action="{{ route('admin.program.destroy', $program) }}" method="POST" class="inline" onsubmit="return confirm('Delete this program?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn-icon btn-icon-delete" title="Delete">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="9"><x-admin.empty-state title="No programs yet" description="Create programs to be offered by institutions." :action-href="route('admin.program.create')" action-label="Add Program" /></td></tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-
-        @if($programs->count() > 0)
-        <div class="mt-6">
-            {{ $programs->links() }}
-        </div>
+        @if(method_exists($programs,'links') && $programs->hasPages())
+        <div class="px-6 py-4 border-t border-slate-100">{{ $programs->links() }}</div>
         @endif
     </div>
 </div>

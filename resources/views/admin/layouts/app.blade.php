@@ -8,30 +8,37 @@
 
     <title>{{ config('app.name', 'EIMS') }} | @yield('title')</title>
 
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('page-specific-style')
 </head>
 
-<body class="max-h-[100vh] bg-gray-50 overflow-hidden relative">
+<body class="bg-slate-50 antialiased">
 
+    <!-- Mobile overlay -->
+    <div id="sidebar-overlay" onclick="Alpine.store('sidebar').closeMobile()"></div>
+
+    <!-- Sidebar -->
     @include('admin.includes.sidebar')
 
-    @include('admin.includes.header')
+    <!-- Page Wrapper (header + main) -->
+    <div id="page-wrapper">
 
-    @php
-    $sidebarOpen = session('sidebarOpen', true);
-    @endphp
+        <!-- Header -->
+        @include('admin.includes.header')
 
-    <main
-        class="relative top-[70px] max-md:left-0 max-md:w-full px-2 sm:px-5 py-3
-        transition-all duration-300 h-[calc(100vh-70px)] overflow-y-auto
-        {{ $sidebarOpen
-            ? 'left-[250px] w-[calc(100%-250px)] max-lg:w-[calc(100%-70px)] max-lg:left-[70px]'
-            : 'left-[70px] w-[calc(100%-70px)]'
-        }}">
-        @yield('content')
-    </main>
+        <!-- Main Content -->
+        <main class="px-4 sm:px-6 py-6 pt-[calc(var(--header-height)+24px)] min-h-screen">
+            @yield('content')
+        </main>
 
+    </div>
+
+    <!-- TinyMCE -->
     <script src="https://cdn.tiny.cloud/1/8wbt89rzkyg60acmtvlic31msdvwo1jbftv5sfl6ws93wevi/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
 
     @yield('page-specific-script')

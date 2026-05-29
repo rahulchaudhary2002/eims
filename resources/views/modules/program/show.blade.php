@@ -22,9 +22,9 @@
                 <span class="inline-block px-3 py-1 bg-[#4299e1]/10 text-[#4299e1] rounded-full text-xs font-semibold mb-3">{{ $program->category?->name ?? 'Uncategorized' }}</span>
                 <h1 class="text-4xl max-sm:text-3xl font-bold text-[#2c5aa0] mb-3">{{ $program->name }}</h1>
                 <div class="flex flex-wrap gap-4 text-gray-600 text-sm">
-                    <span><i class="fas fa-graduation-cap"></i> {{ $program->level?->name ?? '—' }}</span>
-                    <span><i class="fas fa-clock"></i> {{ $program->duration ?? '—' }}</span>
-                    <span><i class="fas fa-university"></i> {{ $program->affiliation?->name ?? '—' }}</span>
+                    <span><i class="fas fa-graduation-cap"></i> {{ $program->level?->name ?? '-' }}</span>
+                    <span><i class="fas fa-clock"></i> {{ $program->duration ?? '-' }}</span>
+                    <span><i class="fas fa-university"></i> {{ $program->affiliation?->name ?? '-' }}</span>
                     <span><i class="fas fa-book"></i> {{ $program->courses->count() }} Courses</span>
                 </div>
                 <div class="mt-4 text-2xl font-bold text-[#2c5aa0] whitespace-nowrap">NPR {{ number_format($program->fee) }}<small class="text-sm text-gray-600 font-normal">/total</small></div>
@@ -59,7 +59,7 @@
                     @forelse($relatedPrograms as $related)
                     <a href="{{ route('program.show', $related->slug) }}" class="block p-3 rounded-lg border border-gray-200 hover:border-[#4299e1] hover:bg-[#4299e1]/5 transition">
                         <div class="font-semibold text-gray-900">{{ $related->name }}</div>
-                        <div class="text-sm text-gray-500">{{ $related->level?->name ?? '—' }}</div>
+                        <div class="text-sm text-gray-500">{{ $related->level?->name ?? '-' }}</div>
                     </a>
                     @empty
                     <p class="text-sm text-gray-500">No related programs available.</p>

@@ -1,120 +1,61 @@
 @extends('admin.layouts.app')
 @section('title', 'Courses')
+@section('page-title', 'Courses')
 @section('content')
-<div class="bg-white rounded-lg shadow-lg border border-gray-200">
-    <div class="p-6 flex justify-between items-center mb-4 bg-white bg-opacity-80 backdrop-blur-sm rounded-t-lg">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">📚 Courses Management</h1>
-            <p class="text-gray-600 mt-1">Manage all courses/programs</p>
-        </div>
-        <a href="{{ route('admin.course.create') }}" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 flex items-center">
-            <x-lucide-plus class="w-5 h-5 mr-2" />
-            Add Course
-        </a>
-    </div>
-
-    @if(session('success'))
-    <div class="px-6 pb-4">
-        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 px-4 py-3 rounded-r-lg shadow-sm">
-            <div class="flex items-center">
-                <x-lucide-check-circle class="w-5 h-5 mr-2 text-green-600" />
-                {{ session('success') }}
-            </div>
-        </div>
-    </div>
-    @endif
-
-    <div class="px-6 pb-6">
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
-                        <tr>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Code</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Programs</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($courses as $course)
-                        <tr class="hover:bg-blue-50 transition-colors duration-150">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $course->id }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-900">{{ $course->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                @if($course->code)
-                                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                                    <x-lucide-hash class="w-3 h-3 mr-1" />
-                                    {{ $course->code }}
-                                </span>
-                                @else
-                                <span class="text-gray-400 text-sm">-</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                @forelse($course->programs as $program)
-                                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-indigo-100 text-indigo-800 mr-1">
-                                    {{ $program->name }}
-                                </span>
-                                @empty
-                                <span class="text-gray-400 text-sm">-</span>
-                                @endforelse
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium {{ $course->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    <x-lucide-circle class="w-2 h-2 mr-1 {{ $course->is_active ? 'text-green-500' : 'text-red-500' }}" />
-                                    {{ $course->is_active ? 'Active' : 'Inactive' }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('admin.course.show', $course) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-colors duration-150 flex items-center">
-                                        <x-lucide-eye class="w-4 h-4 mr-1" />
-                                        View
-                                    </a>
-                                    <a href="{{ route('admin.course.edit', $course) }}"
-                                        class="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 transform hover:-translate-y-0.5 flex items-center shadow-sm hover:shadow">
-                                        <x-lucide-edit class="w-4 h-4 mr-1" />
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('admin.course.destroy', $course) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 transform hover:-translate-y-0.5 flex items-center shadow-sm hover:shadow"
-                                            onclick="return confirm('Are you sure you want to delete this course?')">
-                                            <x-lucide-trash-2 class="w-4 h-4 mr-1" />
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="9" class="px-6 py-12 text-center text-gray-500">
-                                <x-lucide-book class="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                                <p class="text-lg font-medium">No courses found</p>
-                                <p class="text-sm mt-1">Get started by adding your first course.</p>
-                                <a href="{{ route('admin.course.create') }}"
-                                    class="mt-4 inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-md transition-colors duration-150">
-                                    <x-lucide-plus class="w-4 h-4 mr-2" />
-                                    Create First Course
+<div class="space-y-5">
+    <x-admin.page-header title="Courses" subtitle="Manage all courses / subject offerings"
+        :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Courses']]">
+        <x-slot:actions>
+            <a href="{{ route('admin.course.create') }}" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                Add Course
+            </a>
+        </x-slot:actions>
+    </x-admin.page-header>
+    <x-admin.alert type="success" :message="session('success')" />
+    <x-admin.alert type="danger"  :message="session('error')" />
+    <div class="eims-card p-0 overflow-hidden">
+        <div class="eims-table-wrapper">
+            <table class="eims-table">
+                <thead><tr>
+                    <th>Name</th><th>Code</th><th>Programs</th><th>Status</th><th class="text-right">Actions</th>
+                </tr></thead>
+                <tbody>
+                    @forelse($courses as $course)
+                    <tr>
+                        <td class="font-medium text-slate-800">{{ $course->name }}</td>
+                        <td>@if($course->code)<span class="badge badge-secondary font-mono">{{ $course->code }}</span>@else<span class="text-slate-400">-</span>@endif</td>
+                        <td>
+                            @forelse($course->programs as $program)
+                            <span class="badge badge-primary mr-1">{{ $program->name }}</span>
+                            @empty<span class="text-slate-400">-</span>@endforelse
+                        </td>
+                        <td><x-admin.status-badge :status="$course->is_active ? 'active' : 'inactive'" /></td>
+                        <td class="actions-cell">
+                            <div class="flex items-center justify-end gap-1.5">
+                                <a href="{{ route('admin.course.show', $course) }}" class="btn-icon btn-icon-view" title="View">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 </a>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                                <a href="{{ route('admin.course.edit', $course) }}" class="btn-icon btn-icon-edit" title="Edit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
+                                </a>
+                                <form action="{{ route('admin.course.destroy', $course) }}" method="POST" class="inline" onsubmit="return confirm('Delete this course?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn-icon btn-icon-delete" title="Delete">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td colspan="5"><x-admin.empty-state title="No courses yet" description="Create courses to assign to institutions." :action-href="route('admin.course.create')" action-label="Add Course" /></td></tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-
-        @if($courses->count() > 0)
-        <div class="mt-6">
-            {{ $courses->links() }}
-        </div>
+        @if(method_exists($courses,'links') && $courses->hasPages())
+        <div class="px-6 py-4 border-t border-slate-100">{{ $courses->links() }}</div>
         @endif
     </div>
 </div>
