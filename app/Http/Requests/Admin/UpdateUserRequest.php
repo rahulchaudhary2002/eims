@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\UserInstitution;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -28,7 +29,7 @@ class UpdateUserRequest extends FormRequest
             'email_verified_at'                 => ['nullable', 'date'],
             'institutions'                      => ['nullable', 'array'],
             'institutions.*.institution_id'     => ['required', 'integer', 'exists:institutions,id'],
-            'institutions.*.role_name'          => ['nullable', 'string', 'max:100'],
+            'institutions.*.role_name'          => ['nullable', Rule::in(array_keys(UserInstitution::ROLES))],
             'institutions.*.position'           => ['nullable', 'string', 'max:100'],
             'institutions.*.is_active'          => ['nullable'],
             'institutions.*.joined_at'          => ['nullable', 'date'],

@@ -50,7 +50,7 @@ class ScholarshipCashbackController extends Controller
         $statuses = ScholarshipCashback::STATUSES;
         $paymentMethods = ScholarshipCashback::PAYMENT_METHODS;
 
-        return view('admin.scholarship-cashbacks.index', compact(
+        return view('admin.modules.scholarship-cashbacks.index', compact(
             'cashbacks',
             'students',
             'applications',
@@ -71,7 +71,7 @@ class ScholarshipCashbackController extends Controller
         $selectedApplicationId = $request->input('application_id');
         $selectedInvoiceId = $request->input('commission_invoice_id');
 
-        return view('admin.scholarship-cashbacks.create', compact(
+        return view('admin.modules.scholarship-cashbacks.create', compact(
             'students',
             'applications',
             'invoices',
@@ -99,7 +99,7 @@ class ScholarshipCashbackController extends Controller
         $this->authorizeCashbackAccess($scholarshipCashback);
         $scholarshipCashback->load(['student', 'application.institutionProgram.program', 'commissionInvoice.institution']);
 
-        return view('admin.scholarship-cashbacks.show', compact('scholarshipCashback'));
+        return view('admin.modules.scholarship-cashbacks.show', compact('scholarshipCashback'));
     }
 
     public function edit(ScholarshipCashback $scholarshipCashback): View
@@ -113,7 +113,7 @@ class ScholarshipCashbackController extends Controller
         $statuses = ScholarshipCashback::STATUSES;
         $paymentMethods = ScholarshipCashback::PAYMENT_METHODS;
 
-        return view('admin.scholarship-cashbacks.edit', compact(
+        return view('admin.modules.scholarship-cashbacks.edit', compact(
             'scholarshipCashback',
             'students',
             'applications',

@@ -46,7 +46,7 @@ class InstitutionReviewController extends Controller
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $students     = Student::orderBy('name')->get(['id', 'name']);
 
-        return view('admin.institution-reviews.index', compact('reviews', 'institutions', 'students'));
+        return view('admin.modules.institution-reviews.index', compact('reviews', 'institutions', 'students'));
     }
 
     public function create(Request $request): View
@@ -59,7 +59,7 @@ class InstitutionReviewController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.institution-reviews.create', compact('institutions', 'students', 'selectedInstitutionId'));
+        return view('admin.modules.institution-reviews.create', compact('institutions', 'students', 'selectedInstitutionId'));
     }
 
     public function store(StoreInstitutionReviewRequest $request): RedirectResponse
@@ -78,7 +78,7 @@ class InstitutionReviewController extends Controller
         $this->authorizeInstitution((int) $institutionReview->institution_id);
         $institutionReview->load(['student', 'institution']);
 
-        return view('admin.institution-reviews.show', compact('institutionReview'));
+        return view('admin.modules.institution-reviews.show', compact('institutionReview'));
     }
 
     public function edit(InstitutionReview $institutionReview): View
@@ -89,7 +89,7 @@ class InstitutionReviewController extends Controller
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $students     = Student::orderBy('name')->get(['id', 'name']);
 
-        return view('admin.institution-reviews.edit', compact('institutionReview', 'institutions', 'students'));
+        return view('admin.modules.institution-reviews.edit', compact('institutionReview', 'institutions', 'students'));
     }
 
     public function update(UpdateInstitutionReviewRequest $request, InstitutionReview $institutionReview): RedirectResponse

@@ -38,7 +38,7 @@ class InstitutionFollowerController extends Controller
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
 
-        return view('admin.institution-followers.index', compact('followers', 'institutions', 'students'));
+        return view('admin.modules.institution-followers.index', compact('followers', 'institutions', 'students'));
     }
 
     public function show(InstitutionFollower $institutionFollower): View
@@ -46,7 +46,7 @@ class InstitutionFollowerController extends Controller
         $this->authorizeFollowerAccess($institutionFollower);
         $institutionFollower->load(['institution', 'student']);
 
-        return view('admin.institution-followers.show', compact('institutionFollower'));
+        return view('admin.modules.institution-followers.show', compact('institutionFollower'));
     }
 
     public function destroy(InstitutionFollower $institutionFollower): RedirectResponse

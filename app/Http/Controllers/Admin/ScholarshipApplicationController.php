@@ -43,7 +43,7 @@ class ScholarshipApplicationController extends Controller
         $applications = $this->applicationDropdownQuery()->get(['id', 'application_number', 'institution_id']);
         $statuses = ScholarshipApplication::STATUSES;
 
-        return view('admin.scholarship-applications.index', compact(
+        return view('admin.modules.scholarship-applications.index', compact(
             'scholarshipApplications',
             'scholarships',
             'students',
@@ -67,7 +67,7 @@ class ScholarshipApplicationController extends Controller
             $this->authorizeInstitution((int) $scholarship->institution_id);
         }
 
-        return view('admin.scholarship-applications.create', compact(
+        return view('admin.modules.scholarship-applications.create', compact(
             'scholarships',
             'students',
             'applications',
@@ -95,7 +95,7 @@ class ScholarshipApplicationController extends Controller
         $this->authorizeScholarshipApplicationAccess($scholarshipApplication);
         $scholarshipApplication->load(['scholarship.institution', 'student', 'application.institutionProgram.program']);
 
-        return view('admin.scholarship-applications.show', compact('scholarshipApplication'));
+        return view('admin.modules.scholarship-applications.show', compact('scholarshipApplication'));
     }
 
     public function edit(ScholarshipApplication $scholarshipApplication): View
@@ -108,7 +108,7 @@ class ScholarshipApplicationController extends Controller
         $applications = $this->applicationDropdownQuery()->get(['id', 'application_number', 'institution_id']);
         $statuses = ScholarshipApplication::STATUSES;
 
-        return view('admin.scholarship-applications.edit', compact(
+        return view('admin.modules.scholarship-applications.edit', compact(
             'scholarshipApplication',
             'scholarships',
             'students',

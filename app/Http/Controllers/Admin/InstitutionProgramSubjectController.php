@@ -39,7 +39,7 @@ class InstitutionProgramSubjectController extends Controller
         $subjects          = $query->orderBy('subject_name')->paginate(25)->withQueryString();
         $institutionPrograms = $this->institutionProgramDropdownQuery()->get();
 
-        return view('admin.institution-program-subjects.index', compact('subjects', 'institutionPrograms'));
+        return view('admin.modules.institution-program-subjects.index', compact('subjects', 'institutionPrograms'));
     }
 
     public function create(Request $request): View
@@ -51,7 +51,7 @@ class InstitutionProgramSubjectController extends Controller
             $this->authorizeInstitutionProgram((int) $selectedProgramId);
         }
 
-        return view('admin.institution-program-subjects.create', compact('institutionPrograms', 'selectedProgramId'));
+        return view('admin.modules.institution-program-subjects.create', compact('institutionPrograms', 'selectedProgramId'));
     }
 
     public function store(StoreInstitutionProgramSubjectRequest $request): RedirectResponse
@@ -76,7 +76,7 @@ class InstitutionProgramSubjectController extends Controller
             'institutionProgram.program.faculty',
         ]);
 
-        return view('admin.institution-program-subjects.show', compact('institutionProgramSubject'));
+        return view('admin.modules.institution-program-subjects.show', compact('institutionProgramSubject'));
     }
 
     public function edit(InstitutionProgramSubject $institutionProgramSubject): View
@@ -85,7 +85,7 @@ class InstitutionProgramSubjectController extends Controller
 
         $institutionPrograms = $this->institutionProgramDropdownQuery()->get();
 
-        return view('admin.institution-program-subjects.edit', compact('institutionProgramSubject', 'institutionPrograms'));
+        return view('admin.modules.institution-program-subjects.edit', compact('institutionProgramSubject', 'institutionPrograms'));
     }
 
     public function update(UpdateInstitutionProgramSubjectRequest $request, InstitutionProgramSubject $institutionProgramSubject): RedirectResponse

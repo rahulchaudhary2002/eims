@@ -27,12 +27,12 @@ class FacultyController extends Controller
 
         $faculties = $query->orderBy('name')->paginate(20)->withQueryString();
 
-        return view('admin.faculties.index', compact('faculties'));
+        return view('admin.modules.faculties.index', compact('faculties'));
     }
 
     public function create(): View
     {
-        return view('admin.faculties.create');
+        return view('admin.modules.faculties.create');
     }
 
     public function store(StoreFacultyRequest $request): RedirectResponse
@@ -50,12 +50,12 @@ class FacultyController extends Controller
     public function show(Faculty $faculty): View
     {
         $faculty->load(['programs' => fn ($q) => $q->orderBy('name')]);
-        return view('admin.faculties.show', compact('faculty'));
+        return view('admin.modules.faculties.show', compact('faculty'));
     }
 
     public function edit(Faculty $faculty): View
     {
-        return view('admin.faculties.edit', compact('faculty'));
+        return view('admin.modules.faculties.edit', compact('faculty'));
     }
 
     public function update(UpdateFacultyRequest $request, Faculty $faculty): RedirectResponse

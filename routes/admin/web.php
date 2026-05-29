@@ -54,7 +54,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VendorController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('admin')->name('admin.')->middleware(['auth:web'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->middleware(['auth:web', 'verified:admin'])->name('dashboard');
 
     Route::resource('users', UserController::class);

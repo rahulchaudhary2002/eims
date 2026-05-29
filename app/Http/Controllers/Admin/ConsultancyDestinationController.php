@@ -38,7 +38,7 @@ class ConsultancyDestinationController extends Controller
         $destinations = $query->orderBy('country')->orderBy('city')->paginate(20)->withQueryString();
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
 
-        return view('admin.consultancy-destinations.index', compact('destinations', 'institutions'));
+        return view('admin.modules.consultancy-destinations.index', compact('destinations', 'institutions'));
     }
 
     public function create(Request $request): View
@@ -50,7 +50,7 @@ class ConsultancyDestinationController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.consultancy-destinations.create', compact('institutions', 'selectedInstitutionId'));
+        return view('admin.modules.consultancy-destinations.create', compact('institutions', 'selectedInstitutionId'));
     }
 
     public function store(StoreConsultancyDestinationRequest $request): RedirectResponse
@@ -69,7 +69,7 @@ class ConsultancyDestinationController extends Controller
         $this->authorizeDestinationAccess($consultancyDestination);
         $consultancyDestination->load('institution');
 
-        return view('admin.consultancy-destinations.show', compact('consultancyDestination'));
+        return view('admin.modules.consultancy-destinations.show', compact('consultancyDestination'));
     }
 
     public function edit(ConsultancyDestination $consultancyDestination): View
@@ -78,7 +78,7 @@ class ConsultancyDestinationController extends Controller
         $consultancyDestination->load('institution');
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
 
-        return view('admin.consultancy-destinations.edit', compact('consultancyDestination', 'institutions'));
+        return view('admin.modules.consultancy-destinations.edit', compact('consultancyDestination', 'institutions'));
     }
 
     public function update(UpdateConsultancyDestinationRequest $request, ConsultancyDestination $consultancyDestination): RedirectResponse

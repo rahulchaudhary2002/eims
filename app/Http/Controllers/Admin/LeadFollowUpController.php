@@ -44,7 +44,7 @@ class LeadFollowUpController extends Controller
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $statuses = LeadFollowUp::STATUSES;
 
-        return view('admin.lead-follow-ups.index', compact('followUps', 'inquiries', 'users', 'statuses'));
+        return view('admin.modules.lead-follow-ups.index', compact('followUps', 'inquiries', 'users', 'statuses'));
     }
 
     public function create(Request $request): View
@@ -55,7 +55,7 @@ class LeadFollowUpController extends Controller
         $selectedInquiryId = $request->input('inquiry_id');
         $defaultAssignedTo = auth('web')->id();
 
-        return view('admin.lead-follow-ups.create', compact(
+        return view('admin.modules.lead-follow-ups.create', compact(
             'inquiries',
             'users',
             'statuses',
@@ -81,7 +81,7 @@ class LeadFollowUpController extends Controller
         $this->authorizeFollowUpAccess($leadFollowUp);
         $leadFollowUp->load(['inquiry', 'assignedTo']);
 
-        return view('admin.lead-follow-ups.show', compact('leadFollowUp'));
+        return view('admin.modules.lead-follow-ups.show', compact('leadFollowUp'));
     }
 
     public function edit(LeadFollowUp $leadFollowUp): View
@@ -93,7 +93,7 @@ class LeadFollowUpController extends Controller
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $statuses = LeadFollowUp::STATUSES;
 
-        return view('admin.lead-follow-ups.edit', compact('leadFollowUp', 'inquiries', 'users', 'statuses'));
+        return view('admin.modules.lead-follow-ups.edit', compact('leadFollowUp', 'inquiries', 'users', 'statuses'));
     }
 
     public function update(UpdateLeadFollowUpRequest $request, LeadFollowUp $leadFollowUp): RedirectResponse

@@ -40,7 +40,7 @@ class StudentFavoriteInstitutionController extends Controller
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
 
-        return view('admin.student-favorite-institutions.index', compact('favorites', 'students', 'institutions'));
+        return view('admin.modules.student-favorite-institutions.index', compact('favorites', 'students', 'institutions'));
     }
 
     public function create(Request $request): View
@@ -54,7 +54,7 @@ class StudentFavoriteInstitutionController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.student-favorite-institutions.create', compact(
+        return view('admin.modules.student-favorite-institutions.create', compact(
             'students',
             'institutions',
             'selectedStudentId',
@@ -78,7 +78,7 @@ class StudentFavoriteInstitutionController extends Controller
         $this->authorizeFavoriteAccess($studentFavoriteInstitution);
         $studentFavoriteInstitution->load(['student', 'institution']);
 
-        return view('admin.student-favorite-institutions.show', compact('studentFavoriteInstitution'));
+        return view('admin.modules.student-favorite-institutions.show', compact('studentFavoriteInstitution'));
     }
 
     public function edit(StudentFavoriteInstitution $studentFavoriteInstitution): View
@@ -89,7 +89,7 @@ class StudentFavoriteInstitutionController extends Controller
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
 
-        return view('admin.student-favorite-institutions.edit', compact(
+        return view('admin.modules.student-favorite-institutions.edit', compact(
             'studentFavoriteInstitution',
             'students',
             'institutions'

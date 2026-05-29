@@ -39,7 +39,7 @@ class StudentAcademicRecordController extends Controller
         $levels   = StudentAcademicRecord::LEVELS;
         $boards   = StudentAcademicRecord::BOARDS;
 
-        return view('admin.student-academic-records.index', compact(
+        return view('admin.modules.student-academic-records.index', compact(
             'records', 'students', 'levels', 'boards'
         ));
     }
@@ -50,7 +50,7 @@ class StudentAcademicRecordController extends Controller
         $levels   = StudentAcademicRecord::LEVELS;
         $boards   = StudentAcademicRecord::BOARDS;
 
-        return view('admin.student-academic-records.create', compact('students', 'levels', 'boards'));
+        return view('admin.modules.student-academic-records.create', compact('students', 'levels', 'boards'));
     }
 
     public function store(StoreStudentAcademicRecordRequest $request): RedirectResponse
@@ -80,7 +80,7 @@ class StudentAcademicRecordController extends Controller
         $levels = StudentAcademicRecord::LEVELS;
         $boards = StudentAcademicRecord::BOARDS;
 
-        return view('admin.student-academic-records.show', compact('studentAcademicRecord', 'levels', 'boards'));
+        return view('admin.modules.student-academic-records.show', compact('studentAcademicRecord', 'levels', 'boards'));
     }
 
     public function edit(StudentAcademicRecord $studentAcademicRecord): View
@@ -90,7 +90,7 @@ class StudentAcademicRecordController extends Controller
         $levels   = StudentAcademicRecord::LEVELS;
         $boards   = StudentAcademicRecord::BOARDS;
 
-        return view('admin.student-academic-records.edit', compact(
+        return view('admin.modules.student-academic-records.edit', compact(
             'studentAcademicRecord', 'students', 'levels', 'boards'
         ));
     }

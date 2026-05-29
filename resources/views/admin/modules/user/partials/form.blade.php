@@ -132,7 +132,7 @@
             $existingAssignments[] = [
                 'institution_id' => $instId,
                 'name'           => $instName,
-                'role_name'      => $row['role_name'] ?? '',
+                'role_name'      => $row['role_name'] ?? 'staff',
                 'position'       => $row['position'] ?? '',
                 'is_active'      => ($row['is_active'] ?? '1') === '1' ? '1' : '0',
                 'joined_at'      => $row['joined_at'] ?? '',
@@ -143,7 +143,7 @@
             $existingAssignments[] = [
                 'institution_id' => $inst->id,
                 'name'           => $inst->name,
-                'role_name'      => $inst->pivot->role_name ?? '',
+                'role_name'      => $inst->pivot->role_name ?? 'staff',
                 'position'       => $inst->pivot->position ?? '',
                 'is_active'      => $inst->pivot->is_active ? '1' : '0',
                 'joined_at'      => $inst->pivot->joined_at ? $inst->pivot->joined_at->format('Y-m-d\TH:i') : '',
@@ -159,6 +159,7 @@
     }
 
     $allInstitutions = ($institutions ?? collect())->map(fn($i) => ['id' => $i->id, 'name' => $i->name])->values();
+    $institutionRoles = \App\Models\UserInstitution::ROLES;
 @endphp
 
 @error('institutions')<p class="form-error mb-2">{{ $message }}</p>@enderror
@@ -166,6 +167,7 @@
 <div class="eims-card p-6 space-y-5"
      x-data="{
         allInstitutions: {{ $allInstitutions->toJson() }},
+        institutionRoles: {{ collect($institutionRoles)->map(fn($label, $value) => ['value' => $value, 'label' => $label])->values()->toJson() }},
         assignments: {{ json_encode($existingAssignments) }},
         primaryId: {{ json_encode($primaryId) }},
         newInstId: '',
@@ -178,7 +180,7 @@
             const id = parseInt(this.newInstId);
             const inst = this.allInstitutions.find(i => i.id === id);
             if (!inst) return;
-            this.assignments.push({ institution_id: id, name: inst.name, role_name: '', position: '', is_active: '1', joined_at: '' });
+            this.assignments.push({ institution_id: id, name: inst.name, role_name: 'staff', position: '', is_active: '1', joined_at: '' });
             if (this.assignments.length === 1) this.primaryId = id;
             this.newInstId = '';
         },
@@ -224,8 +226,11 @@
                             <span class="font-medium text-slate-700" x-text="row.name"></span>
                         </td>
                         <td class="py-2 px-2">
-                            <input type="text" :name="`institutions[${idx}][role_name]`" x-model="row.role_name"
-                                class="form-control py-1 text-sm w-full min-w-[90px]" placeholder="e.g. admin">
+                            <select :name="`institutions[${idx}][role_name]`" x-model="row.role_name" class="form-control py-1 text-sm w-full min-w-[150px]">
+                                <template x-for="role in institutionRoles" :key="role.value">
+                                    <option :value="role.value" x-text="role.label"></option>
+                                </template>
+                            </select>
                         </td>
                         <td class="py-2 px-2">
                             <input type="text" :name="`institutions[${idx}][position]`" x-model="row.position"

@@ -52,7 +52,7 @@ class InstitutionProgramController extends Controller
         $institutions        = Institution::orderBy('name')->get(['id', 'name']);
         $programs            = Program::orderBy('name')->get(['id', 'name']);
 
-        return view('admin.institution-programs.index', compact('institutionPrograms', 'institutions', 'programs'));
+        return view('admin.modules.institution-programs.index', compact('institutionPrograms', 'institutions', 'programs'));
     }
 
     public function create(Request $request): View
@@ -63,7 +63,7 @@ class InstitutionProgramController extends Controller
         $selectedInstitutionId = $request->input('institution_id');
         $selectedProgramId     = $request->input('program_id');
 
-        return view('admin.institution-programs.create', compact(
+        return view('admin.modules.institution-programs.create', compact(
             'institutions', 'programs', 'selectedInstitutionId', 'selectedProgramId'
         ));
     }
@@ -80,7 +80,7 @@ class InstitutionProgramController extends Controller
     {
         $institutionProgram->load(['institution', 'program.faculty', 'subjects', 'scholarships', 'applications.student', 'applications.scholarship']);
 
-        return view('admin.institution-programs.show', compact('institutionProgram'));
+        return view('admin.modules.institution-programs.show', compact('institutionProgram'));
     }
 
     public function edit(InstitutionProgram $institutionProgram): View
@@ -90,7 +90,7 @@ class InstitutionProgramController extends Controller
         $institutions = Institution::orderBy('name')->get(['id', 'name']);
         $programs     = Program::where('is_active', true)->orderBy('name')->get(['id', 'name']);
 
-        return view('admin.institution-programs.edit', compact('institutionProgram', 'institutions', 'programs'));
+        return view('admin.modules.institution-programs.edit', compact('institutionProgram', 'institutions', 'programs'));
     }
 
     public function update(UpdateInstitutionProgramRequest $request, InstitutionProgram $institutionProgram): RedirectResponse

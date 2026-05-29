@@ -50,7 +50,7 @@ class ApplicationStatusLogController extends Controller
             Student::class => 'Student',
         ];
 
-        return view('admin.application-status-logs.index', compact(
+        return view('admin.modules.application-status-logs.index', compact(
             'logs',
             'applications',
             'statuses',
@@ -63,7 +63,7 @@ class ApplicationStatusLogController extends Controller
         $this->authorizeLogAccess($applicationStatusLog);
         $applicationStatusLog->load(['application.student', 'application.institution', 'application.institutionProgram.program', 'application.scholarship', 'changedBy']);
 
-        return view('admin.application-status-logs.show', compact('applicationStatusLog'));
+        return view('admin.modules.application-status-logs.show', compact('applicationStatusLog'));
     }
 
     public function destroy(ApplicationStatusLog $applicationStatusLog): RedirectResponse

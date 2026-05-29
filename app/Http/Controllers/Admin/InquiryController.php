@@ -58,7 +58,7 @@ class InquiryController extends Controller
         $sources = Inquiry::SOURCES;
         $statuses = Inquiry::STATUSES;
 
-        return view('admin.inquiries.index', compact(
+        return view('admin.modules.inquiries.index', compact(
             'inquiries',
             'institutions',
             'institutionPrograms',
@@ -84,7 +84,7 @@ class InquiryController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.inquiries.create', compact(
+        return view('admin.modules.inquiries.create', compact(
             'institutions',
             'institutionPrograms',
             'students',
@@ -122,7 +122,7 @@ class InquiryController extends Controller
             'followUps' => fn ($q) => $q->with('assignedTo')->orderBy('follow_up_at'),
         ]);
 
-        return view('admin.inquiries.show', compact('inquiry'));
+        return view('admin.modules.inquiries.show', compact('inquiry'));
     }
 
     public function edit(Inquiry $inquiry): View
@@ -137,7 +137,7 @@ class InquiryController extends Controller
         $sources = Inquiry::SOURCES;
         $statuses = Inquiry::STATUSES;
 
-        return view('admin.inquiries.edit', compact(
+        return view('admin.modules.inquiries.edit', compact(
             'inquiry',
             'institutions',
             'institutionPrograms',

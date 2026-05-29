@@ -53,7 +53,7 @@ class CounselingSessionController extends Controller
         $modes = CounselingSession::MODES;
         $statuses = CounselingSession::STATUSES;
 
-        return view('admin.counseling-sessions.index', compact(
+        return view('admin.modules.counseling-sessions.index', compact(
             'sessions',
             'students',
             'institutions',
@@ -78,7 +78,7 @@ class CounselingSessionController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.counseling-sessions.create', compact(
+        return view('admin.modules.counseling-sessions.create', compact(
             'students',
             'institutions',
             'users',
@@ -109,7 +109,7 @@ class CounselingSessionController extends Controller
         $this->authorizeSessionAccess($counselingSession);
         $counselingSession->load(['student', 'institution', 'counselor']);
 
-        return view('admin.counseling-sessions.show', compact('counselingSession'));
+        return view('admin.modules.counseling-sessions.show', compact('counselingSession'));
     }
 
     public function edit(CounselingSession $counselingSession): View
@@ -123,7 +123,7 @@ class CounselingSessionController extends Controller
         $modes = CounselingSession::MODES;
         $statuses = CounselingSession::STATUSES;
 
-        return view('admin.counseling-sessions.edit', compact(
+        return view('admin.modules.counseling-sessions.edit', compact(
             'counselingSession',
             'students',
             'institutions',

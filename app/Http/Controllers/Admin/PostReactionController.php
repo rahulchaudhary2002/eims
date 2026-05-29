@@ -35,7 +35,7 @@ class PostReactionController extends Controller
         $reactionTypes = PostReaction::REACTIONS;
         $reactableTypes = PostReaction::REACTABLE_TYPES;
 
-        return view('admin.post-reactions.index', compact(
+        return view('admin.modules.post-reactions.index', compact(
             'reactions',
             'posts',
             'reactionTypes',
@@ -48,7 +48,7 @@ class PostReactionController extends Controller
         $this->authorizeReactionAccess($postReaction);
         $postReaction->load(['post.institution', 'reactable']);
 
-        return view('admin.post-reactions.show', compact('postReaction'));
+        return view('admin.modules.post-reactions.show', compact('postReaction'));
     }
 
     public function destroy(PostReaction $postReaction): RedirectResponse

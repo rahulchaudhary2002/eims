@@ -7,7 +7,7 @@
     <x-admin.page-header
         title="Edit Institution Category"
         subtitle="Update category details for: {{ $institutionCategory->name }}"
-        :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Categories','route'=>'admin.institution-category.index'],['label'=>'Edit']]">
+        :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Categories','route' => 'admin.institution-category.index'],['label'=>'Edit']]">
         <x-slot:actions>
             <a href="{{ route('admin.institution-category.index') }}" class="btn btn-secondary">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>

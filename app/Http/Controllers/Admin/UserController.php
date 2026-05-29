@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\Institution;
+use App\Models\UserInstitution;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -183,7 +184,7 @@ class UserController extends Controller
             }
 
             $syncData[$instId] = [
-                'role_name'  => $row['role_name'] ?? null,
+                'role_name'  => $row['role_name'] ?? 'staff',
                 'position'   => $row['position'] ?? null,
                 'is_primary' => $primaryId && $primaryId === $instId,
                 'is_active'  => ($row['is_active'] ?? '1') === '1',
@@ -201,4 +202,3 @@ class UserController extends Controller
         $user->institutions()->sync($syncData);
     }
 }
-

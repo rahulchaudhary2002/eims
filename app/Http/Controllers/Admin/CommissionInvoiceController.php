@@ -59,7 +59,7 @@ class CommissionInvoiceController extends Controller
         $commissionTypes = CommissionInvoice::COMMISSION_TYPES;
         $statuses = CommissionInvoice::STATUSES;
 
-        return view('admin.commission-invoices.index', compact(
+        return view('admin.modules.commission-invoices.index', compact(
             'invoices',
             'institutions',
             'admissions',
@@ -84,7 +84,7 @@ class CommissionInvoiceController extends Controller
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
 
-        return view('admin.commission-invoices.create', compact(
+        return view('admin.modules.commission-invoices.create', compact(
             'institutions',
             'admissions',
             'referralAgreements',
@@ -114,7 +114,7 @@ class CommissionInvoiceController extends Controller
         $this->authorizeInvoiceAccess($commissionInvoice);
         $commissionInvoice->load(['institution', 'admission.student', 'referralAgreement', 'payments' => fn ($q) => $q->orderBy('payment_date'), 'scholarshipCashback.student']);
 
-        return view('admin.commission-invoices.show', compact('commissionInvoice'));
+        return view('admin.modules.commission-invoices.show', compact('commissionInvoice'));
     }
 
     public function edit(CommissionInvoice $commissionInvoice): View
@@ -128,7 +128,7 @@ class CommissionInvoiceController extends Controller
         $commissionTypes = CommissionInvoice::COMMISSION_TYPES;
         $statuses = CommissionInvoice::STATUSES;
 
-        return view('admin.commission-invoices.edit', compact(
+        return view('admin.modules.commission-invoices.edit', compact(
             'commissionInvoice',
             'institutions',
             'admissions',

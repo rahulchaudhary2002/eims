@@ -36,7 +36,7 @@ class ProgramController extends Controller
         $faculties = Faculty::orderBy('name')->get(['id', 'name']);
         $levels    = Level::where('is_active', true)->orderBy('order')->orderBy('name')->pluck('name', 'name');
 
-        return view('admin.programs.index', compact('programs', 'faculties', 'levels'));
+        return view('admin.modules.programs.index', compact('programs', 'faculties', 'levels'));
     }
 
     public function create(): View
@@ -44,7 +44,7 @@ class ProgramController extends Controller
         $faculties = Faculty::where('is_active', true)->orderBy('name')->get(['id', 'name']);
         $levels    = Level::where('is_active', true)->orderBy('order')->orderBy('name')->pluck('name', 'name');
 
-        return view('admin.programs.create', compact('faculties', 'levels'));
+        return view('admin.modules.programs.create', compact('faculties', 'levels'));
     }
 
     public function store(StoreProgramRequest $request): RedirectResponse
@@ -66,7 +66,7 @@ class ProgramController extends Controller
             'institutionPrograms' => fn ($q) => $q->with('institution')->orderBy('created_at', 'desc'),
         ]);
 
-        return view('admin.programs.show', compact('program'));
+        return view('admin.modules.programs.show', compact('program'));
     }
 
     public function edit(Program $program): View
@@ -75,7 +75,7 @@ class ProgramController extends Controller
         $faculties = Faculty::where('is_active', true)->orderBy('name')->get(['id', 'name']);
         $levels    = Level::where('is_active', true)->orderBy('order')->orderBy('name')->pluck('name', 'name');
 
-        return view('admin.programs.edit', compact('program', 'faculties', 'levels'));
+        return view('admin.modules.programs.edit', compact('program', 'faculties', 'levels'));
     }
 
     public function update(UpdateProgramRequest $request, Program $program): RedirectResponse

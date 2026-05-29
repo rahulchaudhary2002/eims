@@ -48,7 +48,7 @@ class StudentProfileController extends Controller
         $districts = StudentProfile::whereNotNull('district')->distinct()->orderBy('district')->pluck('district');
         $cities    = StudentProfile::whereNotNull('city')->distinct()->orderBy('city')->pluck('city');
 
-        return view('admin.student-profiles.index', compact(
+        return view('admin.modules.student-profiles.index', compact(
             'profiles', 'students', 'provinces', 'districts', 'cities'
         ));
     }
@@ -57,7 +57,7 @@ class StudentProfileController extends Controller
     {
         $students = Student::doesntHave('profile')->orderBy('name')->get(['id', 'name', 'email']);
 
-        return view('admin.student-profiles.create', compact('students'));
+        return view('admin.modules.student-profiles.create', compact('students'));
     }
 
     public function store(StoreStudentProfileRequest $request): RedirectResponse
@@ -78,7 +78,7 @@ class StudentProfileController extends Controller
     {
         $studentProfile->load('student');
 
-        return view('admin.student-profiles.show', compact('studentProfile'));
+        return view('admin.modules.student-profiles.show', compact('studentProfile'));
     }
 
     public function edit(StudentProfile $studentProfile): View
@@ -91,7 +91,7 @@ class StudentProfileController extends Controller
               ->orWhere('id', $studentProfile->student_id);
         })->orderBy('name')->get(['id', 'name', 'email']);
 
-        return view('admin.student-profiles.edit', compact('studentProfile', 'students'));
+        return view('admin.modules.student-profiles.edit', compact('studentProfile', 'students'));
     }
 
     public function update(UpdateStudentProfileRequest $request, StudentProfile $studentProfile): RedirectResponse

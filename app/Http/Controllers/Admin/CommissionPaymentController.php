@@ -40,7 +40,7 @@ class CommissionPaymentController extends Controller
         $invoices = $this->invoiceDropdownQuery()->get(['id', 'invoice_number', 'institution_id']);
         $paymentMethods = CommissionPayment::PAYMENT_METHODS;
 
-        return view('admin.commission-payments.index', compact('payments', 'invoices', 'paymentMethods'));
+        return view('admin.modules.commission-payments.index', compact('payments', 'invoices', 'paymentMethods'));
     }
 
     public function create(Request $request): View
@@ -54,7 +54,7 @@ class CommissionPaymentController extends Controller
             $this->authorizeInstitution((int) $invoice->institution_id);
         }
 
-        return view('admin.commission-payments.create', compact('invoices', 'paymentMethods', 'selectedInvoiceId'));
+        return view('admin.modules.commission-payments.create', compact('invoices', 'paymentMethods', 'selectedInvoiceId'));
     }
 
     public function store(StoreCommissionPaymentRequest $request): RedirectResponse
@@ -80,7 +80,7 @@ class CommissionPaymentController extends Controller
         $this->authorizePaymentAccess($commissionPayment);
         $commissionPayment->load('commissionInvoice.institution');
 
-        return view('admin.commission-payments.show', compact('commissionPayment'));
+        return view('admin.modules.commission-payments.show', compact('commissionPayment'));
     }
 
     public function edit(CommissionPayment $commissionPayment): View
@@ -91,7 +91,7 @@ class CommissionPaymentController extends Controller
         $invoices = $this->invoiceDropdownQuery()->get(['id', 'invoice_number', 'institution_id']);
         $paymentMethods = CommissionPayment::PAYMENT_METHODS;
 
-        return view('admin.commission-payments.edit', compact('commissionPayment', 'invoices', 'paymentMethods'));
+        return view('admin.modules.commission-payments.edit', compact('commissionPayment', 'invoices', 'paymentMethods'));
     }
 
     public function update(UpdateCommissionPaymentRequest $request, CommissionPayment $commissionPayment): RedirectResponse
