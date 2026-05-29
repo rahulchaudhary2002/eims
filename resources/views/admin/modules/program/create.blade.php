@@ -1,17 +1,66 @@
 @extends('admin.layouts.app')
 @section('title', 'Create Program')
+@section('page-title', 'Create Program')
 @section('content')
-<div class="bg-white rounded-lg shadow-lg border border-gray-200">
-    <div class="p-6 flex justify-between items-center mb-6 bg-white bg-opacity-80 backdrop-blur-sm rounded-t-lg">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">🧩 Create New Program</h1>
-            <p class="text-gray-600 mt-1">Add a new academic program</p>
-        </div>
-        <a href="{{ route('admin.program.index') }}" class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 flex items-center">
-            <x-lucide-arrow-left class="w-5 h-5 mr-2" />
-            Back to Programs
-        </a>
+<div class="space-y-5">
+    <x-admin.page-header title="Create Program" subtitle="Add a new academic program"
+        :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Programs','route'=>'admin.program.index'],['label'=>'Create']]">
+        <x-slot:actions>
+            <a href="{{ route('admin.program.index') }}" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+                Back
+            </a>
+        </x-slot:actions>
+    </x-admin.page-header>
+    @if($errors->any())
+    <div class="alert alert-danger"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+        <ul class="list-disc list-inside text-sm">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
     </div>
+    @endif
+    <x-admin.form-card title="Program Details">
+        <form action="{{ route('admin.program.store') }}" method="POST">
+            @csrf
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <x-admin.form-input name="name" label="Program Name" placeholder="e.g. Computer Science" required />
+                <x-admin.form-input name="code" label="Code" placeholder="Unique code (optional)" />
+                <x-admin.form-select name="category_id" label="Program Category" required>
+                    <option value="">Select Category</option>
+                    @foreach($categories as $category)
+                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                    @endforeach
+                </x-admin.form-select>
+                <x-admin.form-select name="level_id" label="Level" required>
+                    <option value="">Select Level</option>
+                    @foreach($levels as $level)
+                    <option value="{{ $level->id }}" {{ old('level_id') == $level->id ? 'selected' : '' }}>{{ $level->name }}</option>
+                    @endforeach
+                </x-admin.form-select>
+                <x-admin.form-select name="affiliation_id" label="Affiliation">
+                    <option value="">Select Affiliation (optional)</option>
+                    @foreach($affiliations as $affiliation)
+                    <option value="{{ $affiliation->id }}" {{ old('affiliation_id') == $affiliation->id ? 'selected' : '' }}>{{ $affiliation->name }}</option>
+                    @endforeach
+                </x-admin.form-select>
+                <x-admin.form-input name="fee" label="Fee (NPR)" placeholder="e.g. 50000" />
+                <x-admin.form-input name="duration" label="Duration" placeholder="e.g. 4 years" />
+                <div class="md:col-span-2">
+                    <x-admin.form-textarea name="description" label="Description" placeholder="Brief program description" :rows="3" />
+                </div>
+                <div class="md:col-span-2 flex items-center gap-3 pt-1">
+                    <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500">
+                    <label for="is_active" class="form-label mb-0 cursor-pointer">Mark as Active</label>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 mt-6 pt-5 border-t border-slate-100">
+                <a href="{{ route('admin.program.index') }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                    Create Program
+                </button>
+            </div>
+        </form>
+    </x-admin.form-card>
+</div>
 
     @if($errors->any())
     <div class="px-6 pb-4">

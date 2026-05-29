@@ -49,8 +49,8 @@
                     <span class="inline-block px-3 py-1 bg-[#4299e1]/10 text-[#4299e1] rounded-full text-xs font-semibold mb-3">{{ $program->category?->name ?? 'Uncategorized' }}</span>
                     <h3 class="text-2xl text-[#2c5aa0] mb-2.5 leading-tight font-bold">{{ $program->name }}</h3>
                     <div class="flex flex-wrap gap-3 text-gray-600 text-sm mb-4">
-                        <span><i class="fas fa-graduation-cap"></i> {{ $program->level?->name ?? '—' }}</span>
-                        <span><i class="fas fa-clock"></i> {{ $program->duration ?? '—' }}</span>
+                        <span><i class="fas fa-graduation-cap"></i> {{ $program->level?->name ?? '-' }}</span>
+                        <span><i class="fas fa-clock"></i> {{ $program->duration ?? '-' }}</span>
                         <span><i class="fas fa-book"></i> {{ $program->active_courses_count }} Courses</span>
                     </div>
                     <p class="text-gray-600 text-sm line-clamp-3">{{ strip_tags($program->description ?? '') ?: 'No description available.' }}</p>

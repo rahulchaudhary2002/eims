@@ -22,15 +22,15 @@ $primaryProgram = $course->programs->first();
             </h1>
 
             <p class="mt-1 text-lg text-indigo-100">
-                {{ $primaryProgram?->affiliation?->name ?? '—' }}
+                {{ $primaryProgram?->affiliation?->name ?? '-' }}
             </p>
 
             <p class="mt-2 inline-flex items-center gap-2 text-sm text-indigo-100">
                 <span class="px-3 py-1 bg-white/20 rounded-full">
-                    {{ $primaryProgram?->level?->name ?? '—' }}
+                    {{ $primaryProgram?->level?->name ?? '-' }}
                 </span>
                 <span class="px-3 py-1 bg-white/20 rounded-full">
-                    {{ $primaryProgram?->duration ?? '—' }}
+                    {{ $primaryProgram?->duration ?? '-' }}
                 </span>
             </p>
         </div>
@@ -84,8 +84,8 @@ $primaryProgram = $course->programs->first();
             </h1>
 
             <p class="text-gray-600 mt-2">
-                {{ $primaryProgram?->level?->name ?? '—' }} ·
-                {{ $primaryProgram?->duration ?? '—' }}
+                {{ $primaryProgram?->level?->name ?? '-' }} ·
+                {{ $primaryProgram?->duration ?? '-' }}
             </p>
 
             @if($course->description)
@@ -182,7 +182,7 @@ $primaryProgram = $course->programs->first();
             {{ $related->name }}
         </h4>
         <p class="text-sm text-gray-500 mt-1">
-            {{ $related->affiliation?->name ?? '—' }}
+            {{ $related->affiliation?->name ?? '-' }}
         </p>
         <p class="text-sm text-gray-500 mt-1">
             {{ $related->duration ?? '' }}

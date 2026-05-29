@@ -1,203 +1,96 @@
 @extends('admin.layouts.app')
 @section('title', 'Create Course')
+@section('page-title', 'Create Course')
 
 @section('page-specific-style')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 <style>
-    .choices {
-        margin-bottom: 0;
-    }
-
-    .choices__inner {
-        background-color: #ffffff !important;
-        border-radius: 0.5rem !important;
-        border: 1px solid #d1d5db !important;
-        padding: 4px 8px !important;
-        min-height: 48px;
-        display: flex;
-        align-items: center;
-    }
-
-    .choices__list--multiple .choices__item {
-        background-color: #3b82f6 !important;
-        border: 1px solid #2563eb !important;
-        border-radius: 4px !important;
-        padding: 2px 8px !important;
-        font-size: 0.875rem !important;
-    }
-
-    .choices__list--multiple .choices__item.is-highlighted {
-        background-color: #2563eb !important;
-    }
-
-    .choices__input {
-        background-color: transparent !important;
-    }
-
-    .is-focused .choices__inner {
-        border-color: #3b82f6 !important;
-        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
-    }
+    .choices { margin-bottom: 0; }
+    .choices__inner { background-color: #ffffff !important; border-radius: var(--input-radius) !important; border: 1px solid var(--border) !important; min-height: 46px; }
+    .choices__list--multiple .choices__item { background-color: var(--primary) !important; border: 1px solid var(--primary-dark) !important; border-radius: 6px !important; }
+    .choices__list--multiple .choices__item.is-highlighted { background-color: var(--primary-dark) !important; }
+    .choices__input { background-color: transparent !important; }
+    .is-focused .choices__inner { border-color: var(--primary) !important; box-shadow: 0 0 0 3px var(--primary-light) !important; }
 </style>
 @endsection
 
 @section('content')
+<div class="space-y-5">
+    <x-admin.page-header title="Create Course" subtitle="Add a new course with sections"
+        :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Courses','route'=>'admin.course.index'],['label'=>'Create']]">
+        <x-slot:actions>
+            <a href="{{ route('admin.course.index') }}" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+                Back
+            </a>
+        </x-slot:actions>
+    </x-admin.page-header>
 
-<div class="bg-white rounded-lg shadow-lg border border-gray-200">
-    {{-- Header --}}
-    <div class="p-6 flex justify-between items-center mb-6 bg-white bg-opacity-80 backdrop-blur-sm rounded-t-lg">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800">📚 Create New Course</h1>
-            <p class="text-gray-600 mt-1">Add a new course/program</p>
-        </div>
-        <a href="{{ route('admin.course.index') }}" class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-2 px-4 rounded-lg shadow-md flex items-center">
-            <x-lucide-arrow-left class="w-5 h-5 mr-2" />
-            Back to Courses
-        </a>
-    </div>
-
-    {{-- Errors --}}
     @if($errors->any())
-    <div class="px-6 pb-4">
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
-            <ul class="list-disc list-inside">
-                @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="alert alert-danger">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+        <ul class="list-disc list-inside text-sm">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
     </div>
     @endif
 
-    {{-- Form --}}
-    <div class="px-6 pb-6">
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <form action="{{ route('admin.course.store') }}" method="POST">
-                @csrf
-
-                {{-- Course Basic Info --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {{-- Name --}}
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                            <x-lucide-book class="w-5 h-5 mr-2 text-blue-500" />
-                            Course Name *
-                        </label>
-                        <input type="text" name="name" id="name"
-                            value="{{ old('name') }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('name') border-red-500 @enderror"
-                            placeholder="Enter course name" required>
-                        @error('name')
-                        <p class="text-red-500 text-sm mt-1 flex items-center">
-                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
-                            {{ $message }}
-                        </p>
-                        @enderror
-                    </div>
-
-                    {{-- Code --}}
-                    <div>
-                        <label for="code" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                            <x-lucide-hash class="w-5 h-5 mr-2 text-blue-500" />
-                            Course Code *
-                        </label>
-                        <input type="text" name="code" id="code"
-                            value="{{ old('code') }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('code') border-red-500 @enderror"
-                            placeholder="Enter course code" required>
-                        @error('code')
-                        <p class="text-red-500 text-sm mt-1 flex items-center">
-                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
-                            {{ $message }}
-                        </p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="program_ids" class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                            <x-lucide-layers class="w-5 h-5 mr-2 text-blue-500" />
-                            Programs *
-                        </label>
-                        <select name="program_ids[]" id="program_ids" multiple
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg @error('program_ids') border-red-500 @enderror @error('program_ids.*') border-red-500 @enderror"
-                            required>
-                            @foreach($programs as $program)
-                            <option value="{{ $program->id }}" {{ in_array($program->id, old('program_ids', [])) ? 'selected' : '' }}>
-                                {{ $program->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                        <p class="text-gray-500 text-sm mt-1">Select one or more programs.</p>
-                        @error('program_ids')
-                        <p class="text-red-500 text-sm mt-1 flex items-center">
-                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
-                            {{ $message }}
-                        </p>
-                        @enderror
-                        @error('program_ids.*')
-                        <p class="text-red-500 text-sm mt-1 flex items-center">
-                            <x-lucide-alert-circle class="w-4 h-4 mr-1" />
-                            {{ $message }}
-                        </p>
-                        @enderror
-                    </div>
-
-                    {{-- Active --}}
-                    <div class="md:col-span-2">
-                        <div class="flex items-center">
-                            <input type="checkbox" name="is_active" id="is_active" value="1"
-                                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                                {{ old('is_active', true) ? 'checked' : '' }}>
-                            <label for="is_active" class="ml-2 text-sm font-medium text-gray-700">Active Course</label>
-                        </div>
-                        <p class="text-gray-500 text-sm mt-1">Uncheck to make this course inactive</p>
-                    </div>
+    <x-admin.form-card title="Course Details">
+        <form action="{{ route('admin.course.store') }}" method="POST">
+            @csrf
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <x-admin.form-input name="name" label="Course Name" placeholder="Enter course name" required />
+                <x-admin.form-input name="code" label="Course Code" placeholder="Enter course code" required />
+                <div class="md:col-span-2">
+                    <label class="form-label" for="program_ids">Programs <span class="text-danger-600">*</span></label>
+                    <select name="program_ids[]" id="program_ids" multiple
+                        class="form-control @error('program_ids') border-red-400 @enderror" required>
+                        @foreach($programs as $program)
+                        <option value="{{ $program->id }}" {{ in_array($program->id, old('program_ids', [])) ? 'selected' : '' }}>{{ $program->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('program_ids')<p class="form-error">{{ $message }}</p>@enderror
                 </div>
+                <div class="md:col-span-2 flex items-center gap-3 pt-1">
+                    <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500">
+                    <label for="is_active" class="form-label mb-0 cursor-pointer">Mark as Active</label>
+                </div>
+            </div>
 
-                {{-- Sections --}}
-                <div class="mt-6" x-data="sectionsForm()" x-init="initEditors()">
-                    <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                        <x-lucide-file-text class="w-5 h-5 mr-2 text-blue-500" />
-                        Course Sections
-                    </label>
-
-                    <template x-for="(section, index) in sections" :key="index">
-                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-300 mb-4 flex flex-col gap-2">
-                            <div class="flex justify-between items-center">
-                                <strong class="text-gray-700">Section <span x-text="index+1"></span></strong>
-                                <div class="flex gap-2">
-                                    <button type="button" @click="moveUp(index)" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">↑</button>
-                                    <button type="button" @click="moveDown(index)" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">↓</button>
-                                    <button type="button" @click="remove(index)" class="text-red-500 hover:text-red-700">✕</button>
-                                </div>
+            {{-- Sections --}}
+            <div class="mt-6" x-data="sectionsForm()" x-init="initEditors()">
+                <label class="form-label mb-3">Course Sections</label>
+                <template x-for="(section, index) in sections" :key="index">
+                    <div class="bg-slate-50 p-4 rounded-input border border-slate-200 mb-4 flex flex-col gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-semibold text-slate-700">Section <span x-text="index+1"></span></span>
+                            <div class="flex gap-1.5">
+                                <button type="button" @click="moveUp(index)" class="btn-icon" title="Move Up">↑</button>
+                                <button type="button" @click="moveDown(index)" class="btn-icon" title="Move Down">↓</button>
+                                <button type="button" @click="remove(index)" class="btn-icon btn-icon-delete" title="Remove">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
                             </div>
-
-                            <input type="text" :name="'sections['+index+'][title]'" x-model="section.title"
-                                placeholder="Section Title"
-                                class="w-full px-3 py-2 border border-gray-300 rounded">
-
-                            <textarea :id="'content-'+index" :name="'sections['+index+'][content]'" x-model="section.content"
-                                placeholder="Section Content" class="w-full px-3 py-2 border border-gray-300 rounded"></textarea>
                         </div>
-                    </template>
+                        <input type="text" :name="'sections['+index+'][title]'" x-model="section.title"
+                            placeholder="Section Title" class="form-control">
+                        <textarea :id="'content-'+index" :name="'sections['+index+'][content]'" x-model="section.content"
+                            placeholder="Section Content" class="form-control"></textarea>
+                    </div>
+                </template>
+                <button type="button" @click="add()" class="btn btn-secondary text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                    Add Section
+                </button>
+            </div>
 
-                    <button type="button" @click="add()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">+ Add Section</button>
-                </div>
-
-                {{-- Submit buttons --}}
-                <div class="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
-                    <a href="{{ route('admin.course.index') }}"
-                        class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 rounded-lg flex items-center">
-                        <x-lucide-x class="w-5 h-5 mr-2" /> Cancel
-                    </a>
-                    <button type="submit"
-                        class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-lg flex items-center">
-                        <x-lucide-save class="w-5 h-5 mr-2" /> Create Course
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+            <div class="flex items-center justify-end gap-3 mt-6 pt-5 border-t border-slate-100">
+                <a href="{{ route('admin.course.index') }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                    Create Course
+                </button>
+            </div>
+        </form>
+    </x-admin.form-card>
 </div>
 @endsection
 

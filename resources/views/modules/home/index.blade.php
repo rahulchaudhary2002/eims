@@ -353,11 +353,11 @@
             @php $primaryProgram = $course->programs->first(); @endphp
             <div class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl border border-gray-200">
                 <div class="p-7 pb-4 border-b border-gray-200">
-                    <span class="inline-block px-4 py-1.5 bg-orange-500/10 text-orange-500 rounded-full text-xs font-semibold mb-4">{{ $primaryProgram?->affiliation?->name ?? '—' }}</span>
+                    <span class="inline-block px-4 py-1.5 bg-orange-500/10 text-orange-500 rounded-full text-xs font-semibold mb-4">{{ $primaryProgram?->affiliation?->name ?? '-' }}</span>
                     <h3 class="text-2xl text-[#2c5aa0] mb-2.5 leading-tight font-bold">{{ $course->display_name }}</h3>
                     <div class="flex gap-4 text-gray-600 text-sm">
-                        <span><i class="fas fa-clock"></i> {{ $primaryProgram?->duration ?? '—' }}</span>
-                        <span><i class="fas fa-university"></i> {{ $primaryProgram?->level?->name ?? '—' }}</span>
+                        <span><i class="fas fa-clock"></i> {{ $primaryProgram?->duration ?? '-' }}</span>
+                        <span><i class="fas fa-university"></i> {{ $primaryProgram?->level?->name ?? '-' }}</span>
                     </div>
                 </div>
                 <div class="p-5 pt-5">
