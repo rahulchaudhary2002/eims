@@ -155,23 +155,6 @@
                         </div>
                     </div>
 
-                    <!-- FILTER: College Category -->
-                    <div class="pb-5 mb-7 border-b border-lightgray">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">College Category</h3>
-                            <span class="text-[0.8rem] text-[#4299e1] cursor-pointer" data-filter="category">Clear</span>
-                        </div>
-                        <div class="flex flex-col gap-3">
-                            @foreach($institutionCategories as $category)
-                            <div class="flex items-center gap-3">
-                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="checkbox" id="cat-{{ $category->slug }}" name="categories[]" value="{{ $category->slug }}" {{ in_array($category->slug, request()->get('categories', [])) ? 'checked' : '' }}>
-                                <label class="flex-1 cursor-pointer text-dark" for="cat-{{ $category->slug }}">{{ $category->name }}</label>
-                                <span class="text-[0.85rem] text-grayx">({{ $category->institutions_count }})</span>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-
                     <!-- FILTER: Location -->
                     <div>
                         <div class="flex items-center justify-between mb-4">
@@ -275,7 +258,7 @@
 
                         <div class="p-6 flex flex-col flex-1">
                             <span class="inline-flex self-start px-4 py-1 rounded-full text-[0.85rem] font-semibold bg-success/10 text-success mb-4">
-                                {{ $institution->category->name }}
+                                {{ \App\Models\Institution::TYPES[$institution->type] ?? \Illuminate\Support\Str::headline($institution->type) }}
                             </span>
 
                             <h3 class="text-[1.4rem] font-bold text-[#2c5aa0] mb-2 leading-snug">
@@ -294,7 +277,7 @@
                                 </div>
                                 <div class="flex items-center gap-2 text-[0.9rem] text-grayx">
                                     <i class="fas fa-building text-[#4299e1]"></i>
-                                    <span>{{ $institution->institutionType->name }}</span>
+                                    <span>{{ \App\Models\Institution::TYPES[$institution->type] ?? \Illuminate\Support\Str::headline($institution->type) }}</span>
                                 </div>
                             </div>
 

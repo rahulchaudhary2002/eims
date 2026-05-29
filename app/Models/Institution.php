@@ -98,11 +98,6 @@ class Institution extends Model
         return $this->users()->wherePivot('is_active', true);
     }
 
-    public function institutionType(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(\App\Models\InstitutionType::class, 'type', 'slug');
-    }
-
     public function profile(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(\App\Models\InstitutionProfile::class);

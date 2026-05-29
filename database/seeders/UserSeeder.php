@@ -14,9 +14,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Clear existing users except maybe admin
-        // User::where('email', '!=', 'admin@example.com')->delete();
-
         $users = [
             [
                 'name' => 'Super Admin',

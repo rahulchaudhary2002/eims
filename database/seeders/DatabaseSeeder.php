@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             LevelSeeder::class,
             UserSeeder::class,
-            VendorSeeder::class,
             AffiliationSeeder::class,
             FacultySeeder::class,
             InstitutionSeeder::class,
@@ -33,7 +32,6 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
             CourseSeeder::class,
             AffiliationInstitutionSeeder::class,
-            VendorInstitutionSeeder::class,
             CourseDescriptionSeeder::class,
             QuestionSeeder::class,
             ReplySeeder::class,

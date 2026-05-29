@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Route;
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin/auth.php';
 require __DIR__ . '/admin/web.php';
-require __DIR__ . '/vendor/auth.php';
-require __DIR__ . '/vendor/web.php';
 require __DIR__ . '/institution.php';
 
 Route::get('/', [HomeController::class, 'index'])->name('home');

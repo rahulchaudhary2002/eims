@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\EducationField;
-use App\Models\InstitutionCategory;
-use App\Models\InstitutionType;
 use App\Models\Level;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -29,10 +27,7 @@ class RegisteredUserController extends Controller
             ? EducationField::query()->orderBy('name')->get(['name', 'slug'])
             : collect();
         $educationLevels = Level::query()->orderBy('order')->get(['id', 'name']);
-        $institutionTypes = InstitutionType::get(['id', 'name']);
-        $institutionCategories = InstitutionCategory::get(['id', 'name']);
-
-        return view('auth.register', compact('educationFields', 'educationLevels', 'institutionTypes', 'institutionCategories'));
+        return view('auth.register', compact('educationFields', 'educationLevels'));
     }
 
     /**

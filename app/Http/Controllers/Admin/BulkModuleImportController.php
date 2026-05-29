@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Affiliation;
 use App\Models\Course;
 use App\Models\Institution;
-use App\Models\InstitutionCategory;
-use App\Models\InstitutionType;
 use App\Models\Level;
 use App\Models\Program;
 use App\Models\ProgramCategory;
@@ -46,13 +44,11 @@ class BulkModuleImportController extends Controller
             $found = array_keys($sheets);
             $foundText = empty($found) ? 'none' : implode(', ', $found);
             return redirect()->route('admin.bulk-import.index')
-                ->with('error', 'No supported sheets found. Detected sheets: ' . $foundText . '. Use: Affiliations, Institution Types, Institution Categories, Program Categories, Levels, Institutions, Programs, Courses.');
+                ->with('error', 'No supported sheets found. Detected sheets: ' . $foundText . '. Use: Affiliations, Program Categories, Levels, Institutions, Programs, Courses.');
         }
 
         $summary = [
             'affiliations' => 0,
-            'institution_types' => 0,
-            'institution_categories' => 0,
             'program_categories' => 0,
             'levels' => 0,
             'institutions' => 0,
@@ -63,8 +59,6 @@ class BulkModuleImportController extends Controller
 
         DB::transaction(function () use ($mappedSheets, &$summary, &$skipped): void {
             $summary['affiliations'] = $this->importAffiliations($mappedSheets['affiliations'] ?? [], $skipped);
-            $summary['institution_types'] = $this->importInstitutionTypes($mappedSheets['institution_types'] ?? [], $skipped);
-            $summary['institution_categories'] = $this->importInstitutionCategories($mappedSheets['institution_categories'] ?? [], $skipped);
             $summary['program_categories'] = $this->importProgramCategories($mappedSheets['program_categories'] ?? [], $skipped);
             $summary['levels'] = $this->importLevels($mappedSheets['levels'] ?? [], $skipped);
             $summary['institutions'] = $this->importInstitutions($mappedSheets['institutions'] ?? [], $skipped);
@@ -86,16 +80,6 @@ class BulkModuleImportController extends Controller
                 ['Tribhuvan University', 'TU', 'Nepal national university', '1'],
                 ['Pokhara University', 'PU', 'Autonomous public university', '1'],
             ],
-            'Institution Types' => [
-                ['name', 'slug'],
-                ['College', 'college'],
-                ['University', 'university'],
-            ],
-            'Institution Categories' => [
-                ['name', 'slug'],
-                ['Engineering', 'engineering'],
-                ['Management', 'management'],
-            ],
             'Program Categories' => [
                 ['name', 'slug'],
                 ['IT', 'it'],
@@ -107,9 +91,9 @@ class BulkModuleImportController extends Controller
                 ['Master', 'MSTR', 'Graduate level', '2', '1'],
             ],
             'Institutions' => [
-                ['name', 'address', 'phone', 'email', 'website', 'established_year', 'type', 'category', 'affiliations', 'is_active'],
-                ['Prime College', 'Kathmandu', '01-4440000', 'info@prime.edu', 'https://prime.edu', '2001', 'College', 'Management', 'Tribhuvan University, Pokhara University', '1'],
-                ['NCIT', 'Balkumari, Lalitpur', '01-5186358', 'info@ncit.edu', 'https://ncit.edu', '2009', 'College', 'Engineering', 'Pokhara University', '1'],
+                ['name', 'address', 'phone', 'email', 'website', 'established_year', 'type', 'affiliations', 'is_active'],
+                ['Prime College', 'Kathmandu', '01-4440000', 'info@prime.edu', 'https://prime.edu', '2001', 'college', 'Tribhuvan University, Pokhara University', '1'],
+                ['NCIT', 'Balkumari, Lalitpur', '01-5186358', 'info@ncit.edu', 'https://ncit.edu', '2009', 'college', 'Pokhara University', '1'],
             ],
             'Programs' => [
                 ['name', 'code', 'description', 'level', 'affiliation', 'category', 'fee', 'duration', 'is_active'],
@@ -136,8 +120,6 @@ class BulkModuleImportController extends Controller
     {
         $aliases = [
             'affiliations' => ['affiliations', 'affiliation'],
-            'institution_types' => ['institution_types', 'institution_type', 'institution types', 'institution type', 'types', 'type'],
-            'institution_categories' => ['institution_categories', 'institution_category', 'institution categories', 'institution category', 'categories', 'category'],
             'program_categories' => ['program_categories', 'program_category', 'program categories', 'program category'],
             'levels' => ['levels', 'level'],
             'institutions' => ['institutions', 'institution'],
@@ -184,58 +166,6 @@ class BulkModuleImportController extends Controller
                     'description' => $this->nullableString($row['description'] ?? ''),
                     'is_active' => $this->parseBoolean($row['is_active'] ?? null, true),
                 ]
-            );
-            $count++;
-        }
-
-        return $count;
-    }
-
-    /**
-     * @param  array<int, array<string, string>>  $rows
-     * @param  array<int, string>  $skipped
-     */
-    private function importInstitutionTypes(array $rows, array &$skipped): int
-    {
-        $count = 0;
-        foreach ($rows as $row) {
-            $name = trim($row['name'] ?? '');
-            if ($name === '') {
-                $skipped[] = 'Institution Types row ' . ($row['__row_number'] ?? '?') . ': name is required.';
-                continue;
-            }
-
-            $slug = $this->nullableString($row['slug'] ?? '') ?? Str::slug($name);
-
-            InstitutionType::updateOrCreate(
-                ['slug' => $slug],
-                ['name' => $name]
-            );
-            $count++;
-        }
-
-        return $count;
-    }
-
-    /**
-     * @param  array<int, array<string, string>>  $rows
-     * @param  array<int, string>  $skipped
-     */
-    private function importInstitutionCategories(array $rows, array &$skipped): int
-    {
-        $count = 0;
-        foreach ($rows as $row) {
-            $name = trim($row['name'] ?? '');
-            if ($name === '') {
-                $skipped[] = 'Institution Categories row ' . ($row['__row_number'] ?? '?') . ': name is required.';
-                continue;
-            }
-
-            $slug = $this->nullableString($row['slug'] ?? '') ?? Str::slug($name);
-
-            InstitutionCategory::updateOrCreate(
-                ['slug' => $slug],
-                ['name' => $name]
             );
             $count++;
         }
@@ -314,33 +244,17 @@ class BulkModuleImportController extends Controller
             }
 
             $typeValue = trim($row['type'] ?? $row['institution_type'] ?? '');
-            $categoryValue = trim($row['category'] ?? $row['institution_category'] ?? '');
 
-            if ($typeValue === '' || $categoryValue === '') {
-                $skipped[] = 'Institutions row ' . ($row['__row_number'] ?? '?') . ': type and category are required.';
+            if ($typeValue === '') {
+                $skipped[] = 'Institutions row ' . ($row['__row_number'] ?? '?') . ': type is required.';
                 continue;
             }
 
-            $institutionType = InstitutionType::query()
-                ->whereRaw('LOWER(name) = ?', [strtolower($typeValue)])
-                ->orWhereRaw('LOWER(slug) = ?', [strtolower(Str::slug($typeValue))])
-                ->first();
+            $type = $this->resolveInstitutionKind($typeValue);
 
-            if (!$institutionType) {
+            if (!$type) {
                 $skipped[] = 'Institutions row ' . ($row['__row_number'] ?? '?') . ': type "' . $typeValue . '" not found.';
                 continue;
-            }
-
-            $institutionCategory = InstitutionCategory::query()
-                ->whereRaw('LOWER(name) = ?', [strtolower($categoryValue)])
-                ->orWhereRaw('LOWER(slug) = ?', [strtolower(Str::slug($categoryValue))])
-                ->first();
-
-            if (!$institutionCategory) {
-                $institutionCategory = InstitutionCategory::create([
-                    'name' => $categoryValue,
-                    'slug' => Str::slug($categoryValue),
-                ]);
             }
 
             $affiliationIds = null;
@@ -366,7 +280,7 @@ class BulkModuleImportController extends Controller
                 ['name' => $name],
                 [
                     'slug' => Str::slug($name),
-                    'type' => $institutionType->slug,
+                    'type' => $type,
                     'address' => $this->nullableString($row['address'] ?? ''),
                     'phone' => $this->nullableString($row['phone'] ?? ''),
                     'email' => $this->nullableString($row['email'] ?? ''),
@@ -540,6 +454,15 @@ class BulkModuleImportController extends Controller
     {
         $value = trim((string) $value);
         return $value === '' ? null : (int) $value;
+    }
+
+    private function resolveInstitutionKind(string $value): ?string
+    {
+        $normalized = Str::slug($value, '_');
+        $labels = collect(Institution::TYPES)
+            ->mapWithKeys(fn (string $label, string $key) => [Str::slug($label, '_') => $key]);
+
+        return Institution::TYPES[$normalized] ?? $labels[$normalized] ?? null;
     }
 
     /**
