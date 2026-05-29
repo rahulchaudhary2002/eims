@@ -717,5 +717,284 @@
         @endif
     </div>
 
+    {{-- Referral Agreements --}}
+    <div class="eims-card overflow-hidden">
+        <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100">
+            <div class="p-2 bg-violet-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="text-base font-semibold text-slate-800">Referral Agreements</h3>
+            <span class="ml-1 text-xs text-slate-400">{{ $institution->referralAgreements->count() }} agreement(s)</span>
+            <div class="ml-auto">
+                <a href="{{ route('admin.referral-agreements.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs py-1.5">
+                    Add Agreement
+                </a>
+            </div>
+        </div>
+
+        @if($institution->referralAgreements->isEmpty())
+            <div class="text-center py-10 text-slate-400">
+                <p class="text-sm mb-3">No referral agreements created yet.</p>
+                <a href="{{ route('admin.referral-agreements.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs">Add First Agreement</a>
+            </div>
+        @else
+            <div class="overflow-x-auto">
+                <table class="eims-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Commission Type</th>
+                            <th>Commission Value</th>
+                            <th>Student Cashback %</th>
+                            <th>Platform Revenue %</th>
+                            <th>Dates</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($institution->referralAgreements as $agreement)
+                            <tr>
+                                <td>{{ \App\Models\ReferralAgreement::COMMISSION_TYPES[$agreement->commission_type] ?? $agreement->commission_type }}</td>
+                                <td class="font-mono text-sm">{{ number_format((float) $agreement->commission_value, 4) }}</td>
+                                <td class="font-mono text-sm">{{ number_format((float) $agreement->student_cashback_percentage, 4) }}%</td>
+                                <td class="font-mono text-sm">{{ number_format((float) $agreement->platform_revenue_percentage, 4) }}%</td>
+                                <td class="text-xs text-slate-500">
+                                    {{ $agreement->start_date?->format('d M Y') ?? '—' }} – {{ $agreement->end_date?->format('d M Y') ?? '—' }}
+                                </td>
+                                <td><span class="badge">{{ \App\Models\ReferralAgreement::STATUSES[$agreement->status] ?? $agreement->status }}</span></td>
+                                <td>
+                                    <div class="flex items-center justify-center gap-1">
+                                        <a href="{{ route('admin.referral-agreements.show', $agreement) }}" class="btn-icon btn-icon-view" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </a>
+                                        <a href="{{ route('admin.referral-agreements.edit', $agreement) }}" class="btn-icon btn-icon-edit" title="Edit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-6 py-3 border-t border-slate-100 text-right">
+                <a href="{{ route('admin.referral-agreements.index', ['institution_id' => $institution->id]) }}" class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                    View all referral agreements for this institution →
+                </a>
+            </div>
+        @endif
+    </div>
+
+    {{-- Referrals --}}
+    <div class="eims-card overflow-hidden">
+        <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100">
+            <div class="p-2 bg-indigo-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+            </div>
+            <h3 class="text-base font-semibold text-slate-800">Referrals</h3>
+            <span class="ml-1 text-xs text-slate-400">{{ $institution->referrals->count() }} referral(s)</span>
+            <div class="ml-auto">
+                <a href="{{ route('admin.referrals.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs py-1.5">
+                    Add Referral
+                </a>
+            </div>
+        </div>
+
+        @if($institution->referrals->isEmpty())
+            <div class="text-center py-10 text-slate-400">
+                <p class="text-sm mb-3">No referrals created yet.</p>
+                <a href="{{ route('admin.referrals.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs">Add First Referral</a>
+            </div>
+        @else
+            <div class="overflow-x-auto">
+                <table class="eims-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Referral #</th>
+                            <th>Student</th>
+                            <th>Referred By</th>
+                            <th>Referred At</th>
+                            <th>Viewed At</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($institution->referrals->take(5) as $referral)
+                            <tr>
+                                <td class="font-mono text-sm font-medium">
+                                    <a href="{{ route('admin.referrals.show', $referral) }}" class="text-blue-600 hover:underline">
+                                        {{ $referral->referral_number }}
+                                    </a>
+                                </td>
+                                <td class="text-sm">{{ $referral->student->name ?? '—' }}</td>
+                                <td class="text-sm">{{ $referral->referredBy->name ?? '—' }}</td>
+                                <td class="text-xs text-slate-500">{{ $referral->referred_at?->format('d M Y, H:i') ?? '—' }}</td>
+                                <td class="text-xs text-slate-500">{{ $referral->viewed_at?->format('d M Y, H:i') ?? '—' }}</td>
+                                <td><span class="badge">{{ \App\Models\Referral::STATUSES[$referral->status] ?? $referral->status }}</span></td>
+                                <td>
+                                    <div class="flex items-center justify-center gap-1">
+                                        <a href="{{ route('admin.referrals.show', $referral) }}" class="btn-icon btn-icon-view" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </a>
+                                        <a href="{{ route('admin.referrals.edit', $referral) }}" class="btn-icon btn-icon-edit" title="Edit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-6 py-3 border-t border-slate-100 text-right">
+                <a href="{{ route('admin.referrals.index', ['institution_id' => $institution->id]) }}" class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                    View all referrals for this institution →
+                </a>
+            </div>
+        @endif
+    </div>
+
+    {{-- Commission Invoices --}}
+    <div class="eims-card overflow-hidden">
+        <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100">
+            <div class="p-2 bg-amber-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/></svg>
+            </div>
+            <h3 class="text-base font-semibold text-slate-800">Commission Invoices</h3>
+            <span class="ml-1 text-xs text-slate-400">{{ $institution->commissionInvoices->count() }} invoice(s)</span>
+            <div class="ml-auto">
+                <a href="{{ route('admin.commission-invoices.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs py-1.5">
+                    Add Invoice
+                </a>
+            </div>
+        </div>
+
+        @if($institution->commissionInvoices->isEmpty())
+            <div class="text-center py-10 text-slate-400">
+                <p class="text-sm mb-3">No commission invoices created yet.</p>
+                <a href="{{ route('admin.commission-invoices.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs">Add First Invoice</a>
+            </div>
+        @else
+            <div class="overflow-x-auto">
+                <table class="eims-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Invoice #</th>
+                            <th>Admission</th>
+                            <th>Commission Amt</th>
+                            <th>Platform Revenue</th>
+                            <th>Invoice Date</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($institution->commissionInvoices->take(5) as $invoice)
+                            <tr>
+                                <td class="font-mono text-sm">
+                                    <a href="{{ route('admin.commission-invoices.show', $invoice) }}" class="text-blue-600 hover:underline">
+                                        {{ $invoice->invoice_number }}
+                                    </a>
+                                </td>
+                                <td class="text-sm font-mono text-slate-600">{{ $invoice->admission->admission_number ?? '—' }}</td>
+                                <td class="font-mono text-sm">{{ number_format((float) $invoice->commission_amount, 2) }}</td>
+                                <td class="font-mono text-sm">{{ number_format((float) $invoice->platform_revenue_amount, 2) }}</td>
+                                <td class="text-xs text-slate-500">{{ $invoice->invoice_date?->format('d M Y') ?? '—' }}</td>
+                                <td class="text-xs text-slate-500">{{ $invoice->due_date?->format('d M Y') ?? '—' }}</td>
+                                <td><span class="badge">{{ \App\Models\CommissionInvoice::STATUSES[$invoice->status] ?? $invoice->status }}</span></td>
+                                <td>
+                                    <div class="flex items-center justify-center gap-1">
+                                        <a href="{{ route('admin.commission-invoices.show', $invoice) }}" class="btn-icon btn-icon-view" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </a>
+                                        <a href="{{ route('admin.commission-invoices.edit', $invoice) }}" class="btn-icon btn-icon-edit" title="Edit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-6 py-3 border-t border-slate-100 text-right">
+                <a href="{{ route('admin.commission-invoices.index', ['institution_id' => $institution->id]) }}" class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                    View all commission invoices for this institution →
+                </a>
+            </div>
+        @endif
+    </div>
+
+    {{-- Inquiries --}}
+    <div class="eims-card overflow-hidden">
+        <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100">
+            <div class="p-2 bg-sky-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-sky-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/></svg>
+            </div>
+            <h3 class="text-base font-semibold text-slate-800">Inquiries</h3>
+            <span class="ml-1 text-xs text-slate-400">{{ $institution->inquiries->count() }} inquiry(ies)</span>
+            <div class="ml-auto">
+                <a href="{{ route('admin.inquiries.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs py-1.5">
+                    Add Inquiry
+                </a>
+            </div>
+        </div>
+
+        @if($institution->inquiries->isEmpty())
+            <div class="text-center py-10 text-slate-400">
+                <p class="text-sm mb-3">No inquiries recorded yet.</p>
+                <a href="{{ route('admin.inquiries.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs">Add First Inquiry</a>
+            </div>
+        @else
+            <div class="overflow-x-auto">
+                <table class="eims-table w-full">
+                    <thead>
+                        <tr>
+                            <th>Name / Email</th>
+                            <th>Source</th>
+                            <th>Assigned To</th>
+                            <th>Last Contacted</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($institution->inquiries->take(5) as $inquiry)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('admin.inquiries.show', $inquiry) }}" class="font-semibold text-blue-600 hover:underline text-sm">
+                                        {{ $inquiry->name }}
+                                    </a>
+                                    <div class="text-xs text-slate-400">{{ $inquiry->email }}</div>
+                                </td>
+                                <td class="text-sm">{{ \App\Models\Inquiry::SOURCES[$inquiry->source] ?? ($inquiry->source ?: '—') }}</td>
+                                <td class="text-sm">{{ $inquiry->assignedTo->name ?? '—' }}</td>
+                                <td class="text-xs text-slate-500">{{ $inquiry->last_contacted_at?->format('d M Y') ?? '—' }}</td>
+                                <td><span class="badge">{{ \App\Models\Inquiry::STATUSES[$inquiry->status] ?? $inquiry->status }}</span></td>
+                                <td>
+                                    <div class="flex items-center justify-center gap-1">
+                                        <a href="{{ route('admin.inquiries.show', $inquiry) }}" class="btn-icon btn-icon-view" title="View">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </a>
+                                        <a href="{{ route('admin.inquiries.edit', $inquiry) }}" class="btn-icon btn-icon-edit" title="Edit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-6 py-3 border-t border-slate-100 text-right">
+                <a href="{{ route('admin.inquiries.index', ['institution_id' => $institution->id]) }}" class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                    View all inquiries for this institution →
+                </a>
+            </div>
+        @endif
+    </div>
+
 </div>
 @endsection

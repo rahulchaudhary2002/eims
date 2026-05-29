@@ -66,6 +66,9 @@ class StudentController extends Controller
             'academicRecords',
             'documents',
             'applications' => fn ($q) => $q->with(['institution', 'institutionProgram.program', 'scholarship'])->latest(),
+            'scholarshipApplications' => fn ($q) => $q->with('scholarship.institution')->latest(),
+            'scholarshipCashbacks' => fn ($q) => $q->with('commissionInvoice')->latest(),
+            'favoriteInstitutions' => fn ($q) => $q->with('institution')->latest(),
         ]);
 
         return view('admin.modules.student.show', compact('student'));

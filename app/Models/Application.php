@@ -84,4 +84,9 @@ class Application extends Model
     {
         return $this->hasOne(Admission::class);
     }
+
+    public function referral(): HasOne
+    {
+        return $this->hasOne(\App\Models\Referral::class);
+    }
 }

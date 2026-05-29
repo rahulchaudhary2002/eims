@@ -61,4 +61,9 @@ class Admission extends Model
     {
         return $this->belongsTo(User::class, 'verified_by');
     }
+
+    public function commissionInvoice(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(\App\Models\CommissionInvoice::class);
+    }
 }
