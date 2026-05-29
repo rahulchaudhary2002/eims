@@ -15,7 +15,7 @@
 
         <div class="lg:col-span-2">
             <x-admin.form-card title="Upload Excel">
-                <p class="text-sm text-slate-600 mb-5">Supported sheet names: <strong>Affiliations</strong>, <strong>Institution Types</strong>, <strong>Institution Categories</strong>, <strong>Program Categories</strong>, <strong>Levels</strong>, <strong>Institutions</strong>, <strong>Programs</strong>, <strong>Courses</strong>.</p>
+                <p class="text-sm text-slate-600 mb-5">Supported sheet names: <strong>Affiliations</strong>, <strong>Program Categories</strong>, <strong>Levels</strong>, <strong>Institutions</strong>, <strong>Programs</strong>, <strong>Courses</strong>.</p>
 
                 <form action="{{ route('admin.bulk-import.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf

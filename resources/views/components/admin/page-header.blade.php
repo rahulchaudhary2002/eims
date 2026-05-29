@@ -2,9 +2,9 @@
     Page Header Component
     Usage:
     <x-admin.page-header
-        title="Institution Categories"
-        subtitle="Manage institution categories"
-        :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Categories']]">
+        title="Users"
+        subtitle="Manage user accounts"
+        :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Users']]">
         <x-slot:actions>
             <a href="..." class="btn btn-primary">Add New</a>
         </x-slot:actions>
@@ -37,7 +37,10 @@
                 <svg class="w-3.5 h-3.5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                 @endif
                 @if(isset($crumb['route']))
-                <a href="{{ route($crumb['route']) }}" class="text-xs text-primary-600 hover:underline font-medium">{{ $crumb['label'] }}</a>
+                    @php
+                        $routeParams = $crumb['params'] ?? $crumb['param'] ?? $crumb['routeParam'] ?? [];
+                    @endphp
+                <a href="{{ route($crumb['route'], $routeParams) }}" class="text-xs text-primary-600 hover:underline font-medium">{{ $crumb['label'] }}</a>
                 @else
                 <span class="text-xs text-slate-500">{{ $crumb['label'] }}</span>
                 @endif

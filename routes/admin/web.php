@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\AdmissionController;
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\ApplicationStatusLogController;
-use App\Http\Controllers\Admin\AffiliationController;
 use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\ConsultancyDestinationController;
@@ -31,11 +30,9 @@ use App\Http\Controllers\Admin\ScholarshipCashbackController;
 use App\Http\Controllers\Admin\ReferralAgreementController;
 use App\Http\Controllers\Admin\ReferralController;
 use App\Http\Controllers\Admin\BulkModuleImportController;
-use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\CurrentInstitutionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FacultyController;
-use App\Http\Controllers\Admin\InstitutionCategoryController;
 use App\Http\Controllers\Admin\InstitutionController;
 use App\Http\Controllers\Admin\InstitutionDocumentController;
 use App\Http\Controllers\Admin\InstitutionProfileController;
@@ -44,14 +41,11 @@ use App\Http\Controllers\Admin\StudentDocumentController;
 use App\Http\Controllers\Admin\StudentProfileController;
 use App\Http\Controllers\Admin\InstitutionProgramController;
 use App\Http\Controllers\Admin\InstitutionProgramSubjectController;
-use App\Http\Controllers\Admin\InstitutionTypeController;
-use App\Http\Controllers\Admin\LevelController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\ScholarshipController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\VendorController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->group(function () {
@@ -138,10 +132,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->
     Route::patch('admissions/{admission}/verify', [AdmissionController::class, 'verify'])
         ->name('admissions.verify');
 
-    Route::resource('institution-type', InstitutionTypeController::class)->except('show');
-    Route::resource('institution-category', InstitutionCategoryController::class)->except('show');
-    Route::resource('vendor', VendorController::class);
-
     Route::resource('referral-agreements', ReferralAgreementController::class);
     Route::patch('referral-agreements/{referralAgreement}/status', [ReferralAgreementController::class, 'updateStatus'])
         ->name('referral-agreements.update-status');
@@ -194,12 +184,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->
     Route::patch('post-comments/{postComment}/toggle-hidden', [PostCommentController::class, 'toggleHidden'])
         ->name('post-comments.toggle-hidden');
 
-    Route::resource('affiliation', AffiliationController::class)->except('show');
-    Route::resource('level', LevelController::class)->except('show');
     Route::resource('programs', ProgramController::class);
     Route::patch('programs/{program}/status', [ProgramController::class, 'updateStatus'])
         ->name('programs.update-status');
-    Route::resource('course', CourseController::class);
     Route::get('bulk-import', [BulkModuleImportController::class, 'index'])->name('bulk-import.index');
     Route::post('bulk-import', [BulkModuleImportController::class, 'store'])->name('bulk-import.store');
     Route::get('bulk-import/template', [BulkModuleImportController::class, 'template'])->name('bulk-import.template');

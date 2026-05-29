@@ -28,8 +28,6 @@
         {{-- ── User Management ── --}}
         @php $isUserGroup = request()->routeIs('admin.users.*') || request()->routeIs('admin.students.*') || request()->routeIs('admin.student-profiles.*') || request()->routeIs('admin.student-academic-records.*') || request()->routeIs('admin.student-documents.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Users</p>
-
             <div x-data="sidebarGroup('users', {{ $isUserGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isUserGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
@@ -71,11 +69,9 @@
         @php
             $webUser = auth('web')->user();
             $canViewProgramSubjects = $webUser && ($webUser->is_super_admin || session('current_institution_id'));
-            $isInstitutionGroup = request()->routeIs('admin.institutions.*') || request()->routeIs('admin.institution-type.*') || request()->routeIs('admin.institution-category.*') || request()->routeIs('admin.institution-profiles.*') || request()->routeIs('admin.institution-documents.*') || request()->routeIs('admin.institution-programs.*') || request()->routeIs('admin.institution-program-subjects.*') || request()->routeIs('admin.institution-followers.*') || request()->routeIs('admin.institution-reviews.*');
+            $isInstitutionGroup = request()->routeIs('admin.institutions.*') || request()->routeIs('admin.institution-profiles.*') || request()->routeIs('admin.institution-documents.*') || request()->routeIs('admin.institution-programs.*') || request()->routeIs('admin.institution-program-subjects.*') || request()->routeIs('admin.institution-followers.*') || request()->routeIs('admin.institution-reviews.*');
         @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Institution Management</p>
-
             <div x-data="sidebarGroup('institution', {{ $isInstitutionGroup ? 'true' : 'false' }})" class="relative">
                 {{-- Collapsed: icon triggers dropright --}}
                 <div class="sidebar-group-header rounded-lg {{ $isInstitutionGroup ? 'group-active' : '' }}"
@@ -89,10 +85,6 @@
                 <div class="sidebar-children" x-show="open && !isIconOnly()" x-collapse>
                     <a href="{{ route('admin.institutions.index') }}"
                        class="{{ request()->routeIs('admin.institutions.*') ? 'active' : '' }}">Institutions</a>
-                    <a href="{{ route('admin.institution-type.index') }}"
-                       class="{{ request()->routeIs('admin.institution-type.*') ? 'active' : '' }}">Institution Types</a>
-                    <a href="{{ route('admin.institution-category.index') }}"
-                       class="{{ request()->routeIs('admin.institution-category.*') ? 'active' : '' }}">Institution Categories</a>
                     <a href="{{ route('admin.institution-profiles.index') }}"
                        class="{{ request()->routeIs('admin.institution-profiles.*') ? 'active' : '' }}">Institution Profiles</a>
                     <a href="{{ route('admin.institution-documents.index') }}"
@@ -117,8 +109,6 @@
                          class="sidebar-dropright" :style="`top:${droprightTop}px;left:${droprightLeft}px`">
                         <div class="sidebar-dropright-title">Institution Management</div>
                         <a href="{{ route('admin.institutions.index') }}" class="{{ request()->routeIs('admin.institutions.*') ? 'active' : '' }}">Institutions</a>
-                        <a href="{{ route('admin.institution-type.index') }}" class="{{ request()->routeIs('admin.institution-type.*') ? 'active' : '' }}">Institution Types</a>
-                        <a href="{{ route('admin.institution-category.index') }}" class="{{ request()->routeIs('admin.institution-category.*') ? 'active' : '' }}">Institution Categories</a>
                         <a href="{{ route('admin.institution-profiles.index') }}" class="{{ request()->routeIs('admin.institution-profiles.*') ? 'active' : '' }}">Institution Profiles</a>
                         <a href="{{ route('admin.institution-documents.index') }}" class="{{ request()->routeIs('admin.institution-documents.*') ? 'active' : '' }}">Institution Documents</a>
                         <a href="{{ route('admin.institution-programs.index') }}" class="{{ request()->routeIs('admin.institution-programs.*') ? 'active' : '' }}">Institution Programs</a>
@@ -137,8 +127,6 @@
         {{-- ── Academic Setup ── --}}
         @php $isAcademicSetupGroup = request()->routeIs('admin.faculties.*') || request()->routeIs('admin.programs.*') || request()->routeIs('admin.scholarships.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Academic Setup</p>
-
             <div x-data="sidebarGroup('academic-setup', {{ $isAcademicSetupGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isAcademicSetupGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
@@ -173,8 +161,6 @@
         {{-- ── Applications & Admissions ── --}}
         @php $isApplicationsGroup = request()->routeIs('admin.applications.*') || request()->routeIs('admin.admissions.*') || request()->routeIs('admin.application-status-logs.*') || request()->routeIs('admin.scholarship-applications.*') || request()->routeIs('admin.scholarship-cashbacks.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Applications & Admissions</p>
-
             <div x-data="sidebarGroup('applications-admissions', {{ $isApplicationsGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isApplicationsGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
@@ -211,39 +197,9 @@
             </div>
         </div>
 
-        {{-- ── Academic Management ── --}}
-        @php $isAcademicGroup = request()->routeIs('admin.affiliation.*') || request()->routeIs('admin.level.*') || request()->routeIs('admin.course.*'); @endphp
-        <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Academic</p>
-
-            <div x-data="sidebarGroup('academic', {{ $isAcademicGroup ? 'true' : 'false' }})" class="relative">
-                <div class="sidebar-group-header rounded-lg {{ $isAcademicGroup ? 'group-active' : '' }}"
-                     @click="isIconOnly() ? showDropright($event) : toggle()">
-                    <svg class="sidebar-item-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/></svg>
-                    <span class="sidebar-label flex-1">Academic Management</span>
-                    <svg class="sidebar-chevron sidebar-label" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" :class="open ? 'rotate-180' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
-                </div>
-                <div class="sidebar-children" x-show="open && !isIconOnly()" x-collapse>
-                    <a href="{{ route('admin.affiliation.index') }}" class="{{ request()->routeIs('admin.affiliation.*') ? 'active' : '' }}">Affiliations</a>
-                    <a href="{{ route('admin.level.index') }}" class="{{ request()->routeIs('admin.level.*') ? 'active' : '' }}">Levels</a>
-                    <a href="{{ route('admin.course.index') }}" class="{{ request()->routeIs('admin.course.*') ? 'active' : '' }}">Courses</a>
-                </div>
-                <template x-teleport="body">
-                    <div x-show="droprightOpen" x-cloak @click.outside="hideDropright()" class="sidebar-dropright" :style="`top:${droprightTop}px;left:${droprightLeft}px`">
-                        <div class="sidebar-dropright-title">Academic</div>
-                        <a href="{{ route('admin.affiliation.index') }}" class="{{ request()->routeIs('admin.affiliation.*') ? 'active' : '' }}">Affiliations</a>
-                        <a href="{{ route('admin.level.index') }}" class="{{ request()->routeIs('admin.level.*') ? 'active' : '' }}">Levels</a>
-                        <a href="{{ route('admin.course.index') }}" class="{{ request()->routeIs('admin.course.*') ? 'active' : '' }}">Courses</a>
-                    </div>
-                </template>
-            </div>
-        </div>
-
         {{-- ── Referral & Commission ── --}}
-        @php $isReferralGroup = request()->routeIs('admin.vendor.*') || request()->routeIs('admin.referral-agreements.*') || request()->routeIs('admin.referrals.*') || request()->routeIs('admin.commission-invoices.*') || request()->routeIs('admin.commission-payments.*'); @endphp
+        @php $isReferralGroup = request()->routeIs('admin.referral-agreements.*') || request()->routeIs('admin.referrals.*') || request()->routeIs('admin.commission-invoices.*') || request()->routeIs('admin.commission-payments.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Referral & Commission</p>
-
             <div x-data="sidebarGroup('referral', {{ $isReferralGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isReferralGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
@@ -252,7 +208,6 @@
                     <svg class="sidebar-chevron sidebar-label" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" :class="open ? 'rotate-180' : ''"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
                 </div>
                 <div class="sidebar-children" x-show="open && !isIconOnly()" x-collapse>
-                    <a href="{{ route('admin.vendor.index') }}" class="{{ request()->routeIs('admin.vendor.*') ? 'active' : '' }}">Vendors / Agents</a>
                     @auth('web')
                         <a href="{{ route('admin.referral-agreements.index') }}" class="{{ request()->routeIs('admin.referral-agreements.*') ? 'active' : '' }}">Referral Agreements</a>
                         <a href="{{ route('admin.referrals.index') }}" class="{{ request()->routeIs('admin.referrals.*') ? 'active' : '' }}">Referrals</a>
@@ -263,9 +218,8 @@
                 <template x-teleport="body">
                     <div x-show="droprightOpen" x-cloak @click.outside="hideDropright()" class="sidebar-dropright" :style="`top:${droprightTop}px;left:${droprightLeft}px`">
                         <div class="sidebar-dropright-title">Referral & Commission</div>
-                        <a href="{{ route('admin.vendor.index') }}" class="{{ request()->routeIs('admin.vendor.*') ? 'active' : '' }}">Vendors / Agents</a>
-                        @auth('web')
-                            <a href="{{ route('admin.referral-agreements.index') }}" class="{{ request()->routeIs('admin.referral-agreements.*') ? 'active' : '' }}">Referral Agreements</a>
+                    @auth('web')
+                        <a href="{{ route('admin.referral-agreements.index') }}" class="{{ request()->routeIs('admin.referral-agreements.*') ? 'active' : '' }}">Referral Agreements</a>
                             <a href="{{ route('admin.referrals.index') }}" class="{{ request()->routeIs('admin.referrals.*') ? 'active' : '' }}">Referrals</a>
                             <a href="{{ route('admin.commission-invoices.index') }}" class="{{ request()->routeIs('admin.commission-invoices.*') ? 'active' : '' }}">Commission Invoices</a>
                             <a href="{{ route('admin.commission-payments.index') }}" class="{{ request()->routeIs('admin.commission-payments.*') ? 'active' : '' }}">Commission Payments</a>
@@ -278,8 +232,6 @@
         {{-- ── Lead & Inquiry ── --}}
         @php $isLeadGroup = request()->routeIs('admin.inquiries.*') || request()->routeIs('admin.lead-notes.*') || request()->routeIs('admin.lead-follow-ups.*') || request()->routeIs('admin.counseling-sessions.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Lead & Inquiry</p>
-
             <div x-data="sidebarGroup('lead-inquiry', {{ $isLeadGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isLeadGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
@@ -312,8 +264,6 @@
         {{-- ── Student Activity ── --}}
         @php $isStudentActivityGroup = request()->routeIs('admin.student-favorite-institutions.*') || request()->routeIs('admin.student-compare-items.*') || request()->routeIs('admin.student-recommendations.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Student Activity</p>
-
             <div x-data="sidebarGroup('student-activity', {{ $isStudentActivityGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isStudentActivityGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
@@ -344,8 +294,6 @@
         {{-- ── Content Management ── --}}
         @php $isContentGroup = request()->routeIs('admin.posts.*') || request()->routeIs('admin.post-media.*') || request()->routeIs('admin.post-reactions.*') || request()->routeIs('admin.post-comments.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Content Management</p>
-
             <div x-data="sidebarGroup('content', {{ $isContentGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isContentGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
@@ -378,8 +326,6 @@
         {{-- ── Consultancy ── --}}
         @php $isConsultancyGroup = request()->routeIs('admin.consultancy-destinations.*') || request()->routeIs('admin.consultancy-services.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Consultancy</p>
-
             <div x-data="sidebarGroup('consultancy', {{ $isConsultancyGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isConsultancyGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
@@ -408,8 +354,6 @@
         {{-- ── Subscription & Promotion ── --}}
         @php $isSubscriptionGroup = request()->routeIs('admin.subscription-plans.*') || request()->routeIs('admin.institution-subscriptions.*') || request()->routeIs('admin.promotions.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Subscription & Promotion</p>
-
             <div x-data="sidebarGroup('subscription', {{ $isSubscriptionGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isSubscriptionGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
@@ -440,8 +384,6 @@
         {{-- ── Communication ── --}}
         @php $isCommunicationGroup = request()->routeIs('admin.conversations.*') || request()->routeIs('admin.messages.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">Communication</p>
-
             <div x-data="sidebarGroup('communication', {{ $isCommunicationGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isCommunicationGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">
@@ -470,8 +412,6 @@
         {{-- ── Settings ── --}}
         @php $isSettingsGroup = request()->routeIs('admin.bulk-import.*'); @endphp
         <div class="px-3 pt-2">
-            <p class="sidebar-section-label">System</p>
-
             <div x-data="sidebarGroup('settings', {{ $isSettingsGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isSettingsGroup ? 'group-active' : '' }}"
                      @click="isIconOnly() ? showDropright($event) : toggle()">

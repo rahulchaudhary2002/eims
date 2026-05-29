@@ -14,8 +14,7 @@ class HomeController extends Controller
     public function index()
     {
         $colleges = Institution::active()
-            ->with('institutionType')
-            ->ofType('college')
+            ->where('type', 'college')
             ->limit(6)
             ->get();
         $courses = Course::active()
