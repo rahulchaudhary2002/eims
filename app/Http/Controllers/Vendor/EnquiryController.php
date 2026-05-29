@@ -10,7 +10,7 @@ class EnquiryController extends Controller
 {
     public function index()
     {
-        $institution = session('current_institution');
+        $institution = Institution::find(session('current_institution_id'));
         $enquiries = Enquiry::where('institution_id', $institution->id)->latest()->paginate(10);
 
         return view('vendor.modules.enquiry.index', compact('enquiries'));
@@ -18,7 +18,7 @@ class EnquiryController extends Controller
 
     public function show($enquiryId)
     {
-        $institution = session('current_institution');
+        $institution = Institution::find(session('current_institution_id'));
         $enquiry = Enquiry::where('institution_id', $institution->id)->where('id', $enquiryId)->firstOrFail();
 
         if ($enquiry->status === 'pending') {
@@ -34,7 +34,7 @@ class EnquiryController extends Controller
             'reply_message' => 'required|string',
         ]);
 
-        $institution = session('current_institution');
+        $institution = Institution::find(session('current_institution_id'));
         $enquiry = Enquiry::where('institution_id', $institution->id)->where('id', $enquiryId)->firstOrFail();
 
         $enquiry->reply_message = $request->input('reply_message');

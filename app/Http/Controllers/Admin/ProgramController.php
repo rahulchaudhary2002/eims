@@ -3,104 +3,109 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Affiliation;
+use App\Http\Requests\Admin\StoreProgramRequest;
+use App\Http\Requests\Admin\UpdateProgramRequest;
+use App\Models\Faculty;
 use App\Models\Level;
 use App\Models\Program;
-use App\Models\ProgramCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ProgramController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $programs = Program::with(['level', 'affiliation', 'category'])->latest()->paginate(10);
+        $query = Program::with('faculty');
 
-        return view('admin.modules.program.index', compact('programs'));
+        if ($search = $request->input('search')) {
+            $query->where('name', 'ilike', '%' . $search . '%');
+        }
+        if ($facultyId = $request->input('faculty_id')) {
+            $query->where('faculty_id', $facultyId);
+        }
+        if ($level = $request->input('level')) {
+            $query->where('level', $level);
+        }
+        if ($request->filled('is_active')) {
+            $query->where('is_active', (bool) $request->input('is_active'));
+        }
+
+        $programs  = $query->orderBy('name')->paginate(20)->withQueryString();
+        $faculties = Faculty::orderBy('name')->get(['id', 'name']);
+        $levels    = Level::where('is_active', true)->orderBy('order')->orderBy('name')->pluck('name', 'name');
+
+        return view('admin.programs.index', compact('programs', 'faculties', 'levels'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(): View
     {
-        $levels = Level::active()->ordered()->get();
-        $affiliations = Affiliation::active()->get();
-        $categories = ProgramCategory::all();
+        $faculties = Faculty::where('is_active', true)->orderBy('name')->get(['id', 'name']);
+        $levels    = Level::where('is_active', true)->orderBy('order')->orderBy('name')->pluck('name', 'name');
 
-        return view('admin.modules.program.create', compact('levels', 'affiliations', 'categories'));
+        return view('admin.programs.create', compact('faculties', 'levels'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreProgramRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:programs,name',
-            'code' => 'nullable|string|max:50|unique:programs,code',
-            'description' => 'nullable|string',
-            'level_id' => 'required|exists:levels,id',
-            'affiliation_id' => 'nullable|exists:affiliations,id',
-            'category_id' => 'required|exists:program_categories,id',
-            'fee' => 'required|numeric|min:0',
-            'duration' => 'nullable|string|max:50',
-            'is_active' => 'boolean',
-        ]);
+        $data = $request->validated();
+        $data['slug']      = $data['slug'] ? Str::slug($data['slug']) : Str::slug($data['name']);
+        $data['is_active'] = $request->boolean('is_active', true);
 
-        Program::create([...$validated, 'is_active' => $request->is_active ?? false]);
+        $program = Program::create($data);
 
-        return redirect()->route('admin.program.index')
+        return redirect()->route('admin.programs.show', $program)
             ->with('success', 'Program created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Program $program): View
+    public function show(Program $program): View
     {
-        $levels = Level::active()->ordered()->get();
-        $affiliations = Affiliation::active()->get();
-        $categories = ProgramCategory::all();
-
-        return view('admin.modules.program.edit', compact('program', 'levels', 'affiliations', 'categories'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Program $program): RedirectResponse
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:programs,name,' . $program->id,
-            'code' => 'nullable|string|max:50|unique:programs,code,' . $program->id,
-            'description' => 'nullable|string',
-            'level_id' => 'required|exists:levels,id',
-            'affiliation_id' => 'nullable|exists:affiliations,id',
-            'category_id' => 'required|exists:program_categories,id',
-            'fee' => 'required|numeric|min:0',
-            'duration' => 'nullable|string|max:50',
-            'is_active' => 'boolean',
+        $program->load([
+            'faculty',
+            'institutionPrograms' => fn ($q) => $q->with('institution')->orderBy('created_at', 'desc'),
         ]);
 
-        $program->update([...$validated, 'is_active' => $request->is_active ?? false]);
+        return view('admin.programs.show', compact('program'));
+    }
 
-        return redirect()->route('admin.program.index')
+    public function edit(Program $program): View
+    {
+        $program->load('faculty');
+        $faculties = Faculty::where('is_active', true)->orderBy('name')->get(['id', 'name']);
+        $levels    = Level::where('is_active', true)->orderBy('order')->orderBy('name')->pluck('name', 'name');
+
+        return view('admin.programs.edit', compact('program', 'faculties', 'levels'));
+    }
+
+    public function update(UpdateProgramRequest $request, Program $program): RedirectResponse
+    {
+        $data = $request->validated();
+        $data['slug']      = $data['slug'] ? Str::slug($data['slug']) : Str::slug($data['name']);
+        $data['is_active'] = $request->boolean('is_active', true);
+
+        $program->update($data);
+
+        return redirect()->route('admin.programs.show', $program)
             ->with('success', 'Program updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Program $program): RedirectResponse
     {
         $program->delete();
 
-        return redirect()->route('admin.program.index')
+        return redirect()->route('admin.programs.index')
             ->with('success', 'Program deleted successfully.');
+    }
+
+    public function updateStatus(Request $request, Program $program): RedirectResponse
+    {
+        $request->validate([
+            'is_active' => 'required|boolean',
+        ]);
+
+        $program->update(['is_active' => $request->boolean('is_active')]);
+
+        return back()->with('success', 'Program status updated.');
     }
 }

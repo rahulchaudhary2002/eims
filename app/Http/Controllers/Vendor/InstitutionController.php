@@ -13,7 +13,7 @@ class InstitutionController extends Controller
 {
     public function profile()
     {
-        $current_institution = session()->get('current_institution');
+        $current_institution = Institution::find(session('current_institution_id'));
 
         if (!$current_institution) {
             return redirect()->route('vendor.dashboard')
@@ -23,7 +23,7 @@ class InstitutionController extends Controller
         $institution = Institution::where('id', $current_institution->id)->first();
 
         if (!$institution) {
-            session()->forget('current_institution');
+            session()->forget('current_institution_id');
             return redirect()->route('vendor.dashboard')
                 ->with('error', 'Selected institution not found.');
         }
@@ -33,7 +33,7 @@ class InstitutionController extends Controller
 
     public function edit()
     {
-        $current_institution = session()->get('current_institution');
+        $current_institution = Institution::find(session('current_institution_id'));
 
         if (!$current_institution) {
             return back()->with('error', 'Please select an institution first.');
@@ -47,7 +47,7 @@ class InstitutionController extends Controller
 
     public function update(Request $request)
     {
-        $current_institution = session()->get('current_institution');
+        $current_institution = Institution::find(session('current_institution_id'));
 
         if (!$current_institution) {
             return back()->with('error', 'Please select an institution first.');

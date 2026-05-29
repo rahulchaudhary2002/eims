@@ -2,185 +2,207 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ScopesForInstitution;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreInstitutionRequest;
+use App\Http\Requests\Admin\UpdateInstitutionRequest;
 use App\Models\Institution;
-use App\Models\InstitutionType;
-use App\Models\Affiliation;
-use App\Models\Program;
-use App\Models\InstitutionCategory;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class InstitutionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): View
+    use ScopesForInstitution;
+    public function index(Request $request): View
     {
-        $institutions = Institution::with(['affiliations', 'programs', 'institutionType'])->paginate(10);
-        return view('admin.modules.institution.index', compact('institutions'));
+        $query = Institution::query();
+
+        // Institution scope: non-super-admins only see their assigned institutions
+        $scope = $this->institutionScope();
+        if ($scope !== null) {
+            $query->whereHas('users', fn($q) => $q->where('users.id', auth('web')->id())->wherePivot('is_active', true));
+        }
+
+        // Search
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%");
+            });
+        }
+
+        // Filters
+        if ($type = $request->input('type')) {
+            $query->where('type', $type);
+        }
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+        if ($request->filled('is_verified')) {
+            $query->where('is_verified', (bool) $request->input('is_verified'));
+        }
+        if ($request->filled('is_featured')) {
+            $query->where('is_featured', (bool) $request->input('is_featured'));
+        }
+        if ($province = $request->input('province')) {
+            $query->where('province', $province);
+        }
+        if ($district = $request->input('district')) {
+            $query->where('district', $district);
+        }
+        if ($city = $request->input('city')) {
+            $query->where('city', $city);
+        }
+
+        $institutions = $query->orderBy('sort_order')->orderBy('name')->paginate(15)->withQueryString();
+
+        $types    = Institution::TYPES;
+        $statuses = Institution::STATUSES;
+
+        // Distinct values for location filters
+        $provinces = Institution::whereNotNull('province')->distinct()->orderBy('province')->pluck('province');
+        $districts = Institution::whereNotNull('district')->distinct()->orderBy('district')->pluck('district');
+        $cities    = Institution::whereNotNull('city')->distinct()->orderBy('city')->pluck('city');
+
+        return view('admin.modules.institution.index', compact(
+            'institutions', 'types', 'statuses', 'provinces', 'districts', 'cities'
+        ));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(): View
     {
-        $affiliations = Affiliation::active()->get();
-        $programs = Program::active()->get();
-        $institutionTypes = InstitutionType::orderBy('name')->get();
-        $institutionCategories = InstitutionCategory::orderBy('name')->get();
-        return view('admin.modules.institution.create', compact('affiliations', 'programs', 'institutionTypes', 'institutionCategories'));
+        $types    = Institution::TYPES;
+        $statuses = Institution::STATUSES;
+        $parents  = Institution::orderBy('name')->pluck('name', 'id');
+
+        return view('admin.modules.institution.create', compact('types', 'statuses', 'parents'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreInstitutionRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'nullable|string',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
-            'established_year' => 'nullable|integer|min:1800|max:' . (date('Y') + 1),
-            'type' => 'required|exists:institution_types,id',
-            'affiliations' => 'nullable|array',
-            'affiliations.*' => 'exists:affiliations,id',
-            'programs' => 'nullable|array',
-            'programs.*' => 'exists:programs,id',
-            'commissions' => 'nullable|array',
-            'commissions.*' => 'nullable|numeric',
-            'institution_category' => 'required|exists:institution_categories,id',
-            'is_active' => 'boolean',
-        ]);
+        $data = $request->validated();
 
-        $institution = Institution::create([
-            'name' => $validated['name'],
-            'address' => $validated['address'] ?? null,
-            'phone' => $validated['phone'] ?? null,
-            'email' => $validated['email'] ?? null,
-            'established_year' => $validated['established_year'] ?? null,
-            'institution_type_id' => $validated['type'],
-            'institution_category_id' => $validated['institution_category'],
-            'is_active' => $request->is_active ?? false
-        ]);
+        $data['is_verified'] = $request->boolean('is_verified');
+        $data['is_featured'] = $request->boolean('is_featured');
+        $data['sort_order']  = $data['sort_order'] ?? 0;
 
-        // Sync affiliations if provided
-        if ($request->has('affiliations')) {
-            $institution->affiliations()->sync($request->affiliations);
+        // Handle logo upload
+        if ($request->hasFile('logo')) {
+            $data['logo'] = $request->file('logo')->store('institutions/logos', 'public');
         }
 
-        // Sync programs if provided
-        if ($request->has('programs')) {
-            $syncData = [];
-
-            foreach ($request->programs as $index => $programId) {
-                $syncData[$programId] = [
-                    'commission_amount' => $request->commissions[$index] ?? 0
-                ];
-            }
-
-            $institution->programs()->sync($syncData);
+        // Handle cover image upload
+        if ($request->hasFile('cover_image')) {
+            $data['cover_image'] = $request->file('cover_image')->store('institutions/covers', 'public');
         }
 
-        return redirect()->route('admin.institution.index')
+        $institution = Institution::create($data);
+
+        return redirect()->route('admin.institutions.show', $institution)
             ->with('success', 'Institution created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Institution $institution): View
     {
-        $institution->load(['affiliations', 'programs', 'institutionType', 'category']);
+        $this->authorizeInstitutionAccess($institution);
+        $institution->load([
+            'users',
+            'profile',
+            'documents',
+            'scholarships' => fn ($q) => $q->with('institutionProgram.program')->latest(),
+            'applications' => fn ($q) => $q->with(['student', 'institutionProgram.program', 'scholarship'])->latest(),
+            'programs' => fn ($q) => $q->with('program.faculty')->orderBy('created_at', 'desc'),
+        ]);
+
         return view('admin.modules.institution.show', compact('institution'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Institution $institution): View
     {
-        $affiliations = Affiliation::active()->get();
-        $programs = Program::active()->get();
-        $institutionTypes = InstitutionType::orderBy('name')->get();
-        $institutionCategories = InstitutionCategory::orderBy('name')->get();
-        $institution->load(['affiliations', 'programs', 'institutionType', 'category']);
+        $this->authorizeInstitutionAccess($institution);
+        $types    = Institution::TYPES;
+        $statuses = Institution::STATUSES;
+        $parents  = Institution::where('id', '!=', $institution->id)->orderBy('name')->pluck('name', 'id');
 
-        return view('admin.modules.institution.edit', compact('institution', 'affiliations', 'programs', 'institutionTypes', 'institutionCategories'));
+        return view('admin.modules.institution.edit', compact('institution', 'types', 'statuses', 'parents'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Institution $institution): RedirectResponse
+    public function update(UpdateInstitutionRequest $request, Institution $institution): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'nullable|string',
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
-            'established_year' => 'nullable|integer|min:1800|max:' . (date('Y') + 1),
-            'type' => 'required|exists:institution_types,id',
-            'affiliations' => 'nullable|array',
-            'affiliations.*' => 'exists:affiliations,id',
-            'programs' => 'nullable|array',
-            'programs.*' => 'exists:programs,id',
-            'institution_category' => 'required|exists:institution_categories,id',
-            'is_active' => 'boolean',
-        ]);
+        $this->authorizeInstitutionAccess($institution);
+        $data = $request->validated();
 
-        $institution->update([
-            'name' => $validated['name'],
-            'address' => $validated['address'] ?? null,
-            'phone' => $validated['phone'] ?? null,
-            'email' => $validated['email'] ?? null,
-            'established_year' => $validated['established_year'] ?? null,
-            'institution_type_id' => $validated['type'],
-            'institution_category_id' => $validated['institution_category'],
-            'is_active' => $request->is_active ?? false
-        ]);
+        $data['is_verified'] = $request->boolean('is_verified');
+        $data['is_featured'] = $request->boolean('is_featured');
+        $data['sort_order']  = $data['sort_order'] ?? 0;
 
-        // Sync affiliations
-        if ($request->has('affiliations')) {
-            $institution->affiliations()->sync($request->affiliations);
-        } else {
-            $institution->affiliations()->detach();
-        }
-
-        // Sync programs
-        if ($request->has('programs')) {
-            $syncData = [];
-
-            foreach ($request->programs as $index => $programId) {
-                $syncData[$programId] = [
-                    'commission_amount' => $request->commissions[$index] ?? 0
-                ];
+        // Handle logo upload
+        if ($request->hasFile('logo')) {
+            if ($institution->logo) {
+                Storage::disk('public')->delete($institution->logo);
             }
-
-            $institution->programs()->sync($syncData);
+            $data['logo'] = $request->file('logo')->store('institutions/logos', 'public');
         } else {
-            $institution->programs()->detach();
+            unset($data['logo']);
         }
 
-        return redirect()->route('admin.institution.index')
+        // Handle cover image upload
+        if ($request->hasFile('cover_image')) {
+            if ($institution->cover_image) {
+                Storage::disk('public')->delete($institution->cover_image);
+            }
+            $data['cover_image'] = $request->file('cover_image')->store('institutions/covers', 'public');
+        } else {
+            unset($data['cover_image']);
+        }
+
+        $institution->update($data);
+
+        return redirect()->route('admin.institutions.show', $institution)
             ->with('success', 'Institution updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Institution $institution): RedirectResponse
     {
-        // Detach all relations before deleting
-        $institution->affiliations()->detach();
-        $institution->programs()->detach();
+        $this->authorizeInstitutionAccess($institution);
+        if ($institution->logo) {
+            Storage::disk('public')->delete($institution->logo);
+        }
+        if ($institution->cover_image) {
+            Storage::disk('public')->delete($institution->cover_image);
+        }
+
         $institution->delete();
 
-        return redirect()->route('admin.institution.index')
+        return redirect()->route('admin.institutions.index')
             ->with('success', 'Institution deleted successfully.');
+    }
+
+    private function authorizeInstitutionAccess(Institution $institution): void
+    {
+        $scope = $this->institutionScope();
+        if ($scope !== null) {
+            abort_unless(
+                $institution->users()->where('users.id', auth('web')->id())->wherePivot('is_active', true)->exists(),
+                403,
+                'You do not have access to this institution.'
+            );
+        }
+    }
+
+    public function updateStatus(Request $request, Institution $institution): RedirectResponse
+    {
+        $this->authorizeInstitutionAccess($institution);
+        $request->validate([
+            'status' => ['required', 'in:' . implode(',', array_keys(Institution::STATUSES))],
+        ]);
+
+        $institution->update(['status' => $request->status]);
+
+        return back()->with('success', 'Institution status updated.');
     }
 }

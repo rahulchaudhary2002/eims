@@ -27,7 +27,10 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             VendorSeeder::class,
             AffiliationSeeder::class,
+            FacultySeeder::class,
             InstitutionSeeder::class,
+            InstitutionUserSeeder::class,
+            StudentSeeder::class,
             CourseSeeder::class,
             AffiliationInstitutionSeeder::class,
             VendorInstitutionSeeder::class,
@@ -37,6 +40,10 @@ class DatabaseSeeder extends Seeder
             EnquirySeeder::class,
             ProgramSeeder::class,
             InstitutionProgramSeeder::class,
+            InstitutionProgramSubjectSeeder::class,
+            ScholarshipSeeder::class,
+            ApplicationSeeder::class,
+            AdmissionSeeder::class,
         ]);
     }
 }

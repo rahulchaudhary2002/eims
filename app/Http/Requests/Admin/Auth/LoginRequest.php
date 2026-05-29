@@ -52,7 +52,7 @@ class LoginRequest extends FormRequest
             ? ['email' => $username, 'password' => $this->string('password')]
             : ['phone' => $username, 'password' => $this->string('password')];
 
-        if (! Auth::guard('admin')->attempt($credentials, $this->boolean('remember'))) {
+        if (! Auth::guard('web')->attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

@@ -365,14 +365,14 @@ class BulkModuleImportController extends Controller
             $institution = Institution::updateOrCreate(
                 ['name' => $name],
                 [
+                    'slug' => Str::slug($name),
+                    'type' => $institutionType->slug,
                     'address' => $this->nullableString($row['address'] ?? ''),
                     'phone' => $this->nullableString($row['phone'] ?? ''),
                     'email' => $this->nullableString($row['email'] ?? ''),
                     'website' => $this->nullableString($row['website'] ?? ''),
                     'established_year' => $this->nullableInteger($row['established_year'] ?? ''),
-                    'institution_type_id' => $institutionType->id,
-                    'institution_category_id' => $institutionCategory->id,
-                    'is_active' => $this->parseBoolean($row['is_active'] ?? null, true),
+                    'status' => $this->parseBoolean($row['is_active'] ?? null, true) ? 'active' : 'inactive',
                 ]
             );
 

@@ -12,7 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'auth' => \App\Http\Middleware\Authenticate::class,
+            'auth'                 => \App\Http\Middleware\Authenticate::class,
+            'current.institution'  => \App\Http\Middleware\EnsureCurrentInstitution::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

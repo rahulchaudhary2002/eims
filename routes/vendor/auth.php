@@ -12,11 +12,12 @@ use App\Http\Controllers\Vendor\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('institution')->name('vendor.')->group(function () {
-    Route::middleware('guest:vendor')->group(function () {
+    Route::middleware('guest:web')->group(function () {
 
+        Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login.form');
         Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
-        Route::post('register', [RegisteredUserController::class, 'store']) ->name('register');
+        Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
 
         Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
             ->name('password.request');
@@ -31,7 +32,7 @@ Route::prefix('institution')->name('vendor.')->group(function () {
             ->name('password.store');
     });
 
-    Route::middleware('auth:vendor')->group(function () {
+    Route::middleware('auth:web')->group(function () {
         Route::get('verify-email', EmailVerificationPromptController::class)
             ->name('verification.notice');
 

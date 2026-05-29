@@ -10,7 +10,7 @@
         title="Dashboard"
         subtitle="Welcome back - here's what's happening today.">
         <x-slot:actions>
-            <a href="{{ route('admin.institution.create') }}" class="btn btn-primary btn-sm">
+            <a href="{{ route('admin.institutions.create') }}" class="btn btn-primary btn-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
                 Add Institution
             </a>
@@ -65,7 +65,7 @@
     <div class="eims-card">
         <div class="eims-card-header">
             <h2 class="eims-card-title">Institution Types Overview</h2>
-            <a href="{{ route('admin.institution.index') }}" class="text-sm text-primary-600 font-medium hover:underline">View All Institutions</a>
+            <a href="{{ route('admin.institutions.index') }}" class="text-sm text-primary-600 font-medium hover:underline">View All Institutions</a>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             @forelse($institutionTypes as $type)
@@ -94,8 +94,8 @@
     {{-- ── Recent Applications ── --}}
     <div class="eims-card p-0 overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-            <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Recent Admission Applications</h2>
-            <a href="{{ route('admin.admission.reward.index') }}" class="text-sm text-primary-600 font-medium hover:underline">View All</a>
+            <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Recent Applications</h2>
+            <a href="{{ route('admin.applications.index') }}" class="text-sm text-primary-600 font-medium hover:underline">View All</a>
         </div>
         <div class="eims-table-wrapper">
             <table class="eims-table">
@@ -111,13 +111,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($recentAdmissionApplications as $application)
+                    @forelse($recentApplications as $application)
                     <tr>
-                        <td class="font-medium text-slate-800">{{ $application->full_name ?? '-' }}</td>
-                        <td class="text-slate-600">{{ $application->admission->institution->name ?? '-' }}</td>
-                        <td class="text-slate-600">{{ $application->email ?? '-' }}</td>
-                        <td class="hidden md:table-cell text-slate-600">{{ $application->phone ?? '-' }}</td>
-                        <td class="hidden lg:table-cell text-slate-600">{{ $application->grade ?? ($application->course->name ?? '-') }}</td>
+                        <td class="font-medium text-slate-800">{{ $application->student->name ?? $application->student->full_name ?? '-' }}</td>
+                        <td class="text-slate-600">{{ $application->institution->name ?? '-' }}</td>
+                        <td class="text-slate-600">{{ $application->student->email ?? '-' }}</td>
+                        <td class="hidden md:table-cell text-slate-600">{{ $application->student->phone ?? '-' }}</td>
+                        <td class="hidden lg:table-cell text-slate-600">{{ $application->institutionProgram->program->name ?? $application->institutionProgram->title ?? '-' }}</td>
                         <td class="hidden sm:table-cell text-slate-500 text-xs">{{ $application->created_at->format('M d, Y') }}</td>
                         <td><x-admin.status-badge :status="$application->status ?? 'pending'" /></td>
                     </tr>

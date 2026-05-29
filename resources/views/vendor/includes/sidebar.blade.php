@@ -31,16 +31,6 @@ $sidebarOpen = session('sidebarOpen', true);
             </a>
         </li>
 
-        {{-- Admissions --}}
-        <li class="text-white font-semibold text-sm">
-            <a href="{{ route('vendor.admission.index') }}"
-                class="flex items-center px-4 py-3 h-12 transition-all duration-300 border-l-4
-                {{ request()->routeIs('vendor.admission.*') ? 'bg-[rgba(255,255,255,0.1)] border-success' : 'border-transparent hover:bg-[rgba(255,255,255,0.1)] hover:border-success' }}">
-                <x-lucide-graduation-cap class="w-5 h-5 mr-2" />
-                <span>{{ $sidebarOpen ? 'Admissions' : '' }}</span>
-            </a>
-        </li>
-
         {{-- Events --}}
         <li class="text-white font-semibold text-sm">
             <a href="{{ route('vendor.event.index') }}"
@@ -51,14 +41,5 @@ $sidebarOpen = session('sidebarOpen', true);
             </a>
         </li>
 
-        {{-- Admission Commission --}}
-        <li class="text-white font-semibold text-sm">
-            <a href="{{ route('vendor.admission-commission.index') }}"
-                class="flex items-center px-4 py-3 h-12 transition-all duration-300 border-l-4
-                {{ request()->routeIs('vendor.admission-commission.*') ? 'bg-[rgba(255,255,255,0.1)] border-success' : 'border-transparent hover:bg-[rgba(255,255,255,0.1)] hover:border-success' }}">
-                <x-lucide-percent class="w-5 h-5 mr-2" />
-                <span>{{ $sidebarOpen ? 'Admission Commission' : '' }}</span>
-            </a>
-        </li>
     </ul>
 </div>

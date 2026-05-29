@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ScopesForInstitution;
 use App\Http\Controllers\Controller;
 use App\Models\Institution;
 use App\Models\Vendor;
@@ -12,12 +13,20 @@ use Illuminate\Support\Facades\Hash;
 
 class VendorController extends Controller
 {
+    use ScopesForInstitution;
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $vendors = Vendor::paginate(10);
+        $query = Vendor::query();
+
+        $scope = $this->institutionScope();
+        if ($scope !== null) {
+            $query->whereHas('institutions', fn($q) => $q->where('institutions.id', $scope));
+        }
+
+        $vendors = $query->paginate(10);
         return view('admin.modules.vendor.index', compact('vendors'));
     }
 
@@ -26,7 +35,12 @@ class VendorController extends Controller
      */
     public function create(): View
     {
-        $institutions = Institution::active()->with('institutionType')->get();
+        $scope = $this->institutionScope();
+        $institutionsQuery = Institution::active()->with('institutionType');
+        if ($scope !== null) {
+            $institutionsQuery->where('id', $scope);
+        }
+        $institutions = $institutionsQuery->get();
         return view('admin.modules.vendor.create', compact('institutions'));
     }
 
@@ -66,6 +80,7 @@ class VendorController extends Controller
      */
     public function show(Vendor $vendor): View
     {
+        $this->authorizeVendorAccess($vendor);
         $vendor->load('institutions.institutionType');
         return view('admin.modules.vendor.show', compact('vendor'));
     }
@@ -75,7 +90,13 @@ class VendorController extends Controller
      */
     public function edit(Vendor $vendor): View
     {
-        $institutions = Institution::active()->with('institutionType')->get();
+        $this->authorizeVendorAccess($vendor);
+        $scope = $this->institutionScope();
+        $institutionsQuery = Institution::active()->with('institutionType');
+        if ($scope !== null) {
+            $institutionsQuery->where('id', $scope);
+        }
+        $institutions = $institutionsQuery->get();
         $vendor->load('institutions.institutionType');
 
         return view('admin.modules.vendor.edit', compact('vendor', 'institutions'));
@@ -86,6 +107,7 @@ class VendorController extends Controller
      */
     public function update(Request $request, Vendor $vendor): RedirectResponse
     {
+        $this->authorizeVendorAccess($vendor);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:vendors,email,' . $vendor->id,
@@ -123,8 +145,21 @@ class VendorController extends Controller
      */
     public function destroy(Vendor $vendor): RedirectResponse
     {
+        $this->authorizeVendorAccess($vendor);
         $vendor->delete();
 
         return redirect()->route('admin.vendor.index')->with('success', 'Vendor deleted successfully.');
+    }
+
+    private function authorizeVendorAccess(Vendor $vendor): void
+    {
+        $scope = $this->institutionScope();
+        if ($scope !== null) {
+            abort_unless(
+                $vendor->institutions()->where('institutions.id', $scope)->exists(),
+                403,
+                'You do not have access to this vendor.'
+            );
+        }
     }
 }

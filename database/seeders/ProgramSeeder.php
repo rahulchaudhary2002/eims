@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Program;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class ProgramSeeder extends Seeder
@@ -13,40 +13,43 @@ class ProgramSeeder extends Seeder
      */
     public function run(): void
     {
-        $program = Program::create([
+        $program = Program::updateOrCreate(['slug' => 'bachelor-in-computer-application'], [
+            'faculty_id' => 1,
+            'level' => 'Bachelor',
             'name' => 'Bachelor In Computer Application',
-            'slug' => 'bachelor-in-computer-application',
-            'level_id' => 1,
-            'affiliation_id' => 1,
-            'category_id' => 1,
-            'duration' => '3 years',
-            'fee' => 550000,
+            'description' => 'Undergraduate program focused on software, databases, networks, and application development.',
             'is_active' => true,
         ]);
-        $program->courses()->attach([1, 2, 5, 9]);
+        $this->syncCourses($program->id, [1, 2, 5, 9]);
 
-        $program = Program::create([
+        $program = Program::updateOrCreate(['slug' => 'bachelor-in-business-administration'], [
+            'faculty_id' => 2,
+            'level' => 'Bachelor',
             'name' => 'Bachelor In Business Administration',
-            'slug' => 'bachelor-in-business-administration',
-            'level_id' => 1,
-            'affiliation_id' => 1,
-            'category_id' => 1,
-            'duration' => '3 years',
-            'fee' => 350000,
+            'description' => 'Undergraduate program in management, accounting, marketing, and business operations.',
             'is_active' => true,
         ]);
-        $program->courses()->attach([3, 4, 5, 8]);
+        $this->syncCourses($program->id, [3, 4, 5, 8]);
 
-        $program = Program::create([
+        $program = Program::updateOrCreate(['slug' => 'bachelor-in-commerce'], [
+            'faculty_id' => 2,
+            'level' => 'Bachelor',
             'name' => 'Bachelor In Commerce',
-            'slug' => 'bachelor-in-commerce',
-            'level_id' => 1,
-            'affiliation_id' => 1,
-            'category_id' => 1,
-            'duration' => '3 years',
-            'fee' => 400000,
+            'description' => 'Undergraduate commerce program covering finance, accounting, economics, and business law.',
             'is_active' => true,
         ]);
-        $program->courses()->attach([3, 4, 6, 7]);
+        $this->syncCourses($program->id, [3, 4, 6, 7]);
+    }
+
+    private function syncCourses(int $programId, array $courseIds): void
+    {
+        DB::table('course_program')->where('program_id', $programId)->delete();
+
+        DB::table('course_program')->insert(array_map(fn($courseId) => [
+            'course_id' => $courseId,
+            'program_id' => $programId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ], $courseIds));
     }
 }
