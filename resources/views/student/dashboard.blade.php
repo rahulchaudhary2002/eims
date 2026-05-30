@@ -1,21 +1,10 @@
-@extends('website.layouts.app')
+@extends('layouts.student')
 
-@section('meta-title', 'My Dashboard — ' . config('app.name'))
+@section('title', 'My Dashboard')
 
 @section('content')
 
-@php
-    $profile = $student->profile;
-    $profileFields = [
-        $student->name, $student->email, $student->phone,
-        $student->date_of_birth, $student->gender, $student->avatar,
-        $profile?->address, $profile?->province,
-        $profile?->career_interests, $profile?->preferred_faculties,
-    ];
-    $filled  = count(array_filter($profileFields, fn($v) => !empty($v)));
-    $total   = count($profileFields);
-    $percent = (int) round(($filled / $total) * 100);
-@endphp
+@php $profile = $student->profile; @endphp
 
 {{-- Hero --}}
 <section class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] pt-[150px] pb-20 text-white">
@@ -42,11 +31,11 @@
                 </div>
             </div>
             <div class="flex items-center gap-3 flex-shrink-0">
-                <a href="{{ route('website.applications.create') }}"
+                <a href="{{ route('student.applications.create') }}"
                    class="inline-flex items-center gap-2 bg-white text-[#2c5aa0] font-bold px-5 py-2.5 rounded-xl hover:bg-gray-100 transition no-underline text-sm">
                     <i class="fas fa-paper-plane"></i> Apply Now
                 </a>
-                <a href="{{ route('profile.edit') }}"
+                <a href="{{ route('student.profile.index') }}"
                    class="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 border border-white/20 text-white font-semibold px-5 py-2.5 rounded-xl transition no-underline text-sm">
                     <i class="fas fa-pen"></i> Edit Profile
                 </a>
@@ -91,7 +80,7 @@
                         <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
                             <i class="fas fa-file-alt text-[#4299e1]"></i> My Applications
                         </h2>
-                        <a href="{{ route('website.applications.create') }}"
+                        <a href="{{ route('student.applications.create') }}"
                            class="text-sm text-[#4299e1] hover:text-[#2c5aa0] font-semibold transition no-underline flex items-center gap-1">
                             <i class="fas fa-plus text-xs"></i> New Application
                         </a>
@@ -239,7 +228,7 @@
                                 <div class="h-2.5 rounded-full bg-gradient-to-r from-[#4299e1] to-[#2c5aa0]"
                                      style="width: {{ $percent }}%"></div>
                             </div>
-                            <a href="{{ route('profile.edit') }}"
+                            <a href="{{ route('student.profile.index') }}"
                                class="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 border-2 border-[#4299e1] text-[#2c5aa0] text-xs font-semibold rounded-xl hover:bg-[#4299e1]/10 transition no-underline">
                                 <i class="fas fa-pen text-[10px]"></i>
                                 {{ $percent < 100 ? 'Complete' : 'Edit Profile' }}
@@ -252,10 +241,10 @@
                         <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Quick Access</h3>
                         <div class="grid grid-cols-2 gap-2">
                             @foreach ([
-                                ['route' => 'website.applications.create', 'icon' => 'fa-paper-plane',  'label' => 'Apply',        'primary' => true],
-                                ['route' => 'website.inquiry.create',      'icon' => 'fa-paper-plane',  'label' => 'Inquiry',      'primary' => false],
-                                ['route' => 'website.compare.index',       'icon' => 'fa-balance-scale','label' => 'Compare',      'primary' => false],
-                                ['route' => 'website.scholarships.index',  'icon' => 'fa-award',        'label' => 'Scholarship',  'primary' => false],
+                                ['route' => 'student.applications.create',          'icon' => 'fa-paper-plane',  'label' => 'Apply',        'primary' => true],
+                                ['route' => 'student.inquiries.create',              'icon' => 'fa-question-circle','label' => 'Inquiry',    'primary' => false],
+                                ['route' => 'student.compare.index',                 'icon' => 'fa-balance-scale','label' => 'Compare',      'primary' => false],
+                                ['route' => 'student.scholarship-applications.index','icon' => 'fa-award',        'label' => 'Scholarship',  'primary' => false],
                             ] as $action)
                                 <a href="{{ route($action['route']) }}"
                                    class="flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl text-xs font-semibold transition no-underline
