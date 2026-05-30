@@ -74,7 +74,7 @@
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">Phone</dt>
-                        <dd class="mt-1 text-slate-700">{{ $student->phone ?: '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $student->phone ?: '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">Gender</dt>
@@ -82,14 +82,14 @@
                             @if($student->gender)
                                 <span class="badge badge-blue capitalize">{{ $student->gender }}</span>
                             @else
-                                <span class="text-slate-400 text-sm">—</span>
+                                <span class="text-slate-400 text-sm">-</span>
                             @endif
                         </dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">Date of Birth</dt>
                         <dd class="mt-1 text-slate-700 text-sm">
-                            {{ $student->date_of_birth ? $student->date_of_birth->format('d M Y') : '—' }}
+                            {{ $student->date_of_birth ? $student->date_of_birth->format('d M Y') : '-' }}
                         </dd>
                     </div>
                     <div>
@@ -195,7 +195,7 @@
             <div class="space-y-2">
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Guardian</p>
                 @if($student->profile->guardian_name || $student->profile->guardian_phone)
-                    <p class="text-slate-800 font-medium">{{ $student->profile->guardian_name ?? '—' }}</p>
+                    <p class="text-slate-800 font-medium">{{ $student->profile->guardian_name ?? '-' }}</p>
                     <p class="text-slate-500">{{ $student->profile->guardian_phone ?? '' }}</p>
                 @else
                     <p class="text-slate-400 italic">Not specified</p>
@@ -323,12 +323,12 @@
                                 {{ \App\Models\StudentAcademicRecord::LEVELS[$record->level] ?? $record->level }}
                             </span>
                         </td>
-                        <td class="text-sm">{{ $record->institution_name ?? '—' }}</td>
+                        <td class="text-sm">{{ $record->institution_name ?? '-' }}</td>
                         <td class="text-sm">
-                            {{ \App\Models\StudentAcademicRecord::BOARDS[$record->board] ?? ($record->board ?? '—') }}
+                            {{ \App\Models\StudentAcademicRecord::BOARDS[$record->board] ?? ($record->board ?? '-') }}
                         </td>
-                        <td class="text-sm">{{ $record->faculty ?? '—' }}</td>
-                        <td class="text-sm">{{ $record->passed_year ?? '—' }}</td>
+                        <td class="text-sm">{{ $record->faculty ?? '-' }}</td>
+                        <td class="text-sm">{{ $record->passed_year ?? '-' }}</td>
                         <td class="text-sm">
                             @if($record->gpa !== null)
                                 {{ number_format($record->gpa, 2) }} GPA
@@ -338,7 +338,7 @@
                                 {{ number_format($record->percentage, 2) }}%
                             @endif
                             @if($record->gpa === null && $record->percentage === null)
-                                <span class="text-slate-300">—</span>
+                                <span class="text-slate-300">-</span>
                             @endif
                         </td>
                         <td class="text-center text-sm">
@@ -348,7 +348,7 @@
                             @if($docCount)
                                 <span class="badge badge-blue">{{ $docCount }} file{{ $docCount > 1 ? 's' : '' }}</span>
                             @else
-                                <span class="text-slate-300">—</span>
+                                <span class="text-slate-300">-</span>
                             @endif
                         </td>
                         <td>
@@ -576,9 +576,9 @@
                     <tbody>
                         @foreach($student->scholarshipApplications->take(5) as $sa)
                             <tr>
-                                <td class="font-medium text-sm">{{ $sa->scholarship->title ?? '—' }}</td>
-                                <td class="text-sm text-slate-500">{{ $sa->scholarship?->institution?->name ?? '—' }}</td>
-                                <td class="font-mono text-sm">{{ $sa->approved_amount !== null ? number_format((float) $sa->approved_amount, 2) : '—' }}</td>
+                                <td class="font-medium text-sm">{{ $sa->scholarship->title ?? '-' }}</td>
+                                <td class="text-sm text-slate-500">{{ $sa->scholarship?->institution?->name ?? '-' }}</td>
+                                <td class="font-mono text-sm">{{ $sa->approved_amount !== null ? number_format((float) $sa->approved_amount, 2) : '-' }}</td>
                                 <td><span class="badge">{{ \App\Models\ScholarshipApplication::STATUSES[$sa->status] ?? $sa->status }}</span></td>
                                 <td>
                                     <div class="flex justify-center gap-1">
@@ -641,13 +641,13 @@
                                             {{ $cashback->commissionInvoice->invoice_number }}
                                         </a>
                                     @else
-                                        —
+                                        -
                                     @endif
                                 </td>
                                 <td class="font-mono text-sm">{{ number_format((float) $cashback->commission_received_amount, 2) }}</td>
                                 <td class="font-mono text-sm">{{ number_format((float) $cashback->cashback_percentage, 4) }}%</td>
                                 <td class="font-mono text-sm font-semibold text-green-700">{{ number_format((float) $cashback->cashback_amount, 2) }}</td>
-                                <td class="text-xs text-slate-500">{{ $cashback->paid_at?->format('d M Y') ?? '—' }}</td>
+                                <td class="text-xs text-slate-500">{{ $cashback->paid_at?->format('d M Y') ?? '-' }}</td>
                                 <td><span class="badge">{{ \App\Models\ScholarshipCashback::STATUSES[$cashback->status] ?? $cashback->status }}</span></td>
                                 <td>
                                     <div class="flex justify-center gap-1">
@@ -706,7 +706,7 @@
                                             {{ $fav->institution->name }}
                                         </a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td class="text-xs text-slate-500">{{ $fav->created_at->format('d M Y') }}</td>
@@ -771,14 +771,14 @@
                                             {{ $item->institution->name }}
                                         </a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td class="text-sm text-slate-600">
                                     @if($item->institutionProgram)
-                                        {{ $item->institutionProgram->title ?: ($item->institutionProgram->program->name ?? '—') }}
+                                        {{ $item->institutionProgram->title ?: ($item->institutionProgram->program->name ?? '-') }}
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td class="text-xs text-slate-500">{{ $item->created_at->format('d M Y') }}</td>
@@ -842,11 +842,11 @@
                                     @if($rec->institution)
                                         <a href="{{ route('admin.institutions.show', $rec->institution) }}" class="font-medium text-blue-600 hover:underline text-sm">{{ $rec->institution->name }}</a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td class="text-sm text-slate-600">
-                                    {{ $rec->institutionProgram?->title ?: ($rec->institutionProgram?->program?->name ?? '—') }}
+                                    {{ $rec->institutionProgram?->title ?: ($rec->institutionProgram?->program?->name ?? '-') }}
                                 </td>
                                 <td>
                                     @if($rec->score !== null)
@@ -854,7 +854,7 @@
                                             {{ number_format((float) $rec->score, 2) }}
                                         </span>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td>
@@ -915,7 +915,7 @@
                                             {{ $follow->institution->name }}
                                         </a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td class="text-xs text-slate-500">{{ $follow->created_at->format('d M Y') }}</td>
@@ -978,8 +978,8 @@
                                 <td class="text-sm {{ $cs->scheduled_at->isPast() && $cs->status === 'scheduled' ? 'text-red-600 font-medium' : 'text-slate-700' }}">
                                     {{ $cs->scheduled_at->format('d M Y, H:i') }}
                                 </td>
-                                <td class="text-sm">{{ $cs->institution->name ?? '—' }}</td>
-                                <td class="text-sm">{{ $cs->counselor->name ?? '—' }}</td>
+                                <td class="text-sm">{{ $cs->institution->name ?? '-' }}</td>
+                                <td class="text-sm">{{ $cs->counselor->name ?? '-' }}</td>
                                 <td class="text-sm">{{ \App\Models\CounselingSession::MODES[$cs->mode] ?? $cs->mode }}</td>
                                 <td><span class="badge">{{ \App\Models\CounselingSession::STATUSES[$cs->status] ?? $cs->status }}</span></td>
                                 <td>
@@ -1038,7 +1038,7 @@
                                     <span class="font-semibold text-amber-500">{{ $review->rating }}</span>
                                     <span class="text-slate-400 text-xs">/ 5</span>
                                 </td>
-                                <td class="text-sm max-w-xs truncate text-slate-600">{{ $review->review ? \Illuminate\Support\Str::limit($review->review, 50) : '—' }}</td>
+                                <td class="text-sm max-w-xs truncate text-slate-600">{{ $review->review ? \Illuminate\Support\Str::limit($review->review, 50) : '-' }}</td>
                                 <td>
                                     @if($review->is_approved)
                                         <span class="badge badge-success">Approved</span>
@@ -1100,7 +1100,7 @@
                                     @if($conv->institution)
                                         <a href="{{ route('admin.institutions.show', $conv->institution) }}" class="text-blue-600 hover:underline">{{ $conv->institution->name }}</a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td>

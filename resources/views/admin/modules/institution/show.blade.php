@@ -91,11 +91,11 @@
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">Code</dt>
-                        <dd class="mt-1 text-slate-600 font-mono">{{ $institution->code ?: '—' }}</dd>
+                        <dd class="mt-1 text-slate-600 font-mono">{{ $institution->code ?: '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">Established</dt>
-                        <dd class="mt-1 text-slate-700">{{ $institution->established_year ?: '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $institution->established_year ?: '-' }}</dd>
                     </div>
                     @if($institution->parent_id)
                     <div>
@@ -165,10 +165,10 @@
                     <h3 class="text-base font-semibold text-slate-800">Location</h3>
                 </div>
                 <dl class="grid grid-cols-2 gap-4">
-                    <div><dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">Country</dt><dd class="mt-1 text-slate-700 text-sm">{{ $institution->country ?: '—' }}</dd></div>
-                    <div><dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">Province</dt><dd class="mt-1 text-slate-700 text-sm">{{ $institution->province ?: '—' }}</dd></div>
-                    <div><dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">District</dt><dd class="mt-1 text-slate-700 text-sm">{{ $institution->district ?: '—' }}</dd></div>
-                    <div><dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">City</dt><dd class="mt-1 text-slate-700 text-sm">{{ $institution->city ?: '—' }}</dd></div>
+                    <div><dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">Country</dt><dd class="mt-1 text-slate-700 text-sm">{{ $institution->country ?: '-' }}</dd></div>
+                    <div><dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">Province</dt><dd class="mt-1 text-slate-700 text-sm">{{ $institution->province ?: '-' }}</dd></div>
+                    <div><dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">District</dt><dd class="mt-1 text-slate-700 text-sm">{{ $institution->district ?: '-' }}</dd></div>
+                    <div><dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">City</dt><dd class="mt-1 text-slate-700 text-sm">{{ $institution->city ?: '-' }}</dd></div>
                     @if($institution->address)
                     <div class="col-span-2"><dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">Address</dt><dd class="mt-1 text-slate-700 text-sm">{{ $institution->address }}</dd></div>
                     @endif
@@ -309,10 +309,10 @@
                                 </div>
                             </div>
                         </td>
-                        <td>{{ \App\Models\UserInstitution::ROLES[$usr->pivot->role_name] ?? $usr->pivot->role_name ?? '—' }}</td>
-                        <td>{{ $usr->pivot->position ?: '—' }}</td>
+                        <td>{{ \App\Models\UserInstitution::ROLES[$usr->pivot->role_name] ?? $usr->pivot->role_name ?? '-' }}</td>
+                        <td>{{ $usr->pivot->position ?: '-' }}</td>
                         <td class="text-sm text-slate-500">
-                            {{ $usr->pivot->joined_at ? \Carbon\Carbon::parse($usr->pivot->joined_at)->format('d M Y') : '—' }}
+                            {{ $usr->pivot->joined_at ? \Carbon\Carbon::parse($usr->pivot->joined_at)->format('d M Y') : '-' }}
                         </td>
                         <td class="text-center">
                             @if($usr->pivot->is_active)
@@ -325,7 +325,7 @@
                             @if($usr->pivot->is_primary)
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-500 mx-auto" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd"/></svg>
                             @else
-                                <span class="text-slate-300">—</span>
+                                <span class="text-slate-300">-</span>
                             @endif
                         </td>
                     </tr>
@@ -539,15 +539,15 @@
                         @foreach($institution->programs as $ip)
                         <tr>
                             <td>
-                                <div class="font-medium text-slate-800 text-sm">{{ $ip->program->name ?? '—' }}</div>
+                                <div class="font-medium text-slate-800 text-sm">{{ $ip->program->name ?? '-' }}</div>
                                 @if($ip->program?->level)
                                     <span class="badge badge-blue text-xs">{{ $ip->program->level }}</span>
                                 @endif
                             </td>
-                            <td class="text-sm text-slate-600 max-w-xs truncate">{{ $ip->title ?? '—' }}</td>
-                            <td class="text-sm text-slate-700">{{ $ip->total_fee !== null ? number_format($ip->total_fee, 2) : '—' }}</td>
+                            <td class="text-sm text-slate-600 max-w-xs truncate">{{ $ip->title ?? '-' }}</td>
+                            <td class="text-sm text-slate-700">{{ $ip->total_fee !== null ? number_format($ip->total_fee, 2) : '-' }}</td>
                             <td class="text-sm text-slate-600">
-                                {{ $ip->available_seats !== null ? $ip->available_seats . ' / ' . ($ip->total_seats ?? '?') : '—' }}
+                                {{ $ip->available_seats !== null ? $ip->available_seats . ' / ' . ($ip->total_seats ?? '?') : '-' }}
                             </td>
                             <td>
                                 @php $c = match($ip->status) { 'open'=>'green','upcoming'=>'blue','suspended'=>'orange',default=>'red' }; @endphp
@@ -759,7 +759,7 @@
                                 <td class="font-mono text-sm">{{ number_format((float) $agreement->student_cashback_percentage, 4) }}%</td>
                                 <td class="font-mono text-sm">{{ number_format((float) $agreement->platform_revenue_percentage, 4) }}%</td>
                                 <td class="text-xs text-slate-500">
-                                    {{ $agreement->start_date?->format('d M Y') ?? '—' }} – {{ $agreement->end_date?->format('d M Y') ?? '—' }}
+                                    {{ $agreement->start_date?->format('d M Y') ?? '-' }} – {{ $agreement->end_date?->format('d M Y') ?? '-' }}
                                 </td>
                                 <td><span class="badge">{{ \App\Models\ReferralAgreement::STATUSES[$agreement->status] ?? $agreement->status }}</span></td>
                                 <td>
@@ -827,10 +827,10 @@
                                         {{ $referral->referral_number }}
                                     </a>
                                 </td>
-                                <td class="text-sm">{{ $referral->student->name ?? '—' }}</td>
-                                <td class="text-sm">{{ $referral->referredBy->name ?? '—' }}</td>
-                                <td class="text-xs text-slate-500">{{ $referral->referred_at?->format('d M Y, H:i') ?? '—' }}</td>
-                                <td class="text-xs text-slate-500">{{ $referral->viewed_at?->format('d M Y, H:i') ?? '—' }}</td>
+                                <td class="text-sm">{{ $referral->student->name ?? '-' }}</td>
+                                <td class="text-sm">{{ $referral->referredBy->name ?? '-' }}</td>
+                                <td class="text-xs text-slate-500">{{ $referral->referred_at?->format('d M Y, H:i') ?? '-' }}</td>
+                                <td class="text-xs text-slate-500">{{ $referral->viewed_at?->format('d M Y, H:i') ?? '-' }}</td>
                                 <td><span class="badge">{{ \App\Models\Referral::STATUSES[$referral->status] ?? $referral->status }}</span></td>
                                 <td>
                                     <div class="flex items-center justify-center gap-1">
@@ -898,11 +898,11 @@
                                         {{ $invoice->invoice_number }}
                                     </a>
                                 </td>
-                                <td class="text-sm font-mono text-slate-600">{{ $invoice->admission->admission_number ?? '—' }}</td>
+                                <td class="text-sm font-mono text-slate-600">{{ $invoice->admission->admission_number ?? '-' }}</td>
                                 <td class="font-mono text-sm">{{ number_format((float) $invoice->commission_amount, 2) }}</td>
                                 <td class="font-mono text-sm">{{ number_format((float) $invoice->platform_revenue_amount, 2) }}</td>
-                                <td class="text-xs text-slate-500">{{ $invoice->invoice_date?->format('d M Y') ?? '—' }}</td>
-                                <td class="text-xs text-slate-500">{{ $invoice->due_date?->format('d M Y') ?? '—' }}</td>
+                                <td class="text-xs text-slate-500">{{ $invoice->invoice_date?->format('d M Y') ?? '-' }}</td>
+                                <td class="text-xs text-slate-500">{{ $invoice->due_date?->format('d M Y') ?? '-' }}</td>
                                 <td><span class="badge">{{ \App\Models\CommissionInvoice::STATUSES[$invoice->status] ?? $invoice->status }}</span></td>
                                 <td>
                                     <div class="flex items-center justify-center gap-1">
@@ -969,9 +969,9 @@
                                     </a>
                                     <div class="text-xs text-slate-400">{{ $inquiry->email }}</div>
                                 </td>
-                                <td class="text-sm">{{ \App\Models\Inquiry::SOURCES[$inquiry->source] ?? ($inquiry->source ?: '—') }}</td>
-                                <td class="text-sm">{{ $inquiry->assignedTo->name ?? '—' }}</td>
-                                <td class="text-xs text-slate-500">{{ $inquiry->last_contacted_at?->format('d M Y') ?? '—' }}</td>
+                                <td class="text-sm">{{ \App\Models\Inquiry::SOURCES[$inquiry->source] ?? ($inquiry->source ?: '-') }}</td>
+                                <td class="text-sm">{{ $inquiry->assignedTo->name ?? '-' }}</td>
+                                <td class="text-xs text-slate-500">{{ $inquiry->last_contacted_at?->format('d M Y') ?? '-' }}</td>
                                 <td><span class="badge">{{ \App\Models\Inquiry::STATUSES[$inquiry->status] ?? $inquiry->status }}</span></td>
                                 <td>
                                     <div class="flex items-center justify-center gap-1">
@@ -1038,7 +1038,7 @@
                                     </a>
                                 </td>
                                 <td class="text-sm">{{ \App\Models\Post::TYPES[$post->type] ?? $post->type }}</td>
-                                <td class="text-sm">{{ $post->creator->name ?? '—' }}</td>
+                                <td class="text-sm">{{ $post->creator->name ?? '-' }}</td>
                                 <td>
                                     @if($post->is_published)
                                         <span class="badge badge-green text-xs">Published</span>
@@ -1050,7 +1050,7 @@
                                     @if($post->is_featured)
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500 mx-auto" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd"/></svg>
                                     @else
-                                        <span class="text-slate-300">—</span>
+                                        <span class="text-slate-300">-</span>
                                     @endif
                                 </td>
                                 <td>
@@ -1108,10 +1108,10 @@
                                 <td>
                                     @if($follower->student)
                                         <a href="{{ route('admin.students.show', $follower->student) }}" class="font-medium text-blue-600 hover:underline text-sm">{{ $follower->student->name }}</a>
-                                    @else <span class="text-slate-400">—</span>
+                                    @else <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
-                                <td class="text-sm text-slate-500">{{ $follower->student->email ?? '—' }}</td>
+                                <td class="text-sm text-slate-500">{{ $follower->student->email ?? '-' }}</td>
                                 <td class="text-xs text-slate-500">{{ $follower->created_at->format('d M Y') }}</td>
                                 <td>
                                     <div class="flex items-center justify-center gap-1">
@@ -1173,7 +1173,7 @@
                         @foreach($institution->consultancyDestinations as $dest)
                             <tr>
                                 <td class="font-medium text-sm">{{ $dest->country }}</td>
-                                <td class="text-sm text-slate-600">{{ $dest->city ?: '—' }}</td>
+                                <td class="text-sm text-slate-600">{{ $dest->city ?: '-' }}</td>
                                 <td>
                                     @if($dest->is_active)
                                         <span class="badge badge-green text-xs">Active</span>
@@ -1242,7 +1242,7 @@
                                     </a>
                                 </td>
                                 <td class="text-sm">{{ \App\Models\ConsultancyService::SERVICE_TYPES[$svc->service_type] ?? $svc->service_type }}</td>
-                                <td class="font-mono text-sm">{{ $svc->service_fee !== null ? number_format((float) $svc->service_fee, 2) : '—' }}</td>
+                                <td class="font-mono text-sm">{{ $svc->service_fee !== null ? number_format((float) $svc->service_fee, 2) : '-' }}</td>
                                 <td>
                                     @if($svc->is_active)
                                         <span class="badge badge-green text-xs">Active</span>
@@ -1304,8 +1304,8 @@
                     <tbody>
                         @foreach($institution->counselingSessions->take(5) as $cs)
                             <tr>
-                                <td class="text-sm font-medium">{{ $cs->student->name ?? '—' }}</td>
-                                <td class="text-sm">{{ $cs->counselor->name ?? '—' }}</td>
+                                <td class="text-sm font-medium">{{ $cs->student->name ?? '-' }}</td>
+                                <td class="text-sm">{{ $cs->counselor->name ?? '-' }}</td>
                                 <td class="text-sm">{{ \App\Models\CounselingSession::MODES[$cs->mode] ?? $cs->mode }}</td>
                                 <td class="text-sm {{ $cs->scheduled_at->isPast() && $cs->status === 'scheduled' ? 'text-red-600 font-medium' : 'text-slate-700' }}">
                                     {{ $cs->scheduled_at->format('d M Y, H:i') }}
@@ -1366,7 +1366,7 @@
                     <tbody>
                         @foreach($institution->subscriptions->take(5) as $sub)
                             <tr>
-                                <td class="font-medium text-sm">{{ $sub->subscriptionPlan->name ?? '—' }}</td>
+                                <td class="font-medium text-sm">{{ $sub->subscriptionPlan->name ?? '-' }}</td>
                                 <td class="text-sm">{{ \App\Models\InstitutionSubscription::BILLING_CYCLES[$sub->billing_cycle] ?? $sub->billing_cycle }}</td>
                                 <td class="font-mono text-sm">{{ number_format((float) $sub->amount, 2) }}</td>
                                 <td class="text-xs text-slate-500">{{ $sub->starts_at?->format('d M Y') }}</td>
@@ -1432,9 +1432,9 @@
                                     <a href="{{ route('admin.promotions.show', $promo) }}" class="font-semibold text-blue-600 hover:underline text-sm">{{ $promo->title }}</a>
                                 </td>
                                 <td class="text-sm">{{ \App\Models\Promotion::TYPES[$promo->type] ?? $promo->type }}</td>
-                                <td class="font-mono text-sm">{{ $promo->amount !== null ? number_format((float) $promo->amount, 2) : '—' }}</td>
+                                <td class="font-mono text-sm">{{ $promo->amount !== null ? number_format((float) $promo->amount, 2) : '-' }}</td>
                                 <td class="text-xs text-slate-500">
-                                    {{ $promo->start_date?->format('d M Y') ?? '—' }}
+                                    {{ $promo->start_date?->format('d M Y') ?? '-' }}
                                     @if($promo->end_date) – {{ $promo->end_date->format('d M Y') }} @endif
                                 </td>
                                 <td><span class="badge">{{ \App\Models\Promotion::STATUSES[$promo->status] ?? $promo->status }}</span></td>
@@ -1497,14 +1497,14 @@
                                     @if($review->student)
                                         <a href="{{ route('admin.students.show', $review->student) }}" class="text-blue-600 hover:underline">{{ $review->student->name }}</a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td>
                                     <span class="font-semibold text-amber-500">{{ $review->rating }}</span>
                                     <span class="text-slate-400 text-xs">/ 5</span>
                                 </td>
-                                <td class="text-sm max-w-xs truncate text-slate-600">{{ $review->review ? \Illuminate\Support\Str::limit($review->review, 50) : '—' }}</td>
+                                <td class="text-sm max-w-xs truncate text-slate-600">{{ $review->review ? \Illuminate\Support\Str::limit($review->review, 50) : '-' }}</td>
                                 <td>
                                     @if($review->is_approved)
                                         <span class="badge badge-success">Approved</span>
@@ -1570,7 +1570,7 @@
                                     @if($conv->student)
                                         <a href="{{ route('admin.students.show', $conv->student) }}" class="text-blue-600 hover:underline">{{ $conv->student->name }}</a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td>

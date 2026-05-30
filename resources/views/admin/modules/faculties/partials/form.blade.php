@@ -1,5 +1,5 @@
 {{--
-    partials/form.blade.php — shared fields for create / edit faculty.
+    partials/form.blade.php - shared fields for create / edit faculty.
     Variables: $faculty (Faculty|null)
 --}}
 

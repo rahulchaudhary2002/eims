@@ -166,12 +166,12 @@
                         <td>
                             <span class="badge badge-blue">{{ \App\Models\Institution::TYPES[$institution->type] ?? $institution->type }}</span>
                         </td>
-                        <td class="text-slate-500 font-mono text-sm">{{ $institution->code ?: '—' }}</td>
+                        <td class="text-slate-500 font-mono text-sm">{{ $institution->code ?: '-' }}</td>
                         <td class="text-sm text-slate-600">
                             @if($institution->city || $institution->district)
                             {{ implode(', ', array_filter([$institution->city, $institution->district])) }}
                             @else
-                            <span class="text-slate-300">—</span>
+                            <span class="text-slate-300">-</span>
                             @endif
                         </td>
                         <td class="text-sm">
@@ -182,21 +182,21 @@
                             <span class="text-slate-500">{{ $institution->phone }}</span>
                             @endif
                             @if(!$institution->email && !$institution->phone)
-                            <span class="text-slate-300">—</span>
+                            <span class="text-slate-300">-</span>
                             @endif
                         </td>
                         <td class="text-center">
                             @if($institution->is_verified)
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
                             @else
-                            <span class="text-slate-200">—</span>
+                            <span class="text-slate-200">-</span>
                             @endif
                         </td>
                         <td class="text-center">
                             @if($institution->is_featured)
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-400 mx-auto" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z" clip-rule="evenodd"/></svg>
                             @else
-                            <span class="text-slate-200">—</span>
+                            <span class="text-slate-200">-</span>
                             @endif
                         </td>
                         <td>

@@ -57,7 +57,7 @@
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Amount</dt>
                         <dd class="mt-1 font-mono font-semibold text-slate-800">
-                            {{ $promotion->amount !== null ? number_format((float) $promotion->amount, 2) : '—' }}
+                            {{ $promotion->amount !== null ? number_format((float) $promotion->amount, 2) : '-' }}
                         </dd>
                     </div>
                     <div>
@@ -68,18 +68,18 @@
                                     {{ $promotion->target_url }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Start Date</dt>
-                        <dd class="mt-1 text-slate-800">{{ $promotion->start_date?->format('d M Y') ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-800">{{ $promotion->start_date?->format('d M Y') ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">End Date</dt>
                         <dd class="mt-1 {{ $promotion->end_date?->isPast() && $promotion->status === 'active' ? 'text-red-600 font-semibold' : 'text-slate-800' }}">
-                            {{ $promotion->end_date?->format('d M Y') ?? '—' }}
+                            {{ $promotion->end_date?->format('d M Y') ?? '-' }}
                         </dd>
                     </div>
                     <div>

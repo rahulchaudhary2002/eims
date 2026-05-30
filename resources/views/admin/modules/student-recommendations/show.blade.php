@@ -41,7 +41,7 @@
                                     {{ $studentRecommendation->student->name }}
                                 </a>
                                 <div class="text-xs text-slate-400 mt-0.5">{{ $studentRecommendation->student->email }}</div>
-                            @else <span class="text-slate-400">—</span>
+                            @else <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -52,7 +52,7 @@
                                 <a href="{{ route('admin.institutions.show', $studentRecommendation->institution) }}" class="text-blue-600 hover:underline font-medium">
                                     {{ $studentRecommendation->institution->name }}
                                 </a>
-                            @else <span class="text-slate-400">—</span>
+                            @else <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -61,7 +61,7 @@
                         <dd class="mt-1 text-slate-700">
                             @if($studentRecommendation->institutionProgram)
                                 <a href="{{ route('admin.institution-programs.show', $studentRecommendation->institutionProgram) }}" class="text-blue-600 hover:underline">
-                                    {{ $studentRecommendation->institutionProgram->title ?: ($studentRecommendation->institutionProgram->program->name ?? '—') }}
+                                    {{ $studentRecommendation->institutionProgram->title ?: ($studentRecommendation->institutionProgram->program->name ?? '-') }}
                                 </a>
                             @else <span class="text-slate-400">Not specified</span>
                             @endif
@@ -75,7 +75,7 @@
                                     {{ number_format((float) $studentRecommendation->score, 2) }}
                                 </span>
                                 <span class="text-xs text-slate-400">/ 100</span>
-                            @else <span class="text-slate-400">—</span>
+                            @else <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>

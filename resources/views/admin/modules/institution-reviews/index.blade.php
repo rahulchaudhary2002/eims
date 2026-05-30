@@ -98,7 +98,7 @@
                                     @if($review->student)
                                         <a href="{{ route('admin.students.show', $review->student) }}" class="text-blue-600 hover:underline">{{ $review->student->name }}</a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td class="text-sm">
@@ -108,7 +108,7 @@
                                     <span class="font-semibold text-amber-500">{{ $review->rating }}</span>
                                     <span class="text-slate-400 text-xs">/ 5</span>
                                 </td>
-                                <td class="text-sm max-w-xs truncate text-slate-600">{{ $review->review ? \Illuminate\Support\Str::limit($review->review, 60) : '—' }}</td>
+                                <td class="text-sm max-w-xs truncate text-slate-600">{{ $review->review ? \Illuminate\Support\Str::limit($review->review, 60) : '-' }}</td>
                                 <td>
                                     @if($review->is_approved)
                                         <span class="badge badge-success">Approved</span>

@@ -41,7 +41,7 @@
                                     {{ $consultancyDestination->institution->name }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -51,7 +51,7 @@
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">City</dt>
-                        <dd class="mt-1 text-slate-700">{{ $consultancyDestination->city ?: '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $consultancyDestination->city ?: '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Status</dt>

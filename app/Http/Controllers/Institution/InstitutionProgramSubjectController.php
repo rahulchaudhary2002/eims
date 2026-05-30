@@ -45,7 +45,12 @@ class InstitutionProgramSubjectController extends Controller
     protected function selectOptions(): array
     {
         return [
-            'institution_program_id' => InstitutionProgram::where('institution_id', $this->activeInstitutionId())->orderBy('title')->pluck('title', 'id')->all(),
+            'institution_program_id' => InstitutionProgram::with('program')
+                ->where('institution_id', $this->activeInstitutionId())
+                ->orderBy('title')
+                ->get()
+                ->mapWithKeys(fn (InstitutionProgram $program) => [$program->id => $program->display_name])
+                ->all(),
         ];
     }
 }

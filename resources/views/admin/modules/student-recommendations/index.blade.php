@@ -96,18 +96,18 @@
                                     <a href="{{ route('admin.students.show', $rec->student) }}" class="font-medium text-blue-600 hover:underline text-sm">{{ $rec->student->name }}</a>
                                     <div class="text-xs text-slate-400">{{ $rec->student->email }}</div>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td>
                                 @if($rec->institution)
                                     <a href="{{ route('admin.institutions.show', $rec->institution) }}" class="font-medium text-blue-600 hover:underline text-sm">{{ $rec->institution->name }}</a>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-sm text-slate-600">
-                                {{ $rec->institutionProgram?->title ?: ($rec->institutionProgram?->program?->name ?? '—') }}
+                                {{ $rec->institutionProgram?->title ?: ($rec->institutionProgram?->program?->name ?? '-') }}
                             </td>
                             <td>
                                 @if($rec->score !== null)
@@ -115,7 +115,7 @@
                                         {{ number_format((float) $rec->score, 2) }}
                                     </span>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td>

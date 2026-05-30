@@ -1,5 +1,5 @@
 {{--
-    Messages thread partial — included in conversations/show.blade.php
+    Messages thread partial - included in conversations/show.blade.php
     Expects: $conversation (with messages.sender loaded)
 --}}
 
@@ -87,7 +87,7 @@
                 <div>
                     <label class="form-label required">Send As (Type)</label>
                     <select name="sender_type" class="form-control @error('sender_type') is-invalid @enderror" required>
-                        <option value="">— Select Sender Type —</option>
+                        <option value="">- Select Sender Type -</option>
                         @foreach(\App\Models\Message::SENDER_TYPES as $value => $label)
                             <option value="{{ $value }}" {{ old('sender_type') === $value ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach

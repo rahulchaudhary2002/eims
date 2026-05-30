@@ -83,7 +83,7 @@
                             <td class="font-mono text-xs text-slate-500">{{ $plan->slug }}</td>
                             <td class="font-mono text-sm">{{ number_format((float) $plan->price_monthly, 2) }}</td>
                             <td class="font-mono text-sm">{{ number_format((float) $plan->price_yearly, 2) }}</td>
-                            <td class="text-sm text-slate-500">{{ is_array($plan->features) ? count($plan->features) . ' feature(s)' : '—' }}</td>
+                            <td class="text-sm text-slate-500">{{ is_array($plan->features) ? count($plan->features) . ' feature(s)' : '-' }}</td>
                             <td>
                                 @if($plan->is_active)
                                     <span class="badge badge-green text-xs">Active</span>

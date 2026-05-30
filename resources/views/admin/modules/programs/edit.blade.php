@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Edit Program — ' . $program->name)
+@section('title', 'Edit Program - ' . $program->name)
 @section('page-title', 'Edit Program')
 
 @section('content')

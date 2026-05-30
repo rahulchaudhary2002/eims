@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Edit Destination — ' . $consultancyDestination->country . ($consultancyDestination->city ? ', ' . $consultancyDestination->city : ''))
+@section('title', 'Edit Destination - ' . $consultancyDestination->country . ($consultancyDestination->city ? ', ' . $consultancyDestination->city : ''))
 @section('page-title', 'Edit Consultancy Destination')
 
 @section('content')

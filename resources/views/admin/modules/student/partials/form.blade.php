@@ -1,7 +1,7 @@
 {{--
     partials/form.blade.php
     Shared form fields for create and edit student.
-    Variables: $student (optional — null on create)
+    Variables: $student (optional - null on create)
 --}}
 
 {{-- Profile --}}
@@ -48,7 +48,7 @@
         <div>
             <label class="form-label" for="gender">Gender</label>
             <select name="gender" id="gender" class="form-control @error('gender') is-invalid @enderror">
-                <option value="">— Select gender —</option>
+                <option value="">- Select gender -</option>
                 <option value="male"   {{ old('gender', $student->gender ?? '') === 'male'   ? 'selected' : '' }}>Male</option>
                 <option value="female" {{ old('gender', $student->gender ?? '') === 'female' ? 'selected' : '' }}>Female</option>
                 <option value="other"  {{ old('gender', $student->gender ?? '') === 'other'  ? 'selected' : '' }}>Other</option>

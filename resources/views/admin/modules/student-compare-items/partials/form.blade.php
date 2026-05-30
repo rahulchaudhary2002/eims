@@ -6,7 +6,7 @@
         @foreach($students as $student)
             <option value="{{ $student->id }}"
                 {{ old('student_id', $studentCompareItem->student_id ?? $selectedStudentId ?? '') == $student->id ? 'selected' : '' }}>
-                {{ $student->name }} — {{ $student->email }}
+                {{ $student->name }} - {{ $student->email }}
             </option>
         @endforeach
     </select>

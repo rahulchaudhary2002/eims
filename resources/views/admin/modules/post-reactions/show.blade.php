@@ -40,7 +40,7 @@
                                     <div class="text-xs text-slate-400 mt-0.5">{{ $postReaction->post->institution->name }}</div>
                                 @endif
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -61,7 +61,7 @@
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Reacted By</dt>
                         <dd class="mt-1 font-medium text-slate-800">
-                            {{ $postReaction->reactable?->name ?? ($postReaction->reactable?->email ?? '—') }}
+                            {{ $postReaction->reactable?->name ?? ($postReaction->reactable?->email ?? '-') }}
                         </dd>
                     </div>
                     <div>

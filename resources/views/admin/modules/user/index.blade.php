@@ -100,12 +100,12 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="text-slate-600 text-sm">{{ $user->phone ?: '—' }}</td>
+                        <td class="text-slate-600 text-sm">{{ $user->phone ?: '-' }}</td>
                         <td class="text-center">
                             @if($user->is_super_admin)
                             <span class="badge badge-red">Super Admin</span>
                             @else
-                            <span class="text-slate-300 text-xs">—</span>
+                            <span class="text-slate-300 text-xs">-</span>
                             @endif
                         </td>
                         <td class="text-sm">

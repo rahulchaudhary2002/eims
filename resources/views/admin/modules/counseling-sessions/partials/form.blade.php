@@ -6,7 +6,7 @@
         @foreach($students as $student)
             <option value="{{ $student->id }}"
                 {{ old('student_id', $counselingSession->student_id ?? $selectedStudentId ?? '') == $student->id ? 'selected' : '' }}>
-                {{ $student->name }} — {{ $student->email }}
+                {{ $student->name }} - {{ $student->email }}
             </option>
         @endforeach
     </select>
@@ -36,7 +36,7 @@
         @foreach($users as $user)
             <option value="{{ $user->id }}"
                 {{ old('counselor_id', $counselingSession->counselor_id ?? $defaultCounselorId ?? '') == $user->id ? 'selected' : '' }}>
-                {{ $user->name }} — {{ $user->email }}
+                {{ $user->name }} - {{ $user->email }}
             </option>
         @endforeach
     </select>

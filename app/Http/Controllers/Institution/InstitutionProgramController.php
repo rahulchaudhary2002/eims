@@ -16,6 +16,7 @@ class InstitutionProgramController extends Controller
         $this->modelClass = InstitutionProgram::class;
         $this->routeBase = 'programs';
         $this->title = 'Program';
+        $this->relationships = ['program'];
         $this->selectOptions = ['status' => InstitutionProgram::STATUSES];
         $this->fields = [
             'program_id' => ['label' => 'Global Program', 'type' => 'select', 'rules' => ['required', 'integer', 'exists:programs,id']],

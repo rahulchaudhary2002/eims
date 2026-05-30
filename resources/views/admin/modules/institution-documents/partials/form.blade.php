@@ -2,10 +2,10 @@
     partials/form.blade.php
     Shared form fields for create and edit institution document.
     Variables:
-      $document      — InstitutionDocument|null (null on create)
-      $institutions  — Collection
-      $documentTypes — array
-      $statuses      — array
+      $document      - InstitutionDocument|null (null on create)
+      $institutions  - Collection
+      $documentTypes - array
+      $statuses      - array
 --}}
 
 {{-- Institution & Type --}}
@@ -25,7 +25,7 @@
             <select name="institution_id" id="institution_id"
                 class="form-control @error('institution_id') is-invalid @enderror"
                 {{ isset($document) ? 'disabled' : 'required' }}>
-                <option value="">— Select institution —</option>
+                <option value="">- Select institution -</option>
                 @foreach($institutions as $inst)
                     <option value="{{ $inst->id }}"
                         {{ old('institution_id', $document->institution_id ?? '') == $inst->id ? 'selected' : '' }}>
@@ -44,7 +44,7 @@
             <label class="form-label" for="document_type">Document Type <span class="text-red-500">*</span></label>
             <select name="document_type" id="document_type"
                 class="form-control @error('document_type') is-invalid @enderror" required>
-                <option value="">— Select type —</option>
+                <option value="">- Select type -</option>
                 @foreach($documentTypes as $value => $label)
                     <option value="{{ $value }}"
                         {{ old('document_type', $document->document_type ?? '') === $value ? 'selected' : '' }}>
@@ -98,7 +98,7 @@
             class="form-control @error('file_path') is-invalid @enderror"
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp"
             {{ !isset($document) ? 'required' : '' }}>
-        <p class="text-xs text-slate-400 mt-1">Accepted: PDF, DOC, DOCX, JPG, PNG, WEBP — max 10 MB</p>
+        <p class="text-xs text-slate-400 mt-1">Accepted: PDF, DOC, DOCX, JPG, PNG, WEBP - max 10 MB</p>
         @error('file_path')<p class="form-error">{{ $message }}</p>@enderror
     </div>
 </div>

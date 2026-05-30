@@ -104,9 +104,9 @@
                                 </a>
                                 <div class="text-xs text-slate-400">{{ $types[$post->type] ?? $post->type }}</div>
                             </td>
-                            <td class="text-sm">{{ $post->institution->name ?? '—' }}</td>
+                            <td class="text-sm">{{ $post->institution->name ?? '-' }}</td>
                             <td class="text-sm">{{ $types[$post->type] ?? $post->type }}</td>
-                            <td class="text-sm">{{ $post->creator->name ?? '—' }}</td>
+                            <td class="text-sm">{{ $post->creator->name ?? '-' }}</td>
                             <td>
                                 @if($post->is_published)
                                     <span class="badge badge-green text-xs">Published</span>

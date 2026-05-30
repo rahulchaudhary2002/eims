@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', ($levels[$studentAcademicRecord->level] ?? $studentAcademicRecord->level) . ' — ' . $studentAcademicRecord->student->name)
+@section('title', ($levels[$studentAcademicRecord->level] ?? $studentAcademicRecord->level) . ' - ' . $studentAcademicRecord->student->name)
 @section('page-title', 'Academic Record')
 
 @section('content')
@@ -7,7 +7,7 @@
 
     <x-admin.page-header
         title="Academic Record"
-        :subtitle="($levels[$studentAcademicRecord->level] ?? $studentAcademicRecord->level) . ' — ' . $studentAcademicRecord->student->name"
+        :subtitle="($levels[$studentAcademicRecord->level] ?? $studentAcademicRecord->level) . ' - ' . $studentAcademicRecord->student->name"
         :breadcrumbs="[
             ['label'=>'Dashboard','route'=>'admin.dashboard'],
             ['label'=>'Academic Records','route' => 'admin.student-academic-records.index'],
@@ -110,34 +110,34 @@
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Institution Name</dt>
-                        <dd class="text-slate-800 font-medium">{{ $studentAcademicRecord->institution_name ?? '—' }}</dd>
+                        <dd class="text-slate-800 font-medium">{{ $studentAcademicRecord->institution_name ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Board / University</dt>
-                        <dd class="text-slate-800">{{ $boards[$studentAcademicRecord->board] ?? ($studentAcademicRecord->board ?? '—') }}</dd>
+                        <dd class="text-slate-800">{{ $boards[$studentAcademicRecord->board] ?? ($studentAcademicRecord->board ?? '-') }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Faculty / Stream</dt>
-                        <dd class="text-slate-800">{{ $studentAcademicRecord->faculty ?? '—' }}</dd>
+                        <dd class="text-slate-800">{{ $studentAcademicRecord->faculty ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Passed Year</dt>
-                        <dd class="text-slate-800 font-medium">{{ $studentAcademicRecord->passed_year ?? '—' }}</dd>
+                        <dd class="text-slate-800 font-medium">{{ $studentAcademicRecord->passed_year ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Symbol / Roll Number</dt>
-                        <dd class="text-slate-800">{{ $studentAcademicRecord->symbol_number ?? '—' }}</dd>
+                        <dd class="text-slate-800">{{ $studentAcademicRecord->symbol_number ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">GPA</dt>
                         <dd class="text-slate-800 font-semibold text-base">
-                            {{ $studentAcademicRecord->gpa !== null ? number_format($studentAcademicRecord->gpa, 2) : '—' }}
+                            {{ $studentAcademicRecord->gpa !== null ? number_format($studentAcademicRecord->gpa, 2) : '-' }}
                         </dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Percentage</dt>
                         <dd class="text-slate-800 font-semibold text-base">
-                            {{ $studentAcademicRecord->percentage !== null ? number_format($studentAcademicRecord->percentage, 2) . '%' : '—' }}
+                            {{ $studentAcademicRecord->percentage !== null ? number_format($studentAcademicRecord->percentage, 2) . '%' : '-' }}
                         </dd>
                     </div>
                 </dl>

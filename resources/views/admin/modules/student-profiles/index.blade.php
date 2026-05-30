@@ -106,12 +106,12 @@
                             <div class="font-medium text-slate-800">{{ $profile->student->name }}</div>
                             <div class="text-xs text-slate-400">{{ $profile->student->email }}</div>
                         </td>
-                        <td>{{ $profile->province ?? '—' }}</td>
+                        <td>{{ $profile->province ?? '-' }}</td>
                         <td>
                             @if($profile->district || $profile->city)
                                 {{ implode(', ', array_filter([$profile->district, $profile->city])) }}
                             @else
-                                <span class="text-slate-300">—</span>
+                                <span class="text-slate-300">-</span>
                             @endif
                         </td>
                         <td class="text-sm">
@@ -120,7 +120,7 @@
                                 –
                                 {{ $profile->budget_max ? number_format($profile->budget_max) : '∞' }}
                             @else
-                                <span class="text-slate-300">—</span>
+                                <span class="text-slate-300">-</span>
                             @endif
                         </td>
                         <td>
@@ -135,7 +135,7 @@
                                     @endif
                                 </div>
                             @else
-                                <span class="text-slate-300">—</span>
+                                <span class="text-slate-300">-</span>
                             @endif
                         </td>
                         <td>
@@ -150,7 +150,7 @@
                                     @endif
                                 </div>
                             @else
-                                <span class="text-slate-300">—</span>
+                                <span class="text-slate-300">-</span>
                             @endif
                         </td>
                         <td class="text-center">

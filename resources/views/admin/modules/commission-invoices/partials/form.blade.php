@@ -46,7 +46,7 @@
         @foreach($referralAgreements as $agreement)
             <option value="{{ $agreement->id }}"
                 {{ old('referral_agreement_id', $commissionInvoice->referral_agreement_id ?? $selectedAgreementId ?? '') == $agreement->id ? 'selected' : '' }}>
-                #{{ $agreement->id }} — {{ \App\Models\CommissionInvoice::COMMISSION_TYPES[$agreement->commission_type] ?? $agreement->commission_type }}
+                #{{ $agreement->id }} - {{ \App\Models\CommissionInvoice::COMMISSION_TYPES[$agreement->commission_type] ?? $agreement->commission_type }}
             </option>
         @endforeach
     </select>

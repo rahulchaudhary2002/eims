@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Edit Invoice — ' . $commissionInvoice->invoice_number)
+@section('title', 'Edit Invoice - ' . $commissionInvoice->invoice_number)
 @section('page-title', 'Edit Commission Invoice')
 
 @section('content')

@@ -7,11 +7,18 @@
         $relationName = \Illuminate\Support\Str::camel(substr($field, 0, -3));
 
         if ($record->relationLoaded($relationName) && ($related = $record->{$relationName})) {
-            $display = $related->name
+            $display = $related->display_name
+                ?? $related->name
                 ?? $related->title
                 ?? $related->full_name
                 ?? $related->email
+                ?? $related->invoice_number
+                ?? $related->admission_number
+                ?? $related->application_number
+                ?? $related->referral_number
                 ?? ('#' . $related->getKey());
+        } elseif ($value !== null && isset($selectOptions[$field]) && array_key_exists($value, $selectOptions[$field])) {
+            $display = $selectOptions[$field][$value];
         }
     }
 
@@ -23,7 +30,7 @@
         $display = implode(', ', $value);
     }
 
-    if (str_ends_with($field, '_id') && $relationName && !$record->relationLoaded($relationName)) {
+    if (str_ends_with($field, '_id') && $relationName && !$record->relationLoaded($relationName) && $display === $value) {
         $display = $value ? '#' . $value : null;
     }
 @endphp
@@ -33,5 +40,5 @@
 @elseif(is_bool($value))
     <span class="badge {{ $value ? 'badge-green' : 'badge-secondary' }}">{{ $display }}</span>
 @else
-    {{ $display ?: '—' }}
+    {{ $display ?: '-' }}
 @endif

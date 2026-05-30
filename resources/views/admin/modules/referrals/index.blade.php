@@ -116,13 +116,13 @@
                                         {{ $referral->application->application_number }}
                                     </a>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
-                            <td class="text-sm">{{ $referral->student->name ?? '—' }}</td>
-                            <td class="text-sm">{{ $referral->institution->name ?? '—' }}</td>
-                            <td class="text-sm">{{ $referral->referredBy->name ?? '—' }}</td>
-                            <td class="text-xs text-slate-500">{{ $referral->referred_at?->format('d M Y, H:i') ?? '—' }}</td>
+                            <td class="text-sm">{{ $referral->student->name ?? '-' }}</td>
+                            <td class="text-sm">{{ $referral->institution->name ?? '-' }}</td>
+                            <td class="text-sm">{{ $referral->referredBy->name ?? '-' }}</td>
+                            <td class="text-xs text-slate-500">{{ $referral->referred_at?->format('d M Y, H:i') ?? '-' }}</td>
                             <td><span class="badge">{{ $statuses[$referral->status] ?? $referral->status }}</span></td>
                             <td>
                                 <div class="flex items-center gap-1">

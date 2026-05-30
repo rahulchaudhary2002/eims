@@ -17,9 +17,10 @@ class InstitutionCounselingSessionController extends Controller
         $this->modelClass = CounselingSession::class;
         $this->routeBase = 'counseling-sessions';
         $this->title = 'Counseling Session';
+        $this->relationships = ['student', 'counselor'];
         $this->selectOptions = ['mode' => CounselingSession::MODES, 'status' => CounselingSession::STATUSES];
         $this->fields = [
-            'student_id' => ['label' => 'Student ID', 'type' => 'number', 'rules' => ['nullable', 'integer', 'exists:students,id']],
+            'student_id' => ['label' => 'Student', 'type' => 'number', 'rules' => ['nullable', 'integer', 'exists:students,id']],
             'counselor_id' => ['label' => 'Counselor', 'type' => 'select', 'rules' => ['nullable', 'integer', 'exists:users,id']],
             'mode' => ['label' => 'Mode', 'type' => 'select', 'rules' => ['required', 'string']],
             'scheduled_at' => ['label' => 'Scheduled At', 'type' => 'datetime-local', 'rules' => ['required', 'date']],

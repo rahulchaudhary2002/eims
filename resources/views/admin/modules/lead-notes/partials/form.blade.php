@@ -6,7 +6,7 @@
         @foreach($inquiries as $inquiry)
             <option value="{{ $inquiry->id }}"
                 {{ old('inquiry_id', $leadNote->inquiry_id ?? $selectedInquiryId ?? '') == $inquiry->id ? 'selected' : '' }}>
-                {{ $inquiry->name }} — {{ $inquiry->email }}
+                {{ $inquiry->name }} - {{ $inquiry->email }}
             </option>
         @endforeach
     </select>
@@ -21,7 +21,7 @@
         @foreach($users as $user)
             <option value="{{ $user->id }}"
                 {{ old('user_id', $leadNote->user_id ?? $defaultUserId ?? '') == $user->id ? 'selected' : '' }}>
-                {{ $user->name }} — {{ $user->email }}
+                {{ $user->name }} - {{ $user->email }}
             </option>
         @endforeach
     </select>

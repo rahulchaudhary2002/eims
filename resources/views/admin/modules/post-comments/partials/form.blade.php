@@ -15,7 +15,7 @@
 
 {{-- Parent Comment --}}
 <div>
-    <label for="parent_id" class="form-label">Reply To <span class="text-slate-400 text-xs">(optional — leave blank for top-level)</span></label>
+    <label for="parent_id" class="form-label">Reply To <span class="text-slate-400 text-xs">(optional - leave blank for top-level)</span></label>
     <input type="number" id="parent_id" name="parent_id"
         value="{{ old('parent_id', $postComment->parent_id ?? $selectedParentId ?? '') }}"
         class="form-control @error('parent_id') is-invalid @enderror"

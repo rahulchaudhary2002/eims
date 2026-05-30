@@ -93,21 +93,21 @@
                 <tbody>
                     @forelse($cashbacks as $cashback)
                         <tr>
-                            <td class="text-sm font-medium">{{ $cashback->student->name ?? '—' }}</td>
+                            <td class="text-sm font-medium">{{ $cashback->student->name ?? '-' }}</td>
                             <td class="font-mono text-xs text-slate-500">
                                 @if($cashback->commissionInvoice)
                                     <a href="{{ route('admin.commission-invoices.show', $cashback->commissionInvoice) }}" class="text-blue-600 hover:underline">
                                         {{ $cashback->commissionInvoice->invoice_number }}
                                     </a>
                                 @else
-                                    —
+                                    -
                                 @endif
                             </td>
                             <td class="font-mono text-sm">{{ number_format((float) $cashback->commission_received_amount, 2) }}</td>
                             <td class="font-mono text-sm">{{ number_format((float) $cashback->cashback_percentage, 4) }}%</td>
                             <td class="font-mono text-sm font-semibold">{{ number_format((float) $cashback->cashback_amount, 2) }}</td>
-                            <td class="text-sm">{{ $paymentMethods[$cashback->payment_method] ?? ($cashback->payment_method ? $cashback->payment_method : '—') }}</td>
-                            <td class="text-xs text-slate-500">{{ $cashback->paid_at?->format('d M Y') ?? '—' }}</td>
+                            <td class="text-sm">{{ $paymentMethods[$cashback->payment_method] ?? ($cashback->payment_method ? $cashback->payment_method : '-') }}</td>
+                            <td class="text-xs text-slate-500">{{ $cashback->paid_at?->format('d M Y') ?? '-' }}</td>
                             <td><span class="badge">{{ $statuses[$cashback->status] ?? $cashback->status }}</span></td>
                             <td>
                                 <div class="flex items-center gap-1">

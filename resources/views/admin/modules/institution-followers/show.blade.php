@@ -38,7 +38,7 @@
                                 </a>
                                 <div class="text-xs text-slate-400 mt-0.5">{{ $institutionFollower->student->email }}</div>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -50,7 +50,7 @@
                                     {{ $institutionFollower->institution->name }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>

@@ -112,7 +112,7 @@
                         </div>
                         <div>
                             <dt class="text-slate-400 text-xs mb-1">Invoice Date</dt>
-                            <dd>{{ $invoice->invoice_date?->format('d M Y') ?? '—' }}</dd>
+                            <dd>{{ $invoice->invoice_date?->format('d M Y') ?? '-' }}</dd>
                         </div>
                         <div>
                             <dt class="text-slate-400 text-xs mb-1">Status</dt>

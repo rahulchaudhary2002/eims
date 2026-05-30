@@ -50,7 +50,7 @@
                                 <a href="{{ route('admin.posts.show', $postMedium->post) }}" class="text-blue-600 hover:underline font-medium">
                                     {{ $postMedium->post->title }}
                                 </a>
-                            @else <span class="text-slate-400">—</span>
+                            @else <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -68,11 +68,11 @@
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Caption</dt>
-                        <dd class="mt-1 text-slate-700">{{ $postMedium->caption ?: '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $postMedium->caption ?: '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Institution</dt>
-                        <dd class="mt-1 text-slate-700">{{ $postMedium->post?->institution?->name ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $postMedium->post?->institution?->name ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Uploaded At</dt>

@@ -73,7 +73,7 @@
                                         {{ $reaction->post->title }}
                                     </a>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td>
@@ -91,9 +91,9 @@
                             </td>
                             <td class="text-sm">
                                 @if($reaction->reactable)
-                                    {{ $reaction->reactable->name ?? ($reaction->reactable->email ?? '—') }}
+                                    {{ $reaction->reactable->name ?? ($reaction->reactable->email ?? '-') }}
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-sm text-slate-500">

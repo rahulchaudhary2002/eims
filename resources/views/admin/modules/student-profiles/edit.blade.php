@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
-@section('title', 'Edit Profile — ' . $studentProfile->student->name)
-@section('page-title', 'Edit Profile — ' . $studentProfile->student->name)
+@section('title', 'Edit Profile - ' . $studentProfile->student->name)
+@section('page-title', 'Edit Profile - ' . $studentProfile->student->name)
 
 @section('content')
 <div class="space-y-5">

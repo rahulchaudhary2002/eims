@@ -110,7 +110,7 @@
                             {{ $institutionReview->institution->name }}
                         </a>
                     @else
-                        <span class="text-slate-400 text-sm">—</span>
+                        <span class="text-slate-400 text-sm">-</span>
                     @endif
                 </div>
                 <div>
@@ -120,7 +120,7 @@
                             {{ $institutionReview->student->name }}
                         </a>
                     @else
-                        <span class="text-slate-400 text-sm">—</span>
+                        <span class="text-slate-400 text-sm">-</span>
                     @endif
                 </div>
                 <div>

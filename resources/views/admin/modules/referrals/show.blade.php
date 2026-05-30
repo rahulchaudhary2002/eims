@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Referral — ' . $referral->referral_number)
+@section('title', 'Referral - ' . $referral->referral_number)
 @section('page-title', 'Referral Details')
 
 @section('content')
@@ -45,7 +45,7 @@
                                     {{ $referral->application->application_number }}
                                 </a>
                             @else
-                                —
+                                -
                             @endif
                         </dd>
                     </div>
@@ -57,7 +57,7 @@
                                     {{ $referral->student->name }}
                                 </a>
                             @else
-                                —
+                                -
                             @endif
                         </dd>
                     </div>
@@ -69,28 +69,28 @@
                                     {{ $referral->institution->name }}
                                 </a>
                             @else
-                                —
+                                -
                             @endif
                         </dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Referred By</dt>
-                        <dd class="mt-1 text-slate-800">{{ $referral->referredBy->name ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-800">{{ $referral->referredBy->name ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Program</dt>
                         <dd class="mt-1 text-slate-700 text-sm">
                             {{ $referral->application?->institutionProgram?->title
-                                ?: ($referral->application?->institutionProgram?->program?->name ?? '—') }}
+                                ?: ($referral->application?->institutionProgram?->program?->name ?? '-') }}
                         </dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Referred At</dt>
-                        <dd class="mt-1 text-slate-700">{{ $referral->referred_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $referral->referred_at?->format('d M Y, H:i') ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Viewed At</dt>
-                        <dd class="mt-1 text-slate-700">{{ $referral->viewed_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $referral->viewed_at?->format('d M Y, H:i') ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Created</dt>

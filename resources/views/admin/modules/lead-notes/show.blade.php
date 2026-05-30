@@ -35,7 +35,7 @@
                     <div>
                         <h3 class="text-base font-semibold text-slate-800">Note</h3>
                         <p class="text-xs text-slate-400 mt-0.5">
-                            By {{ $leadNote->user->name ?? '—' }} · {{ $leadNote->created_at->format('d M Y, H:i') }}
+                            By {{ $leadNote->user->name ?? '-' }} · {{ $leadNote->created_at->format('d M Y, H:i') }}
                             @if($leadNote->updated_at->ne($leadNote->created_at))
                                 · <span class="italic">edited {{ $leadNote->updated_at->format('d M Y, H:i') }}</span>
                             @endif
@@ -59,7 +59,7 @@
                     <p class="text-xs text-slate-400 mt-0.5">{{ $leadNote->inquiry->email }}</p>
                     <span class="badge mt-2">{{ \App\Models\Inquiry::STATUSES[$leadNote->inquiry->status] ?? $leadNote->inquiry->status }}</span>
                 @else
-                    <p class="text-slate-400 text-sm">—</p>
+                    <p class="text-slate-400 text-sm">-</p>
                 @endif
             </div>
 

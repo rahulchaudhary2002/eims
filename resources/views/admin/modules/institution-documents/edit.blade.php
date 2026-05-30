@@ -6,7 +6,7 @@
 <div class="space-y-5">
 
     <x-admin.page-header
-        title="Edit — {{ $document->title }}"
+        title="Edit - {{ $document->title }}"
         subtitle="Update document details"
         :breadcrumbs="[
             ['label'=>'Dashboard','route'=>'admin.dashboard'],

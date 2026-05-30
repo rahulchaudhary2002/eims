@@ -1,11 +1,11 @@
 {{--
-    partials/form.blade.php — shared fields for create / edit student academic record.
+    partials/form.blade.php - shared fields for create / edit student academic record.
 
     Variables expected:
-      $studentAcademicRecord  — StudentAcademicRecord|null  (null on create)
-      $students               — Collection<Student>
-      $levels                 — array  (StudentAcademicRecord::LEVELS)
-      $boards                 — array  (StudentAcademicRecord::BOARDS)
+      $studentAcademicRecord  - StudentAcademicRecord|null  (null on create)
+      $students               - Collection<Student>
+      $levels                 - array  (StudentAcademicRecord::LEVELS)
+      $boards                 - array  (StudentAcademicRecord::BOARDS)
 --}}
 
 {{-- ── Student + Level ── --}}
@@ -23,7 +23,7 @@
             <select name="student_id" id="student_id"
                 class="form-control @error('student_id') is-invalid @enderror"
                 {{ isset($studentAcademicRecord) ? 'disabled' : 'required' }}>
-                <option value="">— Select student —</option>
+                <option value="">- Select student -</option>
                 @foreach($students as $s)
                     <option value="{{ $s->id }}"
                         {{ old('student_id', $studentAcademicRecord->student_id ?? '') == $s->id ? 'selected' : '' }}>
@@ -41,7 +41,7 @@
             <label class="form-label" for="level">Education Level <span class="text-red-500">*</span></label>
             <select name="level" id="level" required
                 class="form-control @error('level') is-invalid @enderror">
-                <option value="">— Select level —</option>
+                <option value="">- Select level -</option>
                 @foreach($levels as $val => $label)
                     <option value="{{ $val }}"
                         {{ old('level', $studentAcademicRecord->level ?? '') === $val ? 'selected' : '' }}>
@@ -77,7 +77,7 @@
             <label class="form-label" for="board">Board / University</label>
             <select name="board" id="board"
                 class="form-control @error('board') is-invalid @enderror">
-                <option value="">— Select board —</option>
+                <option value="">- Select board -</option>
                 @foreach($boards as $val => $label)
                     <option value="{{ $val }}"
                         {{ old('board', $studentAcademicRecord->board ?? '') === $val ? 'selected' : '' }}>
@@ -160,7 +160,7 @@
     <div>
         <label class="form-label" for="transcript_file">
             Transcript / Marksheet
-            <span class="text-slate-400 font-normal">(PDF, JPG, PNG — max 5 MB)</span>
+            <span class="text-slate-400 font-normal">(PDF, JPG, PNG - max 5 MB)</span>
         </label>
         @isset($studentAcademicRecord)
             @if($studentAcademicRecord->transcript_file)
@@ -185,7 +185,7 @@
     <div>
         <label class="form-label" for="character_certificate_file">
             Character Certificate
-            <span class="text-slate-400 font-normal">(PDF, JPG, PNG — max 5 MB)</span>
+            <span class="text-slate-400 font-normal">(PDF, JPG, PNG - max 5 MB)</span>
         </label>
         @isset($studentAcademicRecord)
             @if($studentAcademicRecord->character_certificate_file)

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Edit Academic Record — ' . ($levels[$studentAcademicRecord->level] ?? $studentAcademicRecord->level))
+@section('title', 'Edit Academic Record - ' . ($levels[$studentAcademicRecord->level] ?? $studentAcademicRecord->level))
 @section('page-title', 'Edit Academic Record')
 
 @section('content')
@@ -7,7 +7,7 @@
 
     <x-admin.page-header
         title="Edit Academic Record"
-        :subtitle="$studentAcademicRecord->student->name . ' — ' . ($levels[$studentAcademicRecord->level] ?? $studentAcademicRecord->level)"
+        :subtitle="$studentAcademicRecord->student->name . ' - ' . ($levels[$studentAcademicRecord->level] ?? $studentAcademicRecord->level)"
         :breadcrumbs="[
             ['label'=>'Dashboard','route'=>'admin.dashboard'],
             ['label'=>'Academic Records','route' => 'admin.student-academic-records.index'],

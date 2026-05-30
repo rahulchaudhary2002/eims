@@ -161,8 +161,8 @@
                             <tbody>
                                 @foreach($scholarship->scholarshipApplications->take(5) as $sa)
                                     <tr>
-                                        <td>{{ $sa->student->name ?? '—' }}</td>
-                                        <td class="font-mono">{{ $sa->approved_amount !== null ? number_format((float) $sa->approved_amount, 2) : '—' }}</td>
+                                        <td>{{ $sa->student->name ?? '-' }}</td>
+                                        <td class="font-mono">{{ $sa->approved_amount !== null ? number_format((float) $sa->approved_amount, 2) : '-' }}</td>
                                         <td><span class="badge">{{ \App\Models\ScholarshipApplication::STATUSES[$sa->status] ?? $sa->status }}</span></td>
                                         <td>
                                             <div class="flex items-center gap-1">

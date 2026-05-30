@@ -42,7 +42,7 @@
                                 </a>
                                 <div class="text-xs text-slate-400 mt-0.5">{{ $studentCompareItem->student->email }}</div>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -54,7 +54,7 @@
                                     {{ $studentCompareItem->institution->name }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -63,7 +63,7 @@
                         <dd class="mt-1 text-slate-700">
                             @if($studentCompareItem->institutionProgram)
                                 <a href="{{ route('admin.institution-programs.show', $studentCompareItem->institutionProgram) }}" class="text-blue-600 hover:underline">
-                                    {{ $studentCompareItem->institutionProgram->title ?: ($studentCompareItem->institutionProgram->program->name ?? '—') }}
+                                    {{ $studentCompareItem->institutionProgram->title ?: ($studentCompareItem->institutionProgram->program->name ?? '-') }}
                                 </a>
                             @else
                                 <span class="text-slate-400">Not specified</span>

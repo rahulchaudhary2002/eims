@@ -82,19 +82,19 @@
                                         {{ $payment->commissionInvoice->invoice_number }}
                                     </a>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
-                            <td class="text-sm">{{ $payment->commissionInvoice?->institution?->name ?? '—' }}</td>
+                            <td class="text-sm">{{ $payment->commissionInvoice?->institution?->name ?? '-' }}</td>
                             <td class="font-mono text-sm font-semibold">{{ number_format((float) $payment->amount, 2) }}</td>
                             <td class="text-sm">{{ $paymentMethods[$payment->payment_method] ?? $payment->payment_method }}</td>
-                            <td class="font-mono text-xs text-slate-500">{{ $payment->transaction_reference ?? '—' }}</td>
-                            <td class="text-xs text-slate-500">{{ $payment->payment_date?->format('d M Y') ?? '—' }}</td>
+                            <td class="font-mono text-xs text-slate-500">{{ $payment->transaction_reference ?? '-' }}</td>
+                            <td class="text-xs text-slate-500">{{ $payment->payment_date?->format('d M Y') ?? '-' }}</td>
                             <td>
                                 @if($payment->payment_proof)
                                     <a href="{{ Storage::url($payment->payment_proof) }}" target="_blank" class="text-blue-600 hover:underline text-xs">View</a>
                                 @else
-                                    <span class="text-slate-400 text-xs">—</span>
+                                    <span class="text-slate-400 text-xs">-</span>
                                 @endif
                             </td>
                             <td>

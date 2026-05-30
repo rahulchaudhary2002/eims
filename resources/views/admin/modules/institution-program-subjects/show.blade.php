@@ -11,7 +11,7 @@
 
     <x-admin.page-header
         :title="$subject->subject_name"
-        :subtitle="($ip->institution->name ?? '—') . ' — ' . ($ip->program->name ?? '—')"
+        :subtitle="($ip->institution->name ?? '-') . ' - ' . ($ip->program->name ?? '-')"
         :breadcrumbs="[
             ['label'=>'Dashboard','route'=>'admin.dashboard'],
             ['label'=>'Program Subjects','route' => 'admin.institution-program-subjects.index'],
@@ -82,7 +82,7 @@
                                     {{ $ip->institution->name }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -94,7 +94,7 @@
                                     {{ $ip->program->name }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -103,10 +103,10 @@
                         <dd>
                             @if($ip)
                                 <a href="{{ route('admin.institution-programs.show', $ip) }}" class="text-indigo-600 hover:underline">
-                                    {{ $ip->title ?: ($ip->program->name ?? '—') }}
+                                    {{ $ip->title ?: ($ip->program->name ?? '-') }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>

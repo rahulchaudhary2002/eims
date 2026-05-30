@@ -3,11 +3,11 @@
     <div>
         <label for="institution_program_id" class="form-label">Institution Program <span class="text-red-500">*</span></label>
         <select name="institution_program_id" id="institution_program_id" class="form-control @error('institution_program_id') border-red-400 @enderror">
-            <option value="">— Select Institution Program —</option>
+            <option value="">- Select Institution Program -</option>
             @foreach($institutionPrograms as $ip)
                 <option value="{{ $ip->id }}"
                     {{ old('institution_program_id', $institutionProgramSubject->institution_program_id ?? $selectedProgramId ?? '') == $ip->id ? 'selected' : '' }}>
-                    {{ $ip->institution->name ?? '?' }} — {{ $ip->program->name ?? '?' }}
+                    {{ $ip->institution->name ?? '?' }} - {{ $ip->program->name ?? '?' }}
                 </option>
             @endforeach
         </select>

@@ -108,10 +108,10 @@
                             </span>
                         </td>
                         <td class="text-sm">
-                            {{ \App\Models\StudentAcademicRecord::BOARDS[$record->board] ?? ($record->board ?? '—') }}
+                            {{ \App\Models\StudentAcademicRecord::BOARDS[$record->board] ?? ($record->board ?? '-') }}
                         </td>
-                        <td class="text-sm">{{ $record->faculty ?? '—' }}</td>
-                        <td class="text-sm">{{ $record->passed_year ?? '—' }}</td>
+                        <td class="text-sm">{{ $record->faculty ?? '-' }}</td>
+                        <td class="text-sm">{{ $record->passed_year ?? '-' }}</td>
                         <td class="text-sm">
                             @if($record->gpa !== null)
                                 <span class="font-medium">{{ number_format($record->gpa, 2) }}</span>
@@ -122,7 +122,7 @@
                                 <span class="font-medium">{{ number_format($record->percentage, 2) }}%</span>
                             @endif
                             @if($record->gpa === null && $record->percentage === null)
-                                <span class="text-slate-300">—</span>
+                                <span class="text-slate-300">-</span>
                             @endif
                         </td>
                         <td>

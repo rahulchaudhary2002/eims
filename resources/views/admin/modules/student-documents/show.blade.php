@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', $studentDocument->title . ' — ' . $studentDocument->student->name)
+@section('title', $studentDocument->title . ' - ' . $studentDocument->student->name)
 @section('page-title', 'Student Document')
 
 @section('content')
@@ -7,7 +7,7 @@
 
     <x-admin.page-header
         title="Student Document"
-        :subtitle="$studentDocument->title . ' — ' . $studentDocument->student->name"
+        :subtitle="$studentDocument->title . ' - ' . $studentDocument->student->name"
         :breadcrumbs="[
             ['label'=>'Dashboard','route'=>'admin.dashboard'],
             ['label'=>'Student Documents','route' => 'admin.student-documents.index'],

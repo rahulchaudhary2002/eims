@@ -77,7 +77,7 @@
                                     </a>
                                     <div class="text-xs text-slate-400">{{ $favorite->student->email }}</div>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td>
@@ -86,7 +86,7 @@
                                         {{ $favorite->institution->name }}
                                     </a>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-xs text-slate-500">{{ $favorite->created_at->format('d M Y, H:i') }}</td>

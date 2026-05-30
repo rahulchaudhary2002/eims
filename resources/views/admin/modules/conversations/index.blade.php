@@ -88,14 +88,14 @@
                                     @if($conversation->student)
                                         <a href="{{ route('admin.students.show', $conversation->student) }}" class="text-blue-600 hover:underline">{{ $conversation->student->name }}</a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td class="text-sm">
                                     @if($conversation->institution)
                                         <a href="{{ route('admin.institutions.show', $conversation->institution) }}" class="text-blue-600 hover:underline">{{ $conversation->institution->name }}</a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td>

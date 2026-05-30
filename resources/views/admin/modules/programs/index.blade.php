@@ -89,12 +89,12 @@
                             <div class="font-medium text-slate-800">{{ $program->name }}</div>
                             <div class="text-xs font-mono text-slate-400">{{ $program->slug }}</div>
                         </td>
-                        <td class="text-sm text-slate-600">{{ $program->faculty->name ?? '—' }}</td>
+                        <td class="text-sm text-slate-600">{{ $program->faculty->name ?? '-' }}</td>
                         <td>
                             @if($program->level)
                                 <span class="badge badge-blue">{{ $program->level }}</span>
                             @else
-                                <span class="text-slate-400 text-sm">—</span>
+                                <span class="text-slate-400 text-sm">-</span>
                             @endif
                         </td>
                         <td>

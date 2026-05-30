@@ -40,7 +40,7 @@
                                 <a href="{{ route('admin.institutions.show', $institutionSubscription->institution) }}" class="text-blue-600 hover:underline font-medium">
                                     {{ $institutionSubscription->institution->name }}
                                 </a>
-                            @else <span class="text-slate-400">—</span>
+                            @else <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -51,7 +51,7 @@
                                 <a href="{{ route('admin.subscription-plans.show', $institutionSubscription->subscriptionPlan) }}" class="text-blue-600 hover:underline font-medium">
                                     {{ $institutionSubscription->subscriptionPlan->name }}
                                 </a>
-                            @else <span class="text-slate-400">—</span>
+                            @else <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>

@@ -1,11 +1,11 @@
 {{--
-    partials/form.blade.php — shared fields for create / edit student document.
+    partials/form.blade.php - shared fields for create / edit student document.
 
     Variables:
-      $studentDocument  — StudentDocument|null  (null on create)
-      $students         — Collection<Student>
-      $documentTypes    — array  (StudentDocument::DOCUMENT_TYPES)
-      $statuses         — array  (StudentDocument::STATUSES)
+      $studentDocument  - StudentDocument|null  (null on create)
+      $students         - Collection<Student>
+      $documentTypes    - array  (StudentDocument::DOCUMENT_TYPES)
+      $statuses         - array  (StudentDocument::STATUSES)
 --}}
 
 {{-- Student + Type + Title --}}
@@ -23,7 +23,7 @@
             <select name="student_id" id="student_id"
                 class="form-control @error('student_id') is-invalid @enderror"
                 {{ isset($studentDocument) ? 'disabled' : 'required' }}>
-                <option value="">— Select student —</option>
+                <option value="">- Select student -</option>
                 @foreach($students as $s)
                     <option value="{{ $s->id }}"
                         {{ old('student_id', $studentDocument->student_id ?? '') == $s->id ? 'selected' : '' }}>
@@ -41,7 +41,7 @@
             <label class="form-label" for="document_type">Document Type <span class="text-red-500">*</span></label>
             <select name="document_type" id="document_type" required
                 class="form-control @error('document_type') is-invalid @enderror">
-                <option value="">— Select type —</option>
+                <option value="">- Select type -</option>
                 @foreach($documentTypes as $val => $label)
                     <option value="{{ $val }}"
                         {{ old('document_type', $studentDocument->document_type ?? '') === $val ? 'selected' : '' }}>
@@ -90,7 +90,7 @@
         <label class="form-label" for="file_path">
             Document File
             @if(!isset($studentDocument)) <span class="text-red-500">*</span> @endif
-            <span class="text-slate-400 font-normal">(PDF, JPG, PNG — max 5 MB)</span>
+            <span class="text-slate-400 font-normal">(PDF, JPG, PNG - max 5 MB)</span>
         </label>
         <input type="file" name="file_path" id="file_path"
             class="form-control @error('file_path') is-invalid @enderror"

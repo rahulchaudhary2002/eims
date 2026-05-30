@@ -1,5 +1,5 @@
 {{--
-    partials/form.blade.php — shared fields for create / edit program.
+    partials/form.blade.php - shared fields for create / edit program.
     Variables: $program (Program|null), $faculties (Collection), $levels (Collection keyed name=>name)
 --}}
 
@@ -17,7 +17,7 @@
             <label class="form-label" for="faculty_id">Faculty <span class="text-red-500">*</span></label>
             <select name="faculty_id" id="faculty_id" required
                 class="form-control @error('faculty_id') is-invalid @enderror">
-                <option value="">— Select faculty —</option>
+                <option value="">- Select faculty -</option>
                 @foreach($faculties as $f)
                     <option value="{{ $f->id }}"
                         {{ old('faculty_id', $program->faculty_id ?? '') == $f->id ? 'selected' : '' }}>
@@ -32,7 +32,7 @@
             <label class="form-label" for="level">Level</label>
             <select name="level" id="level"
                 class="form-control @error('level') is-invalid @enderror">
-                <option value="">— None —</option>
+                <option value="">- None -</option>
                 @foreach($levels as $val => $label)
                     <option value="{{ $val }}"
                         {{ old('level', $program->level ?? '') === $val ? 'selected' : '' }}>
