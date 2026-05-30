@@ -46,7 +46,7 @@
                     <div class="flex items-start justify-between gap-3 flex-wrap">
                         <div>
                             <h3 class="text-sm font-bold text-gray-800">{{ $app->institution?->name ?? 'Unknown Institution' }}</h3>
-                            <p class="text-xs text-gray-500 mt-0.5">{{ $app->institutionProgram?->program?->name ?? '—' }}</p>
+                            <p class="text-xs text-gray-500 mt-0.5">{{ $app->institutionProgram?->program?->name ?? '-' }}</p>
                         </div>
                         <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full {{ $sc[$app->status] ?? 'bg-gray-100 text-gray-600' }}">
                             {{ \App\Models\Application::STATUSES[$app->status] ?? $app->status }}

@@ -66,7 +66,7 @@
             <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Gender</label>
             <select name="gender"
                     class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition bg-white @error('gender') border-red-400 @enderror">
-                <option value="">— Select —</option>
+                <option value="">- Select -</option>
                 <option value="male"   {{ old('gender', $user->gender) === 'male'   ? 'selected' : '' }}>Male</option>
                 <option value="female" {{ old('gender', $user->gender) === 'female' ? 'selected' : '' }}>Female</option>
                 <option value="other"  {{ old('gender', $user->gender) === 'other'  ? 'selected' : '' }}>Other</option>

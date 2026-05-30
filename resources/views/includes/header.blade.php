@@ -78,7 +78,7 @@
         </div>
 
         {{-- ═══════════════════════════════════════════════════════════════
-             LARGE SCREEN — Full-width account dropdown (lg+)
+             LARGE SCREEN - Full-width account dropdown (lg+)
              Positioned below the header bar, full container width
         ═══════════════════════════════════════════════════════════════ --}}
         @auth('student')
@@ -150,7 +150,7 @@
                             </form>
                         </div>
 
-                        {{-- Links row — each group is a flex column, all groups in one row --}}
+                        {{-- Links row - each group is a flex column, all groups in one row --}}
                         <div class="flex-1 grid grid-cols-3 gap-6">
                             @foreach($menuGroups as $group => $links)
                             <div class="min-w-0">

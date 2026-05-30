@@ -39,7 +39,7 @@
                             <option value="">No linked application</option>
                             @foreach($myApplications as $app)
                                 <option value="{{ $app->id }}" {{ old('application_id') == $app->id ? 'selected' : '' }}>
-                                    {{ $app->institution?->name }} — {{ $app->application_number }}
+                                    {{ $app->institution?->name }} - {{ $app->application_number }}
                                 </option>
                             @endforeach
                         </select>

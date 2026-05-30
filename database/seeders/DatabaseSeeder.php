@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             ScholarshipSeeder::class,
             ApplicationSeeder::class,
             AdmissionSeeder::class,
+            DemoSeeder::class,
         ]);
     }
 }
