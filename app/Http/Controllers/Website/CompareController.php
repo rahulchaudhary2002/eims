@@ -15,8 +15,23 @@ class CompareController extends Controller
 
     public function index()
     {
-        $compareData = $this->getCompareData();
+        // Logged-in students: load paired items directly
+        if (Auth::guard('student')->check()) {
+            $student = Auth::guard('student')->user();
+            $items   = StudentCompareItem::where('student_id', $student->id)
+                ->with(['institution.profile', 'institutionProgram.program'])
+                ->get();
 
+            return view('website.compare.index', [
+                'items'        => $items,
+                'institutions' => collect(),
+                'programs'     => collect(),
+            ]);
+        }
+
+        // Guests: session-based split tables
+        $compareData  = session('website_compare', ['institutions' => [], 'programs' => []]);
+        $items        = collect();
         $institutions = collect();
         $programs     = collect();
 
@@ -31,11 +46,22 @@ class CompareController extends Controller
 
         if (! empty($compareData['programs'])) {
             $programs = InstitutionProgram::whereIn('id', $compareData['programs'])
-                ->with(['institution', 'program.faculty', 'subjects'])
+                ->with(['institution.profile', 'program.faculty', 'subjects'])
                 ->get();
         }
 
-        return view('website.compare.index', compact('institutions', 'programs'));
+        return view('website.compare.index', compact('items', 'institutions', 'programs'));
+    }
+
+    public function destroyItem(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    {
+        abort_unless(Auth::guard('student')->check(), 403);
+
+        StudentCompareItem::where('id', $id)
+            ->where('student_id', Auth::guard('student')->id())
+            ->delete();
+
+        return back()->with('success', 'Removed from compare list.');
     }
 
     public function store(Request $request)

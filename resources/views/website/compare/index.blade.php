@@ -40,7 +40,7 @@
             </div>
         @endif
 
-        @if ($institutions->isEmpty() && $programs->isEmpty())
+        @if ($items->isEmpty() && $institutions->isEmpty() && $programs->isEmpty())
             <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 py-20 text-center">
                 <i class="fas fa-balance-scale text-gray-200 text-6xl mb-5"></i>
                 <h2 class="text-[1.5rem] font-bold text-gray-700 mb-3">Nothing to Compare Yet</h2>
@@ -56,6 +56,142 @@
                     </a>
                 </div>
             </div>
+        @endif
+
+        {{-- ── STUDENT: Paired institution+program table ── --}}
+        @if ($items->isNotEmpty())
+        @php
+            $yesIcon = '<span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-green-100 text-green-600"><i class="fas fa-check text-xs"></i></span>';
+            $noIcon  = '<span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-gray-100 text-gray-400"><i class="fas fa-times text-xs"></i></span>';
+        @endphp
+        <div class="overflow-x-auto mb-10">
+            <table class="w-full bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden text-sm">
+                <thead>
+                    <tr class="bg-gray-50 border-b border-gray-200">
+                        <th class="px-5 py-4 text-left text-xs font-bold text-gray-500 w-44">Feature</th>
+                        @foreach($items as $item)
+                        <th class="px-5 py-4 text-left min-w-[220px]">
+                            <div class="flex items-start justify-between gap-2">
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">{{ $item->institution?->name }}</p>
+                                    @if($item->institutionProgram)
+                                    <p class="text-xs text-[#4299e1] font-medium mt-0.5">{{ $item->institutionProgram?->program?->name }}</p>
+                                    @endif
+                                    <p class="text-xs text-gray-400 mt-0.5">{{ ucfirst($item->institution?->type ?? '') }}</p>
+                                </div>
+                                <form method="POST" action="{{ route('website.compare.destroy-item', $item->id) }}">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="text-gray-300 hover:text-red-400 transition shrink-0 mt-0.5">
+                                        <i class="fas fa-times text-sm"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+
+                    {{-- General --}}
+                    <tr class="bg-[#f7fafc]">
+                        <td colspan="{{ $items->count() + 1 }}" class="px-5 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">General</td>
+                    </tr>
+                    @foreach([
+                        ['Location',    fn($i) => implode(', ', array_filter([$i->institution?->city, $i->institution?->district, $i->institution?->province]))],
+                        ['Established', fn($i) => $i->institution?->established_year ?? '-'],
+                        ['Status',      fn($i) => ucfirst($i->institution?->status ?? '-')],
+                        ['Verified',    fn($i) => $i->institution?->is_verified ? '✓ Verified' : 'Not Verified'],
+                    ] as [$label, $fn])
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-5 py-3 text-xs font-semibold text-gray-500">{{ $label }}</td>
+                        @foreach($items as $item)
+                        <td class="px-5 py-3 text-sm text-gray-700">{{ $fn($item) }}</td>
+                        @endforeach
+                    </tr>
+                    @endforeach
+
+                    {{-- Program & Fees --}}
+                    <tr class="bg-[#f7fafc]">
+                        <td colspan="{{ $items->count() + 1 }}" class="px-5 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Program & Fees</td>
+                    </tr>
+                    @foreach([
+                        ['Program',        fn($i) => $i->institutionProgram?->program?->name ?? '-'],
+                        ['Total Fee',      fn($i) => $i->institutionProgram?->total_fee      ? 'NPR ' . number_format($i->institutionProgram->total_fee)      : '-'],
+                        ['Admission Fee',  fn($i) => $i->institutionProgram?->admission_fee  ? 'NPR ' . number_format($i->institutionProgram->admission_fee)  : '-'],
+                        ['Semester Fee',   fn($i) => $i->institutionProgram?->semester_fee   ? 'NPR ' . number_format($i->institutionProgram->semester_fee)   : '-'],
+                        ['Duration',       fn($i) => $i->institutionProgram?->duration_months ? $i->institutionProgram->duration_months . ' months'           : '-'],
+                        ['Total Seats',    fn($i) => $i->institutionProgram?->total_seats     ?? '-'],
+                        ['Avail. Seats',   fn($i) => $i->institutionProgram?->available_seats ?? '-'],
+                        ['Min GPA',        fn($i) => $i->institutionProgram?->minimum_gpa        ?? '-'],
+                        ['Min %',          fn($i) => $i->institutionProgram?->minimum_percentage ? $i->institutionProgram->minimum_percentage . '%' : '-'],
+                        ['Deadline',       fn($i) => $i->institutionProgram?->admission_end_date ? 'Until ' . \Carbon\Carbon::parse($i->institutionProgram->admission_end_date)->format('M d, Y') : '-'],
+                    ] as [$label, $fn])
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-5 py-3 text-xs font-semibold text-gray-500">{{ $label }}</td>
+                        @foreach($items as $item)
+                        <td class="px-5 py-3 text-sm text-gray-700">{{ $fn($item) }}</td>
+                        @endforeach
+                    </tr>
+                    @endforeach
+
+                    {{-- Infrastructure --}}
+                    <tr class="bg-[#f7fafc]">
+                        <td colspan="{{ $items->count() + 1 }}" class="px-5 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Infrastructure</td>
+                    </tr>
+                    @foreach([
+                        ['Hostel',          fn($i) => $i->institution?->profile?->has_hostel],
+                        ['Library',         fn($i) => $i->institution?->profile?->has_library],
+                        ['Computer Lab',    fn($i) => $i->institution?->profile?->has_lab],
+                        ['Cafeteria',       fn($i) => $i->institution?->profile?->has_cafeteria],
+                        ['Sports Facility', fn($i) => $i->institution?->profile?->has_sports],
+                        ['Transportation',  fn($i) => $i->institution?->profile?->has_transportation],
+                        ['Scholarship',     fn($i) => $i->institution?->profile?->has_scholarship],
+                    ] as [$label, $fn])
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-5 py-3 text-xs font-semibold text-gray-500">{{ $label }}</td>
+                        @foreach($items as $item)
+                        <td class="px-5 py-3">{!! $fn($item) ? $yesIcon : $noIcon !!}</td>
+                        @endforeach
+                    </tr>
+                    @endforeach
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-5 py-3 text-xs font-semibold text-gray-500">Facilities</td>
+                        @foreach($items as $item)
+                        <td class="px-5 py-3">
+                            @php $facilities = $item->institution?->profile?->facilities ?? []; @endphp
+                            @if(count($facilities))
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($facilities as $f)
+                                    <span class="text-[11px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-medium">{{ $f }}</span>
+                                    @endforeach
+                                </div>
+                            @else
+                                <span class="text-gray-400 text-xs">-</span>
+                            @endif
+                        </td>
+                        @endforeach
+                    </tr>
+
+                    {{-- Apply --}}
+                    <tr class="bg-gray-50">
+                        <td class="px-5 py-4 text-xs font-bold text-gray-500">Apply</td>
+                        @foreach($items as $item)
+                        <td class="px-5 py-4">
+                            @if($item->institution && $item->institutionProgram)
+                            <a href="{{ route('website.applications.create', ['institution' => $item->institution->slug, 'program' => $item->institutionProgram->slug]) }}"
+                               class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] text-white text-xs font-bold rounded-lg hover:opacity-90 transition no-underline">
+                                <i class="fas fa-paper-plane text-[10px]"></i> Apply Now
+                            </a>
+                            @else
+                            <span class="text-gray-400 text-xs">-</span>
+                            @endif
+                        </td>
+                        @endforeach
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
         @endif
 
         {{-- Institutions Comparison --}}
@@ -92,6 +228,10 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
+                        {{-- General --}}
+                        <tr class="bg-[#f7fafc]">
+                            <td colspan="{{ $institutions->count() + 1 }}" class="px-5 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">General</td>
+                        </tr>
                         @foreach ([
                             ['key' => 'type', 'label' => 'Type', 'format' => 'type'],
                             ['key' => 'city', 'label' => 'Location', 'format' => 'text'],
@@ -131,6 +271,51 @@
                                 @endforeach
                             </tr>
                         @endforeach
+
+                        {{-- Infrastructure --}}
+                        <tr class="bg-[#f7fafc]">
+                            <td colspan="{{ $institutions->count() + 1 }}" class="px-5 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Infrastructure</td>
+                        </tr>
+                        @foreach ([
+                            ['field' => 'has_hostel',        'label' => 'Hostel'],
+                            ['field' => 'has_library',       'label' => 'Library'],
+                            ['field' => 'has_lab',           'label' => 'Computer Lab'],
+                            ['field' => 'has_cafeteria',     'label' => 'Cafeteria'],
+                            ['field' => 'has_sports',        'label' => 'Sports Facility'],
+                            ['field' => 'has_transportation','label' => 'Transportation'],
+                            ['field' => 'has_scholarship',   'label' => 'Scholarship'],
+                        ] as $infra)
+                            <tr class="hover:bg-[#f7fafc] transition">
+                                <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ $infra['label'] }}</td>
+                                @foreach ($institutions as $inst)
+                                    <td class="px-5 py-4 text-center">
+                                        @if ($inst->profile?->{$infra['field']})
+                                            <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-green-100 text-green-600"><i class="fas fa-check text-xs"></i></span>
+                                        @else
+                                            <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-gray-100 text-gray-400"><i class="fas fa-times text-xs"></i></span>
+                                        @endif
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                        <tr class="hover:bg-[#f7fafc] transition">
+                            <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Facilities</td>
+                            @foreach ($institutions as $inst)
+                                <td class="px-5 py-4 text-center">
+                                    @php $facilities = $inst->profile?->facilities ?? []; @endphp
+                                    @if(count($facilities))
+                                        <div class="flex flex-wrap justify-center gap-1">
+                                            @foreach($facilities as $f)
+                                            <span class="text-[11px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-medium">{{ $f }}</span>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <span class="text-gray-400">-</span>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+
                         <tr class="bg-[#f7fafc]">
                             <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Actions</td>
                             @foreach ($institutions as $inst)
@@ -178,14 +363,20 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
+
+                        {{-- Fees & Availability --}}
+                        <tr class="bg-[#f7fafc]">
+                            <td colspan="{{ $programs->count() + 1 }}" class="px-5 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Fees & Availability</td>
+                        </tr>
                         @foreach ([
-                            ['key' => 'status', 'label' => 'Status', 'format' => 'status'],
-                            ['key' => 'total_fee', 'label' => 'Total Fee', 'format' => 'currency'],
-                            ['key' => 'duration_months', 'label' => 'Duration (months)', 'format' => 'text'],
-                            ['key' => 'total_seats', 'label' => 'Total Seats', 'format' => 'text'],
-                            ['key' => 'available_seats', 'label' => 'Available Seats', 'format' => 'text'],
-                            ['key' => 'minimum_gpa', 'label' => 'Min GPA', 'format' => 'text'],
-                            ['key' => 'minimum_percentage', 'label' => 'Min %', 'format' => 'percent'],
+                            ['key' => 'status',        'label' => 'Status',           'format' => 'status'],
+                            ['key' => 'total_fee',     'label' => 'Total Fee',         'format' => 'currency'],
+                            ['key' => 'admission_fee', 'label' => 'Admission Fee',     'format' => 'currency'],
+                            ['key' => 'semester_fee',  'label' => 'Semester Fee',      'format' => 'currency'],
+                            ['key' => 'duration_months','label'=> 'Duration',          'format' => 'duration'],
+                            ['key' => 'total_seats',   'label' => 'Total Seats',       'format' => 'text'],
+                            ['key' => 'available_seats','label'=> 'Available Seats',   'format' => 'text'],
+                            ['key' => 'admission_end_date','label'=> 'Deadline',       'format' => 'date'],
                         ] as $attr)
                             <tr class="hover:bg-[#f7fafc] transition">
                                 <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ $attr['label'] }}</td>
@@ -194,17 +385,17 @@
                                         @php $val = $prog->{$attr['key']}; @endphp
                                         @if ($attr['format'] === 'currency')
                                             {{ $val ? 'NPR ' . number_format($val) : '-' }}
-                                        @elseif ($attr['format'] === 'percent')
-                                            {{ $val ? $val . '%' : '-' }}
+                                        @elseif ($attr['format'] === 'duration')
+                                            {{ $val ? $val . ' months' : '-' }}
+                                        @elseif ($attr['format'] === 'date')
+                                            {{ $val ? 'Until ' . \Carbon\Carbon::parse($val)->format('M d, Y') : '-' }}
                                         @elseif ($attr['format'] === 'status')
                                             @if ($val === 'open')
                                                 <span class="inline-flex items-center gap-1 text-green-600 font-semibold text-xs bg-green-50 px-2 py-1 rounded-full">
                                                     <i class="fas fa-circle text-[8px]"></i> Open
                                                 </span>
                                             @elseif ($val)
-                                                <span class="inline-flex items-center gap-1 text-gray-500 text-xs bg-gray-50 px-2 py-1 rounded-full capitalize">
-                                                    {{ $val }}
-                                                </span>
+                                                <span class="inline-flex items-center gap-1 text-gray-500 text-xs bg-gray-50 px-2 py-1 rounded-full capitalize">{{ $val }}</span>
                                             @else
                                                 <span class="text-gray-400">-</span>
                                             @endif
@@ -215,6 +406,70 @@
                                 @endforeach
                             </tr>
                         @endforeach
+
+                        {{-- Requirements --}}
+                        <tr class="bg-[#f7fafc]">
+                            <td colspan="{{ $programs->count() + 1 }}" class="px-5 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Requirements</td>
+                        </tr>
+                        @foreach ([
+                            ['key' => 'minimum_gpa',        'label' => 'Min GPA', 'format' => 'text'],
+                            ['key' => 'minimum_percentage', 'label' => 'Min %',   'format' => 'percent'],
+                        ] as $attr)
+                            <tr class="hover:bg-[#f7fafc] transition">
+                                <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ $attr['label'] }}</td>
+                                @foreach ($programs as $prog)
+                                    <td class="px-5 py-4 text-center text-gray-900 font-medium">
+                                        @php $val = $prog->{$attr['key']}; @endphp
+                                        {{ $attr['format'] === 'percent' ? ($val ? $val . '%' : '-') : ($val ?? '-') }}
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+
+                        {{-- Infrastructure (from institution) --}}
+                        <tr class="bg-[#f7fafc]">
+                            <td colspan="{{ $programs->count() + 1 }}" class="px-5 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Infrastructure</td>
+                        </tr>
+                        @foreach ([
+                            ['field' => 'has_hostel',         'label' => 'Hostel'],
+                            ['field' => 'has_library',        'label' => 'Library'],
+                            ['field' => 'has_lab',            'label' => 'Computer Lab'],
+                            ['field' => 'has_cafeteria',      'label' => 'Cafeteria'],
+                            ['field' => 'has_sports',         'label' => 'Sports Facility'],
+                            ['field' => 'has_transportation', 'label' => 'Transportation'],
+                            ['field' => 'has_scholarship',    'label' => 'Scholarship'],
+                        ] as $infra)
+                            <tr class="hover:bg-[#f7fafc] transition">
+                                <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ $infra['label'] }}</td>
+                                @foreach ($programs as $prog)
+                                    <td class="px-5 py-4 text-center">
+                                        @if ($prog->institution?->profile?->{$infra['field']})
+                                            <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-green-100 text-green-600"><i class="fas fa-check text-xs"></i></span>
+                                        @else
+                                            <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-gray-100 text-gray-400"><i class="fas fa-times text-xs"></i></span>
+                                        @endif
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                        <tr class="hover:bg-[#f7fafc] transition">
+                            <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Facilities</td>
+                            @foreach ($programs as $prog)
+                                <td class="px-5 py-4 text-center">
+                                    @php $facilities = $prog->institution?->profile?->facilities ?? []; @endphp
+                                    @if(count($facilities))
+                                        <div class="flex flex-wrap justify-center gap-1">
+                                            @foreach($facilities as $f)
+                                            <span class="text-[11px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-medium">{{ $f }}</span>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <span class="text-gray-400">-</span>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+
                         <tr class="bg-[#f7fafc]">
                             <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Actions</td>
                             @foreach ($programs as $prog)
