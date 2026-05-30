@@ -243,7 +243,7 @@
                             @foreach ([
                                 ['route' => 'student.applications.create',          'icon' => 'fa-paper-plane',  'label' => 'Apply',        'primary' => true],
                                 ['route' => 'student.inquiries.create',              'icon' => 'fa-question-circle','label' => 'Inquiry',    'primary' => false],
-                                ['route' => 'student.compare.index',                 'icon' => 'fa-balance-scale','label' => 'Compare',      'primary' => false],
+                                ['route' => 'website.compare.index',                 'icon' => 'fa-balance-scale','label' => 'Compare',      'primary' => false],
                                 ['route' => 'student.scholarship-applications.index','icon' => 'fa-award',        'label' => 'Scholarship',  'primary' => false],
                             ] as $action)
                                 <a href="{{ route($action['route']) }}"

@@ -43,6 +43,7 @@ Route::name('website.')->group(function () {
     // Compare
     Route::get('/compare', [CompareController::class, 'index'])->name('compare.index');
     Route::post('/compare', [CompareController::class, 'store'])->name('compare.store');
+    Route::delete('/compare/item/{id}', [CompareController::class, 'destroyItem'])->name('compare.destroy-item');
     Route::delete('/compare/{type}/{slug}', [CompareController::class, 'destroy'])->name('compare.destroy');
 
     // Inquiry

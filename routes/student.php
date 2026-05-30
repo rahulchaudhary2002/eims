@@ -3,7 +3,6 @@
 use App\Http\Controllers\Student\StudentAcademicRecordController;
 use App\Http\Controllers\Student\StudentApplicationController;
 use App\Http\Controllers\Student\StudentCashbackController;
-use App\Http\Controllers\Student\StudentCompareController;
 use App\Http\Controllers\Student\StudentConversationController;
 use App\Http\Controllers\Student\StudentCounselingSessionController;
 use App\Http\Controllers\Student\StudentDashboardController;
@@ -54,12 +53,6 @@ Route::middleware(['auth:student'])
         // Favorites
         Route::resource('favorites', StudentFavoriteInstitutionController::class)
             ->only(['index', 'store', 'destroy']);
-
-        // Compare
-        Route::resource('compare', StudentCompareController::class)
-            ->only(['index', 'store', 'destroy']);
-        Route::delete('compare', [StudentCompareController::class, 'destroyAll'])
-            ->name('compare.destroy-all');
 
         // Recommendations
         Route::resource('recommendations', StudentRecommendationController::class)
