@@ -28,8 +28,8 @@ class UpdateUserRequest extends FormRequest
             'email_verified_at'                 => ['nullable', 'date'],
             'institutions'                      => ['nullable', 'array'],
             'institutions.*.institution_id'     => ['required', 'integer', 'exists:institutions,id'],
-            'institutions.*.role_name'          => ['nullable', Rule::in(array_keys(UserInstitution::ROLES))],
-            'institutions.*.position'           => ['nullable', 'string', 'max:100'],
+            'institutions.*.role'          => ['nullable', Rule::in(array_keys(UserInstitution::ROLES))],
+            
             'institutions.*.is_active'          => ['nullable'],
             'institutions.*.joined_at'          => ['nullable', 'date'],
             'primary_institution_id'            => ['nullable', 'integer', 'exists:institutions,id'],

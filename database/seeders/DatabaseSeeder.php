@@ -23,18 +23,11 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            LevelSeeder::class,
             UserSeeder::class,
-            AffiliationSeeder::class,
             FacultySeeder::class,
             InstitutionSeeder::class,
             InstitutionUserSeeder::class,
             StudentSeeder::class,
-            CourseSeeder::class,
-            AffiliationInstitutionSeeder::class,
-            CourseDescriptionSeeder::class,
-            QuestionSeeder::class,
-            ReplySeeder::class,
             ProgramSeeder::class,
             InstitutionProgramSeeder::class,
             InstitutionProgramSubjectSeeder::class,

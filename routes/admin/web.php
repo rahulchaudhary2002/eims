@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\CounselingSessionController;
 use App\Http\Controllers\Admin\SubscriptionPlanController;
 use App\Http\Controllers\Admin\InstitutionFollowerController;
 use App\Http\Controllers\Admin\CommissionInvoiceController;
+
 use App\Http\Controllers\Admin\CommissionPaymentController;
 use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\LeadFollowUpController;
@@ -29,8 +30,6 @@ use App\Http\Controllers\Admin\ScholarshipApplicationController;
 use App\Http\Controllers\Admin\ScholarshipCashbackController;
 use App\Http\Controllers\Admin\ReferralAgreementController;
 use App\Http\Controllers\Admin\ReferralController;
-use App\Http\Controllers\Admin\BulkModuleImportController;
-use App\Http\Controllers\Admin\CurrentInstitutionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\InstitutionController;
@@ -43,7 +42,6 @@ use App\Http\Controllers\Admin\InstitutionProgramController;
 use App\Http\Controllers\Admin\InstitutionProgramSubjectController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\ScholarshipController;
-use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -59,7 +57,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->
 
     Route::resource('institutions', InstitutionController::class);
     Route::patch('institutions/{institution}/status', [InstitutionController::class, 'updateStatus'])->name('institutions.update-status');
-    Route::post('switch-institution', [CurrentInstitutionController::class, 'switch'])->name('institutions.switch-current');
 
     Route::resource('institution-followers', InstitutionFollowerController::class)->only(['index', 'show', 'destroy']);
 
@@ -187,15 +184,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->
     Route::resource('programs', ProgramController::class);
     Route::patch('programs/{program}/status', [ProgramController::class, 'updateStatus'])
         ->name('programs.update-status');
-    Route::get('bulk-import', [BulkModuleImportController::class, 'index'])->name('bulk-import.index');
-    Route::post('bulk-import', [BulkModuleImportController::class, 'store'])->name('bulk-import.store');
-    Route::get('bulk-import/template', [BulkModuleImportController::class, 'template'])->name('bulk-import.template');
 
     Route::resource('conversations', ConversationController::class);
     Route::resource('messages', MessageController::class)->only(['index', 'show', 'store', 'destroy']);
     Route::post('conversations/{conversation}/messages', [MessageController::class, 'store'])
         ->name('conversations.messages.store');
-
-    Route::post('notification/read-all', [SettingController::class, 'readAllNotifications'])
-        ->name('notification.read-all');
 });

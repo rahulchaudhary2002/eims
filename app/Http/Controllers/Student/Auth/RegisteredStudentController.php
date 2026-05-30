@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Student\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Level;
-use App\Models\ProgramCategory;
 use App\Models\Student;
 use App\Models\StudentProfile;
 use Illuminate\Auth\Events\Registered;
@@ -19,10 +17,7 @@ class RegisteredStudentController extends Controller
 {
     public function create(): View
     {
-        $educationLevels = Level::active()->ordered()->get();
-        $educationFields = ProgramCategory::orderBy('name')->get();
-
-        return view('auth.register', compact('educationLevels', 'educationFields'));
+        return view('auth.register');
     }
 
     public function store(Request $request): RedirectResponse

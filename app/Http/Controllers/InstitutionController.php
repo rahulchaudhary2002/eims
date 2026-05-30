@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Affiliation;
 use App\Models\Inquiry;
 use App\Models\Institution;
 use Illuminate\Http\Request;
@@ -25,13 +24,7 @@ class InstitutionController extends Controller
                 'institutions_count' => $row->institutions_count,
             ]);
 
-        $affiliations = Affiliation::whereHas('institutions')
-            ->withCount('institutions')
-            ->latest()
-            ->get();
-
         $typeSlugs = (array) $request->input('institutionTypes', []);
-        $affSlugs  = (array) $request->input('affiliatedUniversities', []);
         $locations = (array) $request->input('locations', []);
 
         $institutions = Institution::query()
@@ -41,21 +34,13 @@ class InstitutionController extends Controller
             ->when($request->filled('institution_type'), function ($q) use ($request) {
                 $q->where('type', $request->institution_type);
             })
-            ->when($request->filled('affiliated_university'), function ($q) use ($request) {
-                $q->whereHas('affiliations', fn($qq) => $qq->where('slug', $request->affiliated_university));
-            })
             ->when(count($typeSlugs), function ($q) use ($typeSlugs) {
                 $q->whereIn('type', $typeSlugs);
-            })
-            ->when(count($affSlugs), function ($q) use ($affSlugs) {
-                $q->whereHas('affiliations', fn($qq) => $qq->whereIn('slug', $affSlugs));
             })
             ->when(count($locations), function ($q) use ($locations) {
                 $q->whereIn('location_slug', $locations);
             })
-            ->with('affiliations')
             ->withCount('programs')
-
             ->when($request->filled('sort'), function ($q) use ($request) {
                 $allowed = ['name', 'established_year'];
                 $sort = in_array($request->sort, $allowed) ? $request->sort : 'name';
@@ -68,8 +53,7 @@ class InstitutionController extends Controller
 
         return view('modules.institution.index', compact(
             'institutions',
-            'institutionTypes',
-            'affiliations'
+            'institutionTypes'
         ));
     }
 
