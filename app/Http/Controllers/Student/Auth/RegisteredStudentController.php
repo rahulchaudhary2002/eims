@@ -17,7 +17,27 @@ class RegisteredStudentController extends Controller
 {
     public function create(): View
     {
-        return view('auth.register');
+        $educationLevels = collect([
+            ['id' => 'see', 'name' => 'SEE / Secondary'],
+            ['id' => 'plus-two', 'name' => '+2 / Higher Secondary'],
+            ['id' => 'bachelor', 'name' => 'Bachelor'],
+            ['id' => 'master', 'name' => 'Master'],
+            ['id' => 'diploma', 'name' => 'Diploma / Certificate'],
+        ])->map(fn(array $level) => (object) $level);
+
+        $educationFields = collect([
+            'Management',
+            'Science',
+            'Engineering',
+            'Medical',
+            'Information Technology',
+            'Humanities',
+            'Law',
+            'Education',
+            'Arts & Design',
+        ])->map(fn(string $name) => (object) ['name' => $name]);
+
+        return view('auth.register', compact('educationLevels', 'educationFields'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -29,6 +49,7 @@ class RegisteredStudentController extends Controller
             'phone'       => ['required', 'string', 'max:30', 'unique:students,phone'],
             'dob'         => ['required', 'date', 'before:-13 years'],
             'address'     => ['nullable', 'string', 'max:255'],
+            'education_level_id' => ['nullable', 'string', 'max:100'],
             'field_of_interest' => ['nullable', 'string', 'max:255'],
             'password'    => ['required', 'confirmed', Password::min(8)],
             'terms'       => ['accepted'],

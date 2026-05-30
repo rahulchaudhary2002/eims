@@ -14,6 +14,7 @@ return new class extends Migration
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->string('type')->default('article');
             $table->string('title');
+            $table->string('slug')->nullable()->unique();
             $table->longText('content')->nullable();
             $table->string('thumbnail')->nullable();
             $table->boolean('is_published')->default(false);

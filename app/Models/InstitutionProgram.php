@@ -5,9 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class InstitutionProgram extends Model
 {
+    use HasSlug;
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom(function ($model) {
+                return $model->title ?: ($model->program?->name ?? 'program');
+            })
+            ->saveSlugsTo('slug');
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
     const STATUSES = [
         'open' => 'Open',
         'closed' => 'Closed',
@@ -19,6 +36,7 @@ class InstitutionProgram extends Model
         'institution_id',
         'program_id',
         'title',
+        'slug',
         'admission_fee',
         'monthly_fee',
         'semester_fee',

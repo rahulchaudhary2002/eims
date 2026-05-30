@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('institution_id')->constrained()->onDelete('cascade');
             $table->foreignId('program_id')->constrained()->onDelete('cascade');
             $table->string('title')->nullable();
+            $table->string('slug')->nullable()->unique();
             $table->decimal('admission_fee', 12, 2)->nullable();
             $table->decimal('monthly_fee', 12, 2)->nullable();
             $table->decimal('semester_fee', 12, 2)->nullable();

@@ -14,7 +14,7 @@ class InstitutionProgramSeeder extends Seeder
 
         foreach ($institutions as $institution) {
             foreach ([1, 2] as $programId) {
-                InstitutionProgram::updateOrCreate([
+                $ip = InstitutionProgram::updateOrCreate([
                     'institution_id' => $institution->id,
                     'program_id' => $programId,
                 ], [
@@ -33,6 +33,11 @@ class InstitutionProgramSeeder extends Seeder
                     'admission_end_date' => now()->addDays(45)->toDateString(),
                     'status' => 'open',
                 ]);
+
+                if (! $ip->slug) {
+                    $ip->generateSlug();
+                    $ip->saveQuietly();
+                }
             }
         }
     }

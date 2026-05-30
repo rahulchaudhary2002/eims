@@ -189,4 +189,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->
     Route::resource('messages', MessageController::class)->only(['index', 'show', 'store', 'destroy']);
     Route::post('conversations/{conversation}/messages', [MessageController::class, 'store'])
         ->name('conversations.messages.store');
+
+    Route::post('notifications/read-all', [\App\Http\Controllers\Admin\NotificationController::class, 'readAll'])
+        ->name('notification.read-all');
+    Route::post('notifications/{id}/read', [\App\Http\Controllers\Admin\NotificationController::class, 'read'])
+        ->name('notification.read');
 });
