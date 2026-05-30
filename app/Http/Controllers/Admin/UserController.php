@@ -58,7 +58,6 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        $data['is_super_admin'] = $request->boolean('is_super_admin');
         $data['is_active']      = $request->boolean('is_active', true);
 
         if ($request->hasFile('avatar')) {
@@ -99,7 +98,6 @@ class UserController extends Controller
         $this->authorizeUserAccess($user);
         $data = $request->validated();
 
-        $data['is_super_admin'] = $request->boolean('is_super_admin');
         $data['is_active']      = $request->boolean('is_active');
 
         if (empty($data['password'])) {

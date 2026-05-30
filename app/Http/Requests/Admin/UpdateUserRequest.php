@@ -24,7 +24,6 @@ class UpdateUserRequest extends FormRequest
             'phone'                             => ['nullable', 'string', 'max:30', Rule::unique('users', 'phone')->ignore($user->id)],
             'password'                          => ['nullable', 'confirmed', Password::min(8)],
             'avatar'                            => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-            'is_super_admin'                    => ['nullable', 'boolean'],
             'is_active'                         => ['nullable', 'boolean'],
             'email_verified_at'                 => ['nullable', 'date'],
             'institutions'                      => ['nullable', 'array'],
