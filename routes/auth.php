@@ -24,8 +24,8 @@ Route::middleware('guest:student')->group(function () {
 Route::middleware('auth:student')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('student.logout');
 
-    // Dashboard
-    Route::get('/student/dashboard', [DashboardController::class, 'index'])->name('student.dashboard');
+    // Dashboard — redirect legacy route to new student module
+    Route::get('/student/dashboard', [\App\Http\Controllers\Student\StudentDashboardController::class, 'index'])->name('student.dashboard');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
