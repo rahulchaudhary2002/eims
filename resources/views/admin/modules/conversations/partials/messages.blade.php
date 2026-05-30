@@ -3,9 +3,9 @@
     Expects: $conversation (with messages.sender loaded)
 --}}
 
-<div class="card">
+<div class="eims-card overflow-hidden">
     <div class="card-header flex items-center justify-between">
-        <h2 class="card-title">Messages</h2>
+        <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Messages</h2>
         <span class="text-sm text-slate-500">{{ $conversation->messages->count() }} message{{ $conversation->messages->count() !== 1 ? 's' : '' }}</span>
     </div>
 
@@ -86,7 +86,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="form-label required">Send As (Type)</label>
-                    <select name="sender_type" class="form-select @error('sender_type') is-invalid @enderror" required>
+                    <select name="sender_type" class="form-control @error('sender_type') is-invalid @enderror" required>
                         <option value="">— Select Sender Type —</option>
                         @foreach(\App\Models\Message::SENDER_TYPES as $value => $label)
                             <option value="{{ $value }}" {{ old('sender_type') === $value ? 'selected' : '' }}>{{ $label }}</option>
@@ -97,7 +97,7 @@
                 <div>
                     <label class="form-label required">Sender ID</label>
                     <input type="number" name="sender_id" value="{{ old('sender_id', auth('web')->id()) }}"
-                           class="form-input @error('sender_id') is-invalid @enderror"
+                           class="form-control @error('sender_id') is-invalid @enderror"
                            placeholder="User / Student ID" min="1" required>
                     <p class="text-xs text-slate-400 mt-0.5">Your admin ID: {{ auth('web')->id() }}</p>
                     @error('sender_id') <p class="form-error">{{ $message }}</p> @enderror
@@ -107,14 +107,14 @@
             <div class="mb-4">
                 <label class="form-label">Message</label>
                 <textarea name="message" rows="3"
-                          class="form-input @error('message') is-invalid @enderror"
+                          class="form-control @error('message') is-invalid @enderror"
                           placeholder="Type your message…">{{ old('message') }}</textarea>
                 @error('message') <p class="form-error">{{ $message }}</p> @enderror
             </div>
 
             <div class="mb-4">
                 <label class="form-label">Attachment <span class="text-slate-400 font-normal">(optional, max 10 MB)</span></label>
-                <input type="file" name="attachment" class="form-input @error('attachment') is-invalid @enderror">
+                <input type="file" name="attachment" class="form-control @error('attachment') is-invalid @enderror">
                 @error('attachment') <p class="form-error">{{ $message }}</p> @enderror
             </div>
 

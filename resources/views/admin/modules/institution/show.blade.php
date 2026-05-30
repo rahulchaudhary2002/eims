@@ -1464,9 +1464,9 @@
     </div>
 
     {{-- Reviews --}}
-    <div class="card">
+    <div class="eims-card overflow-hidden">
         <div class="card-header flex items-center justify-between">
-            <h2 class="card-title">Reviews</h2>
+            <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Reviews</h2>
             <div class="flex items-center gap-3">
                 <span class="text-sm text-slate-500">{{ $institution->reviews->count() }} total</span>
                 <a href="{{ route('admin.institution-reviews.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary btn-sm">Add Review</a>
@@ -1478,8 +1478,8 @@
                 <a href="{{ route('admin.institution-reviews.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary btn-sm">Add First Review</a>
             </div>
         @else
-            <div class="table-responsive">
-                <table class="data-table">
+            <div class="eims-table-wrapper">
+                <table class="eims-table w-full">
                     <thead>
                         <tr>
                             <th>Student</th>
@@ -1539,9 +1539,9 @@
     </div>
 
     {{-- Conversations --}}
-    <div class="card">
+    <div class="eims-card overflow-hidden">
         <div class="card-header flex items-center justify-between">
-            <h2 class="card-title">Conversations</h2>
+            <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Conversations</h2>
             <div class="flex items-center gap-3">
                 <span class="text-sm text-slate-500">{{ $institution->conversations->count() }} total</span>
                 <a href="{{ route('admin.conversations.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary btn-sm">New Conversation</a>
@@ -1553,8 +1553,8 @@
                 <a href="{{ route('admin.conversations.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary btn-sm">Start First</a>
             </div>
         @else
-            <div class="table-responsive">
-                <table class="data-table">
+            <div class="eims-table-wrapper">
+                <table class="eims-table w-full">
                     <thead>
                         <tr>
                             <th>Student</th>

@@ -1003,9 +1003,9 @@
     </div>
 
     {{-- Reviews --}}
-    <div class="card">
+    <div class="eims-card overflow-hidden">
         <div class="card-header flex items-center justify-between">
-            <h2 class="card-title">Institution Reviews</h2>
+            <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Institution Reviews</h2>
             <div class="flex items-center gap-3">
                 <span class="text-sm text-slate-500">{{ $student->reviews->count() }} total</span>
                 <a href="{{ route('admin.institution-reviews.create', ['student_id' => $student->id]) }}" class="btn btn-primary btn-sm">Add Review</a>
@@ -1016,8 +1016,8 @@
                 <p>No reviews submitted yet.</p>
             </div>
         @else
-            <div class="table-responsive">
-                <table class="data-table">
+            <div class="eims-table-wrapper">
+                <table class="eims-table w-full">
                     <thead>
                         <tr>
                             <th>Institution</th>
@@ -1070,9 +1070,9 @@
     </div>
 
     {{-- Conversations --}}
-    <div class="card">
+    <div class="eims-card overflow-hidden">
         <div class="card-header flex items-center justify-between">
-            <h2 class="card-title">Conversations</h2>
+            <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Conversations</h2>
             <div class="flex items-center gap-3">
                 <span class="text-sm text-slate-500">{{ $student->conversations->count() }} total</span>
                 <a href="{{ route('admin.conversations.create', ['student_id' => $student->id]) }}" class="btn btn-primary btn-sm">New Conversation</a>
@@ -1083,8 +1083,8 @@
                 <p>No conversations yet.</p>
             </div>
         @else
-            <div class="table-responsive">
-                <table class="data-table">
+            <div class="eims-table-wrapper">
+                <table class="eims-table w-full">
                     <thead>
                         <tr>
                             <th>Institution</th>

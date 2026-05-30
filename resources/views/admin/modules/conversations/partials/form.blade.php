@@ -2,7 +2,7 @@
 
 <div class="form-group">
     <label class="form-label">Student</label>
-    <select name="student_id" class="form-select @error('student_id') is-invalid @enderror">
+    <select name="student_id" class="form-control @error('student_id') is-invalid @enderror">
         <option value="">— Select Student —</option>
         @foreach($students as $st)
             <option value="{{ $st->id }}"
@@ -16,7 +16,7 @@
 
 <div class="form-group">
     <label class="form-label">Institution</label>
-    <select name="institution_id" class="form-select @error('institution_id') is-invalid @enderror">
+    <select name="institution_id" class="form-control @error('institution_id') is-invalid @enderror">
         <option value="">— Select Institution —</option>
         @foreach($institutions as $inst)
             <option value="{{ $inst->id }}"
@@ -30,7 +30,7 @@
 
 <div class="form-group">
     <label class="form-label required">Type</label>
-    <select name="type" class="form-select @error('type') is-invalid @enderror" required>
+    <select name="type" class="form-control @error('type') is-invalid @enderror" required>
         <option value="">— Select Type —</option>
         @foreach($types as $value => $label)
             <option value="{{ $value }}"

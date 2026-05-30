@@ -3,25 +3,21 @@
 @section('title', 'Messages')
 
 @section('content')
-<div class="content-header">
-    <div>
-        <h1 class="content-title">Messages</h1>
-        <p class="content-subtitle">Browse and manage all messages across conversations.</p>
-    </div>
-</div>
+<div class="space-y-5">
+<x-admin.page-header title="Messages" subtitle="Browse and manage all messages across conversations."
+    :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Messages']]" />
 
 {{-- Filters --}}
-<div class="card mb-6">
-    <div class="card-body">
-        <form method="GET" action="{{ route('admin.messages.index') }}" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+<div class="eims-card p-4">
+        <form method="GET" action="{{ route('admin.messages.index') }}" class="flex flex-wrap gap-3 items-end">
             <div>
-                <label class="form-label">Conversation #</label>
+                <label class="form-label text-xs">Conversation #</label>
                 <input type="number" name="conversation_id" value="{{ request('conversation_id') }}"
-                       class="form-input" placeholder="Conversation ID">
+                       class="form-control w-44" placeholder="Conversation ID">
             </div>
             <div>
-                <label class="form-label">Sender Type</label>
-                <select name="sender_type" class="form-select">
+                <label class="form-label text-xs">Sender Type</label>
+                <select name="sender_type" class="form-control w-48">
                     <option value="">All Senders</option>
                     @foreach($senderTypes as $value => $label)
                         <option value="{{ $value }}" {{ request('sender_type') === $value ? 'selected' : '' }}>{{ $label }}</option>
@@ -29,37 +25,35 @@
                 </select>
             </div>
             <div>
-                <label class="form-label">Read Status</label>
-                <select name="read_status" class="form-select">
+                <label class="form-label text-xs">Read Status</label>
+                <select name="read_status" class="form-control w-40">
                     <option value="">All</option>
                     <option value="read" {{ request('read_status') === 'read' ? 'selected' : '' }}>Read</option>
                     <option value="unread" {{ request('read_status') === 'unread' ? 'selected' : '' }}>Unread</option>
                 </select>
             </div>
             <div>
-                <label class="form-label">Date From</label>
-                <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-input">
+                <label class="form-label text-xs">Date From</label>
+                <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-control w-44">
             </div>
             <div>
-                <label class="form-label">Date To</label>
-                <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-input">
+                <label class="form-label text-xs">Date To</label>
+                <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-control w-44">
             </div>
             <div class="flex items-end gap-2">
-                <button type="submit" class="btn btn-primary w-full">Filter</button>
-                <a href="{{ route('admin.messages.index') }}" class="btn btn-secondary w-full">Reset</a>
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="{{ route('admin.messages.index') }}" class="btn btn-secondary">Reset</a>
             </div>
         </form>
-    </div>
 </div>
 
 {{-- Table --}}
-<div class="card">
-    <div class="card-body p-0">
+<div class="eims-card overflow-hidden">
         @if($messages->isEmpty())
-            <div class="px-6 py-12 text-center text-slate-400">No messages found.</div>
+            <x-admin.empty-state title="No messages found." description="Try changing the filters." />
         @else
-            <div class="table-responsive">
-                <table class="data-table">
+            <div class="eims-table-wrapper">
+                <table class="eims-table w-full">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -126,6 +120,6 @@
                 {{ $messages->links() }}
             </div>
         @endif
-    </div>
+</div>
 </div>
 @endsection

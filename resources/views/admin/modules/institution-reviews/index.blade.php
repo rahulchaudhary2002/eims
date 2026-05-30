@@ -3,24 +3,23 @@
 @section('title', 'Institution Reviews')
 
 @section('content')
-<div class="content-header">
-    <div>
-        <h1 class="content-title">Institution Reviews</h1>
-        <p class="content-subtitle">Manage student reviews for institutions.</p>
-    </div>
-    <a href="{{ route('admin.institution-reviews.create') }}" class="btn btn-primary">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-        Add Review
-    </a>
-</div>
+<div class="space-y-5">
+<x-admin.page-header title="Institution Reviews" subtitle="Manage student reviews for institutions."
+    :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Institution Reviews']]">
+    <x-slot:actions>
+        <a href="{{ route('admin.institution-reviews.create') }}" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            Add Review
+        </a>
+    </x-slot:actions>
+</x-admin.page-header>
 
 {{-- Filters --}}
-<div class="card mb-6">
-    <div class="card-body">
-        <form method="GET" action="{{ route('admin.institution-reviews.index') }}" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+<div class="eims-card p-4">
+        <form method="GET" action="{{ route('admin.institution-reviews.index') }}" class="flex flex-wrap gap-3 items-end">
             <div>
-                <label class="form-label">Institution</label>
-                <select name="institution_id" class="form-select">
+                <label class="form-label text-xs">Institution</label>
+                <select name="institution_id" class="form-control w-56">
                     <option value="">All Institutions</option>
                     @foreach($institutions as $inst)
                         <option value="{{ $inst->id }}" {{ request('institution_id') == $inst->id ? 'selected' : '' }}>
@@ -30,8 +29,8 @@
                 </select>
             </div>
             <div>
-                <label class="form-label">Student</label>
-                <select name="student_id" class="form-select">
+                <label class="form-label text-xs">Student</label>
+                <select name="student_id" class="form-control w-56">
                     <option value="">All Students</option>
                     @foreach($students as $st)
                         <option value="{{ $st->id }}" {{ request('student_id') == $st->id ? 'selected' : '' }}>
@@ -41,8 +40,8 @@
                 </select>
             </div>
             <div>
-                <label class="form-label">Rating</label>
-                <select name="rating" class="form-select">
+                <label class="form-label text-xs">Rating</label>
+                <select name="rating" class="form-control w-40">
                     <option value="">All Ratings</option>
                     @foreach([1,2,3,4,5] as $r)
                         <option value="{{ $r }}" {{ request('rating') == $r ? 'selected' : '' }}>{{ $r }} Star{{ $r > 1 ? 's' : '' }}</option>
@@ -50,37 +49,35 @@
                 </select>
             </div>
             <div>
-                <label class="form-label">Approved</label>
-                <select name="is_approved" class="form-select">
+                <label class="form-label text-xs">Approved</label>
+                <select name="is_approved" class="form-control w-40">
                     <option value="">All</option>
                     <option value="1" {{ request('is_approved') === '1' ? 'selected' : '' }}>Approved</option>
                     <option value="0" {{ request('is_approved') === '0' ? 'selected' : '' }}>Pending</option>
                 </select>
             </div>
             <div>
-                <label class="form-label">Date From</label>
-                <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-input">
+                <label class="form-label text-xs">Date From</label>
+                <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-control w-44">
             </div>
             <div>
-                <label class="form-label">Date To</label>
-                <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-input">
+                <label class="form-label text-xs">Date To</label>
+                <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-control w-44">
             </div>
-            <div class="flex items-end gap-2 col-span-2 md:col-span-1">
-                <button type="submit" class="btn btn-primary w-full">Filter</button>
-                <a href="{{ route('admin.institution-reviews.index') }}" class="btn btn-secondary w-full">Reset</a>
+            <div class="flex items-end gap-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="{{ route('admin.institution-reviews.index') }}" class="btn btn-secondary">Reset</a>
             </div>
         </form>
-    </div>
 </div>
 
 {{-- Table --}}
-<div class="card">
-    <div class="card-body p-0">
+<div class="eims-card overflow-hidden">
         @if($reviews->isEmpty())
-            <div class="px-6 py-12 text-center text-slate-400">No reviews found.</div>
+            <x-admin.empty-state title="No reviews found." description="Try changing the filters or add a review." />
         @else
-            <div class="table-responsive">
-                <table class="data-table">
+            <div class="eims-table-wrapper">
+                <table class="eims-table w-full">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -154,6 +151,6 @@
                 {{ $reviews->links() }}
             </div>
         @endif
-    </div>
+</div>
 </div>
 @endsection

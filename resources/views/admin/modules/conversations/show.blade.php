@@ -3,20 +3,22 @@
 @section('title', 'Conversation #' . $conversation->id)
 
 @section('content')
-<div class="content-header">
-    <div>
-        <h1 class="content-title">Conversation #{{ $conversation->id }}</h1>
-        <p class="content-subtitle">
-            {{ \App\Models\Conversation::TYPES[$conversation->type] ?? $conversation->type }}
-            @if($conversation->student) · {{ $conversation->student->name }} @endif
-            @if($conversation->institution) · {{ $conversation->institution->name }} @endif
-        </p>
-    </div>
-    <div class="flex gap-2">
-        <a href="{{ route('admin.conversations.edit', $conversation) }}" class="btn btn-secondary">Edit</a>
-        <a href="{{ route('admin.conversations.index') }}" class="btn btn-secondary">← Back to Conversations</a>
-    </div>
-</div>
+<div class="space-y-5">
+<x-admin.page-header title="Conversation #{{ $conversation->id }}"
+    subtitle="{{ \App\Models\Conversation::TYPES[$conversation->type] ?? $conversation->type }}{{ $conversation->student ? ' / '.$conversation->student->name : '' }}{{ $conversation->institution ? ' / '.$conversation->institution->name : '' }}"
+    :breadcrumbs="[
+        ['label'=>'Dashboard','route'=>'admin.dashboard'],
+        ['label'=>'Conversations','route'=>'admin.conversations.index'],
+        ['label'=>'Conversation #'.$conversation->id],
+    ]">
+    <x-slot:actions>
+        <a href="{{ route('admin.conversations.edit', $conversation) }}" class="btn btn-primary">Edit</a>
+        <a href="{{ route('admin.conversations.index') }}" class="btn btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+            Back
+        </a>
+    </x-slot:actions>
+</x-admin.page-header>
 
 @if(session('success'))
     <div class="alert alert-success mb-6">{{ session('success') }}</div>
@@ -26,9 +28,9 @@
 
     {{-- Participants --}}
     <div class="lg:col-span-2 space-y-6">
-        <div class="card">
+        <div class="eims-card overflow-hidden">
             <div class="card-header">
-                <h2 class="card-title">Participants</h2>
+                <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Participants</h2>
             </div>
             <div class="card-body space-y-4">
                 <div class="flex items-start gap-4">
@@ -71,9 +73,9 @@
 
     {{-- Details sidebar --}}
     <div class="space-y-6">
-        <div class="card">
+        <div class="eims-card overflow-hidden">
             <div class="card-header">
-                <h2 class="card-title">Details</h2>
+                <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Details</h2>
             </div>
             <div class="card-body space-y-3">
                 <div>
@@ -93,9 +95,9 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="eims-card overflow-hidden">
             <div class="card-header">
-                <h2 class="card-title">Actions</h2>
+                <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Actions</h2>
             </div>
             <div class="card-body space-y-2">
                 <a href="{{ route('admin.conversations.edit', $conversation) }}" class="btn btn-secondary w-full">Edit Conversation</a>
@@ -108,5 +110,6 @@
         </div>
     </div>
 
+</div>
 </div>
 @endsection
