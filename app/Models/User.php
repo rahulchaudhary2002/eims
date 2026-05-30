@@ -42,9 +42,8 @@ class User extends Authenticatable
 
     public function institutions(): BelongsToMany
     {
-        return $this->belongsToMany(Institution::class, 'institution_user')
-            ->using(InstitutionUser::class)
-            ->withPivot(['role_name', 'position', 'is_primary', 'is_active', 'joined_at'])
+        return $this->belongsToMany(Institution::class, 'user_institutions')
+            ->withPivot(['role', 'is_primary', 'is_active', 'joined_at'])
             ->withTimestamps();
     }
 

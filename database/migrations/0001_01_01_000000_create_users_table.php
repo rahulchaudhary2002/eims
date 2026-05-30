@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('institution_id')->nullable()->index();
             $table->boolean('is_super_admin')->default(false);
             $table->string('name');
             $table->string('email')->unique();

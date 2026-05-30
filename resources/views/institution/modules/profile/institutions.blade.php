@@ -18,7 +18,7 @@
                     <td>{{ \App\Models\Institution::TYPES[$institution->type] ?? $institution->type }}</td>
                     <td><span class="badge badge-blue">{{ $institution->status }}</span></td>
                     <td>{{ $institution->pivot->is_primary ? 'Yes' : 'No' }}</td>
-                    <td>{{ \App\Models\UserInstitution::ROLES[$institution->pivot->role_name] ?? $institution->pivot->role_name }}</td>
+                    <td>{{ \App\Models\UserInstitution::ROLES[$institution->pivot->role] ?? $institution->pivot->role }}</td>
                 </tr>
             @endforeach
             </tbody>

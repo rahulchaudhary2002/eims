@@ -19,11 +19,10 @@ class InstitutionUserSeeder extends Seeder
         if ($manager && $primaryInstitution) {
             $manager->institutions()->syncWithoutDetaching([
                 $primaryInstitution->id => [
-                    'role_name' => 'manager',
-                    'position' => 'Institution Manager',
+                    'role'       => 'manager',
                     'is_primary' => true,
-                    'is_active' => true,
-                    'joined_at' => now(),
+                    'is_active'  => true,
+                    'joined_at'  => now(),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -33,11 +32,10 @@ class InstitutionUserSeeder extends Seeder
         if ($officer && $secondaryInstitution) {
             $officer->institutions()->syncWithoutDetaching([
                 $secondaryInstitution->id => [
-                    'role_name' => 'admissions',
-                    'position' => 'Admissions Officer',
+                    'role'       => 'admission_officer',
                     'is_primary' => true,
-                    'is_active' => true,
-                    'joined_at' => now(),
+                    'is_active'  => true,
+                    'joined_at'  => now(),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],

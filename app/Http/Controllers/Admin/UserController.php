@@ -182,8 +182,7 @@ class UserController extends Controller
             }
 
             $syncData[$instId] = [
-                'role_name'  => $row['role_name'] ?? 'staff',
-                'position'   => $row['position'] ?? null,
+                'role'       => $row['role'] ?? 'staff',
                 'is_primary' => $primaryId && $primaryId === $instId,
                 'is_active'  => ($row['is_active'] ?? '1') === '1',
                 'joined_at'  => ! empty($row['joined_at']) ? $row['joined_at'] : null,

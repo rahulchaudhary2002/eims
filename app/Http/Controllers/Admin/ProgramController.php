@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProgramRequest;
 use App\Http\Requests\Admin\UpdateProgramRequest;
 use App\Models\Faculty;
-use App\Models\Level;
 use App\Models\Program;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,7 +33,9 @@ class ProgramController extends Controller
 
         $programs  = $query->orderBy('name')->paginate(20)->withQueryString();
         $faculties = Faculty::orderBy('name')->get(['id', 'name']);
-        $levels    = Level::where('is_active', true)->orderBy('order')->orderBy('name')->pluck('name', 'name');
+        $levels    = collect(['Certificate', 'Diploma', 'Bachelor', 'Master', 'PhD', 'Other'])->combine(
+            ['Certificate', 'Diploma', 'Bachelor', 'Master', 'PhD', 'Other']
+        );
 
         return view('admin.modules.programs.index', compact('programs', 'faculties', 'levels'));
     }
@@ -42,7 +43,9 @@ class ProgramController extends Controller
     public function create(): View
     {
         $faculties = Faculty::where('is_active', true)->orderBy('name')->get(['id', 'name']);
-        $levels    = Level::where('is_active', true)->orderBy('order')->orderBy('name')->pluck('name', 'name');
+        $levels    = collect(['Certificate', 'Diploma', 'Bachelor', 'Master', 'PhD', 'Other'])->combine(
+            ['Certificate', 'Diploma', 'Bachelor', 'Master', 'PhD', 'Other']
+        );
 
         return view('admin.modules.programs.create', compact('faculties', 'levels'));
     }
@@ -73,7 +76,9 @@ class ProgramController extends Controller
     {
         $program->load('faculty');
         $faculties = Faculty::where('is_active', true)->orderBy('name')->get(['id', 'name']);
-        $levels    = Level::where('is_active', true)->orderBy('order')->orderBy('name')->pluck('name', 'name');
+        $levels    = collect(['Certificate', 'Diploma', 'Bachelor', 'Master', 'PhD', 'Other'])->combine(
+            ['Certificate', 'Diploma', 'Bachelor', 'Master', 'PhD', 'Other']
+        );
 
         return view('admin.modules.programs.edit', compact('program', 'faculties', 'levels'));
     }

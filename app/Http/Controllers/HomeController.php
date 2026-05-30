@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
 use App\Models\Institution;
-use App\Models\Level;
 use App\Models\Program;
 use Illuminate\Http\Request;
 
@@ -17,15 +15,7 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
 
-        $courses = Course::active()
-            ->whereHas('programs', fn($q) => $q->where('is_active', true))
-            ->with(['programs.faculty'])
-            ->limit(6)
-            ->get();
-
         $programs = Program::active()->with('faculty')->get();
-
-        $levels = Level::active()->ordered()->get();
 
         $institutionCount = Institution::active()->count();
 
@@ -35,7 +25,7 @@ class HomeController extends Controller
             ->get();
 
         return view('modules.home.index', compact(
-            'colleges', 'courses', 'programs', 'levels', 'institutionCount', 'featuredPrograms'
+            'colleges', 'programs', 'institutionCount', 'featuredPrograms'
         ));
     }
 }

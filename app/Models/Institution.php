@@ -82,9 +82,8 @@ class Institution extends Model
 
     public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'institution_user')
-            ->using(InstitutionUser::class)
-            ->withPivot(['role_name', 'position', 'is_primary', 'is_active', 'joined_at'])
+        return $this->belongsToMany(User::class, 'user_institutions')
+            ->withPivot(['role', 'is_primary', 'is_active', 'joined_at'])
             ->withTimestamps();
     }
 
@@ -106,11 +105,6 @@ class Institution extends Model
     public function documents(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(\App\Models\InstitutionDocument::class);
-    }
-
-    public function affiliations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany(\App\Models\Affiliation::class, 'affiliation_institution');
     }
 
     public function programs(): \Illuminate\Database\Eloquent\Relations\HasMany

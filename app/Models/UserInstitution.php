@@ -4,27 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserInstitution extends Model
 {
-    protected $table = 'institution_user';
+    use SoftDeletes;
+
+    protected $table = 'user_institutions';
 
     public const ROLES = [
-        'owner' => 'Owner',
-        'admin' => 'Admin',
-        'manager' => 'Manager',
+        'owner'           => 'Owner',
+        'admin'           => 'Admin',
+        'manager'         => 'Manager',
         'admission_officer' => 'Admission Officer',
-        'counselor' => 'Counselor',
+        'counselor'       => 'Counselor',
         'content_manager' => 'Content Manager',
         'finance_officer' => 'Finance Officer',
-        'staff' => 'Staff',
+        'staff'           => 'Staff',
     ];
 
     protected $fillable = [
         'user_id',
         'institution_id',
-        'role_name',
-        'position',
+        'role',
         'is_primary',
         'is_active',
         'joined_at',
@@ -34,8 +36,8 @@ class UserInstitution extends Model
     {
         return [
             'is_primary' => 'boolean',
-            'is_active' => 'boolean',
-            'joined_at' => 'datetime',
+            'is_active'  => 'boolean',
+            'joined_at'  => 'datetime',
         ];
     }
 
