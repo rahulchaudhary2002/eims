@@ -22,7 +22,6 @@ class StoreUserRequest extends FormRequest
             'phone'                             => ['nullable', 'string', 'max:30', 'unique:users,phone'],
             'password'                          => ['required', 'confirmed', Password::min(8)],
             'avatar'                            => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-            'is_super_admin'                    => ['nullable', 'boolean'],
             'is_active'                         => ['nullable', 'boolean'],
             'email_verified_at'                 => ['nullable', 'date'],
             'institutions'                      => ['nullable', 'array'],

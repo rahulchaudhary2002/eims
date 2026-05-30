@@ -311,15 +311,5 @@
                 <p class="text-xs text-slate-400">Allow this user to log in.</p>
             </div>
         </label>
-
-        <label class="flex items-center gap-3 cursor-pointer select-none">
-            <input type="checkbox" name="is_super_admin" value="1"
-                class="w-4 h-4 rounded border-slate-300 text-red-600 focus:ring-red-500"
-                {{ old('is_super_admin', $user->is_super_admin ?? false) ? 'checked' : '' }}>
-            <div>
-                <span class="text-sm font-medium text-slate-700">Super Admin</span>
-                <p class="text-xs text-slate-400">Grants unrestricted access to all system functions.</p>
-            </div>
-        </label>
     </div>
 </div>
