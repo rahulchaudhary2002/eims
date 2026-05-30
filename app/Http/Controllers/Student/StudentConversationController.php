@@ -65,7 +65,8 @@ class StudentConversationController extends Controller
 
     public function show(Request $request, Conversation $conversation): View
     {
-        abort_if($conversation->student_id !== $request->user('student')->id, 403);
+        $studentId = $request->user('student')->id;
+        abort_if($conversation->student_id !== $studentId, 403);
 
         $conversation->load(['institution', 'messages.sender']);
 
@@ -74,6 +75,13 @@ class StudentConversationController extends Controller
             ->where('sender_type', '!=', \App\Models\Student::class)
             ->update(['read_at' => now()]);
 
-        return view('student.conversations.show', compact('conversation'));
+        $conversations = Conversation::where('student_id', $studentId)
+            ->with(['institution', 'messages' => fn($q) => $q->latest()->limit(1)])
+            ->withCount(['messages as unread_count' => fn($q) => $q->whereNull('read_at')
+                ->where('sender_type', '!=', \App\Models\Student::class)])
+            ->latest()
+            ->get();
+
+        return view('student.conversations.show', compact('conversation', 'conversations'));
     }
 }
