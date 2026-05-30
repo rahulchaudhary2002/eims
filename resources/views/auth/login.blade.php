@@ -3,17 +3,17 @@
 @section('title', 'Login')
 
 @section('content')
-<main class="flex-1 flex items-center justify-center py-10 px-4 mt-[80px]">
+<main class="pt-[150px] pb-20 px-4 bg-gradient-to-br from-[#2c5aa0]/10 to-[#1a365d]/5">
     <div class="container mx-auto max-w-6xl">
-        <div class="bg-white rounded-2xl shadow-[0_6px_20px_rgba(0,0,0,0.1)] overflow-hidden grid md:grid-cols-2">
+        <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden grid md:grid-cols-2">
 
             <!-- Left: Hero -->
             <div class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] text-white p-8 md:p-12 flex flex-col justify-center">
-                <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-4" id="hero-title">Welcome Back</h1>
-                <p class="text-lg opacity-90 mb-8 leading-relaxed" id="hero-desc">
+                <h1 class="text-[2.4rem] md:text-[3.2rem] font-bold leading-[1.15] mb-5" id="hero-title">Welcome Back</h1>
+                <p class="text-[1.05rem] md:text-[1.1rem] opacity-90 mb-8 leading-relaxed" id="hero-desc">
                     Access your personalised dashboard to explore scholarship opportunities, connect with institutions, and manage your educational journey.
                 </p>
-                <ul class="space-y-5 mt-4" id="hero-student-items">
+                <ul class="space-y-5 mt-4 text-[1rem]" id="hero-student-items">
                     <li class="flex items-center gap-4">
                         <i class="fas fa-award w-10 h-10 flex items-center justify-center bg-white/10 rounded-full text-[#4299e1]"></i>
                         <span>Track your scholarship applications</span>
@@ -31,7 +31,7 @@
                         <span>Connect with educational institutions</span>
                     </li>
                 </ul>
-                <ul class="space-y-5 mt-4 hidden" id="hero-institution-items">
+                <ul class="space-y-5 mt-4 hidden text-[1rem]" id="hero-institution-items">
                     <li class="flex items-center gap-4">
                         <i class="fas fa-university w-10 h-10 flex items-center justify-center bg-white/10 rounded-full text-[#4299e1]"></i>
                         <span>Manage your institution profile</span>
@@ -53,20 +53,20 @@
 
             <!-- Right: Forms -->
             <div class="p-8 md:p-12">
-                <div class="text-center mb-6">
-                    <h2 class="text-3xl font-bold text-[#2c5aa0] mb-2">Sign In</h2>
-                    <p class="text-gray-600 text-sm">Choose your account type to continue</p>
+                <div class="text-center mb-7">
+                    <h2 class="relative inline-block text-[2.1rem] md:text-[2.3rem] font-bold text-[#2c5aa0] mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-2 after:w-[70px] after:h-[3px] after:bg-[#4299e1]">Sign In</h2>
+                    <p class="text-gray-600 text-[0.95rem]">Choose your account type to continue</p>
                 </div>
 
                 {{-- Tab switcher --}}
-                <div class="flex rounded-xl bg-gray-100 p-1 mb-6">
+                <div class="flex rounded-xl bg-gray-100 p-1 mb-7">
                     <button type="button" id="tab-student"
-                        class="auth-tab flex-1 py-2.5 px-3 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-white shadow text-[#2c5aa0]"
+                        class="auth-tab flex-1 py-3 px-3 rounded-xl font-semibold text-base transition-all duration-200 flex items-center justify-center gap-2 bg-white shadow text-[#2c5aa0]"
                         data-target="form-student">
                         <i class="fas fa-user-graduate"></i> Student
                     </button>
                     <button type="button" id="tab-institution"
-                        class="auth-tab flex-1 py-2.5 px-3 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 text-gray-500"
+                        class="auth-tab flex-1 py-3 px-3 rounded-xl font-semibold text-base transition-all duration-200 flex items-center justify-center gap-2 text-gray-500"
                         data-target="form-institution">
                         <i class="fas fa-university"></i> Institution
                     </button>
@@ -85,7 +85,7 @@
                         <input type="hidden" name="_form" value="student">
 
                         <div>
-                            <label for="username" class="block font-semibold text-gray-800 mb-2 text-sm">Email or Phone Number</label>
+                            <label for="username" class="block font-semibold text-gray-800 mb-2 text-[0.95rem]">Email or Phone Number</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-envelope"></i></span>
                                 <input type="text" id="username" name="username" value="{{ old('username') }}"
@@ -98,7 +98,7 @@
                         </div>
 
                         <div>
-                            <label for="password" class="block font-semibold text-gray-800 mb-2 text-sm">Password</label>
+                            <label for="password" class="block font-semibold text-gray-800 mb-2 text-[0.95rem]">Password</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock"></i></span>
                                 <input type="password" id="password" name="password"
@@ -145,7 +145,7 @@
                         <input type="hidden" name="_form" value="institution">
 
                         <div>
-                            <label for="inst_email" class="block font-semibold text-gray-800 mb-2 text-sm">Email Address</label>
+                            <label for="inst_email" class="block font-semibold text-gray-800 mb-2 text-[0.95rem]">Email Address</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-envelope"></i></span>
                                 <input type="email" id="inst_email" name="email" value="{{ old('email') }}"
@@ -155,7 +155,7 @@
                         </div>
 
                         <div>
-                            <label for="inst_password" class="block font-semibold text-gray-800 mb-2 text-sm">Password</label>
+                            <label for="inst_password" class="block font-semibold text-gray-800 mb-2 text-[0.95rem]">Password</label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock"></i></span>
                                 <input type="password" id="inst_password" name="password"

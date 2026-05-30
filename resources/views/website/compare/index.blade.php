@@ -1,0 +1,239 @@
+@extends('website.layouts.app')
+
+@section('meta-title', 'Compare Institutions & Programs - ' . config('app.name'))
+@section('meta-description', 'Compare institutions and programs side by side to find your best fit.')
+
+@section('content')
+<section class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] pt-[150px] pb-28 text-white">
+    <div class="container max-w-7xl mx-auto px-4">
+        @include('website.partials.breadcrumb', [
+            'variant' => 'dark',
+            'breadcrumbs' => [
+                ['label' => 'Compare'],
+            ],
+        ])
+
+        <div class="mt-12 max-w-3xl">
+            <span class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm font-semibold mb-5">
+                <i class="fas fa-balance-scale text-[#4299e1]"></i>
+                Side-by-Side Comparison
+            </span>
+            <h1 class="text-[2.6rem] md:text-[3.4rem] font-bold leading-[1.15] mb-5">Compare</h1>
+            <p class="text-[1.05rem] md:text-[1.15rem] text-white/85 leading-relaxed max-w-2xl">
+                Evaluate institutions and programs side by side - compare fees, seats, ratings, and more to make the best choice for your academic future.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="bg-[#f7fafc] pt-12 pb-20">
+    <div class="container max-w-7xl mx-auto px-4">
+
+        @if (session('success'))
+            <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6 text-sm flex items-center gap-2">
+                <i class="fas fa-check-circle"></i> {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm flex items-center gap-2">
+                <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+            </div>
+        @endif
+
+        @if ($institutions->isEmpty() && $programs->isEmpty())
+            <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 py-20 text-center">
+                <i class="fas fa-balance-scale text-gray-200 text-6xl mb-5"></i>
+                <h2 class="text-[1.5rem] font-bold text-gray-700 mb-3">Nothing to Compare Yet</h2>
+                <p class="text-gray-500 text-[0.95rem] mb-8 max-w-sm mx-auto">Browse institutions and programs and click "Add to Compare" to compare them side by side.</p>
+                <div class="flex justify-center gap-3 flex-wrap">
+                    <a href="{{ route('website.institutions.index') }}"
+                       class="px-6 py-3 bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] text-white font-semibold rounded-xl hover:from-[#2c5aa0] hover:to-[#1a365d] transition no-underline">
+                        <i class="fas fa-university mr-2"></i> Browse Institutions
+                    </a>
+                    <a href="{{ route('website.programs.index') }}"
+                       class="px-6 py-3 border-2 border-[#4299e1] text-[#2c5aa0] font-semibold rounded-xl hover:bg-[#4299e1]/10 transition no-underline">
+                        <i class="fas fa-book-open mr-2"></i> Browse Programs
+                    </a>
+                </div>
+            </div>
+        @endif
+
+        {{-- Institutions Comparison --}}
+        @if ($institutions->isNotEmpty())
+            <div class="mb-8">
+                <h2 class="relative inline-block text-[2.1rem] md:text-[2.3rem] font-bold text-[#2c5aa0] mb-4 after:content-[''] after:absolute after:left-0 after:-bottom-2 after:w-[70px] after:h-[3px] after:bg-[#4299e1]">Institutions</h2>
+                <p class="text-gray-600 text-[0.95rem] mt-5">Comparing {{ $institutions->count() }} institution{{ $institutions->count() !== 1 ? 's' : '' }}.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-x-auto mb-10">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-[#f7fafc] border-b border-gray-200">
+                            <th class="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wide w-40">Attribute</th>
+                            @foreach ($institutions as $inst)
+                                <th class="px-5 py-4 text-center min-w-52">
+                                    <div class="flex flex-col items-center gap-3">
+                                        <div class="h-14 w-14 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center overflow-hidden">
+                                            @if ($inst->logo)
+                                                <img src="{{ Storage::url($inst->logo) }}" alt="{{ $inst->name }}" class="w-12 h-12 object-contain">
+                                            @else
+                                                <i class="fas fa-university text-[#2c5aa0] text-xl"></i>
+                                            @endif
+                                        </div>
+                                        <span class="font-bold text-gray-900">{{ $inst->name }}</span>
+                                        <form method="POST" action="{{ route('website.compare.destroy', ['type' => 'institution', 'slug' => $inst->slug]) }}">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="text-xs text-red-500 hover:text-red-700 font-semibold transition">
+                                                <i class="fas fa-times mr-1"></i> Remove
+                                            </button>
+                                        </form>
+                                    </div>
+                                </th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @foreach ([
+                            ['key' => 'type', 'label' => 'Type', 'format' => 'type'],
+                            ['key' => 'city', 'label' => 'Location', 'format' => 'text'],
+                            ['key' => 'established_year', 'label' => 'Est. Year', 'format' => 'text'],
+                            ['key' => 'is_verified', 'label' => 'Verified', 'format' => 'bool'],
+                            ['key' => 'programs_count', 'label' => 'Programs', 'format' => 'number'],
+                            ['key' => 'reviews_avg_rating', 'label' => 'Avg Rating', 'format' => 'rating'],
+                            ['key' => 'reviews_count', 'label' => 'Reviews', 'format' => 'number'],
+                        ] as $attr)
+                            <tr class="hover:bg-[#f7fafc] transition">
+                                <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ $attr['label'] }}</td>
+                                @foreach ($institutions as $inst)
+                                    <td class="px-5 py-4 text-center text-gray-900 font-medium">
+                                        @php $val = $inst->{$attr['key']}; @endphp
+                                        @if ($attr['format'] === 'bool')
+                                            @if ($val)
+                                                <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-green-100 text-green-600"><i class="fas fa-check text-xs"></i></span>
+                                            @else
+                                                <span class="inline-flex items-center justify-center h-7 w-7 rounded-full bg-gray-100 text-gray-400"><i class="fas fa-times text-xs"></i></span>
+                                            @endif
+                                        @elseif ($attr['format'] === 'type')
+                                            {{ \App\Models\Institution::TYPES[$val] ?? $val ?? '-' }}
+                                        @elseif ($attr['format'] === 'rating')
+                                            @if ($val)
+                                                <span class="inline-flex items-center gap-1 text-yellow-500 font-bold">
+                                                    <i class="fas fa-star text-xs"></i> {{ number_format($val, 1) }}
+                                                </span>
+                                            @else
+                                                <span class="text-gray-400">-</span>
+                                            @endif
+                                        @elseif ($attr['format'] === 'number')
+                                            {{ $val ?? '0' }}
+                                        @else
+                                            {{ $val ?? '-' }}
+                                        @endif
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                        <tr class="bg-[#f7fafc]">
+                            <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Actions</td>
+                            @foreach ($institutions as $inst)
+                                <td class="px-5 py-4 text-center">
+                                    <a href="{{ route('website.institutions.show', $inst->slug) }}"
+                                       class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] text-white text-xs font-bold rounded-lg hover:from-[#2c5aa0] hover:to-[#1a365d] transition no-underline">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            @endforeach
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
+        {{-- Programs Comparison --}}
+        @if ($programs->isNotEmpty())
+            <div class="mb-8">
+                <h2 class="relative inline-block text-[2.1rem] md:text-[2.3rem] font-bold text-[#2c5aa0] mb-4 after:content-[''] after:absolute after:left-0 after:-bottom-2 after:w-[70px] after:h-[3px] after:bg-[#4299e1]">Programs</h2>
+                <p class="text-gray-600 text-[0.95rem] mt-5">Comparing {{ $programs->count() }} program{{ $programs->count() !== 1 ? 's' : '' }}.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-[#f7fafc] border-b border-gray-200">
+                            <th class="text-left px-5 py-4 text-xs font-bold text-gray-500 uppercase tracking-wide w-40">Attribute</th>
+                            @foreach ($programs as $prog)
+                                <th class="px-5 py-4 text-center min-w-52">
+                                    <div class="flex flex-col items-center gap-2">
+                                        <div class="w-11 h-11 rounded-xl bg-[#4299e1]/10 text-[#2c5aa0] flex items-center justify-center">
+                                            <i class="fas fa-book-open"></i>
+                                        </div>
+                                        <span class="font-bold text-gray-900">{{ $prog->display_name }}</span>
+                                        <span class="text-xs text-gray-500">{{ $prog->institution?->name }}</span>
+                                        <form method="POST" action="{{ route('website.compare.destroy', ['type' => 'program', 'slug' => $prog->slug]) }}">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="text-xs text-red-500 hover:text-red-700 font-semibold transition">
+                                                <i class="fas fa-times mr-1"></i> Remove
+                                            </button>
+                                        </form>
+                                    </div>
+                                </th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @foreach ([
+                            ['key' => 'status', 'label' => 'Status', 'format' => 'status'],
+                            ['key' => 'total_fee', 'label' => 'Total Fee', 'format' => 'currency'],
+                            ['key' => 'duration_months', 'label' => 'Duration (months)', 'format' => 'text'],
+                            ['key' => 'total_seats', 'label' => 'Total Seats', 'format' => 'text'],
+                            ['key' => 'available_seats', 'label' => 'Available Seats', 'format' => 'text'],
+                            ['key' => 'minimum_gpa', 'label' => 'Min GPA', 'format' => 'text'],
+                            ['key' => 'minimum_percentage', 'label' => 'Min %', 'format' => 'percent'],
+                        ] as $attr)
+                            <tr class="hover:bg-[#f7fafc] transition">
+                                <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">{{ $attr['label'] }}</td>
+                                @foreach ($programs as $prog)
+                                    <td class="px-5 py-4 text-center text-gray-900 font-medium">
+                                        @php $val = $prog->{$attr['key']}; @endphp
+                                        @if ($attr['format'] === 'currency')
+                                            {{ $val ? 'NPR ' . number_format($val) : '-' }}
+                                        @elseif ($attr['format'] === 'percent')
+                                            {{ $val ? $val . '%' : '-' }}
+                                        @elseif ($attr['format'] === 'status')
+                                            @if ($val === 'open')
+                                                <span class="inline-flex items-center gap-1 text-green-600 font-semibold text-xs bg-green-50 px-2 py-1 rounded-full">
+                                                    <i class="fas fa-circle text-[8px]"></i> Open
+                                                </span>
+                                            @elseif ($val)
+                                                <span class="inline-flex items-center gap-1 text-gray-500 text-xs bg-gray-50 px-2 py-1 rounded-full capitalize">
+                                                    {{ $val }}
+                                                </span>
+                                            @else
+                                                <span class="text-gray-400">-</span>
+                                            @endif
+                                        @else
+                                            {{ $val ?? '-' }}
+                                        @endif
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                        <tr class="bg-[#f7fafc]">
+                            <td class="px-5 py-4 text-gray-500 font-semibold text-xs uppercase tracking-wide">Actions</td>
+                            @foreach ($programs as $prog)
+                                <td class="px-5 py-4 text-center">
+                                    @if ($prog->status === 'open')
+                                        <a href="{{ route('website.applications.create', ['institution' => $prog->institution?->slug, 'program' => $prog->slug]) }}"
+                                           class="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] text-white text-xs font-bold rounded-lg hover:from-[#2c5aa0] hover:to-[#1a365d] transition no-underline">
+                                            <i class="fas fa-paper-plane"></i> Apply
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400 text-xs">Not open</span>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
+</section>
+@endsection

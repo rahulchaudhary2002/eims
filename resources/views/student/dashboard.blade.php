@@ -1,209 +1,284 @@
-@extends('layouts.app')
+@extends('website.layouts.app')
 
-@section('title', 'Student Dashboard')
+@section('meta-title', 'My Dashboard — ' . config('app.name'))
 
 @section('content')
-<main class="flex-1 py-10 px-4 mt-[80px]">
-    <div class="container mx-auto max-w-6xl space-y-6">
 
-        {{-- Welcome Banner --}}
-        <div class="bg-gradient-to-r from-[#2c5aa0] to-[#4299e1] rounded-2xl p-6 text-white flex items-center gap-5">
-            <div>
-                @if($student->avatar)
+@php
+    $profile = $student->profile;
+    $profileFields = [
+        $student->name, $student->email, $student->phone,
+        $student->date_of_birth, $student->gender, $student->avatar,
+        $profile?->address, $profile?->province,
+        $profile?->career_interests, $profile?->preferred_faculties,
+    ];
+    $filled  = count(array_filter($profileFields, fn($v) => !empty($v)));
+    $total   = count($profileFields);
+    $percent = (int) round(($filled / $total) * 100);
+@endphp
+
+{{-- Hero --}}
+<section class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] pt-[150px] pb-20 text-white">
+    <div class="container max-w-7xl mx-auto px-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 mt-4">
+            <div class="flex items-center gap-4">
+                @if ($student->avatar)
                     <img src="{{ Storage::url($student->avatar) }}" alt="Avatar"
-                         class="w-16 h-16 rounded-full object-cover border-2 border-white/40">
+                         class="w-16 h-16 rounded-full object-cover border-4 border-white/30 flex-shrink-0">
                 @else
-                    <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-3xl font-bold">
+                    <div class="w-16 h-16 rounded-full bg-white/20 border-4 border-white/30 flex items-center justify-center text-2xl font-bold flex-shrink-0">
                         {{ strtoupper(substr($student->name, 0, 1)) }}
                     </div>
                 @endif
-            </div>
-            <div class="flex-1">
-                <h1 class="text-2xl font-bold">Welcome back, {{ $student->name }}!</h1>
-                <p class="opacity-80 text-sm mt-1">
-                    @if($student->profile?->city || $student->profile?->district)
-                        {{ implode(', ', array_filter([$student->profile->city, $student->profile->district])) }}
-                    @else
-                        Complete your profile to get personalised recommendations.
+                <div>
+                    <p class="text-white/70 text-sm mb-0.5">Welcome back</p>
+                    <h1 class="text-2xl md:text-3xl font-bold leading-tight">{{ $student->name }}</h1>
+                    @if ($profile?->city || $profile?->district)
+                        <p class="text-white/65 text-sm mt-1">
+                            <i class="fas fa-map-marker-alt text-[#4299e1] mr-1"></i>
+                            {{ implode(', ', array_filter([$profile->city, $profile->district])) }}
+                        </p>
                     @endif
-                </p>
+                </div>
             </div>
-            <a href="{{ route('profile.edit') }}"
-               class="hidden sm:inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/>
-                </svg>
-                Edit Profile
-            </a>
+            <div class="flex items-center gap-3 flex-shrink-0">
+                <a href="{{ route('website.applications.create') }}"
+                   class="inline-flex items-center gap-2 bg-white text-[#2c5aa0] font-bold px-5 py-2.5 rounded-xl hover:bg-gray-100 transition no-underline text-sm">
+                    <i class="fas fa-paper-plane"></i> Apply Now
+                </a>
+                <a href="{{ route('profile.edit') }}"
+                   class="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 border border-white/20 text-white font-semibold px-5 py-2.5 rounded-xl transition no-underline text-sm">
+                    <i class="fas fa-pen"></i> Edit Profile
+                </a>
+            </div>
         </div>
+    </div>
+</section>
 
-        {{-- Stats --}}
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            @php
-                $statCards = [
-                    ['label' => 'Applications',      'value' => $stats['applications'],             'bg' => 'bg-blue-50',   'text' => 'text-blue-700'],
-                    ['label' => 'Pending',            'value' => $stats['applications_pending'],     'bg' => 'bg-amber-50',  'text' => 'text-amber-700'],
-                    ['label' => 'Approved',           'value' => $stats['applications_approved'],    'bg' => 'bg-emerald-50','text' => 'text-emerald-700'],
-                    ['label' => 'Scholarships',       'value' => $stats['scholarship_applications'], 'bg' => 'bg-purple-50', 'text' => 'text-purple-700'],
-                    ['label' => 'Saved',              'value' => $stats['favorite_institutions'],    'bg' => 'bg-rose-50',   'text' => 'text-rose-700'],
-                    ['label' => 'Following',          'value' => $stats['followed_institutions'],    'bg' => 'bg-teal-50',   'text' => 'text-teal-700'],
-                ];
-            @endphp
-            @foreach($statCards as $card)
-                <div class="bg-white rounded-xl shadow p-4 text-center">
-                    <div class="text-2xl font-bold {{ $card['bg'] }} {{ $card['text'] }} rounded-lg py-1">
-                        {{ $card['value'] }}
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2 font-medium">{{ $card['label'] }}</p>
-                </div>
-            @endforeach
-        </div>
+{{-- Stats Strip (overlapping) --}}
+<div class="container max-w-7xl mx-auto px-4 -mt-8 relative z-10">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        @foreach ([
+            ['label' => 'Total Applications', 'value' => $stats['applications'],             'icon' => 'fa-file-alt',      'accent' => 'border-blue-200 text-blue-600',    'bg' => 'bg-blue-50'],
+            ['label' => 'Pending Review',      'value' => $stats['applications_pending'],     'icon' => 'fa-hourglass-half','accent' => 'border-amber-200 text-amber-600',  'bg' => 'bg-amber-50'],
+            ['label' => 'Approved',            'value' => $stats['applications_approved'],    'icon' => 'fa-check-circle',  'accent' => 'border-emerald-200 text-emerald-600','bg' => 'bg-emerald-50'],
+            ['label' => 'Scholarships',        'value' => $stats['scholarship_applications'], 'icon' => 'fa-award',         'accent' => 'border-purple-200 text-purple-600','bg' => 'bg-purple-50'],
+            ['label' => 'Saved',               'value' => $stats['favorite_institutions'],    'icon' => 'fa-heart',         'accent' => 'border-rose-200 text-rose-600',   'bg' => 'bg-rose-50'],
+            ['label' => 'Following',           'value' => $stats['followed_institutions'],    'icon' => 'fa-bell',          'accent' => 'border-teal-200 text-teal-600',   'bg' => 'bg-teal-50'],
+        ] as $stat)
+            <div class="bg-white rounded-xl border shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-4 flex flex-col items-center text-center border-gray-100">
+                <span class="{{ $stat['bg'] }} {{ $stat['accent'] }} border w-10 h-10 rounded-xl flex items-center justify-center mb-3">
+                    <i class="fas {{ $stat['icon'] }} text-sm"></i>
+                </span>
+                <p class="text-2xl font-bold text-gray-900">{{ $stat['value'] }}</p>
+                <p class="text-xs text-gray-500 mt-1 leading-tight">{{ $stat['label'] }}</p>
+            </div>
+        @endforeach
+    </div>
+</div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+{{-- Main Content --}}
+<section class="bg-[#f7fafc] pt-10 pb-20">
+    <div class="container max-w-7xl mx-auto px-4 mt-4">
+        <div class="grid lg:grid-cols-[minmax(0,1fr)_420px] gap-8 items-start">
 
-            {{-- Recent Applications --}}
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-base font-semibold text-gray-800">Recent Applications</h2>
-                </div>
+            {{-- Left: Main Content --}}
+            <div class="space-y-6">
 
-                @if($recentApplications->isEmpty())
-                    <div class="text-center py-10 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
-                        </svg>
-                        <p class="text-sm">No applications yet.</p>
-                        <a href="{{ route('institution.index') }}" class="mt-3 inline-block text-[#4299e1] text-sm hover:underline">
-                            Browse institutions &rarr;
+                {{-- Recent Applications --}}
+                <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.06)] border border-gray-200 overflow-hidden">
+                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                            <i class="fas fa-file-alt text-[#4299e1]"></i> My Applications
+                        </h2>
+                        <a href="{{ route('website.applications.create') }}"
+                           class="text-sm text-[#4299e1] hover:text-[#2c5aa0] font-semibold transition no-underline flex items-center gap-1">
+                            <i class="fas fa-plus text-xs"></i> New Application
                         </a>
                     </div>
-                @else
-                    <div class="divide-y divide-gray-100">
-                        @foreach($recentApplications as $application)
-                            <div class="py-3 flex items-center justify-between gap-3">
-                                <div class="min-w-0">
-                                    <p class="text-sm font-medium text-gray-800 truncate">
-                                        {{ $application->institution?->name ?? 'Institution' }}
-                                    </p>
-                                    <p class="text-xs text-gray-500 truncate">
-                                        {{ $application->program?->name ?? 'Program' }}
-                                    </p>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    @php
-                                        $statusColor = match(strtolower($application->status ?? '')) {
-                                            'approved', 'accepted' => 'bg-green-100 text-green-700',
-                                            'rejected'             => 'bg-red-100 text-red-700',
-                                            'pending'              => 'bg-amber-100 text-amber-700',
-                                            default                => 'bg-gray-100 text-gray-600',
-                                        };
-                                    @endphp
-                                    <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium {{ $statusColor }}">
-                                        {{ ucfirst($application->status ?? 'Unknown') }}
-                                    </span>
-                                </div>
+
+                    @if ($recentApplications->isEmpty())
+                        <div class="text-center py-16 px-8">
+                            <div class="w-16 h-16 rounded-full bg-blue-50 text-blue-400 flex items-center justify-center mx-auto mb-5">
+                                <i class="fas fa-file-alt text-2xl"></i>
                             </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-
-            {{-- Sidebar: Profile completeness + Recommendations + Quick Links --}}
-            <div class="flex flex-col gap-4">
-
-                {{-- Profile Completeness --}}
-                @php
-                    $profile = $student->profile;
-                    $fields  = [
-                        $student->name, $student->email, $student->phone,
-                        $student->date_of_birth, $student->gender, $student->avatar,
-                        $profile?->address, $profile?->province,
-                        $profile?->career_interests, $profile?->preferred_faculties,
-                    ];
-                    $filled  = count(array_filter($fields, fn($v) => !empty($v)));
-                    $total   = count($fields);
-                    $percent = (int) round(($filled / $total) * 100);
-                @endphp
-                <div class="bg-white rounded-2xl shadow p-5">
-                    <h2 class="text-sm font-semibold text-gray-700 mb-3">Profile Completeness</h2>
-                    <div class="flex items-center gap-3 mb-2">
-                        <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                            <div class="h-2.5 rounded-full bg-[#4299e1] transition-all" style="width: {{ $percent }}%"></div>
+                            <h3 class="font-semibold text-gray-700 mb-2">No applications yet</h3>
+                            <p class="text-sm text-gray-400 mb-7 max-w-xs mx-auto">Find an institution or program that matches your goals and submit your first application.</p>
+                            <div class="flex justify-center gap-3 flex-wrap">
+                                <a href="{{ route('website.institutions.index') }}"
+                                   class="px-6 py-2.5 bg-[#2c5aa0] text-white text-sm font-semibold rounded-xl hover:bg-[#1a365d] transition no-underline">
+                                    Browse Institutions
+                                </a>
+                                <a href="{{ route('website.programs.index') }}"
+                                   class="px-6 py-2.5 border border-gray-200 text-gray-700 text-sm font-semibold rounded-xl hover:border-[#4299e1] hover:text-[#2c5aa0] transition no-underline">
+                                    Explore Programs
+                                </a>
+                            </div>
                         </div>
-                        <span class="text-sm font-bold text-[#2c5aa0]">{{ $percent }}%</span>
-                    </div>
-                    @if($percent < 100)
-                        <a href="{{ route('profile.edit') }}" class="text-xs text-[#4299e1] hover:underline">
-                            Complete your profile &rarr;
-                        </a>
                     @else
-                        <p class="text-xs text-green-600 font-medium">Profile complete!</p>
-                    @endif
-                </div>
-
-                {{-- Recommendations --}}
-                <div class="bg-white rounded-2xl shadow p-5">
-                    <h2 class="text-sm font-semibold text-gray-700 mb-3">Recommended For You</h2>
-                    @if($recommendations->isEmpty())
-                        <p class="text-xs text-gray-400">No recommendations yet. Complete your profile to get personalised suggestions.</p>
-                    @else
-                        <div class="space-y-3">
-                            @foreach($recommendations as $rec)
-                                <div class="text-xs">
-                                    <p class="font-medium text-gray-700 truncate">
-                                        {{ $rec->institution?->name ?? $rec->program?->name ?? 'Recommendation' }}
+                        <div class="px-6 py-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            @foreach ($recentApplications as $application)
+                                @php
+                                    $sc = match(strtolower($application->status ?? '')) {
+                                        'approved','accepted' => ['bg' => 'bg-emerald-50', 'text' => 'text-emerald-700', 'border' => 'border-emerald-200', 'dot' => 'bg-emerald-500'],
+                                        'rejected'            => ['bg' => 'bg-red-50',     'text' => 'text-red-700',     'border' => 'border-red-200',     'dot' => 'bg-red-500'],
+                                        'pending','submitted' => ['bg' => 'bg-amber-50',   'text' => 'text-amber-700',   'border' => 'border-amber-200',   'dot' => 'bg-amber-500'],
+                                        'withdrawn'           => ['bg' => 'bg-gray-50',    'text' => 'text-gray-500',    'border' => 'border-gray-200',    'dot' => 'bg-gray-400'],
+                                        default               => ['bg' => 'bg-blue-50',    'text' => 'text-blue-700',    'border' => 'border-blue-200',    'dot' => 'bg-blue-500'],
+                                    };
+                                @endphp
+                                <div class="rounded-xl border {{ $sc['border'] }} {{ $sc['bg'] }} p-4 flex flex-col gap-3">
+                                    <div class="flex items-start justify-between gap-2">
+                                        <div class="h-9 w-9 rounded-lg bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-university text-[#2c5aa0] text-sm"></i>
+                                        </div>
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-white border {{ $sc['border'] }} {{ $sc['text'] }}">
+                                            <span class="w-1.5 h-1.5 rounded-full {{ $sc['dot'] }}"></span>
+                                            {{ ucfirst($application->status ?? 'Unknown') }}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm leading-snug">
+                                            {{ $application->institution?->name ?? 'Institution' }}
+                                        </p>
+                                        <p class="text-xs text-gray-500 mt-1 truncate">
+                                            {{ $application->institutionProgram?->display_name ?? $application->program?->name ?? 'Program' }}
+                                        </p>
+                                    </div>
+                                    <p class="text-xs text-gray-400 mt-auto">
+                                        <i class="fas fa-calendar-alt mr-1"></i>
+                                        {{ $application->created_at?->format('M d, Y') }}
                                     </p>
-                                    @if($rec->institution && $rec->program)
-                                        <p class="text-gray-400 truncate">{{ $rec->program->name }}</p>
-                                    @endif
                                 </div>
                             @endforeach
                         </div>
                     @endif
                 </div>
 
-                {{-- Quick Links --}}
-                <div class="bg-white rounded-2xl shadow p-5">
-                    <h2 class="text-sm font-semibold text-gray-700 mb-3">Quick Links</h2>
-                    <ul class="space-y-2 text-sm">
-                        <li>
-                            <a href="{{ route('institution.index') }}" class="flex items-center gap-2 text-gray-600 hover:text-[#4299e1]">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21"/></svg>
-                                Browse Institutions
+                {{-- Explore Section --}}
+                <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.06)] border border-gray-200 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                            <i class="fas fa-compass text-[#4299e1]"></i> Explore
+                        </h2>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y divide-gray-100">
+                        @foreach ([
+                            ['route' => 'website.institutions.index',  'icon' => 'fa-university',    'label' => 'Institutions',  'count' => null],
+                            ['route' => 'website.programs.index',      'icon' => 'fa-book-open',     'label' => 'Programs',      'count' => null],
+                            ['route' => 'website.scholarships.index',  'icon' => 'fa-award',         'label' => 'Scholarships',  'count' => null],
+                            ['route' => 'website.consultancies.index', 'icon' => 'fa-handshake',     'label' => 'Consultancies', 'count' => null],
+                        ] as $exp)
+                            <a href="{{ route($exp['route']) }}"
+                               class="flex flex-col items-center gap-2 p-5 hover:bg-[#f7fafc] transition no-underline group">
+                                <span class="w-10 h-10 rounded-xl bg-[#4299e1]/10 text-[#2c5aa0] flex items-center justify-center group-hover:bg-[#4299e1] group-hover:text-white transition">
+                                    <i class="fas {{ $exp['icon'] }} text-sm"></i>
+                                </span>
+                                <span class="text-sm font-semibold text-gray-700 group-hover:text-[#2c5aa0] transition">{{ $exp['label'] }}</span>
                             </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('program.index') }}" class="flex items-center gap-2 text-gray-600 hover:text-[#4299e1]">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
-                                Explore Programs
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('forum.question.index') }}" class="flex items-center gap-2 text-gray-600 hover:text-[#4299e1]">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"/></svg>
-                                Student Forum
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 text-gray-600 hover:text-[#4299e1]">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                My Profile
-                            </a>
-                        </li>
-                    </ul>
+                        @endforeach
+                    </div>
                 </div>
 
+                {{-- Recommendations --}}
+                @if ($recommendations->isNotEmpty())
+                    <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.06)] border border-gray-200 overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-100">
+                            <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                <i class="fas fa-star text-[#4299e1]"></i> Recommended For You
+                            </h2>
+                        </div>
+                        <div class="px-6 py-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            @foreach ($recommendations as $rec)
+                                <div class="rounded-xl bg-[#f7fafc] border border-purple-100 p-4 flex items-start gap-3">
+                                    <div class="h-9 w-9 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-star text-xs"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="font-semibold text-gray-900 text-sm truncate">
+                                            {{ $rec->institution?->name ?? $rec->program?->name ?? 'Recommendation' }}
+                                        </p>
+                                        @if ($rec->institution && $rec->program)
+                                            <p class="text-xs text-gray-400 truncate mt-0.5">{{ $rec->program->name }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
             </div>
-        </div>
 
-        {{-- Sign out --}}
-        <div class="text-right">
-            <form method="POST" action="{{ route('student.logout') }}" class="inline">
-                @csrf
-                <button type="submit" class="text-sm text-gray-400 hover:text-red-500 transition">Sign out</button>
-            </form>
-        </div>
+            {{-- Right Sidebar --}}
+            <aside class="lg:sticky lg:top-28 space-y-4">
 
+                {{-- Profile + Quick Actions in same row --}}
+                <div class="grid grid-cols-2 gap-4">
+
+                    {{-- Profile Card --}}
+                    <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.06)] border border-gray-200 overflow-hidden">
+                        <div class="bg-gradient-to-br from-[#2c5aa0] to-[#4299e1] p-4 text-white text-center">
+                            @if ($student->avatar)
+                                <img src="{{ Storage::url($student->avatar) }}" alt="Avatar"
+                                     class="w-12 h-12 rounded-full object-cover border-4 border-white/30 mx-auto mb-2">
+                            @else
+                                <div class="w-12 h-12 rounded-full bg-white/20 border-4 border-white/30 flex items-center justify-center text-lg font-bold mx-auto mb-2">
+                                    {{ strtoupper(substr($student->name, 0, 1)) }}
+                                </div>
+                            @endif
+                            <h3 class="font-bold text-sm leading-tight truncate">{{ $student->name }}</h3>
+                            <p class="text-white/65 text-[0.7rem] mt-0.5 truncate">{{ $student->email }}</p>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-xs font-semibold text-gray-600">Profile</span>
+                                <span class="text-xs font-bold text-[#2c5aa0]">{{ $percent }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-100 rounded-full h-2.5 mb-3">
+                                <div class="h-2.5 rounded-full bg-gradient-to-r from-[#4299e1] to-[#2c5aa0]"
+                                     style="width: {{ $percent }}%"></div>
+                            </div>
+                            <a href="{{ route('profile.edit') }}"
+                               class="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 border-2 border-[#4299e1] text-[#2c5aa0] text-xs font-semibold rounded-xl hover:bg-[#4299e1]/10 transition no-underline">
+                                <i class="fas fa-pen text-[10px]"></i>
+                                {{ $percent < 100 ? 'Complete' : 'Edit Profile' }}
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- Quick Actions --}}
+                    <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.06)] border border-gray-200 p-4">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Quick Access</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            @foreach ([
+                                ['route' => 'website.applications.create', 'icon' => 'fa-paper-plane',  'label' => 'Apply',        'primary' => true],
+                                ['route' => 'website.inquiry.create',      'icon' => 'fa-paper-plane',  'label' => 'Inquiry',      'primary' => false],
+                                ['route' => 'website.compare.index',       'icon' => 'fa-balance-scale','label' => 'Compare',      'primary' => false],
+                                ['route' => 'website.scholarships.index',  'icon' => 'fa-award',        'label' => 'Scholarship',  'primary' => false],
+                            ] as $action)
+                                <a href="{{ route($action['route']) }}"
+                                   class="flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl text-xs font-semibold transition no-underline
+                                          {{ $action['primary'] ? 'bg-[#2c5aa0] text-white hover:bg-[#1a365d]' : 'border border-gray-200 text-gray-700 hover:border-[#4299e1] hover:text-[#2c5aa0] hover:bg-[#4299e1]/5' }}">
+                                    <i class="fas {{ $action['icon'] }} text-sm {{ $action['primary'] ? '' : 'text-[#4299e1]' }}"></i>
+                                    {{ $action['label'] }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Sign Out --}}
+                <form method="POST" action="{{ route('student.logout') }}">
+                    @csrf
+                    <button type="submit"
+                            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 text-gray-500 text-sm font-medium rounded-xl hover:border-red-200 hover:text-red-500 hover:bg-red-50 transition">
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </button>
+                </form>
+            </aside>
+
+        </div>
     </div>
-</main>
+</section>
 @endsection

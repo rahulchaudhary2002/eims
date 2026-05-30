@@ -3,23 +3,23 @@
 @section('title', 'Register')
 
 @section('content')
-<div class="flex items-center justify-center bg-gray-50 px-4 py-8 mt-[80px]">
+<main class="pt-[150px] pb-20 px-4 bg-gradient-to-br from-[#2c5aa0]/10 to-[#1a365d]/5">
     <div class="container mx-auto max-w-6xl">
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden grid md:grid-cols-2">
+        <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden grid md:grid-cols-2">
 
             <!-- Left: Hero -->
-            <div class="bg-gradient-to-br from-[#38b2ac] to-[#2c9c94] text-white p-8 md:p-10 flex flex-col justify-center">
-                <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-5" id="reg-hero-title">Join Our Community</h1>
-                <p class="text-lg opacity-90 mb-8 leading-relaxed" id="reg-hero-desc">
+            <div class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] text-white p-8 md:p-12 flex flex-col justify-center">
+                <h1 class="text-[2.4rem] md:text-[3.2rem] font-bold leading-[1.15] mb-5" id="reg-hero-title">Join Our Community</h1>
+                <p class="text-[1.05rem] md:text-[1.1rem] opacity-90 mb-8 leading-relaxed" id="reg-hero-desc">
                     Create your account to unlock personalised scholarship recommendations, connect with educational institutions, and access exclusive resources.
                 </p>
-                <ul class="space-y-4 mt-2" id="reg-hero-student">
+                <ul class="space-y-5 mt-4 text-[1rem]" id="reg-hero-student">
                     <li class="flex items-center gap-4"><i class="fas fa-search bg-white/20 w-10 h-10 rounded-full flex items-center justify-center"></i><span>Find scholarships matching your profile</span></li>
                     <li class="flex items-center gap-4"><i class="fas fa-bell bg-white/20 w-10 h-10 rounded-full flex items-center justify-center"></i><span>Get notified about new opportunities</span></li>
                     <li class="flex items-center gap-4"><i class="fas fa-chart-line bg-white/20 w-10 h-10 rounded-full flex items-center justify-center"></i><span>Track your application progress</span></li>
                     <li class="flex items-center gap-4"><i class="fas fa-users bg-white/20 w-10 h-10 rounded-full flex items-center justify-center"></i><span>Connect with mentors and peers</span></li>
                 </ul>
-                <ul class="space-y-4 mt-2 hidden" id="reg-hero-institution">
+                <ul class="space-y-5 mt-4 hidden text-[1rem]" id="reg-hero-institution">
                     <li class="flex items-center gap-4"><i class="fas fa-university bg-white/20 w-10 h-10 rounded-full flex items-center justify-center"></i><span>List your institution and programs</span></li>
                     <li class="flex items-center gap-4"><i class="fas fa-user-graduate bg-white/20 w-10 h-10 rounded-full flex items-center justify-center"></i><span>Receive verified student applications</span></li>
                     <li class="flex items-center gap-4"><i class="fas fa-award bg-white/20 w-10 h-10 rounded-full flex items-center justify-center"></i><span>Publish scholarships and promotions</span></li>
@@ -28,21 +28,21 @@
             </div>
 
             <!-- Right: Forms -->
-            <div class="p-8 md:p-10 max-h-[750px] overflow-y-auto">
-                <div class="text-center mb-6">
-                    <h2 class="text-3xl font-bold text-[#2c5aa0] mb-1">Create Account</h2>
-                    <p class="text-gray-600 text-sm">Choose your account type</p>
+            <div class="p-8 md:p-12 max-h-[860px] overflow-y-auto">
+                <div class="text-center mb-7">
+                    <h2 class="relative inline-block text-[2.1rem] md:text-[2.3rem] font-bold text-[#2c5aa0] mb-4 after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-2 after:w-[70px] after:h-[3px] after:bg-[#4299e1]">Create Account</h2>
+                    <p class="text-gray-600 text-[0.95rem]">Choose your account type</p>
                 </div>
 
                 {{-- Tab switcher --}}
-                <div class="flex rounded-xl bg-gray-100 p-1 mb-6">
+                <div class="flex rounded-xl bg-gray-100 p-1 mb-7">
                     <button type="button" id="reg-tab-student"
-                        class="reg-tab flex-1 py-2.5 px-3 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-white shadow text-[#2c5aa0]"
+                        class="reg-tab flex-1 py-3 px-3 rounded-xl font-semibold text-base transition-all duration-200 flex items-center justify-center gap-2 bg-white shadow text-[#2c5aa0]"
                         data-target="reg-form-student">
                         <i class="fas fa-user-graduate"></i> Student
                     </button>
                     <button type="button" id="reg-tab-institution"
-                        class="reg-tab flex-1 py-2.5 px-3 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 text-gray-500"
+                        class="reg-tab flex-1 py-3 px-3 rounded-xl font-semibold text-base transition-all duration-200 flex items-center justify-center gap-2 text-gray-500"
                         data-target="reg-form-institution">
                         <i class="fas fa-university"></i> Institution
                     </button>
@@ -64,15 +64,15 @@
                         @csrf
                         <input type="hidden" name="_form" value="student">
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">First Name <span class="text-red-500">*</span></label>
+                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">First Name <span class="text-red-500">*</span></label>
                                 <input type="text" name="first_name" value="{{ old('first_name') }}"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
                                     placeholder="First name" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Last Name <span class="text-red-500">*</span></label>
+                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Last Name <span class="text-red-500">*</span></label>
                                 <input type="text" name="last_name" value="{{ old('last_name') }}"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
                                     placeholder="Last name" required>
@@ -80,7 +80,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address <span class="text-red-500">*</span></label>
+                            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Email Address <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-envelope text-sm"></i></span>
                                 <input type="email" name="email" value="{{ old('email') }}"
@@ -89,24 +89,24 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Phone <span class="text-red-500">*</span></label>
+                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Phone <span class="text-red-500">*</span></label>
                                 <input type="tel" name="phone" value="{{ old('phone') }}"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
                                     placeholder="+977 98XXXXXXXX" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Date of Birth <span class="text-red-500">*</span></label>
+                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Date of Birth <span class="text-red-500">*</span></label>
                                 <input type="date" name="dob" value="{{ old('dob') }}"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
                                     required>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Education Level</label>
+                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Education Level</label>
                                 <select name="education_level_id"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm bg-white">
                                     <option value="">Select level</option>
@@ -116,7 +116,7 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Field of Interest</label>
+                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Field of Interest</label>
                                 <select name="field_of_interest"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm bg-white">
                                     <option value="">Select field</option>
@@ -128,7 +128,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
+                            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Password <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock text-sm"></i></span>
                                 <input type="password" id="stu_password" name="password"
@@ -141,7 +141,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Confirm Password <span class="text-red-500">*</span></label>
+                            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Confirm Password <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock text-sm"></i></span>
                                 <input type="password" id="stu_password_confirmation" name="password_confirmation"
@@ -154,19 +154,19 @@
                         </div>
 
                         <div class="flex items-start gap-3">
-                            <input type="checkbox" name="terms" id="student_terms" class="mt-1 w-4 h-4 rounded border-gray-300 text-[#38b2ac]" required {{ old('terms') ? 'checked' : '' }}>
-                            <label for="student_terms" class="text-sm text-gray-700">I agree to the <a href="#" class="text-[#38b2ac] font-semibold">Terms of Service</a> and <a href="#" class="text-[#38b2ac] font-semibold">Privacy Policy</a> <span class="text-red-500">*</span></label>
+                            <input type="checkbox" name="terms" id="student_terms" class="mt-1 w-4 h-4 rounded border-gray-300 text-[#4299e1]" required {{ old('terms') ? 'checked' : '' }}>
+                            <label for="student_terms" class="text-sm text-gray-700">I agree to the <a href="{{ route('website.terms') }}" class="text-[#4299e1] hover:text-[#2c5aa0] font-semibold">Terms of Service</a> and <a href="{{ route('website.privacy-policy') }}" class="text-[#4299e1] hover:text-[#2c5aa0] font-semibold">Privacy Policy</a> <span class="text-red-500">*</span></label>
                         </div>
 
                         <button type="submit"
-                            class="w-full bg-gradient-to-r from-[#38b2ac] to-[#2c9c94] hover:from-[#2c9c94] hover:to-[#1e7a74] text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2 mt-2">
+                            class="w-full bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] hover:from-[#2c5aa0] hover:to-[#1a365d] text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2 mt-2">
                             <i class="fas fa-user-plus"></i> Create Student Account
                         </button>
                     </form>
 
                     <p class="mt-5 text-center text-sm text-gray-600">
                         Already have an account?
-                        <a href="{{ route('student.login') }}" class="text-[#38b2ac] hover:text-[#2c9c94] font-semibold ml-1">Login here</a>
+                        <a href="{{ route('student.login') }}" class="text-[#4299e1] hover:text-[#2c5aa0] font-semibold ml-1">Login here</a>
                     </p>
                 </div>
 
@@ -194,21 +194,21 @@
                         <input type="hidden" name="_form" value="institution">
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Institution Name <span class="text-red-500">*</span></label>
+                            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Institution Name <span class="text-red-500">*</span></label>
                             <input type="text" name="institution_name" value="{{ old('institution_name') }}"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
                                 placeholder="e.g. Tribhuvan University" required>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Contact Person <span class="text-red-500">*</span></label>
+                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Contact Person <span class="text-red-500">*</span></label>
                                 <input type="text" name="contact_name" value="{{ old('contact_name') }}"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
                                     placeholder="Full name" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Designation</label>
+                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Designation</label>
                                 <input type="text" name="contact_designation" value="{{ old('contact_designation') }}"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
                                     placeholder="e.g. Principal">
@@ -216,7 +216,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Official Email <span class="text-red-500">*</span></label>
+                            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Official Email <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-envelope text-sm"></i></span>
                                 <input type="email" name="email" value="{{ old('email') }}"
@@ -225,15 +225,15 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Phone <span class="text-red-500">*</span></label>
+                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Phone <span class="text-red-500">*</span></label>
                                 <input type="tel" name="phone" value="{{ old('phone') }}"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
                                     placeholder="+977 XXXXXXXXXX" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Institution Type</label>
+                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Institution Type</label>
                                 <select name="institution_type"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm bg-white">
                                     <option value="">Select type</option>
@@ -247,14 +247,14 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Address / Location</label>
+                            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Address / Location</label>
                             <input type="text" name="address" value="{{ old('address') }}"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
                                 placeholder="City, District">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Password <span class="text-red-500">*</span></label>
+                            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Password <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock text-sm"></i></span>
                                 <input type="password" id="inst_reg_password" name="password"
@@ -267,7 +267,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Confirm Password <span class="text-red-500">*</span></label>
+                            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Confirm Password <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-lock text-sm"></i></span>
                                 <input type="password" id="inst_reg_password_confirmation" name="password_confirmation"
@@ -280,8 +280,8 @@
                         </div>
 
                         <div class="flex items-start gap-3">
-                            <input type="checkbox" name="terms" id="inst_terms" class="mt-1 w-4 h-4 rounded border-gray-300 text-[#38b2ac]" required {{ old('terms') ? 'checked' : '' }}>
-                            <label for="inst_terms" class="text-sm text-gray-700">I agree to the <a href="#" class="text-[#38b2ac] font-semibold">Terms of Service</a> and <a href="#" class="text-[#38b2ac] font-semibold">Privacy Policy</a> <span class="text-red-500">*</span></label>
+                            <input type="checkbox" name="terms" id="inst_terms" class="mt-1 w-4 h-4 rounded border-gray-300 text-[#4299e1]" required {{ old('terms') ? 'checked' : '' }}>
+                            <label for="inst_terms" class="text-sm text-gray-700">I agree to the <a href="{{ route('website.terms') }}" class="text-[#4299e1] hover:text-[#2c5aa0] font-semibold">Terms of Service</a> and <a href="{{ route('website.privacy-policy') }}" class="text-[#4299e1] hover:text-[#2c5aa0] font-semibold">Privacy Policy</a> <span class="text-red-500">*</span></label>
                         </div>
 
                         <button type="submit"
@@ -301,11 +301,11 @@
 
         <p class="text-center text-xs text-gray-500 mt-6">
             By signing up, you agree to our
-            <a href="#" class="underline hover:text-gray-700">Terms</a> and
-            <a href="#" class="underline hover:text-gray-700">Privacy Policy</a>
+            <a href="{{ route('website.terms') }}" class="underline hover:text-gray-700">Terms</a> and
+            <a href="{{ route('website.privacy-policy') }}" class="underline hover:text-gray-700">Privacy Policy</a>
         </p>
     </div>
-</div>
+</main>
 @endsection
 
 @section('page-specific-script')

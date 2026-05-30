@@ -4,122 +4,123 @@
     @csrf
     @method('patch')
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {{-- Guardian Name --}}
         <div>
-            <x-input-label for="guardian_name" :value="__('Guardian Name')" />
-            <x-text-input id="guardian_name" name="guardian_name" type="text" class="mt-1 block w-full"
-                :value="old('guardian_name', $profile?->guardian_name)" placeholder="Parent / guardian name" />
-            <x-input-error class="mt-2" :messages="$errors->get('guardian_name')" />
+            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Guardian Name</label>
+            <input type="text" name="guardian_name" value="{{ old('guardian_name', $profile?->guardian_name) }}"
+                   placeholder="Parent / guardian name"
+                   class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('guardian_name') border-red-400 @enderror">
+            @error('guardian_name')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
         {{-- Guardian Phone --}}
         <div>
-            <x-input-label for="guardian_phone" :value="__('Guardian Phone')" />
-            <x-text-input id="guardian_phone" name="guardian_phone" type="text" class="mt-1 block w-full"
-                :value="old('guardian_phone', $profile?->guardian_phone)" placeholder="+977 98XXXXXXXX" />
-            <x-input-error class="mt-2" :messages="$errors->get('guardian_phone')" />
+            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Guardian Phone</label>
+            <input type="text" name="guardian_phone" value="{{ old('guardian_phone', $profile?->guardian_phone) }}"
+                   placeholder="+977 98XXXXXXXX"
+                   class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('guardian_phone') border-red-400 @enderror">
+            @error('guardian_phone')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
         {{-- Province --}}
         <div>
-            <x-input-label for="province" :value="__('Province')" />
-            <x-text-input id="province" name="province" type="text" class="mt-1 block w-full"
-                :value="old('province', $profile?->province)" placeholder="e.g. Bagmati" />
-            <x-input-error class="mt-2" :messages="$errors->get('province')" />
+            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Province</label>
+            <input type="text" name="province" value="{{ old('province', $profile?->province) }}"
+                   placeholder="e.g. Bagmati"
+                   class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('province') border-red-400 @enderror">
+            @error('province')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
         {{-- District --}}
         <div>
-            <x-input-label for="district" :value="__('District')" />
-            <x-text-input id="district" name="district" type="text" class="mt-1 block w-full"
-                :value="old('district', $profile?->district)" placeholder="e.g. Kathmandu" />
-            <x-input-error class="mt-2" :messages="$errors->get('district')" />
+            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">District</label>
+            <input type="text" name="district" value="{{ old('district', $profile?->district) }}"
+                   placeholder="e.g. Kathmandu"
+                   class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('district') border-red-400 @enderror">
+            @error('district')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
         {{-- City --}}
         <div>
-            <x-input-label for="city" :value="__('City')" />
-            <x-text-input id="city" name="city" type="text" class="mt-1 block w-full"
-                :value="old('city', $profile?->city)" placeholder="City / Municipality" />
-            <x-input-error class="mt-2" :messages="$errors->get('city')" />
+            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">City</label>
+            <input type="text" name="city" value="{{ old('city', $profile?->city) }}"
+                   placeholder="City / Municipality"
+                   class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('city') border-red-400 @enderror">
+            @error('city')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
         {{-- Preferred Study Location --}}
         <div>
-            <x-input-label for="preferred_location" :value="__('Preferred Study Location')" />
-            <x-text-input id="preferred_location" name="preferred_location" type="text" class="mt-1 block w-full"
-                :value="old('preferred_location', $profile?->preferred_location)" placeholder="e.g. Kathmandu, Pokhara" />
-            <x-input-error class="mt-2" :messages="$errors->get('preferred_location')" />
+            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Preferred Study Location</label>
+            <input type="text" name="preferred_location" value="{{ old('preferred_location', $profile?->preferred_location) }}"
+                   placeholder="e.g. Kathmandu, Pokhara"
+                   class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('preferred_location') border-red-400 @enderror">
+            @error('preferred_location')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
         {{-- Budget Min --}}
         <div>
-            <x-input-label for="budget_min" :value="__('Budget Min (NPR)')" />
-            <x-text-input id="budget_min" name="budget_min" type="number" class="mt-1 block w-full"
-                :value="old('budget_min', $profile?->budget_min)" placeholder="0" min="0" />
-            <x-input-error class="mt-2" :messages="$errors->get('budget_min')" />
+            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Budget Min (NPR)</label>
+            <input type="number" name="budget_min" value="{{ old('budget_min', $profile?->budget_min) }}"
+                   placeholder="0" min="0"
+                   class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('budget_min') border-red-400 @enderror">
+            @error('budget_min')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
         {{-- Budget Max --}}
         <div>
-            <x-input-label for="budget_max" :value="__('Budget Max (NPR)')" />
-            <x-text-input id="budget_max" name="budget_max" type="number" class="mt-1 block w-full"
-                :value="old('budget_max', $profile?->budget_max)" placeholder="500000" min="0" />
-            <x-input-error class="mt-2" :messages="$errors->get('budget_max')" />
+            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Budget Max (NPR)</label>
+            <input type="number" name="budget_max" value="{{ old('budget_max', $profile?->budget_max) }}"
+                   placeholder="500000" min="0"
+                   class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('budget_max') border-red-400 @enderror">
+            @error('budget_max')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
     </div>
 
     {{-- Address --}}
     <div>
-        <x-input-label for="address" :value="__('Full Address')" />
-        <textarea id="address" name="address" rows="2"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-            placeholder="Street / Tole / Ward">{{ old('address', $profile?->address) }}</textarea>
-        <x-input-error class="mt-2" :messages="$errors->get('address')" />
+        <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Full Address</label>
+        <textarea name="address" rows="2" placeholder="Street / Tole / Ward"
+                  class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition resize-none @error('address') border-red-400 @enderror">{{ old('address', $profile?->address) }}</textarea>
+        @error('address')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
     </div>
 
-    {{-- Career Interests --}}
-    <div>
-        <x-input-label :value="__('Career Interests')" />
-        <p class="text-xs text-gray-400 mb-2">Enter each interest on a separate line.</p>
-        <textarea id="career_interests_raw" name="career_interests_raw" rows="3"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-            placeholder="Software Engineering&#10;Medicine&#10;Business">{{ old('career_interests_raw', implode("\n", $profile?->career_interests ?? [])) }}</textarea>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {{-- Career Interests --}}
+        <div>
+            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Career Interests</label>
+            <p class="text-xs text-gray-400 mb-2">One interest per line.</p>
+            <textarea id="career_interests_raw" name="career_interests_raw" rows="4"
+                      placeholder="Software Engineering&#10;Medicine&#10;Business"
+                      class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition resize-none">{{ old('career_interests_raw', implode("\n", $profile?->career_interests ?? [])) }}</textarea>
+        </div>
+
+        {{-- Preferred Faculties --}}
+        <div>
+            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Preferred Faculties / Programs</label>
+            <p class="text-xs text-gray-400 mb-2">One faculty per line.</p>
+            <textarea id="preferred_faculties_raw" name="preferred_faculties_raw" rows="4"
+                      placeholder="Science &amp; Technology&#10;Management"
+                      class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition resize-none">{{ old('preferred_faculties_raw', implode("\n", $profile?->preferred_faculties ?? [])) }}</textarea>
+        </div>
     </div>
 
-    {{-- Preferred Faculties --}}
-    <div>
-        <x-input-label :value="__('Preferred Faculties / Programs')" />
-        <p class="text-xs text-gray-400 mb-2">Enter each faculty on a separate line.</p>
-        <textarea id="preferred_faculties_raw" name="preferred_faculties_raw" rows="3"
-            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-            placeholder="Science &amp; Technology&#10;Management">{{ old('preferred_faculties_raw', implode("\n", $profile?->preferred_faculties ?? [])) }}</textarea>
-    </div>
-
-    <div class="flex items-center gap-4">
-        <x-primary-button>{{ __('Save Details') }}</x-primary-button>
-        @if(session('status') === 'profile-extended-updated')
-            <p class="text-sm text-green-600" x-data="{show:true}" x-show="show" x-transition x-init="setTimeout(()=>show=false,2000)">Saved.</p>
-        @endif
-    </div>
+    <button type="submit"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] hover:from-[#2c5aa0] hover:to-[#1a365d] text-white text-sm font-bold rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5">
+        <i class="fas fa-check"></i> Save Details
+    </button>
 </form>
 
-{{-- Convert textarea lines to array inputs before submit --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('form[action="{{ route('profile.update-extended') }}"]');
     if (!form) return;
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-
-        // career_interests
-        const ciRaw  = document.getElementById('career_interests_raw');
-        const pfRaw  = document.getElementById('preferred_faculties_raw');
-
-        // remove old hidden inputs
+        const ciRaw = document.getElementById('career_interests_raw');
+        const pfRaw = document.getElementById('preferred_faculties_raw');
         form.querySelectorAll('input[name^="career_interests"], input[name^="preferred_faculties"]').forEach(el => el.remove());
-
         if (ciRaw) {
             ciRaw.value.split('\n').map(s => s.trim()).filter(Boolean).forEach((val, i) => {
                 const inp = document.createElement('input');
@@ -134,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 form.appendChild(inp);
             });
         }
-
         form.submit();
     });
 });

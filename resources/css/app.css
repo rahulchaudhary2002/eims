@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -69,9 +71,6 @@ body {
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
 }
-
-/* Import Inter font */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 .no-tailwind * {
   all: revert;
@@ -145,6 +144,119 @@ body {
 
 .nav-link.active {
   @apply bg-primary-100 text-primary-700 font-semibold;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Public website pages use the legacy Sikuna visual system from modules/home. */
+.legacy-sikuna main > div[class*="max-w-"] {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.legacy-sikuna main > div[class*="max-w-"] > .mb-6,
+.legacy-sikuna .legacy-page-heading {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.legacy-sikuna main > div[class*="max-w-"] > .mb-6 h1,
+.legacy-sikuna .legacy-page-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: #2c5aa0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.legacy-sikuna main > div[class*="max-w-"] > .mb-6 h1::after,
+.legacy-sikuna .legacy-page-title::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -0.625rem;
+    width: 5rem;
+    height: 0.25rem;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: #4299e1;
+}
+
+.legacy-sikuna main > div[class*="max-w-"] > .mb-6 p,
+.legacy-sikuna .legacy-page-subtitle {
+    max-width: 42rem;
+    margin: 0 auto;
+    color: #4a5568;
+    font-size: 1.1rem;
+}
+
+.legacy-sikuna .bg-white.rounded-2xl,
+.legacy-sikuna .bg-white.rounded-xl {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.legacy-sikuna .shadow-sm {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.legacy-sikuna .border-gray-100,
+.legacy-sikuna .border-gray-200 {
+    border-color: #e2e8f0 !important;
+}
+
+.legacy-sikuna input[type="text"],
+.legacy-sikuna input[type="email"],
+.legacy-sikuna input[type="number"],
+.legacy-sikuna input[type="tel"],
+.legacy-sikuna input[type="url"],
+.legacy-sikuna input[type="date"],
+.legacy-sikuna select,
+.legacy-sikuna textarea {
+    border-color: #e2e8f0;
+    border-radius: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.legacy-sikuna input:focus,
+.legacy-sikuna select:focus,
+.legacy-sikuna textarea:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.1);
+}
+
+.legacy-sikuna .bg-blue-600 {
+    background-color: #4299e1 !important;
+}
+
+.legacy-sikuna .hover\:bg-blue-700:hover {
+    background-color: #2c5aa0 !important;
+}
+
+.legacy-sikuna .text-blue-600 {
+    color: #4299e1 !important;
+}
+
+.legacy-sikuna h1.text-gray-900,
+.legacy-sikuna h2.text-gray-900,
+.legacy-sikuna h3.text-gray-900 {
+    color: #2c5aa0 !important;
+}
+
+.legacy-sikuna .grid.gap-5 {
+    gap: 1.75rem;
 }
 
 /* =============================================
@@ -982,4 +1094,3 @@ select.form-control {
 .no-tailwind th { font-weight: 600; color: #374151; }
 .no-tailwind tr:last-child td { border-bottom: none; }
 .no-tailwind tbody tr:hover { background-color: #f1f5f9; }
-
