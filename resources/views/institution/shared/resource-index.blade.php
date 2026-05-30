@@ -10,7 +10,10 @@
         :breadcrumbs="[['label' => 'Dashboard', 'route' => 'institution.dashboard'], ['label' => \Illuminate\Support\Str::plural($title)]]">
         <x-slot:actions>
         @if(Route::has("institution.{$routeBase}.create"))
-            <a href="{{ route("institution.{$routeBase}.create") }}" class="btn btn-primary">Add {{ $title }}</a>
+            <a href="{{ route("institution.{$routeBase}.create") }}" class="btn btn-primary">
+                <span class="text-base leading-none">+</span>
+                Add {{ $title }}
+            </a>
         @endif
         </x-slot:actions>
     </x-admin.page-header>
@@ -20,7 +23,11 @@
     @endif
 
     <div class="eims-card overflow-hidden">
-        <div class="overflow-x-auto">
+        <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
+            <h2 class="text-base font-semibold text-slate-800">{{ \Illuminate\Support\Str::plural($title) }}</h2>
+            <span class="text-sm text-slate-500">{{ $records->total() }} total</span>
+        </div>
+        <div class="eims-table-wrapper">
             <table class="eims-table w-full">
                 <thead>
                     <tr>
@@ -49,15 +56,21 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="{{ count($fields) + 1 }}" class="text-center py-8 text-slate-400">No records found.</td>
+                            <td colspan="{{ count($fields) + 1 }}">
+                                <x-admin.empty-state
+                                    :title="'No ' . strtolower(\Illuminate\Support\Str::plural($title)) . ' found'"
+                                    description="Records for the active institution will appear here." />
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <div class="px-4 py-3 border-t border-slate-100">
-            {{ $records->links() }}
-        </div>
+        @if($records->hasPages())
+            <div class="px-5 py-4 border-t border-slate-100">
+                {{ $records->links() }}
+            </div>
+        @endif
     </div>
 </div>
 @endsection

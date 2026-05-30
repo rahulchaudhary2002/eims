@@ -3,16 +3,22 @@
 @section('title', 'Add Institution Review')
 
 @section('content')
-<div class="content-header">
-    <div>
-        <h1 class="content-title">Add Review</h1>
-        <p class="content-subtitle">Create a new institution review.</p>
-    </div>
-    <a href="{{ route('admin.institution-reviews.index') }}" class="btn btn-secondary">← Back to Reviews</a>
-</div>
+<div class="space-y-5">
+<x-admin.page-header title="Add Review" subtitle="Create a new institution review."
+    :breadcrumbs="[
+        ['label'=>'Dashboard','route'=>'admin.dashboard'],
+        ['label'=>'Institution Reviews','route'=>'admin.institution-reviews.index'],
+        ['label'=>'Add Review'],
+    ]">
+    <x-slot:actions>
+        <a href="{{ route('admin.institution-reviews.index') }}" class="btn btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+            Back
+        </a>
+    </x-slot:actions>
+</x-admin.page-header>
 
-<div class="card max-w-2xl">
-    <div class="card-body">
+<div class="eims-card p-6 max-w-2xl">
         <form method="POST" action="{{ route('admin.institution-reviews.store') }}">
             @csrf
             @include('admin.modules.institution-reviews.partials.form', [
@@ -24,6 +30,6 @@
                 <a href="{{ route('admin.institution-reviews.index') }}" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
-    </div>
+</div>
 </div>
 @endsection

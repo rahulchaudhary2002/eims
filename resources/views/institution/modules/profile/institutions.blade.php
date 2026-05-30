@@ -3,9 +3,12 @@
 @section('page-title', 'Assigned Institutions')
 
 @section('content')
-<div class="eims-card p-6">
-    <h1 class="text-xl font-bold text-slate-800 mb-5">Assigned Institutions</h1>
-    <div class="overflow-x-auto">
+<div class="space-y-5">
+    <x-admin.page-header title="Assigned Institutions" subtitle="Institutions assigned to your account."
+        :breadcrumbs="[['label'=>'Institution','route'=>'institution.dashboard'],['label'=>'Assigned Institutions']]" />
+
+    <div class="eims-card overflow-hidden">
+    <div class="eims-table-wrapper">
         <table class="eims-table w-full">
             <thead><tr><th>Name</th><th>Type</th><th>Status</th><th>Primary</th><th>Role</th></tr></thead>
             <tbody>
@@ -20,6 +23,7 @@
             @endforeach
             </tbody>
         </table>
+    </div>
     </div>
 </div>
 @endsection

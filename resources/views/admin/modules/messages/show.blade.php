@@ -3,19 +3,22 @@
 @section('title', 'Message #' . $message->id)
 
 @section('content')
-<div class="content-header">
-    <div>
-        <h1 class="content-title">Message #{{ $message->id }}</h1>
-        <p class="content-subtitle">
-            In Conversation #{{ $message->conversation_id }}
-            @if($message->conversation?->student) · {{ $message->conversation->student->name }} @endif
-        </p>
-    </div>
-    <div class="flex gap-2">
-        <a href="{{ route('admin.conversations.show', $message->conversation_id) }}" class="btn btn-secondary">← Back to Conversation</a>
+<div class="space-y-5">
+<x-admin.page-header title="Message #{{ $message->id }}"
+    subtitle="Conversation #{{ $message->conversation_id }}{{ $message->conversation?->student ? ' / '.$message->conversation->student->name : '' }}"
+    :breadcrumbs="[
+        ['label'=>'Dashboard','route'=>'admin.dashboard'],
+        ['label'=>'Messages','route'=>'admin.messages.index'],
+        ['label'=>'Message #'.$message->id],
+    ]">
+    <x-slot:actions>
+        <a href="{{ route('admin.conversations.show', $message->conversation_id) }}" class="btn btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+            Conversation
+        </a>
         <a href="{{ route('admin.messages.index') }}" class="btn btn-secondary">All Messages</a>
-    </div>
-</div>
+    </x-slot:actions>
+</x-admin.page-header>
 
 @if(session('success'))
     <div class="alert alert-success mb-6">{{ session('success') }}</div>
@@ -25,9 +28,9 @@
 
     {{-- Message body --}}
     <div class="lg:col-span-2 space-y-6">
-        <div class="card">
+        <div class="eims-card overflow-hidden">
             <div class="card-header flex items-center justify-between">
-                <h2 class="card-title">Message Content</h2>
+                <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Message Content</h2>
                 @if($message->read_at)
                     <span class="badge badge-success">Read {{ $message->read_at->format('d M Y, H:i') }}</span>
                 @else
@@ -56,9 +59,9 @@
 
     {{-- Sidebar --}}
     <div class="space-y-6">
-        <div class="card">
+        <div class="eims-card overflow-hidden">
             <div class="card-header">
-                <h2 class="card-title">Sender</h2>
+                <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Sender</h2>
             </div>
             <div class="card-body space-y-3">
                 <div>
@@ -80,9 +83,9 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="eims-card overflow-hidden">
             <div class="card-header">
-                <h2 class="card-title">Conversation</h2>
+                <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Conversation</h2>
             </div>
             <div class="card-body space-y-3">
                 <div>
@@ -108,9 +111,9 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="eims-card overflow-hidden">
             <div class="card-header">
-                <h2 class="card-title">Actions</h2>
+                <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Actions</h2>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('admin.messages.destroy', $message) }}"
@@ -122,5 +125,6 @@
         </div>
     </div>
 
+</div>
 </div>
 @endsection

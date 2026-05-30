@@ -4,10 +4,8 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-5">
-    <div class="eims-card p-6">
-        <h1 class="text-xl font-bold text-slate-800">Select active institution</h1>
-        <p class="text-sm text-slate-500 mt-1">Choose the institution you want to manage in this session.</p>
-    </div>
+    <x-admin.page-header title="Select Institution" subtitle="Choose the institution you want to manage in this session."
+        :breadcrumbs="[['label'=>'Institution'],['label'=>'Select Institution']]" />
 
     @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
@@ -30,7 +28,9 @@
                 </div>
             </form>
         @empty
-            <div class="eims-card p-8 text-center text-slate-500 md:col-span-2">No active institution assignments were found.</div>
+            <div class="eims-card md:col-span-2">
+                <x-admin.empty-state title="No active institution assignments" description="Ask a platform administrator to assign your user to an institution." />
+            </div>
         @endforelse
     </div>
 </div>

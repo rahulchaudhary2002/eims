@@ -19,8 +19,12 @@
         </x-slot:actions>
     </x-admin.page-header>
 
-    <div class="eims-card p-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div class="eims-card overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100">
+            <h2 class="text-base font-semibold text-slate-800">{{ $title }} Information</h2>
+            <p class="text-sm text-slate-500 mt-1">Fields are scoped to {{ $activeInstitution->name }}.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-6">
             @foreach($fields as $field => $config)
                 @continue(in_array($field, $readOnlyFields, true) || $field === 'institution_id')
                 @php

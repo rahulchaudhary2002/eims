@@ -20,8 +20,11 @@
         <x-admin.alert type="success" :message="session('success')" />
     @endif
 
-    <div class="eims-card p-6">
-        <dl class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div class="eims-card overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100">
+            <h2 class="text-base font-semibold text-slate-800">{{ $title }} Information</h2>
+        </div>
+        <dl class="grid grid-cols-1 md:grid-cols-2 gap-5 p-6">
             @foreach($fields as $field => $config)
                 <div class="{{ ($config['type'] ?? null) === 'textarea' ? 'md:col-span-2' : '' }}">
                     <dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">{{ $config['label'] ?? \Illuminate\Support\Str::headline($field) }}</dt>

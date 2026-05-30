@@ -1,6 +1,19 @@
 @php
     $value = data_get($record, $field);
     $display = $value;
+    $relationName = null;
+
+    if (str_ends_with($field, '_id')) {
+        $relationName = \Illuminate\Support\Str::camel(substr($field, 0, -3));
+
+        if ($record->relationLoaded($relationName) && ($related = $record->{$relationName})) {
+            $display = $related->name
+                ?? $related->title
+                ?? $related->full_name
+                ?? $related->email
+                ?? ('#' . $related->getKey());
+        }
+    }
 
     if ($value instanceof \Carbon\CarbonInterface) {
         $display = $value->format('d M Y, h:i A');
@@ -10,13 +23,15 @@
         $display = implode(', ', $value);
     }
 
-    if (str_ends_with($field, '_id')) {
+    if (str_ends_with($field, '_id') && $relationName && !$record->relationLoaded($relationName)) {
         $display = $value ? '#' . $value : null;
     }
 @endphp
 
 @if(is_string($value) && (str_contains($field, 'file') || str_contains($field, 'image') || str_contains($field, 'thumbnail') || str_contains($field, 'proof') || str_contains($field, 'attachment')))
     <a href="{{ Storage::url($value) }}" target="_blank" class="text-blue-600 hover:underline">View file</a>
+@elseif(is_bool($value))
+    <span class="badge {{ $value ? 'badge-green' : 'badge-secondary' }}">{{ $display }}</span>
 @else
     {{ $display ?: '—' }}
 @endif
