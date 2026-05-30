@@ -61,7 +61,7 @@
             Submit your question
         </h2>
 
-        <form method="POST" action="{{ route('institution.query.store', ['institution_type' => $institution->type, 'institution_slug' => $institution->slug]) }}" class="space-y-5">
+        <form method="POST" action="{{ route('institution.query.store', ['institution_slug' => $institution->slug]) }}" class="space-y-5">
             @csrf
 
             {{-- Hidden institution --}}
@@ -74,11 +74,11 @@
                 </label>
                 <input
                     type="text"
-                    name="full_name"
-                    value="{{ old('full_name', auth()->user()->name ?? '') }}"
+                    name="name"
+                    value="{{ old('name', auth()->user()->name ?? '') }}"
                     required
                     class="w-full rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                @error('full_name')
+                @error('name')
                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                 @enderror
             </div>

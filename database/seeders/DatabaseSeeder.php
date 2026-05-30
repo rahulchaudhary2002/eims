@@ -35,7 +35,6 @@ class DatabaseSeeder extends Seeder
             CourseDescriptionSeeder::class,
             QuestionSeeder::class,
             ReplySeeder::class,
-            EnquirySeeder::class,
             ProgramSeeder::class,
             InstitutionProgramSeeder::class,
             InstitutionProgramSubjectSeeder::class,

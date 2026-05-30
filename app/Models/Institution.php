@@ -108,6 +108,11 @@ class Institution extends Model
         return $this->hasMany(\App\Models\InstitutionDocument::class);
     }
 
+    public function affiliations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\Affiliation::class, 'affiliation_institution');
+    }
+
     public function programs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(\App\Models\InstitutionProgram::class);
