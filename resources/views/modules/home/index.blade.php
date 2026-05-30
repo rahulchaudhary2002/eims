@@ -162,12 +162,12 @@
             <div class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl">
                 <div class="p-7 pb-4 border-b border-gray-200">
                     <div class="flex items-center gap-2.5 mb-4">
-                        <span class="px-4 py-1.5 bg-[#4299e1]/10 text-[#4299e1] rounded-full text-xs font-semibold">{{ $program->category->name }}</span>
+                        <span class="px-4 py-1.5 bg-[#4299e1]/10 text-[#4299e1] rounded-full text-xs font-semibold">{{ $program->faculty?->name ?? 'General' }}</span>
                     </div>
                     <h3 class="text-2xl text-[#2c5aa0] mb-2.5 leading-tight font-bold">{{ $program->name }}</h3>
                     <div class="text-gray-600 mb-4 flex items-center gap-1.5 text-sm">
                         <i class="fas fa-graduation-cap"></i>
-                        <span>{{ $program->duration }} • {{ $program->level->name }}</span>
+                        <span>{{ ucfirst($program->level) }}</span>
                     </div>
                 </div>
                 <div class="p-5 pt-5">
@@ -185,8 +185,7 @@
                             <span>Industry partnerships</span>
                         </div>
                     </div> -->
-                    <div class="flex justify-between items-center">
-                        <div class="text-2xl font-bold text-[#2c5aa0] whitespace-nowrap">NPR {{ number_format($program->fee) }}<small class="text-sm text-gray-600 font-normal">/total</small></div>
+                    <div class="flex justify-end items-center">
                         <a href="{{ route('program.show', [$program->slug]) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold cursor-pointer transition-all bg-[#4299e1] text-white text-sm hover:bg-[#2c5aa0] hover:-translate-y-1 hover:shadow-lg">
                             View Program
                             <i class="fas fa-arrow-right"></i>
@@ -223,7 +222,7 @@
                     <img src="{{ $coverImage }}" alt="{{ $college->name }}" class="w-full h-full object-cover transition-all hover:scale-105">
                 </div>
                 <div class="p-7">
-                    <span class="inline-block px-4 py-1.5 bg-teal-500/10 text-teal-500 rounded-full text-xs font-semibold mb-4">{{ $college->category->name }}</span>
+                    <span class="inline-block px-4 py-1.5 bg-teal-500/10 text-teal-500 rounded-full text-xs font-semibold mb-4">{{ ucfirst($college->type) }}</span>
                     <h3 class="text-2xl text-[#2c5aa0] mb-2.5 leading-tight font-bold">{{ $college->name }}</h3>
                     <div class="text-gray-600 mb-4 flex items-center gap-1.5 text-sm">
                         <i class="fas fa-map-marker-alt text-[#4299e1]"></i>
@@ -353,11 +352,10 @@
             @php $primaryProgram = $course->programs->first(); @endphp
             <div class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl border border-gray-200">
                 <div class="p-7 pb-4 border-b border-gray-200">
-                    <span class="inline-block px-4 py-1.5 bg-orange-500/10 text-orange-500 rounded-full text-xs font-semibold mb-4">{{ $primaryProgram?->affiliation?->name ?? '-' }}</span>
+                    <span class="inline-block px-4 py-1.5 bg-orange-500/10 text-orange-500 rounded-full text-xs font-semibold mb-4">{{ $primaryProgram?->faculty?->name ?? '-' }}</span>
                     <h3 class="text-2xl text-[#2c5aa0] mb-2.5 leading-tight font-bold">{{ $course->display_name }}</h3>
                     <div class="flex gap-4 text-gray-600 text-sm">
-                        <span><i class="fas fa-clock"></i> {{ $primaryProgram?->duration ?? '-' }}</span>
-                        <span><i class="fas fa-university"></i> {{ $primaryProgram?->level?->name ?? '-' }}</span>
+                        <span><i class="fas fa-university"></i> {{ $primaryProgram ? ucfirst($primaryProgram->level) : '-' }}</span>
                     </div>
                 </div>
                 <div class="p-5 pt-5">

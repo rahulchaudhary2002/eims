@@ -9,12 +9,31 @@
     <!-- Main Content -->
     <div class="lg:col-span-3 flex flex-col gap-6">
 
-        <!-- Profile Information -->
+        <!-- Flash messages -->
+        @if(session('status') === 'profile-updated')
+            <div class="bg-green-50 border border-green-200 text-green-800 rounded-xl px-4 py-3 text-sm">
+                Profile information updated successfully.
+            </div>
+        @endif
+        @if(session('status') === 'profile-extended-updated')
+            <div class="bg-green-50 border border-green-200 text-green-800 rounded-xl px-4 py-3 text-sm">
+                Additional details updated successfully.
+            </div>
+        @endif
+
+        <!-- Basic Profile Information -->
         <section id="profile" class="bg-white shadow rounded-2xl p-6 sm:p-8">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Update Profile Information</h3>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Profile Information</h3>
             <div class="max-w-xl">
                 @include('modules.profile.partials.update-profile-information-form')
             </div>
+        </section>
+
+        <!-- Additional Details -->
+        <section id="additional" class="bg-white shadow rounded-2xl p-6 sm:p-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-1">Additional Details</h3>
+            <p class="text-sm text-gray-500 mb-4">Guardian info, location, budget and academic interests.</p>
+            @include('modules.profile.partials.update-student-profile-form')
         </section>
 
         <!-- Password Update -->

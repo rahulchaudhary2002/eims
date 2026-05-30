@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Affiliation;
-use App\Models\Enquiry;
+use App\Models\Inquiry;
 use App\Models\Institution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -93,20 +93,21 @@ class InstitutionController extends Controller
         $institution = Institution::where('slug', $institution_slug)->firstOrFail();
 
         $validated = $request->validate([
-            'full_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
             'type' => 'required|string|max:100',
             'message' => 'required|string|max:2000',
         ]);
 
-        Enquiry::create([
+        Inquiry::create([
             'institution_id' => $institution->id,
-            'full_name' => $validated['full_name'],
+            'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
-            'type' => $validated['type'],
-            'message' => $validated['message'],
+            'message' => '[' . ucfirst($validated['type']) . '] ' . $validated['message'],
+            'source' => 'website',
+            'status' => 'new',
         ]);
 
         return redirect()->route('institution.query', ['institution_slug' => $institution_slug])

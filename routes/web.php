@@ -4,7 +4,6 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstitutionController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ReplyController;
@@ -17,17 +16,6 @@ require __DIR__ . '/admin/web.php';
 require __DIR__ . '/institution.php';
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// Student dashboard placeholder (to be expanded in student module steps)
-Route::middleware('auth:student')->prefix('student')->name('student.')->group(function () {
-    Route::get('dashboard', fn () => view('student.dashboard'))->name('dashboard');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 Route::prefix('course')->name('course')->group(function () {
     Route::get('/', [CourseController::class, 'index']);
