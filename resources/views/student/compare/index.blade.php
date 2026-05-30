@@ -65,13 +65,13 @@
                     @foreach([
                         ['Type', fn($i) => \App\Models\Institution::TYPES[$i->institution?->type] ?? $i->institution?->type],
                         ['Location', fn($i) => implode(', ', array_filter([$i->institution?->city, $i->institution?->district]))],
-                        ['Program', fn($i) => $i->institutionProgram?->program?->name ?? '—'],
-                        ['Fee', fn($i) => $i->institutionProgram?->fee ? 'NPR ' . number_format($i->institutionProgram->fee) : '—'],
-                        ['Duration', fn($i) => $i->institutionProgram?->duration ?? '—'],
-                        ['Seats', fn($i) => $i->institutionProgram?->seats ?? '—'],
-                        ['Min GPA', fn($i) => $i->institutionProgram?->min_gpa ?? '—'],
-                        ['Min %', fn($i) => $i->institutionProgram?->min_percentage ? $i->institutionProgram->min_percentage . '%' : '—'],
-                        ['Status', fn($i) => ucfirst($i->institution?->status ?? '—')],
+                        ['Program', fn($i) => $i->institutionProgram?->program?->name ?? '-'],
+                        ['Fee', fn($i) => $i->institutionProgram?->fee ? 'NPR ' . number_format($i->institutionProgram->fee) : '-'],
+                        ['Duration', fn($i) => $i->institutionProgram?->duration ?? '-'],
+                        ['Seats', fn($i) => $i->institutionProgram?->seats ?? '-'],
+                        ['Min GPA', fn($i) => $i->institutionProgram?->min_gpa ?? '-'],
+                        ['Min %', fn($i) => $i->institutionProgram?->min_percentage ? $i->institutionProgram->min_percentage . '%' : '-'],
+                        ['Status', fn($i) => ucfirst($i->institution?->status ?? '-')],
                     ] as [$label, $fn])
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-5 py-3 text-xs font-bold text-gray-500">{{ $label }}</td>

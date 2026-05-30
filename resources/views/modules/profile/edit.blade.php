@@ -1,6 +1,6 @@
 @extends('website.layouts.app')
 
-@section('meta-title', 'My Profile — ' . config('app.name'))
+@section('meta-title', 'My Profile - ' . config('app.name'))
 
 @section('content')
 <section class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] pt-[150px] pb-28 text-white">
