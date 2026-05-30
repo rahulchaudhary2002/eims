@@ -41,7 +41,7 @@
                                 <a href="{{ route('admin.students.show', $scholarshipCashback->student) }}" class="text-blue-600 hover:underline">
                                     {{ $scholarshipCashback->student->name }}
                                 </a>
-                            @else —
+                            @else -
                             @endif
                         </dd>
                     </div>
@@ -54,7 +54,7 @@
                                 </a>
                                 <div class="text-xs text-slate-400 mt-0.5">{{ $scholarshipCashback->commissionInvoice->institution->name ?? '' }}</div>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -66,23 +66,23 @@
                                     {{ $scholarshipCashback->application->application_number }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Payment Method</dt>
                         <dd class="mt-1 text-slate-800">
-                            {{ \App\Models\ScholarshipCashback::PAYMENT_METHODS[$scholarshipCashback->payment_method] ?? ($scholarshipCashback->payment_method ?: '—') }}
+                            {{ \App\Models\ScholarshipCashback::PAYMENT_METHODS[$scholarshipCashback->payment_method] ?? ($scholarshipCashback->payment_method ?: '-') }}
                         </dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Transaction Reference</dt>
-                        <dd class="mt-1 font-mono text-slate-700">{{ $scholarshipCashback->transaction_reference ?? '—' }}</dd>
+                        <dd class="mt-1 font-mono text-slate-700">{{ $scholarshipCashback->transaction_reference ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Paid At</dt>
-                        <dd class="mt-1 text-slate-800">{{ $scholarshipCashback->paid_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-800">{{ $scholarshipCashback->paid_at?->format('d M Y, H:i') ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Created</dt>

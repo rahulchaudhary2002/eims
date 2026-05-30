@@ -51,7 +51,7 @@
 
 {{-- Amount --}}
 <div>
-    <label for="amount" class="form-label">Amount <span class="text-slate-400 text-xs">(optional — discount/cashback value)</span></label>
+    <label for="amount" class="form-label">Amount <span class="text-slate-400 text-xs">(optional - discount/cashback value)</span></label>
     <input type="number" id="amount" name="amount" step="0.0001" min="0"
         value="{{ old('amount', $promotion->amount ?? '') }}"
         class="form-control @error('amount') is-invalid @enderror"

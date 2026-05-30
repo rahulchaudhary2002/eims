@@ -6,7 +6,7 @@
 <div class="space-y-5">
 
     <x-admin.page-header
-        title="Edit Profile — {{ $institutionProfile->institution->name ?? 'Profile' }}"
+        title="Edit Profile - {{ $institutionProfile->institution->name ?? 'Profile' }}"
         subtitle="Update institution profile details"
         :breadcrumbs="[
             ['label'=>'Dashboard','route'=>'admin.dashboard'],

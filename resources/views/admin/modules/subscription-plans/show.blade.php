@@ -60,7 +60,7 @@
                             <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Yearly Savings</dt>
                             <dd class="mt-1 font-mono text-green-600">
                                 @php $savings = ((float) $subscriptionPlan->price_monthly * 12) - (float) $subscriptionPlan->price_yearly; @endphp
-                                {{ $savings > 0 ? number_format($savings, 2) . ' saved' : '—' }}
+                                {{ $savings > 0 ? number_format($savings, 2) . ' saved' : '-' }}
                             </dd>
                         </div>
                     @endif
@@ -154,7 +154,7 @@
                                 <td>
                                     @if($sub->institution)
                                         <a href="{{ route('admin.institutions.show', $sub->institution) }}" class="font-medium text-blue-600 hover:underline text-sm">{{ $sub->institution->name }}</a>
-                                    @else <span class="text-slate-400">—</span>
+                                    @else <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td class="text-sm">{{ \App\Models\InstitutionSubscription::BILLING_CYCLES[$sub->billing_cycle] ?? $sub->billing_cycle }}</td>

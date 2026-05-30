@@ -29,7 +29,7 @@
                     <option value="">All Inquiries</option>
                     @foreach($inquiries as $inquiry)
                         <option value="{{ $inquiry->id }}" {{ request('inquiry_id') == $inquiry->id ? 'selected' : '' }}>
-                            {{ $inquiry->name }} — {{ $inquiry->email }}
+                            {{ $inquiry->name }} - {{ $inquiry->email }}
                         </option>
                     @endforeach
                 </select>
@@ -80,13 +80,13 @@
                                     </a>
                                     <div class="text-xs text-slate-400">{{ $note->inquiry->email }}</div>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-sm text-slate-700 max-w-xs">
                                 <p class="line-clamp-2">{{ $note->note }}</p>
                             </td>
-                            <td class="text-sm">{{ $note->user->name ?? '—' }}</td>
+                            <td class="text-sm">{{ $note->user->name ?? '-' }}</td>
                             <td class="text-xs text-slate-500">{{ $note->created_at->format('d M Y, H:i') }}</td>
                             <td>
                                 <div class="flex items-center gap-1">

@@ -84,7 +84,7 @@
             <a href="{{ Storage::url($referralAgreement->agreement_file) }}" target="_blank" class="text-blue-600 hover:underline">
                 {{ basename($referralAgreement->agreement_file) }}
             </a>
-            — upload a new file to replace it.
+            - upload a new file to replace it.
         </p>
     @endif
     <input type="file" id="agreement_file" name="agreement_file" accept=".pdf,.doc,.docx"

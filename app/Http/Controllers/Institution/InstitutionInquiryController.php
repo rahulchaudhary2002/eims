@@ -18,6 +18,7 @@ class InstitutionInquiryController extends Controller
         $this->modelClass = Inquiry::class;
         $this->routeBase = 'inquiries';
         $this->title = 'Inquiry';
+        $this->relationships = ['institutionProgram', 'assignedTo'];
         $this->selectOptions = [
             'source' => Inquiry::SOURCES,
             'status' => Inquiry::STATUSES,
@@ -51,7 +52,12 @@ class InstitutionInquiryController extends Controller
     protected function selectOptions(): array
     {
         return array_merge($this->selectOptions, [
-            'institution_program_id' => InstitutionProgram::where('institution_id', $this->activeInstitutionId())->orderBy('title')->pluck('title', 'id')->all(),
+            'institution_program_id' => InstitutionProgram::with('program')
+                ->where('institution_id', $this->activeInstitutionId())
+                ->orderBy('title')
+                ->get()
+                ->mapWithKeys(fn (InstitutionProgram $program) => [$program->id => $program->display_name])
+                ->all(),
             'assigned_to' => $this->assignedInstitutionUsers()->pluck('name', 'id')->all(),
         ]);
     }

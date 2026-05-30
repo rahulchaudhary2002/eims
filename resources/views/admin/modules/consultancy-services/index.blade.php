@@ -85,10 +85,10 @@
                                     {{ $service->title }}
                                 </a>
                             </td>
-                            <td class="text-sm">{{ $service->institution->name ?? '—' }}</td>
+                            <td class="text-sm">{{ $service->institution->name ?? '-' }}</td>
                             <td class="text-sm">{{ $serviceTypes[$service->service_type] ?? $service->service_type }}</td>
                             <td class="font-mono text-sm">
-                                {{ $service->service_fee !== null ? number_format((float) $service->service_fee, 2) : '—' }}
+                                {{ $service->service_fee !== null ? number_format((float) $service->service_fee, 2) : '-' }}
                             </td>
                             <td>
                                 @if($service->is_active)

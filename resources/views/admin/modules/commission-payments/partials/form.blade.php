@@ -65,7 +65,7 @@
             <a href="{{ Storage::url($commissionPayment->payment_proof) }}" target="_blank" class="text-blue-600 hover:underline">
                 {{ basename($commissionPayment->payment_proof) }}
             </a>
-            — upload a new file to replace it.
+            - upload a new file to replace it.
         </p>
     @endif
     <input type="file" id="payment_proof" name="payment_proof" accept=".pdf,.jpg,.jpeg,.png"

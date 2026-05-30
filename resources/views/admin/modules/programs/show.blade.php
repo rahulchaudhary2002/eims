@@ -7,7 +7,7 @@
 
     <x-admin.page-header
         title="{{ $program->name }}"
-        :subtitle="($program->faculty->name ?? '—') . ($program->level ? ' · ' . $program->level : '')"
+        :subtitle="($program->faculty->name ?? '-') . ($program->level ? ' · ' . $program->level : '')"
         :breadcrumbs="[
             ['label'=>'Dashboard','route'=>'admin.dashboard'],
             ['label'=>'Programs','route' => 'admin.programs.index'],
@@ -115,7 +115,7 @@
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Faculty</dt>
-                        <dd class="text-slate-800">{{ $program->faculty->name ?? '—' }}</dd>
+                        <dd class="text-slate-800">{{ $program->faculty->name ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Level</dt>
@@ -123,7 +123,7 @@
                             @if($program->level)
                                 <span class="badge badge-blue">{{ $program->level }}</span>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -168,9 +168,9 @@
                             <tbody>
                                 @foreach($program->institutionPrograms as $ip)
                                 <tr>
-                                    <td class="font-medium text-slate-800 text-sm">{{ $ip->institution->name ?? '—' }}</td>
-                                    <td class="text-sm text-slate-600 max-w-xs truncate">{{ $ip->title ?? '—' }}</td>
-                                    <td class="text-sm text-slate-700">{{ $ip->total_fee !== null ? number_format($ip->total_fee, 2) : '—' }}</td>
+                                    <td class="font-medium text-slate-800 text-sm">{{ $ip->institution->name ?? '-' }}</td>
+                                    <td class="text-sm text-slate-600 max-w-xs truncate">{{ $ip->title ?? '-' }}</td>
+                                    <td class="text-sm text-slate-700">{{ $ip->total_fee !== null ? number_format($ip->total_fee, 2) : '-' }}</td>
                                     <td>
                                         @php $c = match($ip->status) { 'open'=>'green','upcoming'=>'blue','suspended'=>'orange',default=>'red' }; @endphp
                                         <span class="badge badge-{{ $c }}">{{ \App\Models\InstitutionProgram::STATUSES[$ip->status] ?? $ip->status }}</span>

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Invoice — ' . $commissionInvoice->invoice_number)
+@section('title', 'Invoice - ' . $commissionInvoice->invoice_number)
 @section('page-title', 'Commission Invoice Details')
 
 @section('content')
@@ -46,7 +46,7 @@
                                 <a href="{{ route('admin.institutions.show', $commissionInvoice->institution) }}" class="text-blue-600 hover:underline">
                                     {{ $commissionInvoice->institution->name }}
                                 </a>
-                            @else —
+                            @else -
                             @endif
                         </dd>
                     </div>
@@ -59,7 +59,7 @@
                                 </a>
                                 <div class="text-xs text-slate-400 mt-0.5">{{ $commissionInvoice->admission->student->name ?? '' }}</div>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -71,21 +71,21 @@
                                     Agreement #{{ $commissionInvoice->referralAgreement->id }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Invoice Date</dt>
-                        <dd class="mt-1 text-slate-700">{{ $commissionInvoice->invoice_date?->format('d M Y') ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $commissionInvoice->invoice_date?->format('d M Y') ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Due Date</dt>
-                        <dd class="mt-1 text-slate-700">{{ $commissionInvoice->due_date?->format('d M Y') ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $commissionInvoice->due_date?->format('d M Y') ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Paid At</dt>
-                        <dd class="mt-1 text-slate-700">{{ $commissionInvoice->paid_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $commissionInvoice->paid_at?->format('d M Y, H:i') ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Created</dt>
@@ -189,15 +189,15 @@
                             <tbody>
                                 @foreach($commissionInvoice->payments as $payment)
                                     <tr>
-                                        <td class="text-sm">{{ $payment->payment_date?->format('d M Y') ?? '—' }}</td>
+                                        <td class="text-sm">{{ $payment->payment_date?->format('d M Y') ?? '-' }}</td>
                                         <td class="font-mono font-semibold text-sm">{{ number_format((float) $payment->amount, 2) }}</td>
                                         <td class="text-sm">{{ \App\Models\CommissionPayment::PAYMENT_METHODS[$payment->payment_method] ?? $payment->payment_method }}</td>
-                                        <td class="font-mono text-xs text-slate-500">{{ $payment->transaction_reference ?? '—' }}</td>
+                                        <td class="font-mono text-xs text-slate-500">{{ $payment->transaction_reference ?? '-' }}</td>
                                         <td>
                                             @if($payment->payment_proof)
                                                 <a href="{{ Storage::url($payment->payment_proof) }}" target="_blank" class="text-blue-600 hover:underline text-xs">View</a>
                                             @else
-                                                <span class="text-slate-400 text-xs">—</span>
+                                                <span class="text-slate-400 text-xs">-</span>
                                             @endif
                                         </td>
                                         <td>
@@ -292,7 +292,7 @@
                                 <a href="{{ route('admin.students.show', $cashback->student) }}" class="text-blue-600 hover:underline">
                                     {{ $cashback->student->name }}
                                 </a>
-                            @else —
+                            @else -
                             @endif
                         </dd>
                     </div>
@@ -310,7 +310,7 @@
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Paid At</dt>
-                        <dd class="mt-1">{{ $cashback->paid_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        <dd class="mt-1">{{ $cashback->paid_at?->format('d M Y, H:i') ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Status</dt>

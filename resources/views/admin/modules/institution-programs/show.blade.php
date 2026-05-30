@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', ($institutionProgram->institution->name ?? '') . ' — ' . ($institutionProgram->program->name ?? ''))
+@section('title', ($institutionProgram->institution->name ?? '') . ' - ' . ($institutionProgram->program->name ?? ''))
 @section('page-title', 'Institution Program')
 
 @section('content')
@@ -17,7 +17,7 @@
 
     <x-admin.page-header
         :title="($ip->title ?: ($ip->program->name ?? 'Program'))"
-        :subtitle="($ip->institution->name ?? '—')"
+        :subtitle="($ip->institution->name ?? '-')"
         :breadcrumbs="[
             ['label'=>'Dashboard','route'=>'admin.dashboard'],
             ['label'=>'Institution Programs','route' => 'admin.institution-programs.index'],
@@ -129,7 +129,7 @@
                     @endif
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Duration</dt>
-                        <dd class="text-slate-800">{{ $ip->duration_months ? $ip->duration_months . ' months' : '—' }}</dd>
+                        <dd class="text-slate-800">{{ $ip->duration_months ? $ip->duration_months . ' months' : '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Admission Window</dt>
@@ -139,7 +139,7 @@
                                 –
                                 {{ $ip->admission_end_date?->format('d M Y') ?? '?' }}
                             @else
-                                —
+                                -
                             @endif
                         </dd>
                     </div>
@@ -160,7 +160,7 @@
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">{{ $label }}</dt>
                         <dd class="text-slate-800 font-medium">
-                            {{ $ip->$field !== null ? number_format($ip->$field, 2) : '—' }}
+                            {{ $ip->$field !== null ? number_format($ip->$field, 2) : '-' }}
                         </dd>
                     </div>
                     @endforeach
@@ -173,19 +173,19 @@
                 <dl class="grid grid-cols-2 sm:grid-cols-4 gap-5 text-sm">
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Total Seats</dt>
-                        <dd class="text-slate-800 font-medium">{{ $ip->total_seats ?? '—' }}</dd>
+                        <dd class="text-slate-800 font-medium">{{ $ip->total_seats ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Available</dt>
-                        <dd class="text-slate-800 font-medium">{{ $ip->available_seats ?? '—' }}</dd>
+                        <dd class="text-slate-800 font-medium">{{ $ip->available_seats ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Min GPA</dt>
-                        <dd class="text-slate-800 font-medium">{{ $ip->minimum_gpa !== null ? number_format($ip->minimum_gpa, 2) : '—' }}</dd>
+                        <dd class="text-slate-800 font-medium">{{ $ip->minimum_gpa !== null ? number_format($ip->minimum_gpa, 2) : '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Min %</dt>
-                        <dd class="text-slate-800 font-medium">{{ $ip->minimum_percentage !== null ? number_format($ip->minimum_percentage, 2) . '%' : '—' }}</dd>
+                        <dd class="text-slate-800 font-medium">{{ $ip->minimum_percentage !== null ? number_format($ip->minimum_percentage, 2) . '%' : '-' }}</dd>
                     </div>
                 </dl>
             </div>

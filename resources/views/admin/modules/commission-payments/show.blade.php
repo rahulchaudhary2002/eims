@@ -41,7 +41,7 @@
                                     {{ $commissionPayment->commissionInvoice->invoice_number }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -53,7 +53,7 @@
                                     {{ $commissionPayment->commissionInvoice->institution->name }}
                                 </a>
                             @else
-                                —
+                                -
                             @endif
                         </dd>
                     </div>
@@ -67,11 +67,11 @@
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Payment Date</dt>
-                        <dd class="mt-1 text-slate-800">{{ $commissionPayment->payment_date?->format('d M Y') ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-800">{{ $commissionPayment->payment_date?->format('d M Y') ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Transaction Reference</dt>
-                        <dd class="mt-1 font-mono text-slate-700">{{ $commissionPayment->transaction_reference ?? '—' }}</dd>
+                        <dd class="mt-1 font-mono text-slate-700">{{ $commissionPayment->transaction_reference ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Payment Proof</dt>

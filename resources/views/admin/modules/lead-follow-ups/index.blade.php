@@ -29,7 +29,7 @@
                     <option value="">All Inquiries</option>
                     @foreach($inquiries as $inquiry)
                         <option value="{{ $inquiry->id }}" {{ request('inquiry_id') == $inquiry->id ? 'selected' : '' }}>
-                            {{ $inquiry->name }} — {{ $inquiry->email }}
+                            {{ $inquiry->name }} - {{ $inquiry->email }}
                         </option>
                     @endforeach
                 </select>
@@ -90,7 +90,7 @@
                                     </a>
                                     <div class="text-xs text-slate-400">{{ $followUp->inquiry->email }}</div>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-sm">
@@ -103,13 +103,13 @@
                                     <div class="text-xs text-amber-600">Today</div>
                                 @endif
                             </td>
-                            <td class="text-sm">{{ $followUp->assignedTo->name ?? '—' }}</td>
+                            <td class="text-sm">{{ $followUp->assignedTo->name ?? '-' }}</td>
                             <td><span class="badge">{{ $statuses[$followUp->status] ?? $followUp->status }}</span></td>
                             <td class="text-sm text-slate-600 max-w-xs">
                                 @if($followUp->remarks)
                                     <p class="line-clamp-2">{{ $followUp->remarks }}</p>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td>

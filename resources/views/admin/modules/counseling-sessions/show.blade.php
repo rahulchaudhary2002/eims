@@ -41,7 +41,7 @@
                                     {{ $counselingSession->student->name }}
                                 </a>
                                 <div class="text-xs text-slate-400 mt-0.5">{{ $counselingSession->student->email }}</div>
-                            @else <span class="text-slate-400">—</span>
+                            @else <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -52,7 +52,7 @@
                                 <a href="{{ route('admin.institutions.show', $counselingSession->institution) }}" class="text-blue-600 hover:underline">
                                     {{ $counselingSession->institution->name }}
                                 </a>
-                            @else <span class="text-slate-400">—</span>
+                            @else <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>

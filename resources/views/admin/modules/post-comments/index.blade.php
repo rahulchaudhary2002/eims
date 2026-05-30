@@ -79,14 +79,14 @@
                                         {{ $comment->post->title }}
                                     </a>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-sm text-slate-700 max-w-xs">
                                 <p class="line-clamp-2">{{ $comment->comment }}</p>
                             </td>
                             <td class="text-sm">
-                                <div>{{ $comment->commentable?->name ?? ($comment->commentable?->email ?? '—') }}</div>
+                                <div>{{ $comment->commentable?->name ?? ($comment->commentable?->email ?? '-') }}</div>
                                 <div class="text-xs text-slate-400">{{ \App\Models\PostComment::COMMENTABLE_TYPES[$comment->commentable_type] ?? class_basename($comment->commentable_type) }}</div>
                             </td>
                             <td class="text-xs text-slate-500">

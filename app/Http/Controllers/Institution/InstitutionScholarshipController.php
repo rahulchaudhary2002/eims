@@ -17,6 +17,7 @@ class InstitutionScholarshipController extends Controller
         $this->modelClass = Scholarship::class;
         $this->routeBase = 'scholarships';
         $this->title = 'Scholarship';
+        $this->relationships = ['institutionProgram'];
         $this->selectOptions = [
             'type' => Scholarship::TYPES,
             'benefit_type' => Scholarship::BENEFIT_TYPES,
@@ -49,7 +50,12 @@ class InstitutionScholarshipController extends Controller
     protected function selectOptions(): array
     {
         return array_merge($this->selectOptions, [
-            'institution_program_id' => InstitutionProgram::where('institution_id', $this->activeInstitutionId())->orderBy('title')->pluck('title', 'id')->all(),
+            'institution_program_id' => InstitutionProgram::with('program')
+                ->where('institution_id', $this->activeInstitutionId())
+                ->orderBy('title')
+                ->get()
+                ->mapWithKeys(fn (InstitutionProgram $program) => [$program->id => $program->display_name])
+                ->all(),
         ]);
     }
 }

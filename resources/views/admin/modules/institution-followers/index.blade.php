@@ -70,7 +70,7 @@
                                         {{ $follower->institution->name }}
                                     </a>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td>
@@ -80,7 +80,7 @@
                                     </a>
                                     <div class="text-xs text-slate-400">{{ $follower->student->email }}</div>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-xs text-slate-500">{{ $follower->created_at->format('d M Y, H:i') }}</td>

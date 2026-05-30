@@ -85,22 +85,22 @@
                         <tr>
                             <td>
                                 <a href="{{ route('admin.scholarship-applications.show', $sa) }}" class="font-semibold text-blue-600 hover:underline text-sm">
-                                    {{ $sa->scholarship->title ?? '—' }}
+                                    {{ $sa->scholarship->title ?? '-' }}
                                 </a>
                             </td>
-                            <td class="text-sm text-slate-500">{{ $sa->scholarship?->institution?->name ?? '—' }}</td>
-                            <td class="text-sm">{{ $sa->student->name ?? '—' }}</td>
+                            <td class="text-sm text-slate-500">{{ $sa->scholarship?->institution?->name ?? '-' }}</td>
+                            <td class="text-sm">{{ $sa->student->name ?? '-' }}</td>
                             <td class="font-mono text-xs text-slate-500">
                                 @if($sa->application)
                                     <a href="{{ route('admin.applications.show', $sa->application) }}" class="text-blue-600 hover:underline">
                                         {{ $sa->application->application_number }}
                                     </a>
                                 @else
-                                    —
+                                    -
                                 @endif
                             </td>
                             <td class="font-mono text-sm">
-                                {{ $sa->approved_amount !== null ? number_format((float) $sa->approved_amount, 2) : '—' }}
+                                {{ $sa->approved_amount !== null ? number_format((float) $sa->approved_amount, 2) : '-' }}
                             </td>
                             <td><span class="badge">{{ $statuses[$sa->status] ?? $sa->status }}</span></td>
                             <td>

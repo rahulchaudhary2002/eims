@@ -16,7 +16,7 @@
         <div>
             <label class="form-label" for="institution_id">Institution <span class="text-red-500">*</span></label>
             <select id="institution_id" name="institution_id" class="form-control @error('institution_id') is-invalid @enderror">
-                <option value="">— Select Institution —</option>
+                <option value="">- Select Institution -</option>
                 @foreach($institutions as $inst)
                     <option value="{{ $inst->id }}"
                         {{ old('institution_id', $ip?->institution_id ?? $selectedInstitutionId ?? '') == $inst->id ? 'selected' : '' }}>
@@ -33,7 +33,7 @@
         <div>
             <label class="form-label" for="program_id">Program <span class="text-red-500">*</span></label>
             <select id="program_id" name="program_id" class="form-control @error('program_id') is-invalid @enderror">
-                <option value="">— Select Program —</option>
+                <option value="">- Select Program -</option>
                 @foreach($programs as $prog)
                     <option value="{{ $prog->id }}"
                         {{ old('program_id', $ip?->program_id ?? $selectedProgramId ?? '') == $prog->id ? 'selected' : '' }}>

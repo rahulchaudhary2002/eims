@@ -40,7 +40,7 @@
                                 <a href="{{ route('admin.institutions.show', $consultancyService->institution) }}" class="text-blue-600 hover:underline font-medium">
                                     {{ $consultancyService->institution->name }}
                                 </a>
-                            @else <span class="text-slate-400">—</span>
+                            @else <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -55,7 +55,7 @@
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Service Fee</dt>
                         <dd class="mt-1 font-mono font-semibold text-slate-800">
-                            {{ $consultancyService->service_fee !== null ? number_format((float) $consultancyService->service_fee, 2) : '—' }}
+                            {{ $consultancyService->service_fee !== null ? number_format((float) $consultancyService->service_fee, 2) : '-' }}
                         </dd>
                     </div>
                     <div>

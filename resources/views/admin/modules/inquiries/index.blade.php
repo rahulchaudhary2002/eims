@@ -121,16 +121,16 @@
                                 @endif
                             </td>
                             <td class="text-sm">
-                                <div>{{ $inquiry->institution->name ?? '—' }}</div>
+                                <div>{{ $inquiry->institution->name ?? '-' }}</div>
                                 @if($inquiry->institutionProgram)
                                     <div class="text-xs text-slate-400">
                                         {{ $inquiry->institutionProgram->title ?: ($inquiry->institutionProgram->program->name ?? '') }}
                                     </div>
                                 @endif
                             </td>
-                            <td class="text-sm">{{ $sources[$inquiry->source] ?? ($inquiry->source ?: '—') }}</td>
-                            <td class="text-sm">{{ $inquiry->assignedTo->name ?? '—' }}</td>
-                            <td class="text-xs text-slate-500">{{ $inquiry->last_contacted_at?->format('d M Y, H:i') ?? '—' }}</td>
+                            <td class="text-sm">{{ $sources[$inquiry->source] ?? ($inquiry->source ?: '-') }}</td>
+                            <td class="text-sm">{{ $inquiry->assignedTo->name ?? '-' }}</td>
+                            <td class="text-xs text-slate-500">{{ $inquiry->last_contacted_at?->format('d M Y, H:i') ?? '-' }}</td>
                             <td><span class="badge">{{ $statuses[$inquiry->status] ?? $inquiry->status }}</span></td>
                             <td>
                                 <div class="flex items-center gap-1">

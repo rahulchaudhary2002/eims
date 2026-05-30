@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Profile — ' . $studentProfile->student->name)
+@section('title', 'Profile - ' . $studentProfile->student->name)
 @section('page-title', 'Student Profile')
 
 @section('content')
@@ -85,15 +85,15 @@
                     <dl class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                         <div>
                             <dt class="text-slate-500 text-xs mb-1">Province</dt>
-                            <dd class="text-slate-800 font-medium">{{ $studentProfile->province ?? '—' }}</dd>
+                            <dd class="text-slate-800 font-medium">{{ $studentProfile->province ?? '-' }}</dd>
                         </div>
                         <div>
                             <dt class="text-slate-500 text-xs mb-1">District</dt>
-                            <dd class="text-slate-800 font-medium">{{ $studentProfile->district ?? '—' }}</dd>
+                            <dd class="text-slate-800 font-medium">{{ $studentProfile->district ?? '-' }}</dd>
                         </div>
                         <div>
                             <dt class="text-slate-500 text-xs mb-1">City</dt>
-                            <dd class="text-slate-800 font-medium">{{ $studentProfile->city ?? '—' }}</dd>
+                            <dd class="text-slate-800 font-medium">{{ $studentProfile->city ?? '-' }}</dd>
                         </div>
                         @if($studentProfile->address)
                         <div class="sm:col-span-3">

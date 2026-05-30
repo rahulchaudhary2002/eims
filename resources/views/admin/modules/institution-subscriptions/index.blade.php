@@ -95,10 +95,10 @@
                             <td>
                                 @if($sub->institution)
                                     <a href="{{ route('admin.institutions.show', $sub->institution) }}" class="font-medium text-blue-600 hover:underline text-sm">{{ $sub->institution->name }}</a>
-                                @else <span class="text-slate-400">—</span>
+                                @else <span class="text-slate-400">-</span>
                                 @endif
                             </td>
-                            <td class="text-sm font-medium">{{ $sub->subscriptionPlan->name ?? '—' }}</td>
+                            <td class="text-sm font-medium">{{ $sub->subscriptionPlan->name ?? '-' }}</td>
                             <td class="text-sm">{{ $billingCycles[$sub->billing_cycle] ?? $sub->billing_cycle }}</td>
                             <td class="font-mono text-sm">{{ number_format((float) $sub->amount, 2) }}</td>
                             <td class="text-xs text-slate-500">{{ $sub->starts_at?->format('d M Y') }}</td>

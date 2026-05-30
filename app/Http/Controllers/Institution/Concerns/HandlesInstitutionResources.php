@@ -18,18 +18,27 @@ trait HandlesInstitutionResources
     use UsesActiveInstitution;
 
     protected string $modelClass;
+
     protected string $routeBase;
+
     protected string $viewPath;
+
     protected string $title;
+
     protected array $fields = [];
+
     protected array $readOnlyFields = [];
+
     protected array $fileFields = [];
+
     protected array $selectOptions = [];
+
     protected array $relationships = [];
 
     public function index(Request $request): View
     {
         $records = $this->resourceQuery()
+            ->with($this->indexRelationships())
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -39,7 +48,7 @@ trait HandlesInstitutionResources
 
     public function create(): View
     {
-        $record = new $this->modelClass();
+        $record = new $this->modelClass;
 
         return view($this->resourceView('create'), $this->viewData(compact('record')));
     }
@@ -106,9 +115,25 @@ trait HandlesInstitutionResources
         return $record;
     }
 
+    protected function indexRelationships(): array
+    {
+        $fieldRelationships = collect(array_keys($this->fields))
+            ->filter(fn (string $field) => str_ends_with($field, '_id'))
+            ->map(fn (string $field) => Str::camel(substr($field, 0, -3)))
+            ->all();
+
+        $relationships = array_values(array_intersect($this->relationships, $fieldRelationships));
+
+        if (in_array('institutionProgram', $relationships, true)) {
+            $relationships[] = 'institutionProgram.program';
+        }
+
+        return $relationships;
+    }
+
     protected function forceInstitutionScope(array $data, ?Model $record = null): array
     {
-        if (Schema::hasColumn((new $this->modelClass())->getTable(), 'institution_id')) {
+        if (Schema::hasColumn((new $this->modelClass)->getTable(), 'institution_id')) {
             $data['institution_id'] = $this->activeInstitutionId();
         }
 
@@ -194,6 +219,6 @@ trait HandlesInstitutionResources
             }
         }
 
-        return Str::headline(class_basename($record)) . ' #' . $record->getKey();
+        return Str::headline(class_basename($record)).' #'.$record->getKey();
     }
 }

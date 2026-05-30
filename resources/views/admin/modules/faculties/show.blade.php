@@ -127,7 +127,7 @@
                                         @if($program->level)
                                             <span class="badge badge-blue">{{ $program->level }}</span>
                                         @else
-                                            <span class="text-slate-400 text-sm">—</span>
+                                            <span class="text-slate-400 text-sm">-</span>
                                         @endif
                                     </td>
                                     <td>

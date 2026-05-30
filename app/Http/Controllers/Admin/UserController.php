@@ -192,7 +192,7 @@ class UserController extends Controller
             ];
         }
 
-        // Ensure only one primary — if none specified, first row gets it
+        // Ensure only one primary - if none specified, first row gets it
         $hasPrimary = collect($syncData)->contains('is_primary', true);
         if (! $hasPrimary && count($syncData) > 0) {
             $firstKey = array_key_first($syncData);

@@ -1,7 +1,7 @@
 {{--
     partials/form.blade.php
     Shared form fields for create and edit user.
-    Variables: $user (optional — null on create), $institutions (Collection<Institution>)
+    Variables: $user (optional - null on create), $institutions (Collection<Institution>)
 --}}
 
 {{-- Profile --}}
@@ -277,7 +277,7 @@
         <div class="flex-1">
             <label class="form-label text-xs">Add Institution</label>
             <select x-model="newInstId" class="form-control">
-                <option value="">— Select institution —</option>
+                <option value="">- Select institution -</option>
                 <template x-for="inst in availableToAdd" :key="inst.id">
                     <option :value="inst.id" x-text="inst.name"></option>
                 </template>

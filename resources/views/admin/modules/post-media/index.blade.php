@@ -79,12 +79,12 @@
                                 @if($item->post)
                                     <a href="{{ route('admin.posts.show', $item->post) }}" class="font-medium text-blue-600 hover:underline text-sm">{{ $item->post->title }}</a>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-sm">{{ $types[$item->type] ?? $item->type }}</td>
                             <td class="text-sm text-slate-600 max-w-xs">
-                                <p class="line-clamp-2">{{ $item->caption ?: '—' }}</p>
+                                <p class="line-clamp-2">{{ $item->caption ?: '-' }}</p>
                             </td>
                             <td class="text-xs text-slate-500">{{ $item->created_at->format('d M Y') }}</td>
                             <td>

@@ -77,16 +77,16 @@
                                 </td>
                                 <td class="text-sm">
                                     <span class="text-slate-500 text-xs block">{{ \App\Models\Message::SENDER_TYPES[$msg->sender_type] ?? $msg->sender_type }}</span>
-                                    <span class="font-medium">{{ $msg->sender?->name ?? '—' }}</span>
+                                    <span class="font-medium">{{ $msg->sender?->name ?? '-' }}</span>
                                 </td>
                                 <td class="text-sm max-w-xs truncate text-slate-600">
-                                    {{ $msg->message ? \Illuminate\Support\Str::limit($msg->message, 60) : '—' }}
+                                    {{ $msg->message ? \Illuminate\Support\Str::limit($msg->message, 60) : '-' }}
                                 </td>
                                 <td class="text-sm">
                                     @if($msg->attachment)
                                         <a href="{{ Storage::url($msg->attachment) }}" target="_blank" class="text-blue-600 hover:underline text-xs">View</a>
                                     @else
-                                        <span class="text-slate-400">—</span>
+                                        <span class="text-slate-400">-</span>
                                     @endif
                                 </td>
                                 <td>

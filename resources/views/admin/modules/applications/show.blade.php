@@ -179,15 +179,15 @@
                         </div>
                         <div>
                             <dt class="text-slate-400 text-xs mb-1">Referred By</dt>
-                            <dd>{{ $application->referral->referredBy->name ?? '—' }}</dd>
+                            <dd>{{ $application->referral->referredBy->name ?? '-' }}</dd>
                         </div>
                         <div>
                             <dt class="text-slate-400 text-xs mb-1">Referred At</dt>
-                            <dd>{{ $application->referral->referred_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                            <dd>{{ $application->referral->referred_at?->format('d M Y, H:i') ?? '-' }}</dd>
                         </div>
                         <div>
                             <dt class="text-slate-400 text-xs mb-1">Viewed At</dt>
-                            <dd>{{ $application->referral->viewed_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                            <dd>{{ $application->referral->viewed_at?->format('d M Y, H:i') ?? '-' }}</dd>
                         </div>
                         <div>
                             <dt class="text-slate-400 text-xs mb-1">Status</dt>

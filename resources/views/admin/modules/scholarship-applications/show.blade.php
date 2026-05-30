@@ -40,7 +40,7 @@
                                 <a href="{{ route('admin.scholarships.show', $scholarshipApplication->scholarship) }}" class="text-blue-600 hover:underline">
                                     {{ $scholarshipApplication->scholarship->title }}
                                 </a>
-                            @else —
+                            @else -
                             @endif
                         </dd>
                     </div>
@@ -51,7 +51,7 @@
                                 <a href="{{ route('admin.institutions.show', $scholarshipApplication->scholarship->institution) }}" class="text-blue-600 hover:underline">
                                     {{ $scholarshipApplication->scholarship->institution->name }}
                                 </a>
-                            @else —
+                            @else -
                             @endif
                         </dd>
                     </div>
@@ -62,7 +62,7 @@
                                 <a href="{{ route('admin.students.show', $scholarshipApplication->student) }}" class="text-blue-600 hover:underline">
                                     {{ $scholarshipApplication->student->name }}
                                 </a>
-                            @else —
+                            @else -
                             @endif
                         </dd>
                     </div>
@@ -78,14 +78,14 @@
                                         ?: ($scholarshipApplication->application->institutionProgram?->program?->name ?? '') }}
                                 </div>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Approved Amount</dt>
                         <dd class="mt-1 font-mono font-semibold text-slate-800">
-                            {{ $scholarshipApplication->approved_amount !== null ? number_format((float) $scholarshipApplication->approved_amount, 2) : '—' }}
+                            {{ $scholarshipApplication->approved_amount !== null ? number_format((float) $scholarshipApplication->approved_amount, 2) : '-' }}
                         </dd>
                     </div>
                     <div>

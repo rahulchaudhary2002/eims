@@ -108,9 +108,9 @@
                             </td>
                             <td class="text-sm text-slate-500">{{ $promotion->institution->name ?? 'Platform-wide' }}</td>
                             <td class="text-sm">{{ $types[$promotion->type] ?? $promotion->type }}</td>
-                            <td class="font-mono text-sm">{{ $promotion->amount !== null ? number_format((float) $promotion->amount, 2) : '—' }}</td>
+                            <td class="font-mono text-sm">{{ $promotion->amount !== null ? number_format((float) $promotion->amount, 2) : '-' }}</td>
                             <td class="text-xs text-slate-500">
-                                {{ $promotion->start_date?->format('d M Y') ?? '—' }}
+                                {{ $promotion->start_date?->format('d M Y') ?? '-' }}
                                 @if($promotion->end_date) – {{ $promotion->end_date->format('d M Y') }} @endif
                             </td>
                             <td><span class="badge">{{ $statuses[$promotion->status] ?? $promotion->status }}</span></td>

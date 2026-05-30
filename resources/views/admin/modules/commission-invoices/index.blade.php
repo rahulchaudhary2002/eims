@@ -47,7 +47,7 @@
                     <option value="">All Agreements</option>
                     @foreach($referralAgreements as $agreement)
                         <option value="{{ $agreement->id }}" {{ request('referral_agreement_id') == $agreement->id ? 'selected' : '' }}>
-                            #{{ $agreement->id }} — {{ \App\Models\CommissionInvoice::COMMISSION_TYPES[$agreement->commission_type] ?? $agreement->commission_type }}
+                            #{{ $agreement->id }} - {{ \App\Models\CommissionInvoice::COMMISSION_TYPES[$agreement->commission_type] ?? $agreement->commission_type }}
                         </option>
                     @endforeach
                 </select>
@@ -118,13 +118,13 @@
                                     {{ $invoice->invoice_number }}
                                 </a>
                             </td>
-                            <td class="text-sm">{{ $invoice->institution->name ?? '—' }}</td>
-                            <td class="text-sm font-mono">{{ $invoice->admission->admission_number ?? '—' }}</td>
+                            <td class="text-sm">{{ $invoice->institution->name ?? '-' }}</td>
+                            <td class="text-sm font-mono">{{ $invoice->admission->admission_number ?? '-' }}</td>
                             <td class="text-sm">{{ $commissionTypes[$invoice->commission_type] ?? $invoice->commission_type }}</td>
                             <td class="text-sm font-mono">{{ number_format((float) $invoice->commission_amount, 2) }}</td>
                             <td class="text-sm font-mono">{{ number_format((float) $invoice->platform_revenue_amount, 2) }}</td>
-                            <td class="text-xs text-slate-500">{{ $invoice->invoice_date?->format('d M Y') ?? '—' }}</td>
-                            <td class="text-xs text-slate-500">{{ $invoice->due_date?->format('d M Y') ?? '—' }}</td>
+                            <td class="text-xs text-slate-500">{{ $invoice->invoice_date?->format('d M Y') ?? '-' }}</td>
+                            <td class="text-xs text-slate-500">{{ $invoice->due_date?->format('d M Y') ?? '-' }}</td>
                             <td><span class="badge">{{ $statuses[$invoice->status] ?? $invoice->status }}</span></td>
                             <td>
                                 <div class="flex items-center gap-1">

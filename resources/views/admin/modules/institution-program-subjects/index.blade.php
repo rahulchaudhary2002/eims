@@ -35,7 +35,7 @@
                     <option value="">All Programs</option>
                     @foreach($institutionPrograms as $ip)
                         <option value="{{ $ip->id }}" {{ request('institution_program_id') == $ip->id ? 'selected' : '' }}>
-                            {{ $ip->institution->name ?? '?' }} — {{ $ip->program->name ?? '?' }}
+                            {{ $ip->institution->name ?? '?' }} - {{ $ip->program->name ?? '?' }}
                         </option>
                     @endforeach
                 </select>
@@ -75,9 +75,9 @@
                         <td class="text-slate-400 text-xs">{{ $subject->id }}</td>
                         <td>
                             <div class="font-medium text-slate-800">
-                                {{ $subject->institutionProgram->institution->name ?? '—' }}
+                                {{ $subject->institutionProgram->institution->name ?? '-' }}
                             </div>
-                            <div class="text-xs text-slate-400">{{ $subject->institutionProgram->program->name ?? '—' }}</div>
+                            <div class="text-xs text-slate-400">{{ $subject->institutionProgram->program->name ?? '-' }}</div>
                         </td>
                         <td class="font-medium text-slate-800">{{ $subject->subject_name }}</td>
                         <td>

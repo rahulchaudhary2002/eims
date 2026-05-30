@@ -1,12 +1,12 @@
 @extends('admin.layouts.app')
-@section('title', $institutionProfile->institution->name . ' — Profile')
+@section('title', $institutionProfile->institution->name . ' - Profile')
 @section('page-title', 'Institution Profile')
 
 @section('content')
 <div class="space-y-5">
 
     <x-admin.page-header
-        :title="$institutionProfile->institution->name . ' — Profile'"
+        :title="$institutionProfile->institution->name . ' - Profile'"
         subtitle="Institution profile details"
         :breadcrumbs="[
             ['label'=>'Dashboard','route'=>'admin.dashboard'],

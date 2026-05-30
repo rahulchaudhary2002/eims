@@ -1,7 +1,7 @@
 {{--
     partials/form.blade.php
     Shared form fields for create and edit institution profile.
-    Variables: $institutionProfile (optional — null on create), $institutions
+    Variables: $institutionProfile (optional - null on create), $institutions
 --}}
 
 {{-- Institution --}}
@@ -18,7 +18,7 @@
         <select name="institution_id" id="institution_id"
             class="form-control @error('institution_id') is-invalid @enderror"
             {{ isset($institutionProfile) ? 'disabled' : 'required' }}>
-            <option value="">— Select institution —</option>
+            <option value="">- Select institution -</option>
             @foreach($institutions as $inst)
                 <option value="{{ $inst->id }}"
                     {{ old('institution_id', $institutionProfile->institution_id ?? '') == $inst->id ? 'selected' : '' }}>

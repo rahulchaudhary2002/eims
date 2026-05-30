@@ -76,11 +76,11 @@
                                         {{ $destination->institution->name }}
                                     </a>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-sm font-medium">{{ $destination->country }}</td>
-                            <td class="text-sm text-slate-600">{{ $destination->city ?: '—' }}</td>
+                            <td class="text-sm text-slate-600">{{ $destination->city ?: '-' }}</td>
                             <td>
                                 @if($destination->is_active)
                                     <span class="badge badge-green text-xs">Active</span>

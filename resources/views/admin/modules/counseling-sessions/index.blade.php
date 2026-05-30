@@ -103,11 +103,11 @@
                             <td>
                                 @if($session->student)
                                     <a href="{{ route('admin.students.show', $session->student) }}" class="font-medium text-blue-600 hover:underline text-sm">{{ $session->student->name }}</a>
-                                @else <span class="text-slate-400">—</span>
+                                @else <span class="text-slate-400">-</span>
                                 @endif
                             </td>
-                            <td class="text-sm">{{ $session->institution->name ?? '—' }}</td>
-                            <td class="text-sm">{{ $session->counselor->name ?? '—' }}</td>
+                            <td class="text-sm">{{ $session->institution->name ?? '-' }}</td>
+                            <td class="text-sm">{{ $session->counselor->name ?? '-' }}</td>
                             <td class="text-sm">{{ $modes[$session->mode] ?? $session->mode }}</td>
                             <td class="text-sm">
                                 <span class="{{ $session->scheduled_at->isPast() && $session->status === 'scheduled' ? 'text-red-600 font-medium' : 'text-slate-700' }}">

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Edit User — ' . $user->name)
+@section('title', 'Edit User - ' . $user->name)
 @section('page-title', 'Edit User')
 
 @section('content')

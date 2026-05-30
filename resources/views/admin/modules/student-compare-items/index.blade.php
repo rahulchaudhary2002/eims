@@ -81,7 +81,7 @@
                                     </a>
                                     <div class="text-xs text-slate-400">{{ $item->student->email }}</div>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td>
@@ -90,14 +90,14 @@
                                         {{ $item->institution->name }}
                                     </a>
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-sm text-slate-600">
                                 @if($item->institutionProgram)
-                                    {{ $item->institutionProgram->title ?: ($item->institutionProgram->program->name ?? '—') }}
+                                    {{ $item->institutionProgram->title ?: ($item->institutionProgram->program->name ?? '-') }}
                                 @else
-                                    <span class="text-slate-400">—</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="text-xs text-slate-500">{{ $item->created_at->format('d M Y, H:i') }}</td>

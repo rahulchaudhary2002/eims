@@ -113,16 +113,16 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="text-sm text-slate-600">{{ $student->phone ?: '—' }}</td>
+                        <td class="text-sm text-slate-600">{{ $student->phone ?: '-' }}</td>
                         <td>
                             @if($student->gender)
                                 <span class="badge badge-blue capitalize">{{ $student->gender }}</span>
                             @else
-                                <span class="text-slate-400 text-sm">—</span>
+                                <span class="text-slate-400 text-sm">-</span>
                             @endif
                         </td>
                         <td class="text-sm text-slate-600">
-                            {{ $student->date_of_birth ? $student->date_of_birth->format('d M Y') : '—' }}
+                            {{ $student->date_of_birth ? $student->date_of_birth->format('d M Y') : '-' }}
                         </td>
                         <td>
                             @if($student->is_active)

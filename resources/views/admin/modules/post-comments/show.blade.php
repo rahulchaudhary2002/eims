@@ -46,14 +46,14 @@
                         <dd class="mt-0.5">
                             @if($postComment->post)
                                 <a href="{{ route('admin.posts.show', $postComment->post) }}" class="text-blue-600 hover:underline">{{ $postComment->post->title }}</a>
-                            @else —
+                            @else -
                             @endif
                         </dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-400 uppercase tracking-wide">Author</dt>
                         <dd class="mt-0.5 text-slate-800">
-                            {{ $postComment->commentable?->name ?? ($postComment->commentable?->email ?? '—') }}
+                            {{ $postComment->commentable?->name ?? ($postComment->commentable?->email ?? '-') }}
                             <span class="text-xs text-slate-400 ml-1">
                                 ({{ \App\Models\PostComment::COMMENTABLE_TYPES[$postComment->commentable_type] ?? class_basename($postComment->commentable_type) }})
                             </span>
@@ -91,7 +91,7 @@
                                 <div class="flex items-start justify-between gap-3">
                                     <div class="min-w-0 flex-1">
                                         <p class="text-xs text-slate-400 mb-1">
-                                            {{ $reply->commentable?->name ?? '—' }}
+                                            {{ $reply->commentable?->name ?? '-' }}
                                             <span class="ml-1">· {{ $reply->created_at->format('d M Y, H:i') }}</span>
                                             @if($reply->is_hidden) <span class="text-red-500 ml-1">· Hidden</span> @endif
                                         </p>

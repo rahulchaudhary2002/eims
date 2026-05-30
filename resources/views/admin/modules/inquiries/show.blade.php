@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Inquiry — ' . $inquiry->name)
+@section('title', 'Inquiry - ' . $inquiry->name)
 @section('page-title', 'Inquiry Details')
 
 @section('content')
@@ -44,11 +44,11 @@
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Phone</dt>
-                        <dd class="mt-1 text-slate-700">{{ $inquiry->phone ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ $inquiry->phone ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Source</dt>
-                        <dd class="mt-1 text-slate-700">{{ \App\Models\Inquiry::SOURCES[$inquiry->source] ?? ($inquiry->source ?: '—') }}</dd>
+                        <dd class="mt-1 text-slate-700">{{ \App\Models\Inquiry::SOURCES[$inquiry->source] ?? ($inquiry->source ?: '-') }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Linked Student</dt>
@@ -58,7 +58,7 @@
                                     {{ $inquiry->student->name }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -80,7 +80,7 @@
                                     {{ $inquiry->institution->name }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -89,10 +89,10 @@
                         <dd class="mt-1 text-slate-700">
                             @if($inquiry->institutionProgram)
                                 <a href="{{ route('admin.institution-programs.show', $inquiry->institutionProgram) }}" class="text-blue-600 hover:underline">
-                                    {{ $inquiry->institutionProgram->title ?: ($inquiry->institutionProgram->program->name ?? '—') }}
+                                    {{ $inquiry->institutionProgram->title ?: ($inquiry->institutionProgram->program->name ?? '-') }}
                                 </a>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
@@ -257,7 +257,7 @@
                     </div>
                     <div>
                         <dt class="text-xs text-slate-400 mb-0.5">Last Contacted</dt>
-                        <dd class="text-slate-700">{{ $inquiry->last_contacted_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        <dd class="text-slate-700">{{ $inquiry->last_contacted_at?->format('d M Y, H:i') ?? '-' }}</dd>
                     </div>
                 </dl>
             </div>

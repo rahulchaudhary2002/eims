@@ -47,13 +47,13 @@
                         <dd class="mt-1">
                             @if($post->institution)
                                 <a href="{{ route('admin.institutions.show', $post->institution) }}" class="text-blue-600 hover:underline">{{ $post->institution->name }}</a>
-                            @else <span class="text-slate-400">—</span>
+                            @else <span class="text-slate-400">-</span>
                             @endif
                         </dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Author</dt>
-                        <dd class="mt-1 text-slate-800">{{ $post->creator->name ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-800">{{ $post->creator->name ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Type</dt>
@@ -61,7 +61,7 @@
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Published At</dt>
-                        <dd class="mt-1 text-slate-800">{{ $post->published_at?->format('d M Y, H:i') ?? '—' }}</dd>
+                        <dd class="mt-1 text-slate-800">{{ $post->published_at?->format('d M Y, H:i') ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Created</dt>
@@ -181,7 +181,7 @@
                                         @foreach($comment->replies->take(2) as $reply)
                                             <div class="{{ $reply->is_hidden ? 'opacity-60' : '' }}">
                                                 <p class="text-xs text-slate-400">
-                                                    {{ $reply->commentable?->name ?? '—' }} · {{ $reply->created_at->format('d M Y') }}
+                                                    {{ $reply->commentable?->name ?? '-' }} · {{ $reply->created_at->format('d M Y') }}
                                                     @if($reply->is_hidden) · <span class="text-red-500">Hidden</span> @endif
                                                 </p>
                                                 <p class="text-xs text-slate-600 line-clamp-2">{{ $reply->comment }}</p>

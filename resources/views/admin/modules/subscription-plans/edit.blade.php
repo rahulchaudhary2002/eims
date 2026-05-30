@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Edit Plan — ' . $subscriptionPlan->name)
+@section('title', 'Edit Plan - ' . $subscriptionPlan->name)
 @section('page-title', 'Edit Subscription Plan')
 
 @section('content')

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Edit Referral — ' . $referral->referral_number)
+@section('title', 'Edit Referral - ' . $referral->referral_number)
 @section('page-title', 'Edit Referral')
 
 @section('content')

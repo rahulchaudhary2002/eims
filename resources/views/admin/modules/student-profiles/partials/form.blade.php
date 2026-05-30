@@ -2,8 +2,8 @@
     partials/form.blade.php
     Shared form fields for create and edit student profile.
     Variables:
-      $studentProfile — StudentProfile|null (null on create)
-      $students       — Collection<Student>
+      $studentProfile - StudentProfile|null (null on create)
+      $students       - Collection<Student>
 --}}
 
 {{-- Student Selection --}}
@@ -20,7 +20,7 @@
         <select name="student_id" id="student_id"
             class="form-control @error('student_id') is-invalid @enderror"
             {{ isset($studentProfile) ? 'disabled' : 'required' }}>
-            <option value="">— Select student —</option>
+            <option value="">- Select student -</option>
             @foreach($students as $s)
                 <option value="{{ $s->id }}"
                     {{ old('student_id', $studentProfile->student_id ?? '') == $s->id ? 'selected' : '' }}>

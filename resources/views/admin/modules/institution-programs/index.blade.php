@@ -74,7 +74,7 @@
 
             <div class="w-32">
                 <label class="form-label text-xs">Max Total Fee</label>
-                <input type="number" name="fee_max" class="form-control" min="0" step="1" value="{{ request('fee_max') }}" placeholder="—">
+                <input type="number" name="fee_max" class="form-control" min="0" step="1" value="{{ request('fee_max') }}" placeholder="-">
             </div>
 
             <div class="flex items-end gap-2">
@@ -105,21 +105,21 @@
                     @forelse($institutionPrograms as $ip)
                     <tr>
                         <td class="text-slate-400 text-sm">{{ $institutionPrograms->firstItem() + $loop->index }}</td>
-                        <td class="text-sm font-medium text-slate-800">{{ $ip->institution->name ?? '—' }}</td>
-                        <td class="text-sm text-slate-700">{{ $ip->program->name ?? '—' }}</td>
-                        <td class="text-sm text-slate-600 max-w-xs truncate">{{ $ip->title ?? '—' }}</td>
+                        <td class="text-sm font-medium text-slate-800">{{ $ip->institution->name ?? '-' }}</td>
+                        <td class="text-sm text-slate-700">{{ $ip->program->name ?? '-' }}</td>
+                        <td class="text-sm text-slate-600 max-w-xs truncate">{{ $ip->title ?? '-' }}</td>
                         <td class="text-sm text-slate-700">
                             @if($ip->total_fee !== null)
                                 {{ number_format($ip->total_fee, 2) }}
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </td>
                         <td class="text-sm text-slate-600">
                             @if($ip->available_seats !== null)
                                 {{ $ip->available_seats }}<span class="text-slate-400"> / {{ $ip->total_seats ?? '?' }}</span>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </td>
                         <td class="text-xs text-slate-600">
@@ -128,7 +128,7 @@
                                 <span class="text-slate-400">–</span>
                                 <span>{{ $ip->admission_end_date?->format('d M Y') ?? '?' }}</span>
                             @else
-                                <span class="text-slate-400">—</span>
+                                <span class="text-slate-400">-</span>
                             @endif
                         </td>
                         <td>

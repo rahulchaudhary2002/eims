@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class InstitutionProgram extends Model
 {
     const STATUSES = [
-        'open'      => 'Open',
-        'closed'    => 'Closed',
-        'upcoming'  => 'Upcoming',
+        'open' => 'Open',
+        'closed' => 'Closed',
+        'upcoming' => 'Upcoming',
         'suspended' => 'Suspended',
     ];
 
@@ -37,16 +37,23 @@ class InstitutionProgram extends Model
     protected function casts(): array
     {
         return [
-            'admission_fee'        => 'decimal:2',
-            'monthly_fee'          => 'decimal:2',
-            'semester_fee'         => 'decimal:2',
-            'annual_fee'           => 'decimal:2',
-            'total_fee'            => 'decimal:2',
-            'minimum_gpa'          => 'decimal:2',
-            'minimum_percentage'   => 'decimal:2',
+            'admission_fee' => 'decimal:2',
+            'monthly_fee' => 'decimal:2',
+            'semester_fee' => 'decimal:2',
+            'annual_fee' => 'decimal:2',
+            'total_fee' => 'decimal:2',
+            'minimum_gpa' => 'decimal:2',
+            'minimum_percentage' => 'decimal:2',
             'admission_start_date' => 'date',
-            'admission_end_date'   => 'date',
+            'admission_end_date' => 'date',
         ];
+    }
+
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->title
+            ?: $this->program?->name
+            ?: 'Program #'.$this->getKey();
     }
 
     public function institution(): BelongsTo
