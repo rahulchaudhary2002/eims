@@ -724,6 +724,9 @@ body {
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
 }
+.form-control.with-icon {
+    padding-left: 2.25rem;
+}
 .form-control.is-invalid {
     border-color: var(--color-danger);
 }

@@ -127,6 +127,8 @@ class UserController extends Controller
     public function destroy(User $user): RedirectResponse
     {
         $this->authorizeUserAccess($user);
+        abort_if($user->is_super_admin, 403, 'Super admin users cannot be deleted.');
+
         if ($user->avatar) {
             Storage::disk('public')->delete($user->avatar);
         }

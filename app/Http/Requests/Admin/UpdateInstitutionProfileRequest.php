@@ -18,7 +18,7 @@ class UpdateInstitutionProfileRequest extends FormRequest
             'institution_id'    => [
                 'required',
                 'exists:institutions,id',
-                Rule::unique('institution_profiles', 'institution_id')->ignore($this->institutionProfile),
+                Rule::unique('institution_profiles', 'institution_id')->ignore($this->route('institution_profile')),
             ],
             'facilities'        => 'nullable|string',
             'infrastructure'    => 'nullable|string',

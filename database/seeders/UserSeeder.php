@@ -24,24 +24,24 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
             ],
-            [
-                'name' => 'Institution Manager',
-                'email' => 'manager@app.com',
-                'phone' => '9876543210',
-                'is_super_admin' => false,
-                'is_active' => true,
-                'email_verified_at' => now(),
-                'password' => Hash::make('password123'),
-            ],
-            [
-                'name' => 'Admissions Officer',
-                'email' => 'admissions@app.com',
-                'phone' => '9841234567',
-                'is_super_admin' => false,
-                'is_active' => true,
-                'email_verified_at' => now(),
-                'password' => Hash::make('password123'),
-            ],
+            // [
+            //     'name' => 'Institution Manager',
+            //     'email' => 'manager@app.com',
+            //     'phone' => '9876543210',
+            //     'is_super_admin' => false,
+            //     'is_active' => true,
+            //     'email_verified_at' => now(),
+            //     'password' => Hash::make('password123'),
+            // ],
+            // [
+            //     'name' => 'Admissions Officer',
+            //     'email' => 'admissions@app.com',
+            //     'phone' => '9841234567',
+            //     'is_super_admin' => false,
+            //     'is_active' => true,
+            //     'email_verified_at' => now(),
+            //     'password' => Hash::make('password123'),
+            // ],
         ];
 
         foreach ($users as $user) {

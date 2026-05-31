@@ -18,7 +18,7 @@ class UpdateStudentProfileRequest extends FormRequest
             'student_id'          => [
                 'required',
                 'exists:students,id',
-                Rule::unique('student_profiles', 'student_id')->ignore($this->studentProfile),
+                Rule::unique('student_profiles', 'student_id')->ignore($this->route('student_profile')),
             ],
             'guardian_name'       => 'nullable|string|max:255',
             'guardian_phone'      => 'nullable|string|max:30',
