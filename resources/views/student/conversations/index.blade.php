@@ -43,7 +43,7 @@
                 @if($conv->institution?->logo)
                     <img src="{{ Storage::url($conv->institution->logo) }}" class="w-12 h-12 rounded-full object-cover shrink-0">
                 @else
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#4299e1] to-[#2c5aa0] flex items-center justify-center shrink-0">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
                         <span class="text-white font-bold text-sm">{{ strtoupper(substr($conv->institution?->name ?? 'I', 0, 1)) }}</span>
                     </div>
                 @endif

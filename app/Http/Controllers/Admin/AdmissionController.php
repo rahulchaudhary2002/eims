@@ -256,7 +256,7 @@ class AdmissionController extends Controller
                 $q->whereDoesntHave('admission');
 
                 if ($admission) {
-                    $q->orWhereKey($admission->application_id);
+                    $q->orWhere('id', $admission->application_id);
                 }
             })
             ->orderByDesc('created_at');

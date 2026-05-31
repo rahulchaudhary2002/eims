@@ -25,7 +25,6 @@
         ],
         'Communication' => [
             ['Conversations', 'institution.conversations.index', 'institution.conversations.*'],
-            ['Messages', 'institution.messages.index', 'institution.messages.*'],
         ],
         'Promotion & Subscription' => [
             ['Promotions', 'institution.promotions.index', 'institution.promotions.*'],

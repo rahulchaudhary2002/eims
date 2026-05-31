@@ -107,7 +107,6 @@
                 ],
                 'Communication' => [
                     ['fas fa-comment-dots', 'Conversations', 'student.conversations.index', '#2b6cb0'],
-                    ['fas fa-envelope', 'Messages', 'student.messages.index', '#2b6cb0'],
                 ],
             ];
         @endphp

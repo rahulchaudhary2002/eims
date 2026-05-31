@@ -76,6 +76,7 @@
                             <th>Student</th>
                             <th>Institution</th>
                             <th>Type</th>
+                            <th>Unread</th>
                             <th>Started</th>
                             <th class="text-center">Actions</th>
                         </tr>
@@ -100,6 +101,15 @@
                                 </td>
                                 <td>
                                     <span class="badge">{{ \App\Models\Conversation::TYPES[$conversation->type] ?? $conversation->type }}</span>
+                                </td>
+                                <td>
+                                    @if($conversation->unread_count > 0)
+                                    <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-blue-600 text-white text-[10px] font-bold">
+                                        {{ $conversation->unread_count > 99 ? '99+' : $conversation->unread_count }}
+                                    </span>
+                                    @else
+                                    <span class="text-slate-300 text-xs">—</span>
+                                    @endif
                                 </td>
                                 <td class="text-xs text-slate-500">{{ $conversation->created_at->format('d M Y, H:i') }}</td>
                                 <td>

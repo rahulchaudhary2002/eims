@@ -6,58 +6,24 @@ use App\Http\Controllers\Admin\Concerns\ScopesForInstitution;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreMessageRequest;
 use App\Models\Conversation;
-use App\Models\Institution;
 use App\Models\Message;
-use App\Models\Student;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\View\View;
 
 class MessageController extends Controller
 {
     use ScopesForInstitution;
 
-    public function index(Request $request): View
+    public function index(): RedirectResponse
     {
-        $query = Message::with(['conversation', 'sender']);
-
-        $this->applyConversationScope($query);
-
-        if ($conversationId = $request->input('conversation_id')) {
-            $query->where('conversation_id', $conversationId);
-        }
-        if ($senderType = $request->input('sender_type')) {
-            $query->where('sender_type', $senderType);
-        }
-        if ($request->filled('read_status')) {
-            if ($request->input('read_status') === 'read') {
-                $query->whereNotNull('read_at');
-            } else {
-                $query->whereNull('read_at');
-            }
-        }
-        if ($dateFrom = $request->input('date_from')) {
-            $query->whereDate('created_at', '>=', $dateFrom);
-        }
-        if ($dateTo = $request->input('date_to')) {
-            $query->whereDate('created_at', '<=', $dateTo);
-        }
-
-        $messages      = $query->latest()->paginate(30)->withQueryString();
-        $conversations = $this->conversationDropdownQuery()->get(['id']);
-        $senderTypes   = Message::SENDER_TYPES;
-
-        return view('admin.modules.messages.index', compact('messages', 'conversations', 'senderTypes'));
+        return redirect()->route('admin.conversations.index');
     }
 
-    public function show(Message $message): View
+    public function show(Message $message): RedirectResponse
     {
-        $this->authorizeMessageAccess($message);
-        $message->load(['conversation.student', 'conversation.institution', 'sender']);
-
-        return view('admin.modules.messages.show', compact('message'));
+        return redirect()->route('admin.conversations.show', $message->conversation_id);
     }
 
     public function store(StoreMessageRequest $request, Conversation $conversation): RedirectResponse

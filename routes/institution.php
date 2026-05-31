@@ -53,7 +53,10 @@ Route::middleware(['auth:web', 'institution.user'])
             Route::resource('post-media', InstitutionPostMediaController::class);
             Route::resource('reviews', InstitutionReviewController::class)->only(['index', 'show']);
             Route::resource('conversations', InstitutionConversationController::class)->only(['index', 'show']);
-            Route::resource('messages', InstitutionMessageController::class)->only(['index', 'show', 'store', 'destroy']);
+            Route::post('conversations/{conversation}/messages', [InstitutionConversationController::class, 'storeMessage'])
+                ->name('conversations.messages.store');
+            Route::delete('messages/{message}', [InstitutionMessageController::class, 'destroy'])
+                ->name('messages.destroy');
             Route::resource('promotions', InstitutionPromotionController::class);
             Route::resource('subscriptions', InstitutionSubscriptionController::class)->only(['index', 'show']);
             Route::resource('referrals', InstitutionReferralController::class)->only(['index', 'show']);
