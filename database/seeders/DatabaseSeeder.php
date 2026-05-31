@@ -24,17 +24,17 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
-            FacultySeeder::class,
-            InstitutionSeeder::class,
-            InstitutionUserSeeder::class,
-            StudentSeeder::class,
-            ProgramSeeder::class,
-            InstitutionProgramSeeder::class,
-            InstitutionProgramSubjectSeeder::class,
-            ScholarshipSeeder::class,
-            ApplicationSeeder::class,
-            AdmissionSeeder::class,
-            DemoSeeder::class,
+            // FacultySeeder::class,
+            // InstitutionSeeder::class,
+            // InstitutionUserSeeder::class,
+            // StudentSeeder::class,
+            // ProgramSeeder::class,
+            // InstitutionProgramSeeder::class,
+            // InstitutionProgramSubjectSeeder::class,
+            // ScholarshipSeeder::class,
+            // ApplicationSeeder::class,
+            // AdmissionSeeder::class,
+            // DemoSeeder::class,
         ]);
     }
 }

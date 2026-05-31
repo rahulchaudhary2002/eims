@@ -1465,17 +1465,20 @@
 
     {{-- Reviews --}}
     <div class="eims-card overflow-hidden">
-        <div class="card-header flex items-center justify-between">
-            <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Reviews</h2>
-            <div class="flex items-center gap-3">
-                <span class="text-sm text-slate-500">{{ $institution->reviews->count() }} total</span>
-                <a href="{{ route('admin.institution-reviews.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary btn-sm">Add Review</a>
+        <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100">
+            <div class="p-2 bg-amber-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+            </div>
+            <h3 class="text-base font-semibold text-slate-800">Reviews</h3>
+            <span class="ml-1 text-xs text-slate-400">{{ $institution->reviews->count() }} review(s)</span>
+            <div class="ml-auto">
+                <a href="{{ route('admin.institution-reviews.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs py-1.5">Add Review</a>
             </div>
         </div>
         @if($institution->reviews->isEmpty())
-            <div class="px-6 py-8 text-center text-slate-400">
-                <p class="mb-3">No reviews yet.</p>
-                <a href="{{ route('admin.institution-reviews.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary btn-sm">Add First Review</a>
+            <div class="text-center py-10 text-slate-400">
+                <p class="text-sm mb-3">No reviews yet.</p>
+                <a href="{{ route('admin.institution-reviews.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs">Add First Review</a>
             </div>
         @else
             <div class="eims-table-wrapper">
@@ -1507,9 +1510,9 @@
                                 <td class="text-sm max-w-xs truncate text-slate-600">{{ $review->review ? \Illuminate\Support\Str::limit($review->review, 50) : '-' }}</td>
                                 <td>
                                     @if($review->is_approved)
-                                        <span class="badge badge-success">Approved</span>
+                                        <span class="badge badge-green">Approved</span>
                                     @else
-                                        <span class="badge badge-warning">Pending</span>
+                                        <span class="badge badge-yellow">Pending</span>
                                     @endif
                                 </td>
                                 <td class="text-xs text-slate-500">{{ $review->created_at->format('d M Y') }}</td>
@@ -1540,17 +1543,20 @@
 
     {{-- Conversations --}}
     <div class="eims-card overflow-hidden">
-        <div class="card-header flex items-center justify-between">
-            <h2 class="eims-card-title !mb-0 !pb-0 !border-0">Conversations</h2>
-            <div class="flex items-center gap-3">
-                <span class="text-sm text-slate-500">{{ $institution->conversations->count() }} total</span>
-                <a href="{{ route('admin.conversations.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary btn-sm">New Conversation</a>
+        <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100">
+            <div class="p-2 bg-sky-50 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-sky-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/></svg>
+            </div>
+            <h3 class="text-base font-semibold text-slate-800">Conversations</h3>
+            <span class="ml-1 text-xs text-slate-400">{{ $institution->conversations->count() }} conversation(s)</span>
+            <div class="ml-auto">
+                <a href="{{ route('admin.conversations.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs py-1.5">New Conversation</a>
             </div>
         </div>
         @if($institution->conversations->isEmpty())
-            <div class="px-6 py-8 text-center text-slate-400">
-                <p class="mb-3">No conversations yet.</p>
-                <a href="{{ route('admin.conversations.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary btn-sm">Start First</a>
+            <div class="text-center py-10 text-slate-400">
+                <p class="text-sm mb-3">No conversations yet.</p>
+                <a href="{{ route('admin.conversations.create', ['institution_id' => $institution->id]) }}" class="btn btn-primary text-xs">Start First</a>
             </div>
         @else
             <div class="eims-table-wrapper">

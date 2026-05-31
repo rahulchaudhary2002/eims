@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\Concerns\ScopesForInstitution;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\Institution;
-use App\Models\User;
+use App\Models\Student;
 
 class DashboardController extends Controller
 {
@@ -29,7 +29,7 @@ class DashboardController extends Controller
                 ->limit(10)
                 ->get();
 
-            $studentCount = User::whereHas(
+            $studentCount = Student::whereHas(
                 'institutions',
                 fn($q) => $q->where('institutions.id', $scope)->wherePivot('is_active', true)
             )->count();
@@ -40,7 +40,7 @@ class DashboardController extends Controller
             $pendingComission = 0;
             $receivedComission = 0;
             $recentApplications = Application::with(['student', 'institution', 'institutionProgram.program'])->latest()->limit(10)->get();
-            $studentCount = User::count();
+            $studentCount = Student::count();
         }
 
         return view('admin.modules.dashboard.index', compact('institutionCount', 'pendingComission', 'receivedComission', 'recentApplications', 'studentCount'));
