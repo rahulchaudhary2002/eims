@@ -43,7 +43,7 @@
                 @if($conv->institution?->logo)
                     <img src="{{ Storage::url($conv->institution->logo) }}" class="w-12 h-12 rounded-full object-cover shrink-0">
                 @else
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#4299e1] to-[#2c5aa0] flex items-center justify-center shrink-0">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
                         <span class="text-white font-bold text-sm">{{ strtoupper(substr($conv->institution?->name ?? 'I', 0, 1)) }}</span>
                     </div>
                 @endif
@@ -96,7 +96,7 @@
             @if($conversation->institution?->logo)
                 <img src="{{ Storage::url($conversation->institution->logo) }}" class="w-10 h-10 rounded-full object-cover shrink-0">
             @else
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#4299e1] to-[#2c5aa0] flex items-center justify-center shrink-0">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
                     <span class="text-white font-bold text-sm">{{ strtoupper(substr($conversation->institution?->name ?? 'I', 0, 1)) }}</span>
                 </div>
             @endif
@@ -123,9 +123,13 @@
 
                 {{-- Institution avatar --}}
                 @if(!$isStudent)
-                <div class="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center shrink-0">
-                    <span class="text-[10px] font-bold text-gray-600">{{ strtoupper(substr($msg->sender?->name ?? 'A', 0, 1)) }}</span>
-                </div>
+                @if($conversation->institution?->logo)
+                    <img src="{{ Storage::url($conversation->institution->logo) }}" class="w-7 h-7 rounded-full object-cover shrink-0">
+                @else
+                    <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
+                        <span class="text-[10px] font-bold text-white">{{ strtoupper(substr($conversation->institution?->name ?? 'A', 0, 1)) }}</span>
+                    </div>
+                @endif
                 @endif
 
                 <div class="max-w-[72%] sm:max-w-[60%]">
@@ -151,7 +155,7 @@
 
                 {{-- Student avatar --}}
                 @if($isStudent)
-                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-[#4299e1] to-[#2c5aa0] flex items-center justify-center shrink-0">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
                     <span class="text-[10px] font-bold text-white">{{ strtoupper(substr(auth('student')->user()->name, 0, 1)) }}</span>
                 </div>
                 @endif

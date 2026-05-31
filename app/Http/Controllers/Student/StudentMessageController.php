@@ -9,29 +9,17 @@ use App\Models\Message;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\View\View;
 
 class StudentMessageController extends Controller
 {
-    public function index(Request $request): View
+    public function index(): RedirectResponse
     {
-        $studentId     = $request->user('student')->id;
-        $conversations = Conversation::where('student_id', $studentId)
-            ->with(['institution', 'messages' => fn($q) => $q->latest()->limit(1)])
-            ->withCount(['messages as unread_count' => fn($q) => $q->whereNull('read_at')
-                ->where('sender_type', '!=', \App\Models\Student::class)])
-            ->latest()
-            ->get();
-
-        return view('student.messages.index', compact('conversations'));
+        return redirect()->route('student.conversations.index');
     }
 
-    public function show(Request $request, Message $message): View
+    public function show(Message $message): RedirectResponse
     {
-        $studentId = $request->user('student')->id;
-        abort_if($message->conversation->student_id !== $studentId, 403);
-
-        return view('student.messages.show', compact('message'));
+        return redirect()->route('student.conversations.show', $message->conversation_id);
     }
 
     public function store(StoreStudentMessageRequest $request, Conversation $conversation): RedirectResponse

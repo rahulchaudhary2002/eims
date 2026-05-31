@@ -382,7 +382,7 @@
         </div>
 
         {{-- ── Communication ── --}}
-        @php $isCommunicationGroup = request()->routeIs('admin.conversations.*') || request()->routeIs('admin.messages.*'); @endphp
+        @php $isCommunicationGroup = request()->routeIs('admin.conversations.*'); @endphp
         <div class="px-3 pt-2">
             <div x-data="sidebarGroup('communication', {{ $isCommunicationGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isCommunicationGroup ? 'group-active' : '' }}"
@@ -394,7 +394,6 @@
                 <div class="sidebar-children" x-show="open && !isIconOnly()" x-collapse>
                     @auth('web')
                         <a href="{{ route('admin.conversations.index') }}" class="{{ request()->routeIs('admin.conversations.*') ? 'active' : '' }}">Conversations</a>
-                        <a href="{{ route('admin.messages.index') }}" class="{{ request()->routeIs('admin.messages.*') ? 'active' : '' }}">Messages</a>
                     @endauth
                 </div>
                 <template x-teleport="body">
@@ -402,7 +401,6 @@
                         <div class="sidebar-dropright-title">Communication</div>
                         @auth('web')
                             <a href="{{ route('admin.conversations.index') }}" class="{{ request()->routeIs('admin.conversations.*') ? 'active' : '' }}">Conversations</a>
-                            <a href="{{ route('admin.messages.index') }}" class="{{ request()->routeIs('admin.messages.*') ? 'active' : '' }}">Messages</a>
                         @endauth
                     </div>
                 </template>

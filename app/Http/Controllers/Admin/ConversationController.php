@@ -20,7 +20,9 @@ class ConversationController extends Controller
 
     public function index(Request $request): View
     {
-        $query = Conversation::with(['student', 'institution']);
+        $query = Conversation::with(['student', 'institution'])
+            ->withCount(['messages as unread_count' => fn($q) => $q->whereNull('read_at')
+                ->where('sender_type', \App\Models\Student::class)]);
         $this->applyInstitutionScope($query);
 
         if ($institutionId = $request->input('institution_id')) {
@@ -83,7 +85,20 @@ class ConversationController extends Controller
         $this->authorizeConversationAccess($conversation);
         $conversation->load(['student', 'institution', 'messages' => fn ($q) => $q->with('sender')->oldest()]);
 
-        return view('admin.modules.conversations.show', compact('conversation'));
+        // Mark student messages as read when admin views the conversation
+        $conversation->messages()
+            ->whereNull('read_at')
+            ->where('sender_type', \App\Models\Student::class)
+            ->update(['read_at' => now()]);
+
+        $query = Conversation::with(['student', 'institution', 'messages' => fn($q) => $q->latest()->limit(1)])
+            ->withCount(['messages as unread_count' => fn($q) => $q->whereNull('read_at')
+                ->where('sender_type', \App\Models\Student::class)])
+            ->latest();
+        $this->applyInstitutionScope($query);
+        $conversations = $query->limit(50)->get();
+
+        return view('admin.modules.conversations.show', compact('conversation', 'conversations'));
     }
 
     public function edit(Conversation $conversation): View
