@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained()->cascadeOnDelete();
             $table->foreignId('application_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('commission_invoice_id')->nullable()->constrained('commission_invoices')->nullOnDelete();
+            $table->foreignId('commission_invoice_id')->nullable()->unique()->constrained('commission_invoices')->nullOnDelete();
             $table->decimal('commission_received_amount', 14, 4)->default(0);
             $table->decimal('cashback_percentage', 5, 4)->default(0);
             $table->decimal('cashback_amount', 14, 4)->default(0);
@@ -25,7 +25,6 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->index(['student_id', 'status']);
-            $table->index(['commission_invoice_id']);
             $table->index(['application_id']);
             $table->index(['status', 'paid_at']);
         });

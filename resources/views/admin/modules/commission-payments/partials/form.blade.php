@@ -5,6 +5,9 @@
         <option value="">Select Invoice</option>
         @foreach($invoices as $invoice)
             <option value="{{ $invoice->id }}"
+                data-commission-amount="{{ $invoiceData[$invoice->id]['commission_amount'] ?? 0 }}"
+                data-paid="{{ $invoiceData[$invoice->id]['paid'] ?? 0 }}"
+                data-remaining="{{ $invoiceData[$invoice->id]['remaining'] ?? 0 }}"
                 {{ old('commission_invoice_id', $commissionPayment->commission_invoice_id ?? $selectedInvoiceId ?? '') == $invoice->id ? 'selected' : '' }}>
                 {{ $invoice->invoice_number }}
             </option>
@@ -20,8 +23,46 @@
         value="{{ old('amount', $commissionPayment->amount ?? '') }}"
         class="form-control @error('amount') is-invalid @enderror"
         placeholder="0.00">
+    <p id="amount-hint" class="text-xs text-slate-500 mt-1 hidden"></p>
     @error('amount') <p class="form-error">{{ $message }}</p> @enderror
 </div>
+
+<script>
+(function () {
+    const invoiceSel  = document.getElementById('commission_invoice_id');
+    const amountInput = document.getElementById('amount');
+    const amountHint  = document.getElementById('amount-hint');
+
+    function applyInvoice() {
+        const opt = invoiceSel.options[invoiceSel.selectedIndex];
+        if (!opt || !opt.value) {
+            amountInput.removeAttribute('max');
+            amountHint.classList.add('hidden');
+            amountHint.textContent = '';
+            return;
+        }
+
+        const total     = parseFloat(opt.dataset.commissionAmount) || 0;
+        const paid      = parseFloat(opt.dataset.paid) || 0;
+        const remaining = parseFloat(opt.dataset.remaining) || 0;
+
+        amountInput.max = remaining.toFixed(4);
+
+        // Only auto-fill if the field is empty (create) or belongs to this invoice
+        if (!amountInput.value || parseFloat(amountInput.value) === 0) {
+            amountInput.value = remaining.toFixed(4);
+        }
+
+        amountHint.textContent = `Invoice: ${total.toFixed(2)} — Already paid: ${paid.toFixed(2)} — Remaining: ${remaining.toFixed(2)}`;
+        amountHint.classList.remove('hidden');
+    }
+
+    invoiceSel.addEventListener('change', applyInvoice);
+
+    // Apply on load if an invoice is already selected
+    if (invoiceSel.value) applyInvoice();
+})();
+</script>
 
 {{-- Payment Method --}}
 <div>

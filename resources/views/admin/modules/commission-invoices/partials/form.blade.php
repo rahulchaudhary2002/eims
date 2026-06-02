@@ -30,6 +30,7 @@
         <option value="">None</option>
         @foreach($admissions as $admission)
             <option value="{{ $admission->id }}"
+                data-institution="{{ $admission->institution_id }}"
                 {{ old('admission_id', $commissionInvoice->admission_id ?? $selectedAdmissionId ?? '') == $admission->id ? 'selected' : '' }}>
                 {{ $admission->admission_number }}
             </option>
@@ -44,9 +45,21 @@
     <select id="referral_agreement_id" name="referral_agreement_id" class="form-control @error('referral_agreement_id') is-invalid @enderror">
         <option value="">None</option>
         @foreach($referralAgreements as $agreement)
+            @php
+                $typeLabel = \App\Models\ReferralAgreement::COMMISSION_TYPES[$agreement->commission_type] ?? $agreement->commission_type;
+                $statusLabel = \App\Models\ReferralAgreement::STATUSES[$agreement->status] ?? $agreement->status;
+                $valueDisplay = $agreement->commission_type === 'percentage'
+                    ? number_format($agreement->commission_value, 2) . '%'
+                    : '$' . number_format($agreement->commission_value, 2);
+            @endphp
             <option value="{{ $agreement->id }}"
+                data-institution="{{ $agreement->institution_id }}"
+                data-commission-type="{{ $agreement->commission_type }}"
+                data-commission-value="{{ $agreement->commission_value }}"
+                data-cashback-percentage="{{ $agreement->student_cashback_percentage }}"
+                data-status="{{ $agreement->status }}"
                 {{ old('referral_agreement_id', $commissionInvoice->referral_agreement_id ?? $selectedAgreementId ?? '') == $agreement->id ? 'selected' : '' }}>
-                #{{ $agreement->id }} - {{ \App\Models\CommissionInvoice::COMMISSION_TYPES[$agreement->commission_type] ?? $agreement->commission_type }}
+                Agreement #{{ $agreement->id }} — {{ $typeLabel }} {{ $valueDisplay }} | Cashback {{ number_format($agreement->student_cashback_percentage, 2) }}% | {{ $statusLabel }}
             </option>
         @endforeach
     </select>
@@ -143,3 +156,114 @@
         class="form-control @error('paid_at') is-invalid @enderror">
     @error('paid_at') <p class="form-error">{{ $message }}</p> @enderror
 </div>
+
+@once
+<script>
+(function () {
+    const institutionSel   = document.getElementById('institution_id');
+    const admissionSel     = document.getElementById('admission_id');
+    const agreementSel     = document.getElementById('referral_agreement_id');
+    const commissionTypeSel = document.getElementById('commission_type');
+    const paidAmountInput  = document.getElementById('admission_paid_amount');
+    const commValueInput   = document.getElementById('commission_value');
+    const commAmountInput  = document.getElementById('commission_amount');
+    const cashbackInput    = document.getElementById('student_cashback_amount');
+
+    // Store original options so we can re-filter without re-rendering
+    const allAdmissionOptions  = Array.from(admissionSel.options).slice(1); // skip "None"
+    const allAgreementOptions  = Array.from(agreementSel.options).slice(1); // skip "None"
+
+    function filterByInstitution(institutionId) {
+        // Filter admissions
+        const currentAdmission = admissionSel.value;
+        while (admissionSel.options.length > 1) admissionSel.remove(1);
+        allAdmissionOptions.forEach(opt => {
+            if (!institutionId || opt.dataset.institution === institutionId) {
+                admissionSel.appendChild(opt.cloneNode(true));
+            }
+        });
+        admissionSel.value = currentAdmission;
+
+        // Filter referral agreements
+        const currentAgreement = agreementSel.value;
+        while (agreementSel.options.length > 1) agreementSel.remove(1);
+        allAgreementOptions.forEach(opt => {
+            if (!institutionId || opt.dataset.institution === institutionId) {
+                agreementSel.appendChild(opt.cloneNode(true));
+            }
+        });
+        // If the previously selected agreement is no longer in the filtered list, clear it
+        if (!Array.from(agreementSel.options).some(o => o.value === currentAgreement)) {
+            agreementSel.value = '';
+        } else {
+            agreementSel.value = currentAgreement;
+        }
+    }
+
+    function setAgreementLocked(locked) {
+        commissionTypeSel.readOnly = locked;
+        commissionTypeSel.classList.toggle('bg-slate-100', locked);
+        commissionTypeSel.style.pointerEvents = locked ? 'none' : '';
+
+        commValueInput.readOnly = locked;
+        commValueInput.classList.toggle('bg-slate-100', locked);
+
+        commAmountInput.readOnly = locked;
+        commAmountInput.classList.toggle('bg-slate-100', locked);
+
+        cashbackInput.readOnly = locked;
+        cashbackInput.classList.toggle('bg-slate-100', locked);
+    }
+
+    function recalculate() {
+        const selectedOpt = agreementSel.options[agreementSel.selectedIndex];
+        if (!selectedOpt || !selectedOpt.value) return;
+
+        const commType    = selectedOpt.dataset.commissionType;
+        const commValue   = parseFloat(selectedOpt.dataset.commissionValue) || 0;
+        const cashbackPct = parseFloat(selectedOpt.dataset.cashbackPercentage) || 0;
+        const paidAmount  = parseFloat(paidAmountInput.value) || 0;
+
+        let commAmount = 0;
+        if (commType === 'percentage') {
+            commAmount = paidAmount * commValue / 100;
+        } else if (commType === 'flat_fee') {
+            commAmount = commValue;
+        } else {
+            commAmount = commValue; // tiered: use value as-is
+        }
+
+        commAmountInput.value = commAmount.toFixed(4);
+        cashbackInput.value   = (paidAmount * cashbackPct / 100).toFixed(4);
+    }
+
+    function applyAgreement() {
+        const selectedOpt = agreementSel.options[agreementSel.selectedIndex];
+        const hasAgreement = selectedOpt && selectedOpt.value;
+
+        if (hasAgreement) {
+            commissionTypeSel.value = selectedOpt.dataset.commissionType || '';
+            commValueInput.value    = selectedOpt.dataset.commissionValue || '0';
+            setAgreementLocked(true);
+            recalculate();
+        } else {
+            setAgreementLocked(false);
+        }
+    }
+
+    institutionSel.addEventListener('change', function () {
+        filterByInstitution(this.value);
+        applyAgreement();
+    });
+
+    agreementSel.addEventListener('change', applyAgreement);
+    paidAmountInput.addEventListener('input', recalculate);
+    commValueInput.addEventListener('input', recalculate);
+    commissionTypeSel.addEventListener('change', recalculate);
+
+    // Apply initial state on page load (edit / validation-failed repopulation)
+    filterByInstitution(institutionSel.value);
+    applyAgreement();
+})();
+</script>
+@endonce

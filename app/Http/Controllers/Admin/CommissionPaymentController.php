@@ -45,7 +45,9 @@ class CommissionPaymentController extends Controller
 
     public function create(Request $request): View
     {
-        $invoices = $this->invoiceDropdownQuery()->get(['id', 'invoice_number', 'institution_id']);
+        $invoices = $this->invoiceDropdownQuery()
+            ->withSum('payments', 'amount')
+            ->get(['id', 'invoice_number', 'institution_id', 'commission_amount']);
         $paymentMethods = CommissionPayment::PAYMENT_METHODS;
         $selectedInvoiceId = $request->input('commission_invoice_id');
 
@@ -54,7 +56,13 @@ class CommissionPaymentController extends Controller
             $this->authorizeInstitution((int) $invoice->institution_id);
         }
 
-        return view('admin.modules.commission-payments.create', compact('invoices', 'paymentMethods', 'selectedInvoiceId'));
+        $invoiceData = $invoices->keyBy('id')->map(fn ($inv) => [
+            'commission_amount' => (float) $inv->commission_amount,
+            'paid'              => (float) ($inv->payments_sum_amount ?? 0),
+            'remaining'         => max(0, (float) $inv->commission_amount - (float) ($inv->payments_sum_amount ?? 0)),
+        ]);
+
+        return view('admin.modules.commission-payments.create', compact('invoices', 'paymentMethods', 'selectedInvoiceId', 'invoiceData'));
     }
 
     public function store(StoreCommissionPaymentRequest $request): RedirectResponse
@@ -88,10 +96,21 @@ class CommissionPaymentController extends Controller
         $this->authorizePaymentAccess($commissionPayment);
         $commissionPayment->load('commissionInvoice');
 
-        $invoices = $this->invoiceDropdownQuery()->get(['id', 'invoice_number', 'institution_id']);
+        $invoices = $this->invoiceDropdownQuery()
+            ->withSum('payments', 'amount')
+            ->get(['id', 'invoice_number', 'institution_id', 'commission_amount']);
         $paymentMethods = CommissionPayment::PAYMENT_METHODS;
 
-        return view('admin.modules.commission-payments.edit', compact('commissionPayment', 'invoices', 'paymentMethods'));
+        $currentAmount = (float) $commissionPayment->amount;
+        $currentInvoiceId = $commissionPayment->commission_invoice_id;
+
+        $invoiceData = $invoices->keyBy('id')->map(fn ($inv) => [
+            'commission_amount' => (float) $inv->commission_amount,
+            'paid'              => (float) ($inv->payments_sum_amount ?? 0),
+            'remaining'         => max(0, (float) $inv->commission_amount - (float) ($inv->payments_sum_amount ?? 0) + ($inv->id === $currentInvoiceId ? $currentAmount : 0)),
+        ]);
+
+        return view('admin.modules.commission-payments.edit', compact('commissionPayment', 'invoices', 'paymentMethods', 'invoiceData'));
     }
 
     public function update(UpdateCommissionPaymentRequest $request, CommissionPayment $commissionPayment): RedirectResponse

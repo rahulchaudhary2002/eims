@@ -27,7 +27,7 @@ class UpdateScholarshipCashbackRequest extends FormRequest
         return [
             'student_id'                 => ['required', Rule::exists('students', 'id')],
             'application_id'             => ['nullable', $applicationRule],
-            'commission_invoice_id'      => ['nullable', $invoiceRule],
+            'commission_invoice_id'      => ['nullable', $invoiceRule, Rule::unique('scholarship_cashbacks', 'commission_invoice_id')->ignore($this->route('scholarship_cashback')?->id)->whereNull('deleted_at')],
             'commission_received_amount' => ['required', 'numeric', 'min:0'],
             'cashback_percentage'        => ['required', 'numeric', 'min:0', 'max:100'],
             'cashback_amount'            => ['required', 'numeric', 'min:0'],

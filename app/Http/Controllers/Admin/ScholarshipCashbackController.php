@@ -64,12 +64,21 @@ class ScholarshipCashbackController extends Controller
     {
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $applications = $this->applicationDropdownQuery()->get(['id', 'application_number', 'institution_id']);
-        $invoices = $this->invoiceDropdownQuery()->get(['id', 'invoice_number', 'institution_id']);
+        $invoices = $this->invoiceDropdownQuery()
+            ->whereDoesntHave('scholarshipCashback')
+            ->with(['referralAgreement:id,student_cashback_percentage'])
+            ->get(['id', 'invoice_number', 'institution_id', 'commission_amount', 'student_cashback_amount', 'referral_agreement_id']);
         $statuses = ScholarshipCashback::STATUSES;
         $paymentMethods = ScholarshipCashback::PAYMENT_METHODS;
         $selectedStudentId = $request->input('student_id');
         $selectedApplicationId = $request->input('application_id');
         $selectedInvoiceId = $request->input('commission_invoice_id');
+
+        $invoiceData = $invoices->keyBy('id')->map(fn ($inv) => [
+            'commission_amount'       => (float) $inv->commission_amount,
+            'student_cashback_amount' => (float) $inv->student_cashback_amount,
+            'cashback_percentage'     => (float) ($inv->referralAgreement?->student_cashback_percentage ?? 0),
+        ]);
 
         return view('admin.modules.scholarship-cashbacks.create', compact(
             'students',
@@ -79,7 +88,8 @@ class ScholarshipCashbackController extends Controller
             'paymentMethods',
             'selectedStudentId',
             'selectedApplicationId',
-            'selectedInvoiceId'
+            'selectedInvoiceId',
+            'invoiceData'
         ));
     }
 
@@ -109,9 +119,20 @@ class ScholarshipCashbackController extends Controller
 
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $applications = $this->applicationDropdownQuery()->get(['id', 'application_number', 'institution_id']);
-        $invoices = $this->invoiceDropdownQuery()->get(['id', 'invoice_number', 'institution_id']);
+        $currentInvoiceId = $scholarshipCashback->commission_invoice_id;
+        $invoices = $this->invoiceDropdownQuery()
+            ->where(fn ($q) => $q->whereDoesntHave('scholarshipCashback')
+                ->orWhere('id', $currentInvoiceId))
+            ->with(['referralAgreement:id,student_cashback_percentage'])
+            ->get(['id', 'invoice_number', 'institution_id', 'commission_amount', 'student_cashback_amount', 'referral_agreement_id']);
         $statuses = ScholarshipCashback::STATUSES;
         $paymentMethods = ScholarshipCashback::PAYMENT_METHODS;
+
+        $invoiceData = $invoices->keyBy('id')->map(fn ($inv) => [
+            'commission_amount'       => (float) $inv->commission_amount,
+            'student_cashback_amount' => (float) $inv->student_cashback_amount,
+            'cashback_percentage'     => (float) ($inv->referralAgreement?->student_cashback_percentage ?? 0),
+        ]);
 
         return view('admin.modules.scholarship-cashbacks.edit', compact(
             'scholarshipCashback',
@@ -119,7 +140,8 @@ class ScholarshipCashbackController extends Controller
             'applications',
             'invoices',
             'statuses',
-            'paymentMethods'
+            'paymentMethods',
+            'invoiceData'
         ));
     }
 

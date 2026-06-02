@@ -15,7 +15,7 @@ class UpdateCommissionInvoiceRequest extends FormRequest
 
     public function rules(): array
     {
-        $invoice       = $this->route('commissionInvoice');
+        $invoice       = $this->route('commission_invoice');
         $institutionRule = Rule::exists('institutions', 'id');
         $admissionRule   = Rule::exists('admissions', 'id');
         $agreementRule   = Rule::exists('referral_agreements', 'id');
