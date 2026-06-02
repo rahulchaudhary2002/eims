@@ -76,7 +76,7 @@
                 @if($post->content)
                     <div class="mt-5 pt-5 border-t border-slate-100">
                         <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Content</h4>
-                        <div class="prose prose-sm max-w-none text-slate-700 whitespace-pre-line">{{ $post->content }}</div>
+                        <div class="ck-content">{!! $post->content !!}</div>
                     </div>
                 @endif
             </div>

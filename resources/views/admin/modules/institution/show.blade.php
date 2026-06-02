@@ -115,7 +115,7 @@
                 @if($institution->description)
                 <div class="mt-4">
                     <dt class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Description</dt>
-                    <div class="prose prose-sm text-slate-700 max-w-none">{!! nl2br(e($institution->description)) !!}</div>
+                    <div class="ck-content">{!! $institution->description !!}</div>
                 </div>
                 @endif
             </div>

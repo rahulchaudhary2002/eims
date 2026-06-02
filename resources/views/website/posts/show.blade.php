@@ -70,8 +70,8 @@
                     <div class="mb-6">
                         <h2 class="relative inline-block text-[2rem] font-bold text-[#2c5aa0] mb-4 after:content-[''] after:absolute after:left-0 after:-bottom-2 after:w-[70px] after:h-[3px] after:bg-[#4299e1]">Article</h2>
                     </div>
-                    <div class="text-gray-700 leading-relaxed text-[0.97rem] space-y-4">
-                        {!! nl2br(e($post->content)) !!}
+                    <div class="ck-content">
+                        {!! $post->content !!}
                     </div>
                 </div>
 

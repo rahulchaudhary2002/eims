@@ -45,7 +45,7 @@
 
                 @if ($scholarship->description)
                     <p class="text-[1.05rem] md:text-[1.15rem] text-white/85 leading-relaxed max-w-3xl">
-                        {{ $scholarship->description }}
+                        {{ Str::limit(strip_tags($scholarship->description), 220) }}
                     </p>
                 @endif
 

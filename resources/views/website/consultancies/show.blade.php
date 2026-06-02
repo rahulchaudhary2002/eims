@@ -51,7 +51,7 @@
 
                 @if ($institution->short_description || $institution->description)
                     <p class="text-[1.05rem] text-white/85 leading-relaxed max-w-2xl">
-                        {{ $institution->short_description ?: Str::limit($institution->description, 220) }}
+                        {{ $institution->short_description ?: Str::limit(strip_tags($institution->description), 220) }}
                     </p>
                 @endif
             </div>
@@ -102,7 +102,7 @@
                                     </span>
                                     <h3 class="font-bold text-gray-900 mb-2">{{ $service->title }}</h3>
                                     @if ($service->description)
-                                        <p class="text-gray-500 text-sm leading-relaxed">{{ Str::limit($service->description, 100) }}</p>
+                                        <p class="text-gray-500 text-sm leading-relaxed">{{ Str::limit(strip_tags($service->description), 100) }}</p>
                                     @endif
                                     @if ($service->service_fee)
                                         <p class="text-[#2c5aa0] font-bold mt-3">NPR {{ number_format($service->service_fee) }}</p>

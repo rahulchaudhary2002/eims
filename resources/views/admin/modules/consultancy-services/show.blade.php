@@ -77,7 +77,7 @@
                 @if($consultancyService->description)
                     <div class="mt-5 pt-5 border-t border-slate-100">
                         <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Description</h4>
-                        <p class="text-sm text-slate-700 whitespace-pre-line">{{ $consultancyService->description }}</p>
+                        <div class="ck-content">{!! $consultancyService->description !!}</div>
                     </div>
                 @endif
             </div>

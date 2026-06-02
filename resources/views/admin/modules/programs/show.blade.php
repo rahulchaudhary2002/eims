@@ -130,7 +130,7 @@
                     @if($program->description)
                     <div class="sm:col-span-2">
                         <dt class="text-slate-400 text-xs mb-1">Description</dt>
-                        <dd class="text-slate-700 whitespace-pre-wrap">{{ $program->description }}</dd>
+                        <dd class="ck-content">{!! $program->description !!}</dd>
                     </div>
                     @endif
                 </dl>
