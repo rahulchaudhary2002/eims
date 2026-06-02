@@ -77,7 +77,7 @@
                 @if($scholarship->description)
                     <div class="mt-5 pt-4 border-t border-slate-100">
                         <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">Description</h4>
-                        <div class="prose prose-sm max-w-none text-slate-700">{!! nl2br(e($scholarship->description)) !!}</div>
+                        <div class="ck-content">{!! $scholarship->description !!}</div>
                     </div>
                 @endif
             </div>

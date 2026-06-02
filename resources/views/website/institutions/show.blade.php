@@ -118,7 +118,7 @@
                             @endif
                         </div>
                         @if ($institution->description)
-                            <div class="text-gray-600 leading-relaxed prose max-w-none">{!! nl2br(e($institution->description)) !!}</div>
+                            <div class="ck-content">{!! $institution->description !!}</div>
                         @endif
                     </div>
                 @endif

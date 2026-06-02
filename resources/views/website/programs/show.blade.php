@@ -38,7 +38,7 @@
 
             @if ($program->description)
                 <p class="text-[1.05rem] md:text-[1.15rem] text-white/85 leading-relaxed max-w-2xl">
-                    {{ Str::limit($program->description, 220) }}
+                    {{ Str::limit(strip_tags($program->description), 220) }}
                 </p>
             @endif
         </div>
