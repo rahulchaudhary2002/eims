@@ -96,7 +96,7 @@
 <div class="md:col-span-2">
     <label for="content" class="form-label">Content</label>
     <textarea id="content" name="content" rows="10"
-        class="form-control @error('content') is-invalid @enderror"
+        class="form-control ckeditor @error('content') is-invalid @enderror"
         placeholder="Write the post content here...">{{ old('content', $post->content ?? '') }}</textarea>
     @error('content') <p class="form-error">{{ $message }}</p> @enderror
 </div>

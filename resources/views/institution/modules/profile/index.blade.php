@@ -47,7 +47,7 @@
             </div>
             <div class="md:col-span-2">
                 <label class="form-label">Description</label>
-                <textarea name="description" class="form-control" rows="5">{{ old('description', $institution->description) }}</textarea>
+                <textarea name="description" id="description" class="form-control ckeditor" rows="5">{{ old('description', $institution->description) }}</textarea>
             </div>
         </div>
     </div>

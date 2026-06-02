@@ -71,8 +71,7 @@
         <div class="sm:col-span-2">
             <label class="form-label" for="description">Description</label>
             <textarea name="description" id="description" rows="4"
-                class="form-control @error('description') is-invalid @enderror"
-                maxlength="5000"
+                class="form-control ckeditor @error('description') is-invalid @enderror"
                 placeholder="Optional program description…">{{ old('description', $program->description ?? '') }}</textarea>
             @error('description')<p class="form-error">{{ $message }}</p>@enderror
         </div>

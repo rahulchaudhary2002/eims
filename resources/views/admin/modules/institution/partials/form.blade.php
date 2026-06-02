@@ -96,8 +96,8 @@
     {{-- Description --}}
     <div>
         <label class="form-label">Description</label>
-        <textarea name="description" rows="5"
-            class="form-control @error('description') is-invalid @enderror"
+        <textarea name="description" id="description" rows="5"
+            class="form-control ckeditor @error('description') is-invalid @enderror"
             placeholder="Full description of the institution...">{{ old('description', $institution->description ?? '') }}</textarea>
         @error('description')<p class="form-error">{{ $message }}</p>@enderror
     </div>
