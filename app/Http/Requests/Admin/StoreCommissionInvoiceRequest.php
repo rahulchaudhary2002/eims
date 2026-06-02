@@ -36,7 +36,6 @@ class StoreCommissionInvoiceRequest extends FormRequest
             'commission_value'        => ['required', 'numeric', 'min:0'],
             'commission_amount'       => ['required', 'numeric', 'min:0'],
             'student_cashback_amount' => ['required', 'numeric', 'min:0'],
-            'platform_revenue_amount' => ['required', 'numeric', 'min:0'],
             'status'                  => ['required', Rule::in(array_keys(CommissionInvoice::STATUSES))],
             'invoice_date'            => ['nullable', 'date'],
             'due_date'                => ['nullable', 'date', 'after_or_equal:invoice_date'],

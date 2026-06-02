@@ -28,7 +28,6 @@ class ReferralAgreement extends Model
         'commission_type',
         'commission_value',
         'student_cashback_percentage',
-        'platform_revenue_percentage',
         'start_date',
         'end_date',
         'agreement_file',
@@ -38,7 +37,6 @@ class ReferralAgreement extends Model
     protected $casts = [
         'commission_value'            => 'decimal:4',
         'student_cashback_percentage' => 'decimal:4',
-        'platform_revenue_percentage' => 'decimal:4',
         'start_date'                  => 'date',
         'end_date'                    => 'date',
     ];

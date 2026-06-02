@@ -47,16 +47,6 @@
     @error('student_cashback_percentage') <p class="form-error">{{ $message }}</p> @enderror
 </div>
 
-{{-- Platform Revenue Percentage --}}
-<div>
-    <label for="platform_revenue_percentage" class="form-label">Platform Revenue % <span class="text-red-500">*</span></label>
-    <input type="number" id="platform_revenue_percentage" name="platform_revenue_percentage" step="0.0001" min="0" max="100"
-        value="{{ old('platform_revenue_percentage', $referralAgreement->platform_revenue_percentage ?? '0') }}"
-        class="form-control @error('platform_revenue_percentage') is-invalid @enderror"
-        placeholder="0 – 100">
-    @error('platform_revenue_percentage') <p class="form-error">{{ $message }}</p> @enderror
-</div>
-
 {{-- Start Date --}}
 <div>
     <label for="start_date" class="form-label">Start Date</label>

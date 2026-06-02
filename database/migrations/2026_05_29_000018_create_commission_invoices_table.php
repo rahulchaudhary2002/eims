@@ -19,7 +19,6 @@ return new class extends Migration
             $table->decimal('commission_value', 10, 4)->default(0);
             $table->decimal('commission_amount', 14, 4)->default(0);
             $table->decimal('student_cashback_amount', 14, 4)->default(0);
-            $table->decimal('platform_revenue_amount', 14, 4)->default(0);
             $table->string('status')->default('draft');
             $table->date('invoice_date')->nullable();
             $table->date('due_date')->nullable();

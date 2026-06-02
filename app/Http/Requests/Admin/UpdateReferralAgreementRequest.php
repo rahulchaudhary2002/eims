@@ -27,7 +27,6 @@ class UpdateReferralAgreementRequest extends FormRequest
             'commission_type'             => ['required', Rule::in(array_keys(ReferralAgreement::COMMISSION_TYPES))],
             'commission_value'            => ['required', 'numeric', 'min:0'],
             'student_cashback_percentage' => ['required', 'numeric', 'min:0', 'max:100'],
-            'platform_revenue_percentage' => ['required', 'numeric', 'min:0', 'max:100'],
             'start_date'                  => ['nullable', 'date'],
             'end_date'                    => ['nullable', 'date', 'after_or_equal:start_date'],
             'agreement_file'              => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],

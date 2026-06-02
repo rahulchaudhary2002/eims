@@ -224,7 +224,7 @@
                             @foreach ($institutionProgram->subjects as $subject)
                                 <div class="flex items-center gap-2.5 text-sm text-gray-700 bg-[#f7fafc] border border-gray-200 rounded-xl px-4 py-3">
                                     <i class="fas fa-book text-[#4299e1] text-xs flex-shrink-0"></i>
-                                    <span>{{ $subject->name ?? $subject->title ?? 'Subject' }}</span>
+                                    <span>{{ $subject->subject_name }}</span>
                                 </div>
                             @endforeach
                         </div>

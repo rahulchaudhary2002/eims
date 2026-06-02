@@ -118,10 +118,6 @@
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Student Cashback Amount</dt>
                         <dd class="mt-1 font-mono text-slate-800">{{ number_format((float) $commissionInvoice->student_cashback_amount, 2) }}</dd>
                     </div>
-                    <div>
-                        <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Platform Revenue Amount</dt>
-                        <dd class="mt-1 font-mono font-semibold text-slate-800">{{ number_format((float) $commissionInvoice->platform_revenue_amount, 2) }}</dd>
-                    </div>
                 </dl>
             </div>
 

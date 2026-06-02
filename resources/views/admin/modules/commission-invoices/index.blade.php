@@ -103,7 +103,6 @@
                         <th>Admission</th>
                         <th>Commission Type</th>
                         <th>Commission Amt</th>
-                        <th>Platform Revenue</th>
                         <th>Invoice Date</th>
                         <th>Due Date</th>
                         <th>Status</th>
@@ -122,7 +121,6 @@
                             <td class="text-sm font-mono">{{ $invoice->admission->admission_number ?? '-' }}</td>
                             <td class="text-sm">{{ $commissionTypes[$invoice->commission_type] ?? $invoice->commission_type }}</td>
                             <td class="text-sm font-mono">{{ number_format((float) $invoice->commission_amount, 2) }}</td>
-                            <td class="text-sm font-mono">{{ number_format((float) $invoice->platform_revenue_amount, 2) }}</td>
                             <td class="text-xs text-slate-500">{{ $invoice->invoice_date?->format('d M Y') ?? '-' }}</td>
                             <td class="text-xs text-slate-500">{{ $invoice->due_date?->format('d M Y') ?? '-' }}</td>
                             <td><span class="badge">{{ $statuses[$invoice->status] ?? $invoice->status }}</span></td>
@@ -145,7 +143,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center text-slate-400 py-10">No commission invoices found.</td>
+                            <td colspan="9" class="text-center text-slate-400 py-10">No commission invoices found.</td>
                         </tr>
                     @endforelse
                 </tbody>

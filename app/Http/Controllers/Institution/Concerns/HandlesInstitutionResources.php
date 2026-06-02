@@ -106,7 +106,13 @@ trait HandlesInstitutionResources
 
     protected function resolveRecord($record): Model
     {
-        $record = $this->resourceQuery()->findOrFail($record instanceof Model ? $record->getKey() : $record);
+        if ($record instanceof Model) {
+            $record = $this->resourceQuery()->findOrFail($record->getKey());
+        } else {
+            $model = new $this->modelClass;
+            $keyName = $model->getRouteKeyName();
+            $record = $this->resourceQuery()->where($keyName, $record)->firstOrFail();
+        }
 
         foreach ($this->relationships as $relationship) {
             $record->loadMissing($relationship);

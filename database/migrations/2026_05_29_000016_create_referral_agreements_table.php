@@ -14,7 +14,6 @@ return new class extends Migration
             $table->string('commission_type');
             $table->decimal('commission_value', 10, 4);
             $table->decimal('student_cashback_percentage', 5, 4)->default(0);
-            $table->decimal('platform_revenue_percentage', 5, 4)->default(0);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('agreement_file')->nullable();

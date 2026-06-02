@@ -434,7 +434,6 @@ class DemoSeeder extends Seeder
                     'commission_type'              => 'percentage',
                     'commission_value'             => 10.0,
                     'student_cashback_percentage'  => 0.02,
-                    'platform_revenue_percentage'  => 0.05,
                     'start_date'                   => now()->subYear()->toDateString(),
                     'end_date'                     => now()->addYear()->toDateString(),
                     'status'                       => 'active',
@@ -552,7 +551,6 @@ class DemoSeeder extends Seeder
             if (! $agreement) continue;
             $commissionAmount        = $adm->paid_amount * 0.10;
             $studentCashbackAmount   = $adm->paid_amount * 0.02;
-            $platformRevenueAmount   = $adm->paid_amount * 0.05;
             $invoice = CommissionInvoice::firstOrCreate(
                 ['admission_id' => $adm->id],
                 [
@@ -564,7 +562,6 @@ class DemoSeeder extends Seeder
                     'commission_value'         => 10.0,
                     'commission_amount'        => $commissionAmount,
                     'student_cashback_amount'  => $studentCashbackAmount,
-                    'platform_revenue_amount'  => $platformRevenueAmount,
                     'status'                   => 'paid',
                     'invoice_date'             => now()->subDays(4)->toDateString(),
                     'due_date'                 => now()->addDays(26)->toDateString(),
