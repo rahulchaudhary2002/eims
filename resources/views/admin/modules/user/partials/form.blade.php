@@ -144,7 +144,7 @@
                 'name'           => $inst->name,
                 'role'           => $inst->pivot->role ?? 'staff',
                 'is_active'      => $inst->pivot->is_active ? '1' : '0',
-                'joined_at'      => $inst->pivot->joined_at ? $inst->pivot->joined_at->format('Y-m-d\TH:i') : '',
+                'joined_at'      => $inst->pivot->joined_at ? \Carbon\Carbon::parse($inst->pivot->joined_at)->format('Y-m-d\TH:i') : '',
             ];
             if ($inst->pivot->is_primary) {
                 $primaryId = $inst->id;
