@@ -35,6 +35,9 @@
         <option value="">None</option>
         @foreach($invoices as $invoice)
             <option value="{{ $invoice->id }}"
+                data-commission-amount="{{ $invoiceData[$invoice->id]['commission_amount'] ?? 0 }}"
+                data-cashback-amount="{{ $invoiceData[$invoice->id]['student_cashback_amount'] ?? 0 }}"
+                data-cashback-percentage="{{ $invoiceData[$invoice->id]['cashback_percentage'] ?? 0 }}"
                 {{ old('commission_invoice_id', $scholarshipCashback->commission_invoice_id ?? $selectedInvoiceId ?? '') == $invoice->id ? 'selected' : '' }}>
                 {{ $invoice->invoice_number }}
             </option>
@@ -83,6 +86,39 @@
         class="form-control @error('cashback_amount') is-invalid @enderror">
     @error('cashback_amount') <p class="form-error">{{ $message }}</p> @enderror
 </div>
+
+<script>
+(function () {
+    const invoiceSel       = document.getElementById('commission_invoice_id');
+    const commReceivedInput = document.getElementById('commission_received_amount');
+    const cashbackPctInput  = document.getElementById('cashback_percentage');
+    const cashbackAmtInput  = document.getElementById('cashback_amount');
+
+    function setLocked(locked) {
+        [commReceivedInput, cashbackPctInput, cashbackAmtInput].forEach(el => {
+            el.readOnly = locked;
+            el.classList.toggle('bg-slate-100', locked);
+        });
+    }
+
+    function applyInvoice() {
+        const opt = invoiceSel.options[invoiceSel.selectedIndex];
+        if (!opt || !opt.value) {
+            setLocked(false);
+            return;
+        }
+
+        commReceivedInput.value = (parseFloat(opt.dataset.commissionAmount) || 0).toFixed(4);
+        cashbackPctInput.value  = (parseFloat(opt.dataset.cashbackPercentage) || 0).toFixed(4);
+        cashbackAmtInput.value  = (parseFloat(opt.dataset.cashbackAmount) || 0).toFixed(4);
+        setLocked(true);
+    }
+
+    invoiceSel.addEventListener('change', applyInvoice);
+
+    if (invoiceSel.value) applyInvoice();
+})();
+</script>
 
 {{-- Payment Method --}}
 <div>

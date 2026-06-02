@@ -55,7 +55,7 @@ class CommissionInvoiceController extends Controller
         $invoices = $query->latest()->paginate(20)->withQueryString();
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $admissions = $this->admissionDropdownQuery()->get(['id', 'admission_number', 'institution_id']);
-        $referralAgreements = $this->referralAgreementDropdownQuery()->get(['id', 'institution_id', 'commission_type']);
+        $referralAgreements = $this->referralAgreementDropdownQuery()->get(['id', 'institution_id', 'commission_type', 'commission_value']);
         $commissionTypes = CommissionInvoice::COMMISSION_TYPES;
         $statuses = CommissionInvoice::STATUSES;
 
@@ -73,7 +73,7 @@ class CommissionInvoiceController extends Controller
     {
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $admissions = $this->admissionDropdownQuery()->get(['id', 'admission_number', 'institution_id']);
-        $referralAgreements = $this->referralAgreementDropdownQuery()->get(['id', 'institution_id', 'commission_type']);
+        $referralAgreements = $this->referralAgreementDropdownQuery()->get(['id', 'institution_id', 'commission_type', 'commission_value', 'student_cashback_percentage', 'status']);
         $commissionTypes = CommissionInvoice::COMMISSION_TYPES;
         $statuses = CommissionInvoice::STATUSES;
         $selectedInstitutionId = $request->input('institution_id');
@@ -124,7 +124,7 @@ class CommissionInvoiceController extends Controller
 
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $admissions = $this->admissionDropdownQuery()->get(['id', 'admission_number', 'institution_id']);
-        $referralAgreements = $this->referralAgreementDropdownQuery()->get(['id', 'institution_id', 'commission_type']);
+        $referralAgreements = $this->referralAgreementDropdownQuery()->get(['id', 'institution_id', 'commission_type', 'commission_value', 'student_cashback_percentage', 'status']);
         $commissionTypes = CommissionInvoice::COMMISSION_TYPES;
         $statuses = CommissionInvoice::STATUSES;
 

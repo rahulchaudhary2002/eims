@@ -46,8 +46,14 @@
                 <select name="referral_agreement_id" class="form-control">
                     <option value="">All Agreements</option>
                     @foreach($referralAgreements as $agreement)
+                        @php
+                            $typeLabel = \App\Models\ReferralAgreement::COMMISSION_TYPES[$agreement->commission_type] ?? $agreement->commission_type;
+                            $valueDisplay = $agreement->commission_type === 'percentage'
+                                ? number_format($agreement->commission_value, 2) . '%'
+                                : '$' . number_format($agreement->commission_value, 2);
+                        @endphp
                         <option value="{{ $agreement->id }}" {{ request('referral_agreement_id') == $agreement->id ? 'selected' : '' }}>
-                            #{{ $agreement->id }} - {{ \App\Models\CommissionInvoice::COMMISSION_TYPES[$agreement->commission_type] ?? $agreement->commission_type }}
+                            Agreement #{{ $agreement->id }} — {{ $typeLabel }} {{ $valueDisplay }}
                         </option>
                     @endforeach
                 </select>

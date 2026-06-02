@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\CommissionInvoice;
 use App\Models\CommissionPayment;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -24,7 +25,16 @@ class UpdateCommissionPaymentRequest extends FormRequest
 
         return [
             'commission_invoice_id' => ['required', $invoiceRule],
-            'amount'                => ['required', 'numeric', 'min:0.01'],
+            'amount'                => ['required', 'numeric', 'min:0.01', function ($attr, $value, $fail) {
+                $invoice = CommissionInvoice::find($this->input('commission_invoice_id'));
+                if (! $invoice) return;
+                $payment = $this->route('commission_payment');
+                $paid = $invoice->payments()->when($payment, fn ($q) => $q->where('id', '!=', $payment->id))->sum('amount');
+                $remaining = max(0, (float) $invoice->commission_amount - (float) $paid);
+                if ((float) $value > $remaining) {
+                    $fail("Amount cannot exceed the remaining balance of {$remaining}.");
+                }
+            }],
             'payment_method'        => ['required', Rule::in(array_keys(CommissionPayment::PAYMENT_METHODS))],
             'transaction_reference' => ['nullable', 'string', 'max:255'],
             'payment_proof'         => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
