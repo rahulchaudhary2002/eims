@@ -34,6 +34,8 @@ class DashboardController extends Controller
             ->limit(4)
             ->get();
 
-        return view('student.dashboard', compact('student', 'stats', 'recentApplications', 'recommendations'));
+        $percent = $student->profileCompletion();
+
+        return view('student.dashboard', compact('student', 'stats', 'recentApplications', 'recommendations', 'percent'));
     }
 }

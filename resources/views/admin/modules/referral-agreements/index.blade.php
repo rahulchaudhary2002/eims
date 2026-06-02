@@ -74,7 +74,6 @@
                         <th>Commission Type</th>
                         <th>Commission Value</th>
                         <th>Student Cashback %</th>
-                        <th>Platform Revenue %</th>
                         <th>Dates</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -91,7 +90,6 @@
                             <td>{{ $commissionTypes[$agreement->commission_type] ?? $agreement->commission_type }}</td>
                             <td>{{ number_format((float) $agreement->commission_value, 4) }}</td>
                             <td>{{ number_format((float) $agreement->student_cashback_percentage, 4) }}%</td>
-                            <td>{{ number_format((float) $agreement->platform_revenue_percentage, 4) }}%</td>
                             <td class="text-xs text-slate-500">
                                 {{ $agreement->start_date?->format('d M Y') ?? '-' }}<br>
                                 {{ $agreement->end_date?->format('d M Y') ?? '-' }}
@@ -116,7 +114,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center text-slate-400 py-10">No referral agreements found.</td>
+                            <td colspan="7" class="text-center text-slate-400 py-10">No referral agreements found.</td>
                         </tr>
                     @endforelse
                 </tbody>

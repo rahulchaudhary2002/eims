@@ -102,4 +102,16 @@ class Student extends Authenticatable
     {
         return $this->hasMany(\App\Models\Conversation::class);
     }
+
+    public function profileCompletion(): int
+    {
+        $fields  = ['name', 'email', 'phone', 'date_of_birth', 'gender', 'avatar'];
+        $filled  = collect($fields)->filter(fn($f) => !empty($this->$f))->count();
+        $profile = $this->profile;
+        $pFields = ['province', 'district', 'city', 'address', 'guardian_name', 'guardian_phone'];
+        $pFilled = $profile ? collect($pFields)->filter(fn($f) => !empty($profile->$f))->count() : 0;
+        $total   = count($fields) + count($pFields);
+
+        return (int) round((($filled + $pFilled) / $total) * 100);
+    }
 }

@@ -104,15 +104,6 @@
     @error('student_cashback_amount') <p class="form-error">{{ $message }}</p> @enderror
 </div>
 
-{{-- Platform Revenue Amount --}}
-<div>
-    <label for="platform_revenue_amount" class="form-label">Platform Revenue Amount <span class="text-red-500">*</span></label>
-    <input type="number" id="platform_revenue_amount" name="platform_revenue_amount" step="0.0001" min="0"
-        value="{{ old('platform_revenue_amount', $commissionInvoice->platform_revenue_amount ?? '0') }}"
-        class="form-control @error('platform_revenue_amount') is-invalid @enderror">
-    @error('platform_revenue_amount') <p class="form-error">{{ $message }}</p> @enderror
-</div>
-
 {{-- Status --}}
 <div>
     <label for="status" class="form-label">Status <span class="text-red-500">*</span></label>

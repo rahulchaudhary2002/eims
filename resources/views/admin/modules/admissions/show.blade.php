@@ -107,10 +107,6 @@
                             <dd class="font-mono">{{ number_format((float) $invoice->commission_amount, 2) }}</dd>
                         </div>
                         <div>
-                            <dt class="text-slate-400 text-xs mb-1">Platform Revenue</dt>
-                            <dd class="font-mono">{{ number_format((float) $invoice->platform_revenue_amount, 2) }}</dd>
-                        </div>
-                        <div>
                             <dt class="text-slate-400 text-xs mb-1">Invoice Date</dt>
                             <dd>{{ $invoice->invoice_date?->format('d M Y') ?? '-' }}</dd>
                         </div>
