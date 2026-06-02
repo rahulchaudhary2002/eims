@@ -65,7 +65,7 @@
 
     <div>
         <label for="description" class="form-label">Description</label>
-        <textarea name="description" id="description" rows="5" class="form-control @error('description') border-red-400 @enderror">{{ old('description', $scholarship->description ?? '') }}</textarea>
+        <textarea name="description" id="description" rows="5" class="form-control ckeditor @error('description') border-red-400 @enderror">{{ old('description', $scholarship->description ?? '') }}</textarea>
         @error('description') <p class="form-error">{{ $message }}</p> @enderror
     </div>
 
