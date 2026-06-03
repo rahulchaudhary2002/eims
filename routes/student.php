@@ -8,7 +8,6 @@ use App\Http\Controllers\Student\StudentCounselingSessionController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Student\StudentDocumentController;
 use App\Http\Controllers\Student\StudentFavoriteInstitutionController;
-use App\Http\Controllers\Student\StudentInquiryController;
 use App\Http\Controllers\Student\StudentMessageController;
 use App\Http\Controllers\Student\StudentProfileController;
 use App\Http\Controllers\Student\StudentRecommendationController;
@@ -59,10 +58,6 @@ Route::middleware(['auth:student'])
             ->only(['index', 'show']);
         Route::patch('recommendations/{studentRecommendation}/mark-viewed', [StudentRecommendationController::class, 'markViewed'])
             ->name('recommendations.mark-viewed');
-
-        // Inquiries
-        Route::resource('inquiries', StudentInquiryController::class)
-            ->only(['index', 'create', 'store', 'show']);
 
         // Counseling Sessions
         Route::resource('counseling-sessions', StudentCounselingSessionController::class)

@@ -108,8 +108,10 @@
 
             @if($conversation->institution?->slug)
             <a href="{{ route('website.institutions.show', $conversation->institution->slug) }}"
-               class="hidden sm:inline-flex items-center gap-1.5 text-xs text-[#4299e1] border border-[#bee3f8] px-3 py-1.5 rounded-lg hover:bg-[#ebf8ff] transition no-underline shrink-0">
-                <i class="fas fa-external-link-alt text-[10px]"></i> View Profile
+               class="inline-flex items-center gap-1.5 text-xs text-[#4299e1] border border-[#bee3f8] px-2.5 sm:px-3 py-1.5 rounded-lg hover:bg-[#ebf8ff] transition no-underline shrink-0">
+                <i class="fas fa-external-link-alt text-[10px]"></i>
+                <span class="hidden sm:inline">View Profile</span>
+                <span class="sm:hidden">Profile</span>
             </a>
             @endif
         </div>

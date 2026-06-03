@@ -22,9 +22,10 @@
                 </div>
             </div>
             <div class="sm:ml-auto flex items-center gap-3 bg-white/15 rounded-xl px-5 py-3">
-                <div class="w-28 h-2 bg-white/20 rounded-full overflow-hidden">
-                    <div class="h-2 bg-white rounded-full" style="width: {{ $profileCompletion }}%"></div>
-                </div>
+                <svg class="w-28 h-2 overflow-hidden rounded-full" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true">
+                    <rect width="100" height="8" rx="4" fill="rgba(255, 255, 255, 0.2)"></rect>
+                    <rect width="{{ $profileCompletion }}" height="8" rx="4" fill="#ffffff"></rect>
+                </svg>
                 <span class="text-sm font-bold text-white">{{ $profileCompletion }}% complete</span>
             </div>
         </div>
@@ -36,17 +37,18 @@
     <div class="container max-w-7xl mx-auto px-4 space-y-8">
 
         @if(session('success'))
-        <div class="bg-green-50 border border-green-200 text-green-700 px-5 py-3 rounded-xl text-sm font-medium flex items-center gap-2">
+        <div class="student-form-info text-green-700 border-green-200 bg-green-50">
             <i class="fas fa-check-circle"></i> {{ session('success') }}
         </div>
         @endif
 
         {{-- Basic Info --}}
-        <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100">
-                <h2 class="text-base font-bold text-gray-800">Basic Information</h2>
+        <div class="student-form-card">
+            <div class="student-form-header">
+                <h2 class="student-form-title">Basic Information</h2>
+                <p class="student-form-description">Keep your core profile details aligned with the same clean design system used for application and inquiry forms.</p>
             </div>
-            <form method="POST" action="{{ route('student.profile.update') }}" enctype="multipart/form-data" class="p-6 space-y-5">
+            <form method="POST" action="{{ route('student.profile.update') }}" enctype="multipart/form-data" class="space-y-5">
                 @csrf @method('PUT')
 
                 {{-- Avatar --}}
@@ -59,39 +61,39 @@
                         </div>
                     @endif
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Profile Photo</label>
+                        <label class="student-form-label">Profile Photo</label>
                         <input type="file" name="avatar" accept="image/*"
-                               class="block text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#ebf8ff] file:text-[#2c5aa0] hover:file:bg-[#bee3f8]">
-                        <p class="text-xs text-gray-400 mt-1">JPG, PNG or GIF. Max 2MB.</p>
+                               class="student-form-file">
+                        <p class="student-form-help">JPG, PNG or GIF. Max 2MB.</p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Full Name <span class="text-red-500">*</span></label>
+                        <label class="student-form-label">Full Name <span class="text-red-500">*</span></label>
                         <input type="text" name="name" value="{{ old('name', $student->name) }}"
-                               class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#4299e1] focus:ring-1 focus:ring-[#4299e1]/20">
-                        @error('name')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
+                               class="student-form-control">
+                        @error('name')<p class="student-form-error">{{ $message }}</p>@enderror
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Email <span class="text-red-500">*</span></label>
+                        <label class="student-form-label">Email <span class="text-red-500">*</span></label>
                         <input type="email" name="email" value="{{ old('email', $student->email) }}"
-                               class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#4299e1] focus:ring-1 focus:ring-[#4299e1]/20">
-                        @error('email')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
+                               class="student-form-control">
+                        @error('email')<p class="student-form-error">{{ $message }}</p>@enderror
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Phone</label>
+                        <label class="student-form-label">Phone</label>
                         <input type="text" name="phone" value="{{ old('phone', $student->phone) }}"
-                               class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#4299e1] focus:ring-1 focus:ring-[#4299e1]/20">
+                               class="student-form-control">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Date of Birth</label>
+                        <label class="student-form-label">Date of Birth</label>
                         <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $student->date_of_birth?->format('Y-m-d')) }}"
-                               class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#4299e1] focus:ring-1 focus:ring-[#4299e1]/20">
+                               class="student-form-control">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Gender</label>
-                        <select name="gender" class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#4299e1] focus:ring-1 focus:ring-[#4299e1]/20">
+                        <label class="student-form-label">Gender</label>
+                        <select name="gender" class="student-form-control student-form-select">
                             <option value="">Select gender</option>
                             <option value="male" {{ old('gender', $student->gender) === 'male' ? 'selected' : '' }}>Male</option>
                             <option value="female" {{ old('gender', $student->gender) === 'female' ? 'selected' : '' }}>Female</option>
@@ -100,9 +102,9 @@
                     </div>
                 </div>
 
-                <div class="flex justify-end">
+                <div class="student-form-actions">
                     <button type="submit"
-                        class="inline-flex items-center gap-2 bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] text-white text-sm font-bold px-6 py-3 rounded-xl hover:opacity-90 transition">
+                        class="student-form-btn-primary">
                         <i class="fas fa-save"></i> Save Changes
                     </button>
                 </div>
@@ -110,11 +112,12 @@
         </div>
 
         {{-- Additional Details --}}
-        <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100">
-                <h2 class="text-base font-bold text-gray-800">Additional Details</h2>
+        <div class="student-form-card">
+            <div class="student-form-header">
+                <h2 class="student-form-title">Additional Details</h2>
+                <p class="student-form-description">Complete your supporting profile information using the same improved spacing and field consistency.</p>
             </div>
-            <form method="POST" action="{{ route('student.profile.update-extended') }}" class="p-6 space-y-5">
+            <form method="POST" action="{{ route('student.profile.update-extended') }}" class="space-y-5">
                 @csrf @method('PUT')
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     @foreach([
@@ -128,21 +131,21 @@
                         ['budget_max', 'Budget Max (NPR)', 'number'],
                     ] as [$field, $label, $type])
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">{{ $label }}</label>
+                        <label class="student-form-label">{{ $label }}</label>
                         <input type="{{ $type }}" name="{{ $field }}"
                                value="{{ old($field, $student->profile?->$field) }}"
-                               class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#4299e1] focus:ring-1 focus:ring-[#4299e1]/20">
+                               class="student-form-control">
                     </div>
                     @endforeach
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Address</label>
+                        <label class="student-form-label">Address</label>
                         <textarea name="address" rows="2"
-                                  class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#4299e1] focus:ring-1 focus:ring-[#4299e1]/20">{{ old('address', $student->profile?->address) }}</textarea>
+                                  class="student-form-control student-form-textarea">{{ old('address', $student->profile?->address) }}</textarea>
                     </div>
                 </div>
-                <div class="flex justify-end">
+                <div class="student-form-actions">
                     <button type="submit"
-                        class="inline-flex items-center gap-2 bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] text-white text-sm font-bold px-6 py-3 rounded-xl hover:opacity-90 transition">
+                        class="student-form-btn-primary">
                         <i class="fas fa-save"></i> Save Details
                     </button>
                 </div>

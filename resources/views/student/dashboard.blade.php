@@ -224,10 +224,16 @@
                                 <span class="text-xs font-semibold text-gray-600">Profile</span>
                                 <span class="text-xs font-bold text-[#2c5aa0]">{{ $percent }}%</span>
                             </div>
-                            <div class="w-full bg-gray-100 rounded-full h-2.5 mb-3">
-                                <div class="h-2.5 rounded-full bg-gradient-to-r from-[#4299e1] to-[#2c5aa0]"
-                                     style="width: {{ $percent }}%"></div>
-                            </div>
+                            <svg class="w-full h-2.5 mb-3 overflow-hidden rounded-full" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
+                                <rect width="100" height="10" rx="5" fill="#f3f4f6"></rect>
+                                <rect width="{{ $percent }}" height="10" rx="5" fill="url(#student-dashboard-progress)"></rect>
+                                <defs>
+                                    <linearGradient id="student-dashboard-progress" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#4299e1"></stop>
+                                        <stop offset="100%" stop-color="#2c5aa0"></stop>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
                             <a href="{{ route('student.profile.index') }}"
                                class="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 border-2 border-[#4299e1] text-[#2c5aa0] text-xs font-semibold rounded-xl hover:bg-[#4299e1]/10 transition no-underline">
                                 <i class="fas fa-pen text-[10px]"></i>
@@ -242,7 +248,7 @@
                         <div class="grid grid-cols-2 gap-2">
                             @foreach ([
                                 ['route' => 'website.applications.create',          'icon' => 'fa-paper-plane',  'label' => 'Apply',        'primary' => true],
-                                ['route' => 'student.inquiries.create',              'icon' => 'fa-question-circle','label' => 'Inquiry',    'primary' => false],
+                                ['route' => 'website.inquiry.create',                'icon' => 'fa-question-circle','label' => 'Inquiry',    'primary' => false],
                                 ['route' => 'website.compare.index',                 'icon' => 'fa-balance-scale','label' => 'Compare',      'primary' => false],
                                 ['route' => 'student.scholarship-applications.index','icon' => 'fa-award',        'label' => 'Scholarship',  'primary' => false],
                             ] as $action)

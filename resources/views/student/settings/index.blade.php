@@ -13,42 +13,43 @@
 
 <section class="bg-[#f7fafc] pt-12 pb-20">
     <div class="container max-w-7xl mx-auto px-4">
-        <div class="max-w-2xl space-y-6">
+        <div class="student-form-shell space-y-6">
 
             @if(session('success'))
-            <div class="bg-green-50 border border-green-200 text-green-700 px-5 py-3 rounded-xl text-sm font-medium flex items-center gap-2">
+            <div class="student-form-info text-green-700 border-green-200 bg-green-50">
                 <i class="fas fa-check-circle"></i> {{ session('success') }}
             </div>
             @endif
 
             {{-- Change Password --}}
-            <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-100">
-                    <h2 class="text-base font-bold text-gray-800">Change Password</h2>
-                    <p class="text-xs text-gray-400 mt-0.5">Choose a strong password to protect your account</p>
+            <div class="student-form-card">
+                <div class="student-form-header">
+                    <h2 class="student-form-title">Change Password</h2>
+                    <p class="student-form-description">Keep your account secure with the same modern form presentation used across the updated student dashboard.</p>
                 </div>
-                <form method="POST" action="{{ route('student.settings.password.update') }}" class="p-6 space-y-4">
+
+                <form method="POST" action="{{ route('student.settings.password.update') }}" class="space-y-4">
                     @csrf @method('PUT')
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Current Password</label>
+                        <label class="student-form-label">Current Password</label>
                         <input type="password" name="current_password"
-                               class="w-full px-4 py-3 text-sm border {{ $errors->has('current_password') ? 'border-red-400' : 'border-gray-200' }} rounded-xl focus:outline-none focus:border-[#4299e1] focus:ring-1 focus:ring-[#4299e1]/20">
-                        @error('current_password')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
+                               class="student-form-control {{ $errors->has('current_password') ? 'is-invalid' : '' }}">
+                        @error('current_password')<p class="student-form-error">{{ $message }}</p>@enderror
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">New Password</label>
+                        <label class="student-form-label">New Password</label>
                         <input type="password" name="password"
-                               class="w-full px-4 py-3 text-sm border {{ $errors->has('password') ? 'border-red-400' : 'border-gray-200' }} rounded-xl focus:outline-none focus:border-[#4299e1] focus:ring-1 focus:ring-[#4299e1]/20">
-                        @error('password')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
+                               class="student-form-control {{ $errors->has('password') ? 'is-invalid' : '' }}">
+                        @error('password')<p class="student-form-error">{{ $message }}</p>@enderror
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Confirm New Password</label>
+                        <label class="student-form-label">Confirm New Password</label>
                         <input type="password" name="password_confirmation"
-                               class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#4299e1] focus:ring-1 focus:ring-[#4299e1]/20">
+                               class="student-form-control">
                     </div>
-                    <div class="flex justify-end">
+                    <div class="student-form-actions">
                         <button type="submit"
-                            class="inline-flex items-center gap-2 bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] text-white text-sm font-bold px-6 py-3 rounded-xl hover:opacity-90 transition">
+                            class="student-form-btn-primary">
                             <i class="fas fa-lock"></i> Update Password
                         </button>
                     </div>
@@ -56,11 +57,11 @@
             </div>
 
             {{-- Account Info --}}
-            <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-100">
-                    <h2 class="text-base font-bold text-gray-800">Account Information</h2>
+            <div class="student-form-panel">
+                <div class="student-form-panel-head">
+                    <h2>Account Information</h2>
                 </div>
-                <div class="p-6 divide-y divide-gray-50 space-y-0">
+                <div class="student-form-panel-body divide-y divide-gray-50 space-y-0">
                     @foreach([
                         ['Email', $student->email],
                         ['Email Verified', $student->email_verified_at ? 'Verified' : 'Not Verified'],
@@ -80,7 +81,7 @@
             </div>
 
             {{-- Delete Account --}}
-            <div class="bg-white rounded-xl border border-red-200 overflow-hidden" x-data="{ open: false }">
+            <div class="student-form-panel border-red-200" x-data="{ open: false }">
                 <div class="px-6 py-4 border-b border-red-100">
                     <h2 class="text-base font-bold text-red-600">Delete Account</h2>
                     <p class="text-xs text-gray-400 mt-0.5">Permanently delete your account and all associated data</p>
@@ -99,13 +100,13 @@
                         <form method="POST" action="{{ route('student.settings.account.destroy') }}">
                             @csrf @method('DELETE')
                             <input type="password" name="password" placeholder="Enter your password"
-                                   class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-red-400 mb-4">
+                                   class="student-form-control mb-4">
                             @error('password', 'userDeletion')
-                                <p class="text-xs text-red-500 mb-3">{{ $message }}</p>
+                                <p class="student-form-error mb-3">{{ $message }}</p>
                             @enderror
                             <div class="flex gap-3 justify-end">
                                 <button type="button" @click="open = false"
-                                    class="px-4 py-2.5 text-sm text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50">Cancel</button>
+                                    class="student-form-btn-secondary">Cancel</button>
                                 <button type="submit"
                                     class="px-4 py-2.5 text-sm font-bold bg-red-600 text-white rounded-xl hover:bg-red-700">Delete Account</button>
                             </div>
