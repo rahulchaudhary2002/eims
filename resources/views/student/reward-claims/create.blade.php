@@ -25,10 +25,19 @@
         </div>
         @endif
 
+        @if($applications->isEmpty())
+            <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 px-6 py-16 text-center">
+                <i class="fas fa-file-signature text-5xl text-gray-200 mb-4 block"></i>
+                <p class="text-gray-600 font-semibold">No applications available for reward claim</p>
+                <p class="text-gray-400 text-sm mt-1">A reward claim can only be created from an application, and each application can have only one reward claim.</p>
+                <a href="{{ route('website.applications.create') }}"
+                   class="mt-4 inline-flex items-center gap-2 bg-[#2c5aa0] text-white text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-[#1a365d] transition no-underline">
+                    <i class="fas fa-arrow-right"></i> Apply Now
+                </a>
+            </div>
+        @else
         <form action="{{ route('student.reward-claims.store') }}" method="POST" enctype="multipart/form-data"
               x-data="{
-                selectedInstitution: '{{ old('institution_id', '') }}',
-                programs: @json($programsByInstitution ?? []),
                 docs: [{ type: '', file: null }],
                 addDoc() { this.docs.push({ type: '', file: null }) },
                 removeDoc(i) { if (this.docs.length > 1) this.docs.splice(i, 1) }
@@ -36,76 +45,38 @@
               class="space-y-6">
             @csrf
 
-            {{-- Section 1: Admission Details --}}
+            {{-- Section 1: Application Selection --}}
             <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100">
                     <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
                         <span class="w-6 h-6 rounded-full bg-[#2c5aa0] text-white text-xs font-bold flex items-center justify-center shrink-0">1</span>
-                        Admission Details
+                        Select Application
                     </h2>
+                    <p class="text-sm text-gray-500 mt-1">Your reward claim will use the institution, program, and available admission details linked to the selected application.</p>
                 </div>
-                <div class="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="px-6 py-5 space-y-5">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Institution <span class="text-red-500">*</span></label>
-                        <select name="institution_id" x-model="selectedInstitution" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4299e1]/30 focus:border-[#4299e1]" required>
-                            <option value="">Select Institution</option>
-                            @foreach($institutions as $institution)
-                                <option value="{{ $institution->id }}" {{ old('institution_id') == $institution->id ? 'selected' : '' }}>{{ $institution->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('institution_id')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Program <span class="text-red-500">*</span></label>
-                        <select name="institution_program_id" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4299e1]/30 focus:border-[#4299e1]" required>
-                            <option value="">Select Program</option>
-                            <template x-if="selectedInstitution && programs[selectedInstitution]">
-                                <template x-for="prog in programs[selectedInstitution]" :key="prog.id">
-                                    <option :value="prog.id" x-text="prog.title || prog.program_name"></option>
-                                </template>
-                            </template>
-                            {{-- Fallback for old value --}}
-                            @foreach($institutionPrograms ?? [] as $ip)
-                                <option value="{{ $ip->id }}" {{ old('institution_program_id') == $ip->id ? 'selected' : '' }}>
-                                    {{ $ip->title ?: ($ip->program->name ?? 'Program') }}
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Application <span class="text-red-500">*</span></label>
+                        <select name="application_id" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4299e1]/30 focus:border-[#4299e1]" required>
+                            <option value="">Select Application</option>
+                            @foreach($applications as $application)
+                                <option value="{{ $application->id }}" {{ (string) old('application_id', $selectedApplicationId) === (string) $application->id ? 'selected' : '' }}>
+                                    {{ $application->application_number ?: ('Application #' . $application->id) }}
+                                    - {{ $application->institution?->name ?? 'Institution' }}
+                                    @if($application->institutionProgram?->title || $application->institutionProgram?->program?->name)
+                                        / {{ $application->institutionProgram?->title ?: $application->institutionProgram?->program?->name }}
+                                    @endif
+                                    / {{ \App\Models\Application::STATUSES[$application->status] ?? $application->status }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('institution_program_id')
+                        @error('application_id')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Admission Date <span class="text-red-500">*</span></label>
-                        <input type="date" name="admission_date" value="{{ old('admission_date') }}"
-                               class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4299e1]/30 focus:border-[#4299e1]" required>
-                        @error('admission_date')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Admission Number <span class="text-red-500">*</span></label>
-                        <input type="text" name="admission_number" value="{{ old('admission_number') }}"
-                               class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4299e1]/30 focus:border-[#4299e1]"
-                               placeholder="e.g. ADM-2024-001" required>
-                        @error('admission_number')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Intake</label>
-                        <input type="text" name="intake" value="{{ old('intake') }}"
-                               class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#4299e1]/30 focus:border-[#4299e1]"
-                               placeholder="e.g. September 2024">
-                        @error('intake')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
+                    <div class="rounded-xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+                        One application can have only one reward claim. Institution, program, and available admission details will be attached automatically.
                     </div>
                 </div>
             </div>
@@ -175,7 +146,7 @@
                                     <select :name="`documents[${i}][document_type]`" x-model="doc.type"
                                             class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4299e1]/30 focus:border-[#4299e1]" required>
                                         <option value="">Select Type</option>
-                                        @foreach(\App\Models\StudentRewardClaimDocument::DOCUMENT_TYPES ?? [] as $value => $label)
+                                        @foreach(\App\Models\StudentRewardClaim::DOCUMENT_TYPES as $value => $label)
                                             <option value="{{ $value }}">{{ $label }}</option>
                                         @endforeach
                                     </select>
@@ -222,6 +193,7 @@
             </div>
 
         </form>
+        @endif
     </div>
 </section>
 

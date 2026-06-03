@@ -158,7 +158,7 @@
                         @foreach($claim->documents as $document)
                             <div class="border border-slate-100 rounded-lg p-3 flex items-center justify-between gap-3">
                                 <div class="flex-1 min-w-0">
-                                    <div class="text-sm font-medium text-slate-800">{{ \App\Models\StudentRewardClaimDocument::DOCUMENT_TYPES[$document->document_type] ?? $document->document_type }}</div>
+                                    <div class="text-sm font-medium text-slate-800">{{ \App\Models\StudentRewardClaim::DOCUMENT_TYPES[$document->document_type] ?? $document->document_type }}</div>
                                     <div class="text-xs text-slate-400 truncate mt-0.5">{{ $document->original_name }}</div>
                                 </div>
                                 <div class="flex items-center gap-2 shrink-0">

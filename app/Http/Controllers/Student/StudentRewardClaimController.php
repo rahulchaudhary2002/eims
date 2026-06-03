@@ -4,14 +4,12 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StoreStudentRewardClaimRequest;
-use App\Models\Referral;
-use App\Models\Admission;
-use App\Models\Institution;
-use App\Models\InstitutionProgram;
+use App\Models\Application;
 use App\Models\StudentRewardClaim;
 use App\Models\StudentRewardClaimDocument;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class StudentRewardClaimController extends Controller
@@ -31,22 +29,22 @@ class StudentRewardClaimController extends Controller
 
     public function create(Request $request): View
     {
-        $institutions = Institution::where('status', 'active')->orderBy('name')->get(['id', 'name']);
+        $studentId = auth('student')->id();
 
-        $selectedInstitutionId = $request->input('institution_id');
-        $selectedApplicationId = $request->input('application_id');
+        $applications = Application::where('student_id', $studentId)
+            ->whereDoesntHave('rewardClaim')
+            ->with([
+                'institution:id,name',
+                'institutionProgram.program:id,name',
+                'admission:id,application_id,admission_number,admission_date',
+            ])
+            ->orderByDesc('id')
+            ->get();
 
-        $programs = null;
-        if ($selectedInstitutionId) {
-            $programs = InstitutionProgram::where('institution_id', $selectedInstitutionId)
-                ->orderBy('id')
-                ->get(['id', 'institution_id']);
-        }
+        $selectedApplicationId = old('application_id', $request->input('application_id'));
 
         return view('student.reward-claims.create', compact(
-            'institutions',
-            'programs',
-            'selectedInstitutionId',
+            'applications',
             'selectedApplicationId'
         ));
     }
@@ -55,18 +53,35 @@ class StudentRewardClaimController extends Controller
     {
         $studentId = auth('student')->id();
         $data      = $request->validated();
+        $application = Application::with(['admission', 'latestReferral', 'rewardClaim'])
+            ->whereKey($data['application_id'])
+            ->where('student_id', $studentId)
+            ->first();
+
+        if (! $application) {
+            throw ValidationException::withMessages([
+                'application_id' => 'Please select a valid application.',
+            ]);
+        }
+
+        if ($application->rewardClaim) {
+            throw ValidationException::withMessages([
+                'application_id' => 'A reward claim for this application has already been submitted.',
+            ]);
+        }
 
         $claimNumber = $this->generateClaimNumber();
+        $admission = $application->admission;
 
         $claim = StudentRewardClaim::create([
             'claim_number'           => $claimNumber,
             'student_id'             => $studentId,
-            'institution_id'         => $data['institution_id'],
-            'institution_program_id' => $data['institution_program_id'] ?? null,
-            'application_id'         => $data['application_id'] ?? null,
-            'admission_date'         => $data['admission_date'],
-            'admission_number'       => $data['admission_number'] ?? null,
-            'intake'                 => $data['intake'] ?? null,
+            'institution_id'         => $application->institution_id,
+            'institution_program_id' => $application->institution_program_id,
+            'application_id'         => $application->id,
+            'admission_id'           => $admission?->id,
+            'admission_date'         => $admission?->admission_date ?? $application->admitted_at?->toDateString(),
+            'admission_number'       => $admission?->admission_number,
             'claimed_reward_amount'  => $data['claimed_reward_amount'] ?? null,
             'payment_method'         => $data['payment_method'] ?? null,
             'student_note'           => $data['student_note'] ?? null,
@@ -74,42 +89,29 @@ class StudentRewardClaimController extends Controller
             'submitted_at'           => now(),
         ]);
 
-        // Upload and store documents
-        foreach ($request->file('documents', []) as $documentData) {
-            $file         = $documentData['file'];
-            $documentType = $documentData['document_type'];
+        foreach ($data['documents'] as $index => $documentData) {
+            $file = $request->file("documents.$index.file");
+
+            if (! $file) {
+                continue;
+            }
+
             $path         = $file->store('reward-claim-documents', 'public');
 
             StudentRewardClaimDocument::create([
                 'student_reward_claim_id' => $claim->id,
-                'document_type'           => $documentType,
+                'document_type'           => $documentData['document_type'],
                 'file_path'               => $path,
-                'original_filename'       => $file->getClientOriginalName(),
+                'original_name'           => $file->getClientOriginalName(),
                 'mime_type'               => $file->getMimeType(),
+                'file_size'               => $file->getSize(),
             ]);
         }
 
-        // Auto-link application referral: find protected referral for same student+institution
-        $referral = Referral::where('student_id', $studentId)
-            ->where('institution_id', $data['institution_id'])
-            ->where('is_profile_unlocked', true)
-            ->where('protection_starts_at', '<=', now())
-            ->where('protection_expires_at', '>=', now())
-            ->latest()
-            ->first();
+        $referral = $application->latestReferral;
 
-        if ($referral) {
+        if ($referral && $referral->is_profile_unlocked && $referral->protection_starts_at <= now() && $referral->protection_expires_at >= now()) {
             $claim->update(['referral_id' => $referral->id]);
-        }
-
-        // Auto-link admission: find admission for same student+institution
-        $admission = Admission::where('student_id', $studentId)
-            ->where('institution_id', $data['institution_id'])
-            ->latest()
-            ->first();
-
-        if ($admission) {
-            $claim->update(['admission_id' => $admission->id]);
         }
 
         return redirect()->route('student.reward-claims.show', $claim)

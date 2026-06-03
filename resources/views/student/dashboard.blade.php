@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-3 flex-shrink-0">
-                <a href="{{ route('student.applications.create') }}"
+                     <a href="{{ route('website.applications.create') }}"
                    class="inline-flex items-center gap-2 bg-white text-[#2c5aa0] font-bold px-5 py-2.5 rounded-xl hover:bg-gray-100 transition no-underline text-sm">
                     <i class="fas fa-paper-plane"></i> Apply Now
                 </a>
@@ -80,7 +80,7 @@
                         <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
                             <i class="fas fa-file-alt text-[#4299e1]"></i> My Applications
                         </h2>
-                        <a href="{{ route('student.applications.create') }}"
+                                <a href="{{ route('website.applications.create') }}"
                            class="text-sm text-[#4299e1] hover:text-[#2c5aa0] font-semibold transition no-underline flex items-center gap-1">
                             <i class="fas fa-plus text-xs"></i> New Application
                         </a>
@@ -241,7 +241,7 @@
                         <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Quick Access</h3>
                         <div class="grid grid-cols-2 gap-2">
                             @foreach ([
-                                ['route' => 'student.applications.create',          'icon' => 'fa-paper-plane',  'label' => 'Apply',        'primary' => true],
+                                ['route' => 'website.applications.create',          'icon' => 'fa-paper-plane',  'label' => 'Apply',        'primary' => true],
                                 ['route' => 'student.inquiries.create',              'icon' => 'fa-question-circle','label' => 'Inquiry',    'primary' => false],
                                 ['route' => 'website.compare.index',                 'icon' => 'fa-balance-scale','label' => 'Compare',      'primary' => false],
                                 ['route' => 'student.scholarship-applications.index','icon' => 'fa-award',        'label' => 'Scholarship',  'primary' => false],
