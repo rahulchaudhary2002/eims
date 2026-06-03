@@ -18,15 +18,31 @@
 
 <section class="bg-[#f7fafc] pt-12 pb-20">
     <div class="container max-w-7xl mx-auto px-4">
-        <div class="max-w-2xl">
-            <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 p-6">
+        <div class="student-form-shell">
+            <div class="student-form-card">
+                <div class="student-form-header">
+                    <h2 class="student-form-title">Edit Review</h2>
+                    <p class="student-form-description">Refine your feedback without losing the same form structure used across the core student experience.</p>
+                </div>
+
+                @if ($errors->any())
+                    <div class="student-form-errors">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ route('student.reviews.update', $review) }}" class="space-y-5">
                     @csrf @method('PUT')
-                    <div class="p-4 bg-gray-50 rounded-xl">
+                    <div class="student-form-info">
+                        <i class="fas fa-building mt-0.5"></i>
                         <p class="text-sm font-semibold text-gray-700">{{ $review->institution?->name }}</p>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-2">Rating <span class="text-red-500">*</span></label>
+                        <label class="student-form-label">Rating <span class="text-red-500">*</span></label>
                         <div class="flex items-center gap-2" x-data="{ rating: {{ old('rating', $review->rating) }} }">
                             @for($i = 1; $i <= 5; $i++)
                             <button type="button" @click="rating = {{ $i }}" class="transition-transform hover:scale-110 focus:outline-none">
@@ -37,15 +53,15 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Review <span class="text-red-500">*</span></label>
+                        <label class="student-form-label">Review <span class="text-red-500">*</span></label>
                         <textarea name="review" rows="5"
-                                  class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#4299e1]">{{ old('review', $review->review) }}</textarea>
+                                  class="student-form-control student-form-textarea">{{ old('review', $review->review) }}</textarea>
                     </div>
-                    <div class="flex justify-end gap-3 pt-2">
+                    <div class="student-form-actions">
                         <a href="{{ route('student.reviews.index') }}"
-                           class="px-5 py-2.5 text-sm text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 no-underline">Cancel</a>
+                           class="student-form-btn-secondary">Cancel</a>
                         <button type="submit"
-                            class="inline-flex items-center gap-2 bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] text-white text-sm font-bold px-6 py-2.5 rounded-xl hover:opacity-90 transition">
+                            class="student-form-btn-primary">
                             <i class="fas fa-save"></i> Update Review
                         </button>
                     </div>

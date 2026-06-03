@@ -86,28 +86,28 @@
             $authStudent = Auth::guard('student')->user();
             $menuGroups = [
                 'My Account' => [
-                    ['fas fa-tachometer-alt', 'Dashboard', 'student.dashboard', '#4299e1'],
-                    ['fas fa-user', 'Profile', 'student.profile.index', '#4299e1'],
-                    ['fas fa-cog', 'Settings', 'student.settings.index', '#718096'],
+                    ['fas fa-tachometer-alt', 'Dashboard', 'student.dashboard', 'text-[#4299e1]'],
+                    ['fas fa-user', 'Profile', 'student.profile.index', 'text-[#4299e1]'],
+                    ['fas fa-cog', 'Settings', 'student.settings.index', 'text-[#718096]'],
                 ],
                 'Applications' => [
-                    ['fas fa-file-alt', 'Applications', 'student.applications.index', '#4299e1'],
-                    ['fas fa-graduation-cap', 'Scholarships', 'student.scholarship-applications.index', '#805ad5'],
-                    ['fas fa-coins', 'Cashbacks', 'student.cashbacks.index', '#38a169'],
-                    ['fas fa-gift', 'My Reward Claims', 'student.reward-claims.index', '#d69e2e'],
+                    ['fas fa-file-alt', 'Applications', 'student.applications.index', 'text-[#4299e1]'],
+                    ['fas fa-graduation-cap', 'Scholarships', 'student.scholarship-applications.index', 'text-[#805ad5]'],
+                    ['fas fa-coins', 'Cashbacks', 'student.cashbacks.index', 'text-[#38a169]'],
+                    ['fas fa-gift', 'My Reward Claims', 'student.reward-claims.index', 'text-[#d69e2e]'],
                 ],
                 'Discovery' => [
-                    ['fas fa-heart', 'Favorites', 'student.favorites.index', '#e53e3e'],
-                    ['fas fa-balance-scale', 'Compare', 'website.compare.index', '#d69e2e'],
-                    ['fas fa-star', 'Recommendations', 'student.recommendations.index', '#d69e2e'],
+                    ['fas fa-heart', 'Favorites', 'student.favorites.index', 'text-[#e53e3e]'],
+                    ['fas fa-balance-scale', 'Compare', 'website.compare.index', 'text-[#d69e2e]'],
+                    ['fas fa-star', 'Recommendations', 'student.recommendations.index', 'text-[#d69e2e]'],
                 ],
                 'Services' => [
-                    ['fas fa-comments', 'Inquiries', 'student.inquiries.index', '#3182ce'],
-                    ['fas fa-calendar', 'Counseling', 'student.counseling-sessions.index', '#319795'],
-                    ['fas fa-star-half-alt', 'Reviews', 'student.reviews.index', '#d69e2e'],
+                    ['fas fa-comments', 'Inquiries', 'website.inquiry.create', 'text-[#3182ce]'],
+                    ['fas fa-calendar', 'Counseling', 'student.counseling-sessions.index', 'text-[#319795]'],
+                    ['fas fa-star-half-alt', 'Reviews', 'student.reviews.index', 'text-[#d69e2e]'],
                 ],
                 'Communication' => [
-                    ['fas fa-comment-dots', 'Conversations', 'student.conversations.index', '#2b6cb0'],
+                    ['fas fa-comment-dots', 'Conversations', 'student.conversations.index', 'text-[#2b6cb0]'],
                 ],
             ];
         @endphp
@@ -156,12 +156,12 @@
                             <div class="min-w-0">
                                 <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 px-2">{{ $group }}</p>
                                 <ul class="space-y-0.5">
-                                    @foreach($links as [$icon, $label, $route, $color])
+                                    @foreach($links as [$icon, $label, $route, $iconColorClass])
                                     <li>
                                         <a href="{{ route($route) }}"
                                            class="flex items-center gap-2.5 px-2 py-2 rounded-lg text-sm text-gray-600 hover:text-[#2c5aa0] hover:bg-[#ebf8ff] transition-colors no-underline {{ request()->routeIs($route) ? 'bg-[#ebf8ff] text-[#2c5aa0] font-semibold' : '' }}"
                                            @click="accountOpen = false">
-                                            <i class="{{ $icon }} w-4 text-center text-xs shrink-0" style="color: {{ $color }}"></i>
+                                            <i class="{{ $icon }} {{ $iconColorClass }} w-4 text-center text-xs shrink-0"></i>
                                             <span class="truncate">{{ $label }}</span>
                                         </a>
                                     </li>
@@ -243,7 +243,7 @@
                         [['fas fa-tachometer-alt', 'Dashboard', 'student.dashboard'], ['fas fa-user', 'Profile', 'student.profile.index'], ['fas fa-cog', 'Settings', 'student.settings.index']],
                         [['fas fa-file-alt', 'Applications', 'student.applications.index'], ['fas fa-graduation-cap', 'Scholarships', 'student.scholarship-applications.index'], ['fas fa-coins', 'Cashbacks', 'student.cashbacks.index'], ['fas fa-gift', 'Reward Claims', 'student.reward-claims.index']],
                         [['fas fa-heart', 'Favorites', 'student.favorites.index'], ['fas fa-balance-scale', 'Compare', 'website.compare.index'], ['fas fa-star', 'Recommendations', 'student.recommendations.index']],
-                        [['fas fa-comments', 'Inquiries', 'student.inquiries.index'], ['fas fa-calendar', 'Counseling', 'student.counseling-sessions.index'], ['fas fa-star-half-alt', 'Reviews', 'student.reviews.index']],
+                        [['fas fa-comments', 'Inquiries', 'website.inquiry.create'], ['fas fa-calendar', 'Counseling', 'student.counseling-sessions.index'], ['fas fa-star-half-alt', 'Reviews', 'student.reviews.index']],
                         [['fas fa-comment-dots', 'Conversations', 'student.conversations.index'], ['fas fa-envelope', 'Messages', 'student.messages.index']],
                     ];
                     @endphp

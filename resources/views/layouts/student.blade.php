@@ -19,9 +19,34 @@
 </head>
 <body class="legacy-sikuna bg-gray-50 font-sans">
 
+    @php
+        $studentPageTitle = trim($__env->yieldContent('title', 'Dashboard'));
+        $studentCurrentLabel = strcasecmp($studentPageTitle, 'My Dashboard') === 0
+            ? 'Dashboard'
+            : $studentPageTitle;
+
+        $studentBreadcrumbs = request()->routeIs('student.dashboard')
+            ? [['label' => 'Dashboard']]
+            : [
+                ['label' => 'Dashboard', 'url' => route('student.dashboard')],
+                ['label' => $studentCurrentLabel],
+            ];
+    @endphp
+
     @include('includes.header')
 
-    <main class="min-h-screen">
+    <main class="min-h-screen relative">
+        <div class="absolute inset-x-0 top-0 z-20 pointer-events-none pt-[105px]">
+            <div class="container max-w-7xl mx-auto px-4">
+                <div class="pointer-events-auto w-fit">
+                    @include('website.partials.breadcrumb', [
+                        'variant' => 'dark',
+                        'breadcrumbs' => $studentBreadcrumbs,
+                    ])
+                </div>
+            </div>
+        </div>
+
         @yield('content')
     </main>
 
