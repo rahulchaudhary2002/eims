@@ -4,6 +4,7 @@ namespace App\Http\Requests\Student;
 
 use App\Models\StudentRewardClaim;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreStudentRewardClaimRequest extends FormRequest
 {
@@ -15,14 +16,14 @@ class StoreStudentRewardClaimRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'institution_id'               => ['required', 'exists:institutions,id'],
-            'institution_program_id'       => ['nullable', 'exists:institution_programs,id'],
-            'application_id'               => ['nullable', 'exists:applications,id'],
-            'admission_date'               => ['required', 'date', 'before_or_equal:today'],
-            'admission_number'             => ['nullable', 'string', 'max:100'],
-            'intake'                       => ['nullable', 'string', 'max:100'],
+            'application_id'               => [
+                'required',
+                Rule::exists('applications', 'id')->where(fn ($query) => $query
+                    ->where('student_id', $this->user('student')?->id)),
+                Rule::unique('student_reward_claims', 'application_id'),
+            ],
             'claimed_reward_amount'        => ['nullable', 'numeric', 'min:0'],
-            'payment_method'               => ['nullable', 'in:' . implode(',', array_keys(StudentRewardClaim::PAYMENT_METHODS))],
+            'payment_method'               => ['required', 'in:' . implode(',', array_keys(StudentRewardClaim::PAYMENT_METHODS))],
             'student_note'                 => ['nullable', 'string', 'max:2000'],
             'documents'                    => ['required', 'array', 'min:1'],
             'documents.*.document_type'    => ['required', 'in:' . implode(',', array_keys(StudentRewardClaim::DOCUMENT_TYPES))],

@@ -12,7 +12,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignId('institution_id')->constrained('institutions')->cascadeOnDelete();
             $table->foreignId('institution_program_id')->nullable()->constrained('institution_programs')->nullOnDelete();
-            $table->foreignId('application_id')->nullable()->constrained('applications')->nullOnDelete();
+            $table->foreignId('application_id')->nullable()->unique()->constrained('applications')->nullOnDelete();
             $table->foreignId('referral_id')->nullable()->constrained('referrals')->nullOnDelete();
             $table->unsignedBigInteger('admission_id')->nullable();
             $table->string('claim_number')->unique();

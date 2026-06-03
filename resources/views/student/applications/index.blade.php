@@ -11,7 +11,7 @@
                 <h1 class="text-2xl md:text-3xl font-bold">My Applications</h1>
                 <p class="text-white/70 text-sm mt-1">Track all your institution applications</p>
             </div>
-            <a href="{{ route('student.applications.create') }}"
+                <a href="{{ route('website.applications.create') }}"
                class="inline-flex items-center gap-2 bg-white text-[#2c5aa0] font-bold px-5 py-2.5 rounded-xl hover:bg-gray-100 transition text-sm no-underline shrink-0">
                 <i class="fas fa-plus"></i> New Application
             </a>
@@ -74,8 +74,8 @@
             <i class="fas fa-file-alt text-5xl text-gray-200 mb-4 block"></i>
             <p class="text-gray-500 font-semibold">No applications yet</p>
             <p class="text-gray-400 text-sm mt-1">Start your journey by applying to institutions and programs</p>
-            <a href="{{ route('student.applications.create') }}"
-               class="mt-4 inline-flex items-center gap-2 bg-[#2c5aa0] text-white text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-[#1a365d] transition no-underline">Browse Programs</a>
+                <a href="{{ route('website.applications.create') }}"
+                    class="mt-4 inline-flex items-center gap-2 bg-[#2c5aa0] text-white text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-[#1a365d] transition no-underline">Apply Now</a>
         </div>
         @endforelse
 

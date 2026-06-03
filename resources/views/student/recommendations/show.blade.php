@@ -59,7 +59,7 @@
 
                 <div class="flex gap-3 px-6 py-4 border-t border-gray-100">
                     @if($studentRecommendation->institutionProgram)
-                    <a href="{{ route('student.applications.create', ['institution' => $studentRecommendation->institution?->slug, 'program' => $studentRecommendation->institutionProgram?->slug]) }}"
+                          <a href="{{ route('website.applications.create', ['institution' => $studentRecommendation->institution?->slug, 'program' => $studentRecommendation->institutionProgram?->slug]) }}"
                        class="inline-flex items-center gap-2 bg-[#2c5aa0] text-white text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-[#1a365d] transition no-underline">
                         <i class="fas fa-paper-plane"></i> Apply Now
                     </a>

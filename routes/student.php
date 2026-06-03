@@ -38,7 +38,7 @@ Route::middleware(['auth:student'])
 
         // Applications
         Route::resource('applications', StudentApplicationController::class)
-            ->only(['index', 'create', 'store', 'show']);
+            ->only(['index', 'show']);
         Route::patch('applications/{application}/cancel', [StudentApplicationController::class, 'cancel'])
             ->name('applications.cancel');
 

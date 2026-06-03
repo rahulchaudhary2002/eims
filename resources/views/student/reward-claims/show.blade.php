@@ -114,7 +114,7 @@ $sc = [
                                 <i class="fas fa-file text-blue-500 text-xs"></i>
                             </div>
                             <div class="min-w-0">
-                                <p class="text-sm font-semibold text-gray-700 truncate">{{ \App\Models\StudentRewardClaimDocument::DOCUMENT_TYPES[$document->document_type] ?? $document->document_type }}</p>
+                                <p class="text-sm font-semibold text-gray-700 truncate">{{ \App\Models\StudentRewardClaim::DOCUMENT_TYPES[$document->document_type] ?? $document->document_type }}</p>
                                 <p class="text-xs text-gray-400 truncate">{{ $document->original_name }}</p>
                             </div>
                         </div>

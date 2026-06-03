@@ -125,4 +125,9 @@ class Application extends Model
     {
         return $this->hasOne(Referral::class)->latestOfMany();
     }
+
+    public function rewardClaim(): HasOne
+    {
+        return $this->hasOne(StudentRewardClaim::class);
+    }
 }
