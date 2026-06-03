@@ -37,15 +37,7 @@ class StudentDashboardController extends Controller
             ->limit(4)
             ->get();
 
-        $profile = $student->profile;
-        $profileFields = [
-            $student->name, $student->email, $student->phone,
-            $student->date_of_birth, $student->gender, $student->avatar,
-            $profile?->address, $profile?->province,
-            $profile?->career_interests, $profile?->preferred_faculties,
-        ];
-        $filled  = count(array_filter($profileFields, fn($v) => !empty($v)));
-        $percent = (int) round(($filled / count($profileFields)) * 100);
+        $percent = $student->profileCompletion();
 
         return view('student.dashboard', compact(
             'student', 'stats', 'recentApplications', 'recommendations', 'percent'
