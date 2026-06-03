@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Institution;
 
+use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Institution\Concerns\HandlesInstitutionResources;
 use App\Models\Conversation;
@@ -52,7 +53,7 @@ class InstitutionConversationController extends Controller
         return view('institution.modules.conversations.show', compact('conversation', 'conversations'));
     }
 
-    public function storeMessage(Request $request, Conversation $conversation): RedirectResponse
+    public function storeMessage(Request $request, Conversation $conversation): RedirectResponse|\Illuminate\Http\JsonResponse
     {
         abort_if($conversation->institution_id !== $this->activeInstitutionId(), 403);
 
@@ -72,7 +73,25 @@ class InstitutionConversationController extends Controller
             $data['attachment'] = $request->file('attachment')->store('messages', 'public');
         }
 
-        Message::create($data);
+        $message = Message::create($data);
+        $message->load('sender');
+
+        broadcast(new MessageSent($message))->toOthers();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'id'              => $message->id,
+                'conversation_id' => $message->conversation_id,
+                'sender_type'     => $message->sender_type,
+                'sender_id'       => $message->sender_id,
+                'sender_name'     => $message->sender?->name ?? 'Unknown',
+                'sender_avatar'   => $message->sender?->avatar ?? null,
+                'message'         => $message->message,
+                'attachment'      => $message->attachment,
+                'created_at'      => $message->created_at->format('M d · h:i A'),
+                'created_at_diff' => $message->created_at->diffForHumans(),
+            ]);
+        }
 
         return back();
     }

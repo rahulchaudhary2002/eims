@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Student;
 
+use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StoreStudentMessageRequest;
 use App\Models\Conversation;
 use App\Models\Message;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +24,7 @@ class StudentMessageController extends Controller
         return redirect()->route('student.conversations.show', $message->conversation_id);
     }
 
-    public function store(StoreStudentMessageRequest $request, Conversation $conversation): RedirectResponse
+    public function store(StoreStudentMessageRequest $request, Conversation $conversation): RedirectResponse|JsonResponse
     {
         abort_if($conversation->student_id !== $request->user('student')->id, 403);
 
@@ -37,7 +39,25 @@ class StudentMessageController extends Controller
                 ->store("students/{$student->id}/messages", 'public');
         }
 
-        Message::create($data);
+        $message = Message::create($data);
+        $message->load('sender');
+
+        broadcast(new MessageSent($message))->toOthers();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'id'              => $message->id,
+                'conversation_id' => $message->conversation_id,
+                'sender_type'     => $message->sender_type,
+                'sender_id'       => $message->sender_id,
+                'sender_name'     => $message->sender?->name ?? 'Unknown',
+                'sender_avatar'   => $message->sender?->avatar ?? null,
+                'message'         => $message->message,
+                'attachment'      => $message->attachment,
+                'created_at'      => $message->created_at->format('M d · h:i A'),
+                'created_at_diff' => $message->created_at->diffForHumans(),
+            ]);
+        }
 
         return back();
     }
