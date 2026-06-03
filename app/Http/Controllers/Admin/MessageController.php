@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\MessageSent;
 use App\Http\Controllers\Admin\Concerns\ScopesForInstitution;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreMessageRequest;
 use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -26,7 +28,7 @@ class MessageController extends Controller
         return redirect()->route('admin.conversations.show', $message->conversation_id);
     }
 
-    public function store(StoreMessageRequest $request, Conversation $conversation): RedirectResponse
+    public function store(StoreMessageRequest $request, Conversation $conversation): RedirectResponse|JsonResponse
     {
         $this->authorizeConversationAccess($conversation);
 
@@ -37,7 +39,25 @@ class MessageController extends Controller
             $data['attachment'] = $request->file('attachment')->store('messages', 'public');
         }
 
-        Message::create($data);
+        $message = Message::create($data);
+        $message->load('sender');
+
+        broadcast(new MessageSent($message))->toOthers();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'id'              => $message->id,
+                'conversation_id' => $message->conversation_id,
+                'sender_type'     => $message->sender_type,
+                'sender_id'       => $message->sender_id,
+                'sender_name'     => $message->sender?->name ?? 'Unknown',
+                'sender_avatar'   => $message->sender?->avatar ?? null,
+                'message'         => $message->message,
+                'attachment'      => $message->attachment,
+                'created_at'      => $message->created_at->format('M d · h:i A'),
+                'created_at_diff' => $message->created_at->diffForHumans(),
+            ]);
+        }
 
         return redirect()->route('admin.conversations.show', $conversation)
             ->with('success', 'Message sent.');

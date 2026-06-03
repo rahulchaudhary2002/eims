@@ -220,13 +220,6 @@ if (textarea) {
         textarea.style.overflowY = textarea.scrollHeight > MAX_H ? 'auto' : 'hidden';
     };
     textarea.addEventListener('input', grow);
-    textarea.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            const hasContent = this.value.trim() || document.getElementById('attach-input').files.length > 0;
-            if (hasContent) document.getElementById('msg-form').submit();
-        }
-    });
     textarea.focus();
 }
 
@@ -252,5 +245,130 @@ document.getElementById('conv-search')?.addEventListener('input', function () {
         el.style.display = (el.dataset.name || '').includes(q) ? '' : 'none';
     });
 });
+
+// ── Laravel Echo / Reverb live chat ────────────────────────────
+(function () {
+    const USER_CLASS      = 'App\\Models\\User';
+    const studentName     = @json($conversation->student?->name ?? 'Student');
+    const studentAvatar   = @json($conversation->student?->avatar ? Storage::url($conversation->student->avatar) : null);
+    const conversationId  = {{ $conversation->id }};
+    const msgAction       = @json(route('institution.conversations.messages.store', $conversation));
+
+    function studentAvatarHtml() {
+        if (studentAvatar) {
+            return `<img src="${studentAvatar}" class="w-7 h-7 rounded-full object-cover shrink-0">`;
+        }
+        return `<div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style="background-color:#2563eb">
+                    <span class="text-[10px] font-bold text-white">${studentName.charAt(0).toUpperCase()}</span>
+                </div>`;
+    }
+
+    function staffAvatarHtml(name) {
+        const initial = (name || 'A').charAt(0).toUpperCase();
+        return `<div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style="background-color:#64748b">
+                    <span class="text-[10px] font-bold text-white">${initial}</span>
+                </div>`;
+    }
+
+    function escapeHtml(str) {
+        const d = document.createElement('div');
+        d.appendChild(document.createTextNode(str));
+        return d.innerHTML;
+    }
+
+    function appendMessage(data) {
+        const container = document.getElementById('msg-container');
+        if (!container) return;
+
+        const isInstitution = data.sender_type === USER_CLASS;
+        const bubble = `
+        <div class="flex ${isInstitution ? 'justify-end' : 'justify-start'} items-end gap-2" data-message-id="${data.id}">
+            ${!isInstitution ? studentAvatarHtml() : ''}
+            <div class="max-w-[70%] sm:max-w-[60%]">
+                <div class="px-4 py-2.5 rounded-2xl ${isInstitution
+                    ? 'bg-blue-600 text-white rounded-br-none'
+                    : 'bg-white text-slate-800 rounded-bl-none shadow-sm border border-slate-100'}">
+                    ${data.message ? `<p class="text-sm leading-relaxed whitespace-pre-line">${escapeHtml(data.message)}</p>` : ''}
+                    ${data.attachment ? `<a href="/storage/${data.attachment}" target="_blank"
+                        class="inline-flex items-center gap-1.5 text-xs ${isInstitution ? 'text-white/80 hover:text-white' : 'text-blue-600'} mt-1.5 no-underline hover:underline">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"/></svg>
+                        Attachment</a>` : ''}
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1 px-1 ${isInstitution ? 'text-right' : ''}">
+                    ${data.created_at}${!isInstitution ? ' · ' + escapeHtml(data.sender_name || 'Student') : ''}
+                </p>
+            </div>
+            ${isInstitution ? staffAvatarHtml(data.sender_name) : ''}
+        </div>`;
+
+        const empty = container.querySelector('.flex.flex-col.items-center');
+        if (empty) empty.remove();
+
+        container.insertAdjacentHTML('beforeend', bubble);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    // AJAX form submission — no page reload, keeps Echo subscription alive
+    const form = document.getElementById('msg-form');
+    const sendBtn = form?.querySelector('button[type="submit"]');
+    if (form) {
+        const submitForm = async () => {
+            const msgInput    = document.getElementById('msg-input');
+            const attachInput = document.getElementById('attach-input');
+            const hasContent  = msgInput?.value.trim() || attachInput?.files.length > 0;
+            if (!hasContent) return;
+
+            if (sendBtn) sendBtn.disabled = true;
+
+            const formData = new FormData(form);
+            try {
+                const headers = {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+                };
+                if (window.Echo?.socketId()) {
+                    headers['X-Socket-Id'] = window.Echo.socketId();
+                }
+                const res = await fetch(msgAction, { method: 'POST', headers, body: formData });
+                if (!res.ok) throw new Error('Send failed');
+                const data = await res.json();
+                appendMessage(data);
+                if (msgInput) { msgInput.value = ''; msgInput.style.height = '38px'; }
+                if (attachInput) attachInput.value = '';
+                const preview = document.getElementById('attach-preview');
+                if (preview) { preview.classList.add('hidden'); preview.classList.remove('flex'); }
+            } catch (err) {
+                console.error('Message send error:', err);
+            } finally {
+                if (sendBtn) sendBtn.disabled = false;
+                document.getElementById('msg-input')?.focus();
+            }
+        };
+
+        form.addEventListener('submit', (e) => { e.preventDefault(); submitForm(); });
+
+        document.getElementById('msg-input')?.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                submitForm();
+            }
+        });
+    }
+
+    (function waitForEcho() {
+        if (!window.Echo) { setTimeout(waitForEcho, 100); return; }
+        window.Echo.private(`conversation.${conversationId}`)
+            .listen('.message.sent', (data) => {
+                appendMessage(data);
+                if (data.sender_type !== USER_CLASS) {
+                    fetch(`/institution/conversations/${conversationId}/messages/read`, {
+                        method: 'POST',
+                        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '', 'X-Requested-With': 'XMLHttpRequest' }
+                    }).catch(() => {});
+                }
+            });
+    })();
+})();
 </script>
 @endsection

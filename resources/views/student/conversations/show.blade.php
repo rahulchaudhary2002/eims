@@ -233,13 +233,6 @@ if (textarea) {
         textarea.style.overflowY = textarea.scrollHeight > MAX_H ? 'auto' : 'hidden';
     };
     textarea.addEventListener('input', grow);
-    textarea.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            const hasContent = this.value.trim() || document.getElementById('attach-input').files.length > 0;
-            if (hasContent) document.getElementById('msg-form').submit();
-        }
-    });
     textarea.focus();
 }
 
@@ -270,5 +263,118 @@ document.getElementById('conv-search')?.addEventListener('input', function () {
         el.style.display = (el.dataset.name || '').includes(q) ? '' : 'none';
     });
 });
+
+// ── Laravel Echo / Reverb live chat ────────────────────────────
+(function () {
+    const STUDENT_CLASS   = 'App\\Models\\Student';
+    const institutionName = @json($conversation->institution?->name ?? 'I');
+    const institutionLogo = @json($conversation->institution?->logo ? Storage::url($conversation->institution->logo) : null);
+    const conversationId  = {{ $conversation->id }};
+    const studentInitial  = @json(strtoupper(substr(auth('student')->user()->name, 0, 1)));
+    const msgAction       = @json(route('student.conversations.messages.store', $conversation));
+
+    function institutionAvatar() {
+        if (institutionLogo) {
+            return `<img src="${institutionLogo}" class="w-7 h-7 rounded-full object-cover shrink-0">`;
+        }
+        return `<div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
+                    <span class="text-[10px] font-bold text-white">${institutionName.charAt(0).toUpperCase()}</span>
+                </div>`;
+    }
+
+    function escapeHtml(str) {
+        const d = document.createElement('div');
+        d.appendChild(document.createTextNode(str));
+        return d.innerHTML;
+    }
+
+    function appendMessage(data) {
+        const container = document.getElementById('msg-container');
+        if (!container) return;
+
+        const isStudent = data.sender_type === STUDENT_CLASS;
+        const bubble = `
+        <div class="flex ${isStudent ? 'justify-end' : 'justify-start'} items-end gap-2" data-message-id="${data.id}">
+            ${!isStudent ? institutionAvatar() : ''}
+            <div class="max-w-[72%] sm:max-w-[60%]">
+                <div class="px-4 py-2.5 rounded-2xl ${isStudent
+                    ? 'bg-[#2c5aa0] text-white rounded-br-none'
+                    : 'bg-white text-gray-800 rounded-bl-none shadow-[0_1px_6px_rgba(0,0,0,0.08)]'}">
+                    ${data.message ? `<p class="text-sm leading-relaxed whitespace-pre-line">${escapeHtml(data.message)}</p>` : ''}
+                    ${data.attachment ? `<a href="/storage/${data.attachment}" target="_blank"
+                        class="inline-flex items-center gap-1.5 text-xs ${isStudent ? 'text-white/80 hover:text-white' : 'text-[#4299e1]'} mt-1.5 no-underline hover:underline">
+                        <i class="fas fa-paperclip"></i> Attachment</a>` : ''}
+                </div>
+                <p class="text-[10px] text-gray-400 mt-1 px-1 ${isStudent ? 'text-right' : ''}">
+                    ${data.created_at}
+                </p>
+            </div>
+            ${isStudent ? `<div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
+                <span class="text-[10px] font-bold text-white">${studentInitial}</span>
+            </div>` : ''}
+        </div>`;
+
+        const empty = container.querySelector('.flex.flex-col.items-center');
+        if (empty) empty.remove();
+
+        container.insertAdjacentHTML('beforeend', bubble);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    // AJAX form submission — no page reload, keeps Echo subscription alive
+    const form = document.getElementById('msg-form');
+    const sendBtn = form?.querySelector('button[type="submit"]');
+    if (form) {
+        const submitForm = async () => {
+            const msgInput  = document.getElementById('msg-input');
+            const attachInput = document.getElementById('attach-input');
+            const hasContent = msgInput?.value.trim() || attachInput?.files.length > 0;
+            if (!hasContent) return;
+
+            if (sendBtn) sendBtn.disabled = true;
+
+            const formData = new FormData(form);
+            try {
+                const headers = {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+                };
+                if (window.Echo?.socketId()) {
+                    headers['X-Socket-Id'] = window.Echo.socketId();
+                }
+                const res = await fetch(msgAction, { method: 'POST', headers, body: formData });
+                if (!res.ok) throw new Error('Send failed');
+                const data = await res.json();
+                appendMessage(data);
+                if (msgInput) { msgInput.value = ''; msgInput.style.height = '42px'; }
+                if (attachInput) attachInput.value = '';
+                const preview = document.getElementById('attach-preview');
+                if (preview) { preview.classList.add('hidden'); preview.classList.remove('flex'); }
+            } catch (err) {
+                console.error('Message send error:', err);
+            } finally {
+                if (sendBtn) sendBtn.disabled = false;
+                document.getElementById('msg-input')?.focus();
+            }
+        };
+
+        form.addEventListener('submit', (e) => { e.preventDefault(); submitForm(); });
+
+        // Override textarea keydown to use AJAX submit
+        document.getElementById('msg-input')?.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                submitForm();
+            }
+        });
+    }
+
+    (function waitForEcho() {
+        if (!window.Echo) { setTimeout(waitForEcho, 100); return; }
+        window.Echo.private(`conversation.${conversationId}`)
+            .listen('.message.sent', (data) => { appendMessage(data); });
+    })();
+})();
 </script>
 @endpush
