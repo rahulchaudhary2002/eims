@@ -94,6 +94,7 @@
                     ['fas fa-file-alt', 'Applications', 'student.applications.index', '#4299e1'],
                     ['fas fa-graduation-cap', 'Scholarships', 'student.scholarship-applications.index', '#805ad5'],
                     ['fas fa-coins', 'Cashbacks', 'student.cashbacks.index', '#38a169'],
+                    ['fas fa-gift', 'My Reward Claims', 'student.reward-claims.index', '#d69e2e'],
                 ],
                 'Discovery' => [
                     ['fas fa-heart', 'Favorites', 'student.favorites.index', '#e53e3e'],
@@ -240,7 +241,7 @@
                     @php
                     $mobileGroups = [
                         [['fas fa-tachometer-alt', 'Dashboard', 'student.dashboard'], ['fas fa-user', 'Profile', 'student.profile.index'], ['fas fa-cog', 'Settings', 'student.settings.index']],
-                        [['fas fa-file-alt', 'Applications', 'student.applications.index'], ['fas fa-graduation-cap', 'Scholarships', 'student.scholarship-applications.index'], ['fas fa-coins', 'Cashbacks', 'student.cashbacks.index']],
+                        [['fas fa-file-alt', 'Applications', 'student.applications.index'], ['fas fa-graduation-cap', 'Scholarships', 'student.scholarship-applications.index'], ['fas fa-coins', 'Cashbacks', 'student.cashbacks.index'], ['fas fa-gift', 'Reward Claims', 'student.reward-claims.index']],
                         [['fas fa-heart', 'Favorites', 'student.favorites.index'], ['fas fa-balance-scale', 'Compare', 'website.compare.index'], ['fas fa-star', 'Recommendations', 'student.recommendations.index']],
                         [['fas fa-comments', 'Inquiries', 'student.inquiries.index'], ['fas fa-calendar', 'Counseling', 'student.counseling-sessions.index'], ['fas fa-star-half-alt', 'Reviews', 'student.reviews.index']],
                         [['fas fa-comment-dots', 'Conversations', 'student.conversations.index'], ['fas fa-envelope', 'Messages', 'student.messages.index']],

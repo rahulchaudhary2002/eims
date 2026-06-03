@@ -89,4 +89,8 @@ Route::middleware(['auth:student'])
         Route::get('/settings', [StudentSettingController::class, 'index'])->name('settings.index');
         Route::put('/settings/password', [StudentSettingController::class, 'updatePassword'])->name('settings.password.update');
         Route::delete('/settings/account', [StudentSettingController::class, 'destroy'])->name('settings.account.destroy');
+
+        // Reward Claims
+        Route::resource('reward-claims', \App\Http\Controllers\Student\StudentRewardClaimController::class)
+            ->only(['index', 'create', 'store', 'show']);
     });

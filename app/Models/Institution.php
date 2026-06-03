@@ -186,4 +186,9 @@ class Institution extends Model
     {
         return $this->hasMany(\App\Models\Conversation::class);
     }
+
+    public function rewardClaims(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\StudentRewardClaim::class);
+    }
 }

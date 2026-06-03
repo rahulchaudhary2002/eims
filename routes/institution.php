@@ -60,7 +60,16 @@ Route::middleware(['auth:web', 'institution.user'])
             Route::resource('promotions', InstitutionPromotionController::class);
             Route::resource('subscriptions', InstitutionSubscriptionController::class)->only(['index', 'show']);
             Route::resource('referrals', InstitutionReferralController::class)->only(['index', 'show']);
+            Route::post('referrals/{referral}/request-unlock', [InstitutionReferralController::class, 'requestUnlock'])
+                ->name('referrals.request-unlock');
+            Route::patch('referrals/{referral}/accept', [InstitutionReferralController::class, 'accept'])
+                ->name('referrals.accept');
+            Route::patch('referrals/{referral}/reject', [InstitutionReferralController::class, 'reject'])
+                ->name('referrals.reject');
+            Route::patch('referrals/{referral}/request-more-info', [InstitutionReferralController::class, 'requestMoreInfo'])
+                ->name('referrals.request-more-info');
             Route::resource('commission-invoices', InstitutionCommissionInvoiceController::class)->only(['index', 'show']);
             Route::resource('commission-payments', InstitutionCommissionPaymentController::class);
+
         });
     });
