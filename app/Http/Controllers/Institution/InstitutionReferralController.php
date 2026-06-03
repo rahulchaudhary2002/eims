@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Institution;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Institution\Concerns\UsesActiveInstitution;
 use App\Models\Referral;
 use App\Models\ReferralAccessLog;
 use App\Models\Student;
@@ -12,9 +13,10 @@ use Illuminate\View\View;
 
 class InstitutionReferralController extends Controller
 {
+    use UsesActiveInstitution;
     public function index(Request $request): View
     {
-        $institutionId = $this->currentInstitutionId();
+        $institutionId = $this->activeInstitutionId();
 
         $query = Referral::with([
             'application',
@@ -27,10 +29,11 @@ class InstitutionReferralController extends Controller
             $query->where('status', $status);
         }
 
-        $referrals = $query->latest()->paginate(15)->withQueryString();
-        $statuses  = Referral::STATUSES;
+        $referrals        = $query->latest()->paginate(15)->withQueryString();
+        $statuses         = Referral::STATUSES;
+        $activeInstitution = $this->activeInstitution();
 
-        return view('institution.referrals.index', compact('referrals', 'statuses'));
+        return view('institution.referrals.index', compact('referrals', 'statuses', 'activeInstitution'));
     }
 
     public function show(Referral $referral): View
@@ -185,7 +188,7 @@ class InstitutionReferralController extends Controller
     protected function authorizeReferralAccess(Referral $referral): void
     {
         abort_unless(
-            (int) $referral->institution_id === (int) session('current_institution_id'),
+            (int) $referral->institution_id === $this->activeInstitutionId(),
             403,
             'You do not have access to this referral.'
         );
@@ -212,11 +215,4 @@ class InstitutionReferralController extends Controller
         ];
     }
 
-    private function currentInstitutionId(): int
-    {
-        $institutionId = session('current_institution_id');
-        abort_unless((bool) $institutionId, 403, 'No active institution selected.');
-
-        return (int) $institutionId;
-    }
 }

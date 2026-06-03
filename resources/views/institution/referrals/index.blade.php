@@ -23,7 +23,7 @@
                 <label class="form-label text-xs">Status</label>
                 <select name="status" class="form-control">
                     <option value="">All Statuses</option>
-                    @foreach(\App\Models\ApplicationReferral::STATUSES as $value => $label)
+                    @foreach(\App\Models\Referral::STATUSES as $value => $label)
                         <option value="{{ $value }}" {{ request('status') === $value ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
                 </select>
