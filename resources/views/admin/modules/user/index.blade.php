@@ -137,7 +137,7 @@
                                         class="btn-icon btn-icon-view" title="Toggle Status">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"/></svg>
                                     </button>
-                                    <div class="status-dropdown hidden absolute right-0 mt-1 w-36 bg-white rounded-lg shadow-lg border border-slate-200 z-50 py-1">
+                                    <div class="status-dropdown hidden fixed w-36 bg-white rounded-lg shadow-lg border border-slate-200 z-50 py-1">
                                         <form method="POST" action="{{ route('admin.users.update-status', $user) }}">
                                             @csrf @method('PATCH')
                                             <input type="hidden" name="is_active" value="1">
@@ -198,7 +198,35 @@ function toggleStatusDropdown(btn) {
     const dropdown = btn.nextElementSibling;
     const isHidden = dropdown.classList.contains('hidden');
     closeAllStatusDropdowns();
-    if (isHidden) dropdown.classList.remove('hidden');
+
+    if (!isHidden) {
+        return;
+    }
+
+    positionStatusDropdown(btn, dropdown);
+    dropdown.classList.remove('hidden');
+}
+
+function positionStatusDropdown(btn, dropdown) {
+    const rect = btn.getBoundingClientRect();
+    const dropdownWidth = dropdown.offsetWidth || 144;
+    const dropdownHeight = dropdown.offsetHeight || 96;
+    const spacing = 6;
+    const viewportPadding = 8;
+
+    let left = rect.right - dropdownWidth;
+    let top = rect.bottom + spacing;
+
+    if (left < viewportPadding) {
+        left = viewportPadding;
+    }
+
+    if (top + dropdownHeight > window.innerHeight - viewportPadding) {
+        top = Math.max(viewportPadding, rect.top - dropdownHeight - spacing);
+    }
+
+    dropdown.style.left = `${left}px`;
+    dropdown.style.top = `${top}px`;
 }
 
 function closeAllStatusDropdowns() {
@@ -210,5 +238,8 @@ document.addEventListener('click', function (e) {
         closeAllStatusDropdowns();
     }
 });
+
+window.addEventListener('resize', closeAllStatusDropdowns);
+window.addEventListener('scroll', closeAllStatusDropdowns, true);
 </script>
 @endsection
