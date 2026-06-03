@@ -12,7 +12,6 @@
             ['Applications', 'institution.applications.index', 'institution.applications.*'],
             ['Admissions', 'institution.admissions.index', 'institution.admissions.*'],
             ['Counseling Sessions', 'institution.counseling-sessions.index', 'institution.counseling-sessions.*'],
-            ['Referrals', 'institution.referrals.index', 'institution.referrals.*'],
         ],
         'Lead & Inquiry' => [
             ['Inquiries', 'institution.inquiries.index', 'institution.inquiries.*'],
