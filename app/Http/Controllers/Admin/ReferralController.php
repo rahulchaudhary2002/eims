@@ -7,8 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreReferralRequest;
 use App\Http\Requests\Admin\UpdateReferralRequest;
 use App\Models\Application;
+use App\Models\ApplicationStatusLog;
 use App\Models\Institution;
+use App\Models\InstitutionProgram;
 use App\Models\Referral;
+use App\Models\ReferralAccessLog;
+use App\Models\ReferralAgreement;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +26,7 @@ class ReferralController extends Controller
 
     public function index(Request $request): View
     {
-        $query = Referral::with(['application', 'student', 'institution', 'referredBy']);
+        $query = Referral::with(['application', 'student', 'institution', 'institutionProgram', 'referredBy']);
         $this->applyInstitutionScope($query);
 
         if ($applicationId = $request->input('application_id')) {
@@ -40,6 +44,9 @@ class ReferralController extends Controller
         if ($status = $request->input('status')) {
             $query->where('status', $status);
         }
+        if ($request->has('is_profile_unlocked') && $request->input('is_profile_unlocked') !== '') {
+            $query->where('is_profile_unlocked', (bool) $request->input('is_profile_unlocked'));
+        }
         if ($dateFrom = $request->input('date_from')) {
             $query->whereDate('referred_at', '>=', $dateFrom);
         }
@@ -47,12 +54,12 @@ class ReferralController extends Controller
             $query->whereDate('referred_at', '<=', $dateTo);
         }
 
-        $referrals = $query->latest()->paginate(20)->withQueryString();
+        $referrals    = $query->latest()->paginate(20)->withQueryString();
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
         $applications = $this->applicationDropdownQuery()->get(['id', 'application_number', 'student_id', 'institution_id']);
-        $students = Student::orderBy('name')->get(['id', 'name', 'email']);
-        $users = User::orderBy('name')->get(['id', 'name', 'email']);
-        $statuses = Referral::STATUSES;
+        $students     = Student::orderBy('name')->get(['id', 'name', 'email']);
+        $users        = User::orderBy('name')->get(['id', 'name', 'email']);
+        $statuses     = Referral::STATUSES;
 
         return view('admin.modules.referrals.index', compact(
             'referrals',
@@ -66,12 +73,18 @@ class ReferralController extends Controller
 
     public function create(Request $request): View
     {
-        $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $applications = $this->applicationDropdownQuery()->get(['id', 'application_number', 'student_id', 'institution_id']);
-        $students = Student::orderBy('name')->get(['id', 'name', 'email']);
-        $users = User::orderBy('name')->get(['id', 'name', 'email']);
-        $statuses = Referral::STATUSES;
-        $selectedInstitutionId = $request->input('institution_id');
+        $application = null;
+        if ($applicationId = $request->input('application_id')) {
+            $application = Application::with(['student', 'institution', 'institutionProgram'])->find($applicationId);
+        }
+
+        $institutions      = $this->institutionDropdownQuery()->get(['id', 'name']);
+        $applications      = $this->applicationDropdownQuery()->get(['id', 'application_number', 'student_id', 'institution_id']);
+        $students          = Student::orderBy('name')->get(['id', 'name', 'email']);
+        $users             = User::orderBy('name')->get(['id', 'name', 'email']);
+        $referralAgreements = ReferralAgreement::where('status', 'active')->orderBy('id')->get();
+        $statuses          = Referral::STATUSES;
+        $selectedInstitutionId = $request->input('institution_id') ?? $application?->institution_id;
         $selectedApplicationId = $request->input('application_id');
 
         if ($selectedInstitutionId) {
@@ -79,10 +92,12 @@ class ReferralController extends Controller
         }
 
         return view('admin.modules.referrals.create', compact(
+            'application',
             'institutions',
             'applications',
             'students',
             'users',
+            'referralAgreements',
             'statuses',
             'selectedInstitutionId',
             'selectedApplicationId'
@@ -95,9 +110,26 @@ class ReferralController extends Controller
         $this->authorizeInstitution((int) $data['institution_id']);
 
         $data['referral_number'] = ($data['referral_number'] ?? '') ?: $this->nextReferralNumber();
-        $data['referred_at'] = $data['referred_at'] ?? now();
+        $data['referred_at']     = $data['referred_at'] ?? now();
+        $data['referred_by']     = $data['referred_by'] ?? auth('web')->id();
+
+        if (empty($data['status'])) {
+            $data['status'] = 'sent';
+        }
 
         $referral = Referral::create($data);
+
+        if (! empty($data['application_id'])) {
+            $application = Application::find($data['application_id']);
+            if ($application) {
+                $fromStatus = $application->status;
+                $application->update([
+                    'status'      => 'referred_to_institution',
+                    'referred_at' => now(),
+                ]);
+                $this->recordApplicationStatusLog($application, $fromStatus, 'referred_to_institution');
+            }
+        }
 
         return redirect()->route('admin.referrals.show', $referral)
             ->with('success', 'Referral created successfully.');
@@ -106,7 +138,20 @@ class ReferralController extends Controller
     public function show(Referral $referral): View
     {
         $this->authorizeReferralAccess($referral);
-        $referral->load(['application.institutionProgram.program', 'student', 'institution', 'referredBy']);
+        $referral->load([
+            'application.institutionProgram.program',
+            'student',
+            'student.profile',
+            'student.documents',
+            'student.academicRecords',
+            'institution',
+            'institutionProgram',
+            'referredBy',
+            'profileUnlockedBy',
+            'accessLogs.user',
+            'admission',
+            'rewardClaims',
+        ]);
 
         return view('admin.modules.referrals.show', compact('referral'));
     }
@@ -116,11 +161,12 @@ class ReferralController extends Controller
         $this->authorizeReferralAccess($referral);
         $referral->load(['application', 'student', 'institution', 'referredBy']);
 
-        $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $applications = $this->applicationDropdownQuery()->get(['id', 'application_number', 'student_id', 'institution_id']);
-        $students = Student::orderBy('name')->get(['id', 'name', 'email']);
-        $users = User::orderBy('name')->get(['id', 'name', 'email']);
-        $statuses = Referral::STATUSES;
+        $institutions       = $this->institutionDropdownQuery()->get(['id', 'name']);
+        $applications       = $this->applicationDropdownQuery()->get(['id', 'application_number', 'student_id', 'institution_id']);
+        $students           = Student::orderBy('name')->get(['id', 'name', 'email']);
+        $users              = User::orderBy('name')->get(['id', 'name', 'email']);
+        $referralAgreements = ReferralAgreement::where('status', 'active')->orderBy('id')->get();
+        $statuses           = Referral::STATUSES;
 
         return view('admin.modules.referrals.edit', compact(
             'referral',
@@ -128,6 +174,7 @@ class ReferralController extends Controller
             'applications',
             'students',
             'users',
+            'referralAgreements',
             'statuses'
         ));
     }
@@ -160,18 +207,42 @@ class ReferralController extends Controller
         $this->authorizeReferralAccess($referral);
 
         $request->validate([
-            'status' => ['required', 'in:' . implode(',', array_keys(Referral::STATUSES))],
+            'status'  => ['required', 'in:' . implode(',', array_keys(Referral::STATUSES))],
+            'remarks' => ['nullable', 'string'],
         ]);
 
-        $data = ['status' => $request->input('status')];
+        $status = $request->input('status');
+        $data   = ['status' => $status];
 
-        if ($request->input('status') === 'viewed' && ! $referral->viewed_at) {
+        if ($status === 'preview_viewed' && ! $referral->viewed_at) {
             $data['viewed_at'] = now();
         }
 
         $referral->update($data);
 
+        ReferralAccessLog::create([
+            'referral_id'  => $referral->id,
+            'institution_id' => $referral->institution_id,
+            'user_id'      => auth('web')->id(),
+            'action'       => $status,
+            'ip_address'   => $request->ip(),
+            'user_agent'   => $request->userAgent(),
+        ]);
+
         return back()->with('success', 'Referral status updated.');
+    }
+
+    public function markPlatformNote(Request $request, Referral $referral): RedirectResponse
+    {
+        $this->authorizeReferralAccess($referral);
+
+        $request->validate([
+            'platform_note' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        $referral->update(['platform_note' => $request->input('platform_note')]);
+
+        return back()->with('success', 'Platform note updated.');
     }
 
     private function nextReferralNumber(): string
@@ -261,5 +332,23 @@ class ReferralController extends Controller
 
         return $scope > 0
             && (bool) $user?->activeInstitutions()->where('institutions.id', $scope)->exists();
+    }
+
+    private function recordApplicationStatusLog(Application $application, ?string $fromStatus, string $toStatus): void
+    {
+        if ($fromStatus === $toStatus) {
+            return;
+        }
+
+        $user = auth('web')->user();
+
+        ApplicationStatusLog::create([
+            'application_id'  => $application->id,
+            'from_status'     => $fromStatus,
+            'to_status'       => $toStatus,
+            'changed_by_type' => $user ? $user::class : null,
+            'changed_by_id'   => $user?->id,
+            'remarks'         => null,
+        ]);
     }
 }

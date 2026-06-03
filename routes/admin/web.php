@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\InstitutionFollowerController;
 use App\Http\Controllers\Admin\CommissionInvoiceController;
 
 use App\Http\Controllers\Admin\CommissionPaymentController;
+use App\Http\Controllers\Admin\StudentRewardClaimController;
 use App\Http\Controllers\Admin\InquiryController;
 use App\Http\Controllers\Admin\LeadFollowUpController;
 use App\Http\Controllers\Admin\LeadNoteController;
@@ -194,4 +195,19 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->
         ->name('notification.read-all');
     Route::post('notifications/{id}/read', [\App\Http\Controllers\Admin\NotificationController::class, 'read'])
         ->name('notification.read');
+
+    Route::patch('referrals/{referral}/platform-note', [ReferralController::class, 'markPlatformNote'])
+        ->name('referrals.platform-note');
+
+    // Student Reward Claims
+    Route::resource('student-reward-claims', StudentRewardClaimController::class)
+        ->only(['index', 'show']);
+    Route::patch('student-reward-claims/{studentRewardClaim}/status', [StudentRewardClaimController::class, 'updateStatus'])
+        ->name('student-reward-claims.update-status');
+    Route::patch('student-reward-claim-documents/{studentRewardClaimDocument}/verify', [StudentRewardClaimController::class, 'verifyDocument'])
+        ->name('student-reward-claim-documents.verify');
+    Route::patch('student-reward-claims/{studentRewardClaim}/link-referral', [StudentRewardClaimController::class, 'linkReferral'])
+        ->name('student-reward-claims.link-referral');
+    Route::patch('student-reward-claims/{studentRewardClaim}/link-admission', [StudentRewardClaimController::class, 'linkAdmission'])
+        ->name('student-reward-claims.link-admission');
 });

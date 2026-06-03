@@ -1,0 +1,201 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Admin\Concerns\ScopesForInstitution;
+use App\Http\Controllers\Controller;
+use App\Models\Institution;
+use App\Models\Student;
+use App\Models\StudentRewardClaim;
+use App\Models\StudentRewardClaimDocument;
+use App\Models\StudentRewardPayment;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class StudentRewardClaimController extends Controller
+{
+    use ScopesForInstitution;
+
+    public function index(Request $request): View
+    {
+        $query = StudentRewardClaim::with([
+            'student',
+            'institution',
+            'institutionProgram',
+            'referral',
+        ]);
+
+        $scope = $this->institutionScope();
+        if ($scope !== null) {
+            if ($scope === 0) {
+                $query->whereRaw('1 = 0');
+            } else {
+                $query->where('institution_id', $scope);
+            }
+        }
+
+        if ($studentId = $request->input('student_id')) {
+            $query->where('student_id', $studentId);
+        }
+        if ($institutionId = $request->input('institution_id')) {
+            $query->where('institution_id', $institutionId);
+        }
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+        if ($dateFrom = $request->input('date_from')) {
+            $query->whereDate('submitted_at', '>=', $dateFrom);
+        }
+        if ($dateTo = $request->input('date_to')) {
+            $query->whereDate('submitted_at', '<=', $dateTo);
+        }
+
+        $claims = $query->latest()->paginate(20)->withQueryString();
+        $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
+        $students = Student::orderBy('name')->get(['id', 'name']);
+
+        return view('admin.modules.student-reward-claims.index', compact('claims', 'institutions', 'students'));
+    }
+
+    public function show(StudentRewardClaim $studentRewardClaim): View
+    {
+        $studentRewardClaim->load([
+            'student',
+            'institution',
+            'institutionProgram',
+            'application',
+            'referral',
+            'admission',
+            'documents.verifiedBy',
+            'payments.paidBy',
+            'verifiedBy',
+            'approvedBy',
+            'paidBy',
+        ]);
+
+        return view('admin.modules.student-reward-claims.show', compact('studentRewardClaim'));
+    }
+
+    public function updateStatus(Request $request, StudentRewardClaim $studentRewardClaim): RedirectResponse
+    {
+        $request->validate([
+            'status'                => ['required', 'in:' . implode(',', StudentRewardClaim::STATUSES)],
+            'approved_reward_amount' => ['nullable', 'numeric', 'min:0'],
+            'rejection_reason'      => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        $status = $request->input('status');
+        $data   = ['status' => $status];
+
+        if ($status === 'verified') {
+            $data['verified_at'] = now();
+            $data['verified_by'] = auth('web')->id();
+        } elseif ($status === 'approved') {
+            $data['approved_at']            = now();
+            $data['approved_by']            = auth('web')->id();
+            $data['approved_reward_amount'] = $request->input('approved_reward_amount');
+        } elseif ($status === 'paid') {
+            $data['paid_at'] = now();
+            $data['paid_by'] = auth('web')->id();
+
+            StudentRewardPayment::create([
+                'student_reward_claim_id' => $studentRewardClaim->id,
+                'amount'                  => $studentRewardClaim->approved_reward_amount,
+                'paid_by'                 => auth('web')->id(),
+                'paid_at'                 => now(),
+            ]);
+        } elseif ($status === 'rejected') {
+            $request->validate([
+                'rejection_reason' => ['required', 'string', 'max:2000'],
+            ]);
+            $data['rejection_reason'] = $request->input('rejection_reason');
+        }
+
+        $studentRewardClaim->update($data);
+
+        return back()->with('success', 'Reward claim status updated.');
+    }
+
+    public function verifyDocument(Request $request, StudentRewardClaimDocument $studentRewardClaimDocument): RedirectResponse
+    {
+        $request->validate([
+            'verification_note' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        $studentRewardClaimDocument->update([
+            'is_verified'       => true,
+            'verified_by'       => auth('web')->id(),
+            'verified_at'       => now(),
+            'verification_note' => $request->input('verification_note'),
+        ]);
+
+        return back()->with('success', 'Document verified successfully.');
+    }
+
+    public function linkReferral(Request $request, StudentRewardClaim $studentRewardClaim): RedirectResponse
+    {
+        $request->validate([
+            'referral_id' => ['required', 'exists:referrals,id'],
+        ]);
+
+        $studentRewardClaim->update([
+            'referral_id' => $request->input('referral_id'),
+        ]);
+
+        return back()->with('success', 'Referral linked successfully.');
+    }
+
+    public function linkAdmission(Request $request, StudentRewardClaim $studentRewardClaim): RedirectResponse
+    {
+        $request->validate([
+            'admission_id' => ['required', 'exists:admissions,id'],
+        ]);
+
+        $studentRewardClaim->update([
+            'admission_id' => $request->input('admission_id'),
+        ]);
+
+        return back()->with('success', 'Admission linked successfully.');
+    }
+
+    private function institutionDropdownQuery(): Builder
+    {
+        $query = Institution::orderBy('name');
+        $scope = $this->institutionScope();
+
+        if ($scope !== null) {
+            if (! $this->currentInstitutionIsAssigned()) {
+                $query->whereRaw('1 = 0');
+            } else {
+                $query->where('id', $scope)
+                    ->whereHas('users', fn (Builder $institutionQuery) => $institutionQuery
+                        ->where('users.id', auth('web')->id())
+                        ->wherePivot('is_active', true));
+            }
+        }
+
+        return $query;
+    }
+
+    private function currentInstitutionIsAssigned(): bool
+    {
+        /** @var User|null $user */
+        $user = auth('web')->user();
+
+        if ($user?->is_super_admin) {
+            return true;
+        }
+
+        if (! $user) {
+            return false;
+        }
+
+        $scope = (int) session('current_institution_id', 0);
+
+        return $scope > 0
+            && (bool) $user->activeInstitutions()->where('institutions.id', $scope)->exists();
+    }
+}

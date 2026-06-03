@@ -24,6 +24,14 @@ return new class extends Migration
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamp('referred_at')->nullable();
             $table->timestamp('admitted_at')->nullable();
+            $table->text('student_note')->nullable();
+            $table->text('platform_review_note')->nullable();
+            $table->foreignId('platform_reviewed_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('platform_reviewed_at')->nullable();
+            $table->timestamp('more_info_requested_at')->nullable();
+            $table->timestamp('approved_for_referral_at')->nullable();
+            $table->timestamp('institution_rejected_at')->nullable();
+            $table->timestamp('cancelled_at')->nullable();
             $table->timestamps();
 
             $table->index(['institution_id', 'status']);

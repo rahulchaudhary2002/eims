@@ -103,6 +103,16 @@ class Student extends Authenticatable
         return $this->hasMany(\App\Models\Conversation::class);
     }
 
+    public function referrals(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Referral::class);
+    }
+
+    public function rewardClaims(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StudentRewardClaim::class);
+    }
+
     public function profileCompletion(): int
     {
         $fields  = ['name', 'email', 'phone', 'date_of_birth', 'gender', 'avatar'];

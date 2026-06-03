@@ -159,7 +159,7 @@
         </div>
 
         {{-- ── Applications & Admissions ── --}}
-        @php $isApplicationsGroup = request()->routeIs('admin.applications.*') || request()->routeIs('admin.admissions.*') || request()->routeIs('admin.application-status-logs.*') || request()->routeIs('admin.scholarship-applications.*') || request()->routeIs('admin.scholarship-cashbacks.*'); @endphp
+        @php $isApplicationsGroup = request()->routeIs('admin.applications.*') || request()->routeIs('admin.admissions.*') || request()->routeIs('admin.application-status-logs.*') || request()->routeIs('admin.scholarship-applications.*') || request()->routeIs('admin.scholarship-cashbacks.*') || request()->routeIs('admin.student-reward-claims.*'); @endphp
         <div class="px-3 pt-2">
             <div x-data="sidebarGroup('applications-admissions', {{ $isApplicationsGroup ? 'true' : 'false' }})" class="relative">
                 <div class="sidebar-group-header rounded-lg {{ $isApplicationsGroup ? 'group-active' : '' }}"
@@ -180,6 +180,8 @@
                            class="{{ request()->routeIs('admin.scholarship-applications.*') ? 'active' : '' }}">Scholarship Applications</a>
                         <a href="{{ route('admin.scholarship-cashbacks.index') }}"
                            class="{{ request()->routeIs('admin.scholarship-cashbacks.*') ? 'active' : '' }}">Scholarship Cashbacks</a>
+                        <a href="{{ route('admin.student-reward-claims.index') }}"
+                           class="{{ request()->routeIs('admin.student-reward-claims.*') ? 'active' : '' }}">Reward Claims</a>
                     @endauth
                 </div>
                 <template x-teleport="body">
@@ -191,6 +193,7 @@
                             <a href="{{ route('admin.application-status-logs.index') }}" class="{{ request()->routeIs('admin.application-status-logs.*') ? 'active' : '' }}">Application Status Logs</a>
                             <a href="{{ route('admin.scholarship-applications.index') }}" class="{{ request()->routeIs('admin.scholarship-applications.*') ? 'active' : '' }}">Scholarship Applications</a>
                             <a href="{{ route('admin.scholarship-cashbacks.index') }}" class="{{ request()->routeIs('admin.scholarship-cashbacks.*') ? 'active' : '' }}">Scholarship Cashbacks</a>
+                            <a href="{{ route('admin.student-reward-claims.index') }}" class="{{ request()->routeIs('admin.student-reward-claims.*') ? 'active' : '' }}">Reward Claims</a>
                         @endauth
                     </div>
                 </template>
