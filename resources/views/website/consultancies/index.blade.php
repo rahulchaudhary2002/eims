@@ -71,7 +71,7 @@
             @if ($consultancies->isEmpty())
                 <div class="text-center py-20"><h3 class="text-[1.5rem] font-bold text-gray-600 mb-3">No consultancies found.</h3></div>
             @else
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-7">
                     @foreach ($consultancies as $consultancy)
                         <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-7 hover:-translate-y-1.5 hover:shadow-2xl transition-all">
                             <div class="flex items-start gap-4 mb-4">

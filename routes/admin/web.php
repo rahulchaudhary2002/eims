@@ -198,6 +198,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->
 
     Route::patch('referrals/{referral}/platform-note', [ReferralController::class, 'markPlatformNote'])
         ->name('referrals.platform-note');
+    Route::post('referrals/{referral}/reward-claim', [StudentRewardClaimController::class, 'storeFromReferral'])
+        ->name('referrals.reward-claim.store');
 
     // Student Reward Claims
     Route::resource('student-reward-claims', StudentRewardClaimController::class)
