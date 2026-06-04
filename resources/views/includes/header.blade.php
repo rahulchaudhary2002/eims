@@ -12,13 +12,12 @@
                 </a>
 
                 {{-- DESKTOP NAV --}}
-                <nav class="hidden md:flex items-center gap-6">
+                <nav class="hidden md:flex items-center gap-6" x-data="{ moreOpen: false }">
                     @foreach([
                         ['Home', 'website.home', 'website.home'],
                         ['Institutions', 'website.institutions.index', 'website.institutions.*'],
                         ['Programs', 'website.programs.index', 'website.programs.*'],
                         ['Scholarships', 'website.scholarships.index', 'website.scholarships.*'],
-                        ['Blog', 'website.posts.index', 'website.posts.*'],
                     ] as [$label, $route, $pattern])
                     <a href="{{ route($route) }}"
                        class="text-[15px] py-2 transition-colors no-underline whitespace-nowrap
@@ -26,6 +25,44 @@
                         {{ $label }}
                     </a>
                     @endforeach
+
+                    {{-- More dropdown --}}
+                    <div class="relative" @mouseleave="moreOpen = false">
+                        <button @mouseenter="moreOpen = true" @click="moreOpen = !moreOpen"
+                                class="inline-flex items-center gap-1 text-[15px] py-2 transition-colors no-underline whitespace-nowrap
+                                    {{ request()->routeIs('website.posts.*', 'website.consultancies.*', 'website.compare.*', 'website.contact.*', 'website.about', 'website.inquiry.*') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }}">
+                            More
+                            <i class="fas fa-chevron-down text-[11px] transition-transform duration-200" :class="moreOpen ? 'rotate-180' : ''"></i>
+                        </button>
+
+                        <div x-show="moreOpen" x-cloak
+                             @mouseenter="moreOpen = true"
+                             x-transition:enter="transition ease-out duration-150"
+                             x-transition:enter-start="opacity-0 translate-y-1"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-100"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 translate-y-1"
+                             class="absolute left-0 top-full pt-2 w-52 z-50">
+                            <div class="bg-white border border-gray-200 rounded-xl shadow-xl py-2">
+                                @foreach([
+                                    ['fas fa-newspaper',    'Blog',           'website.posts.index',          'website.posts.*'],
+                                    ['fas fa-handshake',    'Consultancies',  'website.consultancies.index',   'website.consultancies.*'],
+                                    ['fas fa-balance-scale','Compare',        'website.compare.index',         'website.compare.*'],
+                                    ['fas fa-paper-plane',  'Submit Inquiry', 'website.inquiry.create',        'website.inquiry.*'],
+                                    ['fas fa-headset',      'Contact Us',     'website.contact.index',         'website.contact.*'],
+                                    ['fas fa-info-circle',  'About Us',       'website.about',                 'website.about'],
+                                ] as [$icon, $label, $route, $pattern])
+                                <a href="{{ route($route) }}" @click="moreOpen = false"
+                                   class="flex items-center gap-3 px-4 py-2.5 text-sm no-underline transition-colors
+                                       {{ request()->routeIs($pattern) ? 'text-[#4299e1] font-semibold bg-[#ebf8ff]' : 'text-[#2d3748] hover:text-[#4299e1] hover:bg-[#f7fafc]' }}">
+                                    <i class="{{ $icon }} w-4 text-[#4299e1]"></i>
+                                    {{ $label }}
+                                </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
                 </nav>
 
                 {{-- RIGHT: Auth / Account --}}
@@ -194,15 +231,21 @@
 
                 {{-- Main nav --}}
                 @foreach([
-                    ['Home', 'website.home', 'website.home'],
-                    ['Institutions', 'website.institutions.index', 'website.institutions.*'],
-                    ['Programs', 'website.programs.index', 'website.programs.*'],
-                    ['Scholarships', 'website.scholarships.index', 'website.scholarships.*'],
-                    ['Blog', 'website.posts.index', 'website.posts.*'],
-                ] as [$label, $route, $pattern])
+                    ['fas fa-home',         'Home',           'website.home',                   'website.home'],
+                    ['fas fa-university',   'Institutions',   'website.institutions.index',      'website.institutions.*'],
+                    ['fas fa-book-open',    'Programs',       'website.programs.index',          'website.programs.*'],
+                    ['fas fa-award',        'Scholarships',   'website.scholarships.index',      'website.scholarships.*'],
+                    ['fas fa-newspaper',    'Blog',           'website.posts.index',             'website.posts.*'],
+                    ['fas fa-handshake',    'Consultancies',  'website.consultancies.index',     'website.consultancies.*'],
+                    ['fas fa-balance-scale','Compare',        'website.compare.index',           'website.compare.*'],
+                    ['fas fa-paper-plane',  'Submit Inquiry', 'website.inquiry.create',          'website.inquiry.*'],
+                    ['fas fa-headset',      'Contact Us',     'website.contact.index',           'website.contact.*'],
+                    ['fas fa-info-circle',  'About Us',       'website.about',                   'website.about'],
+                ] as [$icon, $label, $route, $pattern])
                 <a href="{{ route($route) }}" @click="mobileOpen = false"
-                   class="block py-3 px-4 rounded-xl text-[15px] transition-all no-underline
+                   class="flex items-center gap-3 py-3 px-4 rounded-xl text-[15px] transition-all no-underline
                        {{ request()->routeIs($pattern) ? 'text-[#4299e1] font-semibold bg-[#ebf8ff] border-l-4 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1] hover:bg-[#ebf8ff]' }}">
+                    <i class="{{ $icon }} w-5 text-center {{ request()->routeIs($pattern) ? 'text-[#4299e1]' : 'text-gray-400' }}"></i>
                     {{ $label }}
                 </a>
                 @endforeach
