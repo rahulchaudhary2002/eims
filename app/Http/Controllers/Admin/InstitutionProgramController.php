@@ -49,7 +49,7 @@ class InstitutionProgramController extends Controller
         }
 
         $institutionPrograms = $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
-        $institutions        = Institution::orderBy('name')->get(['id', 'name']);
+        $institutions        = Institution::where('type', '!=', 'consultancy')->orderBy('name')->get(['id', 'name']);
         $programs            = Program::orderBy('name')->get(['id', 'name']);
 
         return view('admin.modules.institution-programs.index', compact('institutionPrograms', 'institutions', 'programs'));
@@ -57,7 +57,7 @@ class InstitutionProgramController extends Controller
 
     public function create(Request $request): View
     {
-        $institutions = Institution::orderBy('name')->get(['id', 'name']);
+        $institutions = Institution::where('type', '!=', 'consultancy')->orderBy('name')->get(['id', 'name']);
         $programs     = Program::where('is_active', true)->orderBy('name')->get(['id', 'name']);
 
         $selectedInstitutionId = $request->input('institution_id');
@@ -70,7 +70,14 @@ class InstitutionProgramController extends Controller
 
     public function store(StoreInstitutionProgramRequest $request): RedirectResponse
     {
-        $institutionProgram = InstitutionProgram::create($request->validated());
+        $data = $request->validated();
+        abort_if(
+            Institution::where('id', $data['institution_id'])->where('type', 'consultancy')->exists(),
+            422,
+            'Consultancy institutions cannot have programs.'
+        );
+
+        $institutionProgram = InstitutionProgram::create($data);
 
         return redirect()->route('admin.institution-programs.show', $institutionProgram)
             ->with('success', 'Institution program created successfully.');
@@ -87,7 +94,7 @@ class InstitutionProgramController extends Controller
     {
         $institutionProgram->load(['institution', 'program', 'subjects']);
 
-        $institutions = Institution::orderBy('name')->get(['id', 'name']);
+        $institutions = Institution::where('type', '!=', 'consultancy')->orderBy('name')->get(['id', 'name']);
         $programs     = Program::where('is_active', true)->orderBy('name')->get(['id', 'name']);
 
         return view('admin.modules.institution-programs.edit', compact('institutionProgram', 'institutions', 'programs'));
@@ -95,7 +102,14 @@ class InstitutionProgramController extends Controller
 
     public function update(UpdateInstitutionProgramRequest $request, InstitutionProgram $institutionProgram): RedirectResponse
     {
-        $institutionProgram->update($request->validated());
+        $data = $request->validated();
+        abort_if(
+            Institution::where('id', $data['institution_id'])->where('type', 'consultancy')->exists(),
+            422,
+            'Consultancy institutions cannot have programs.'
+        );
+
+        $institutionProgram->update($data);
 
         return redirect()->route('admin.institution-programs.show', $institutionProgram)
             ->with('success', 'Institution program updated successfully.');

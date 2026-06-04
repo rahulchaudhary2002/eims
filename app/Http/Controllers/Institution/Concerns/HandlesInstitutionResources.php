@@ -35,8 +35,11 @@ trait HandlesInstitutionResources
 
     protected array $relationships = [];
 
+    protected function beforeAction(): void {}
+
     public function index(Request $request): View
     {
+        $this->beforeAction();
         $records = $this->resourceQuery()
             ->with($this->indexRelationships())
             ->latest()
@@ -48,6 +51,7 @@ trait HandlesInstitutionResources
 
     public function create(): View
     {
+        $this->beforeAction();
         $record = new $this->modelClass;
 
         return view($this->resourceView('create'), $this->viewData(compact('record')));
@@ -55,6 +59,7 @@ trait HandlesInstitutionResources
 
     public function store(Request $request): RedirectResponse
     {
+        $this->beforeAction();
         $data = $this->validatedData($request);
         $data = $this->forceInstitutionScope($data);
 
@@ -66,6 +71,7 @@ trait HandlesInstitutionResources
 
     public function show($record): View
     {
+        $this->beforeAction();
         $record = $this->resolveRecord($record);
 
         return view($this->resourceView('show'), $this->viewData(compact('record')));
@@ -73,6 +79,7 @@ trait HandlesInstitutionResources
 
     public function edit($record): View
     {
+        $this->beforeAction();
         $record = $this->resolveRecord($record);
 
         return view($this->resourceView('edit'), $this->viewData(compact('record')));
@@ -80,6 +87,7 @@ trait HandlesInstitutionResources
 
     public function update(Request $request, $record): RedirectResponse
     {
+        $this->beforeAction();
         $record = $this->resolveRecord($record);
         $data = $this->validatedData($request, $record);
         $data = $this->forceInstitutionScope($data, $record);
@@ -92,6 +100,7 @@ trait HandlesInstitutionResources
 
     public function destroy($record): RedirectResponse
     {
+        $this->beforeAction();
         $record = $this->resolveRecord($record);
         $record->delete();
 

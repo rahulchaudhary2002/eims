@@ -116,6 +116,7 @@ class InstitutionProgramSubjectController extends Controller
     private function institutionProgramDropdownQuery(): Builder
     {
         $query = InstitutionProgram::with(['institution', 'program'])
+            ->whereHas('institution', fn ($q) => $q->where('type', '!=', 'consultancy'))
             ->orderBy('id');
 
         $scope = $this->institutionScope();

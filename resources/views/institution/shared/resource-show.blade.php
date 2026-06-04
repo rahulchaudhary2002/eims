@@ -26,9 +26,10 @@
         </div>
         <dl class="grid grid-cols-1 md:grid-cols-2 gap-5 p-6">
             @foreach($fields as $field => $config)
-                <div class="{{ ($config['type'] ?? null) === 'textarea' ? 'md:col-span-2' : '' }}">
+                @php $fieldType = $config['type'] ?? null; @endphp
+                <div class="{{ in_array($fieldType, ['textarea', 'ckeditor']) ? 'md:col-span-2' : '' }}">
                     <dt class="text-xs font-medium text-slate-400 uppercase tracking-wider">{{ $config['label'] ?? \Illuminate\Support\Str::headline($field) }}</dt>
-                    <dd class="mt-1 text-slate-800">@include('institution.shared.resource-value', ['record' => $record, 'field' => $field])</dd>
+                    <dd class="mt-1 text-slate-800">@include('institution.shared.resource-value', ['record' => $record, 'field' => $field, 'fieldType' => $fieldType])</dd>
                 </div>
             @endforeach
         </dl>

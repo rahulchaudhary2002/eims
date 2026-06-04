@@ -32,10 +32,12 @@
                     $label = $config['label'] ?? \Illuminate\Support\Str::headline($field);
                     $value = old($field, $record->{$field});
                 @endphp
-                <div class="{{ $type === 'textarea' ? 'md:col-span-2' : '' }}">
+                <div class="{{ in_array($type, ['textarea', 'ckeditor']) ? 'md:col-span-2' : '' }}">
                     <label class="form-label" for="{{ $field }}">{{ $label }}</label>
                     @if($type === 'textarea')
                         <textarea name="{{ $field }}" id="{{ $field }}" rows="5" class="form-control @error($field) is-invalid @enderror">{{ $value }}</textarea>
+                    @elseif($type === 'ckeditor')
+                        <textarea name="{{ $field }}" id="{{ $field }}" rows="6" class="form-control ckeditor @error($field) is-invalid @enderror">{{ $value }}</textarea>
                     @elseif($type === 'select')
                         <select name="{{ $field }}" id="{{ $field }}" class="form-control @error($field) is-invalid @enderror">
                             <option value="">Select {{ strtolower($label) }}</option>

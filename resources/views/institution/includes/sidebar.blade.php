@@ -1,13 +1,18 @@
 @php
+    $sidebarInstitution = \App\Models\Institution::find(session('active_institution_id'));
+    $isConsultancy = $sidebarInstitution && $sidebarInstitution->type === 'consultancy';
+
     $groups = [
-        'Institution Profile' => [
+        'Institution Profile' => array_filter([
             ['Institution Details', 'institution.institutions.index', 'institution.institutions.*'],
             ['Profile', 'institution.profile.index', 'institution.profile.*'],
             ['Documents', 'institution.documents.index', 'institution.documents.*'],
-            ['Programs', 'institution.programs.index', 'institution.programs.*'],
-            ['Program Subjects', 'institution.program-subjects.index', 'institution.program-subjects.*'],
+            $isConsultancy ? null : ['Programs', 'institution.programs.index', 'institution.programs.*'],
+            $isConsultancy ? null : ['Program Subjects', 'institution.program-subjects.index', 'institution.program-subjects.*'],
+            $isConsultancy ? ['Destinations', 'institution.consultancy-destinations.index', 'institution.consultancy-destinations.*'] : null,
+            $isConsultancy ? ['Services', 'institution.consultancy-services.index', 'institution.consultancy-services.*'] : null,
             ['Scholarships', 'institution.scholarships.index', 'institution.scholarships.*'],
-        ],
+        ]),
         'Applications & Admissions' => [
             ['Applications', 'institution.applications.index', 'institution.applications.*'],
             ['Admissions', 'institution.admissions.index', 'institution.admissions.*'],

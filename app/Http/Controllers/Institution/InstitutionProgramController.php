@@ -37,6 +37,11 @@ class InstitutionProgramController extends Controller
         ];
     }
 
+    protected function beforeAction(): void
+    {
+        abort_if($this->activeInstitution()->type === 'consultancy', 403, 'Consultancies cannot manage programs.');
+    }
+
     protected function selectOptions(): array
     {
         return array_merge($this->selectOptions, [

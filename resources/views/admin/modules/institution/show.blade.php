@@ -498,7 +498,8 @@
         @endif
         @endif
     </div>
-    {{-- Institution Programs --}}
+    {{-- Institution Programs (not for consultancies) --}}
+    @if($institution->type !== 'consultancy')
     <div class="eims-card overflow-hidden">
         <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100">
             <div class="p-2 bg-indigo-50 rounded-lg">
@@ -576,6 +577,7 @@
             </div>
         @endif
     </div>
+    @endif {{-- end non-consultancy programs --}}
 
     {{-- Applications --}}
     <div class="eims-card overflow-hidden">
@@ -1137,7 +1139,8 @@
         @endif
     </div>
 
-    {{-- Consultancy Destinations --}}
+    {{-- Consultancy Destinations & Services (consultancy only) --}}
+    @if($institution->type === 'consultancy')
     <div class="eims-card overflow-hidden">
         <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100">
             <div class="p-2 bg-teal-50 rounded-lg">
@@ -1268,6 +1271,7 @@
             </div>
         @endif
     </div>
+    @endif {{-- end consultancy destinations & services --}}
 
     {{-- Counseling Sessions --}}
     <div class="eims-card overflow-hidden">

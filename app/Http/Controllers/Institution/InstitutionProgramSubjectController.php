@@ -26,6 +26,11 @@ class InstitutionProgramSubjectController extends Controller
         ];
     }
 
+    protected function beforeAction(): void
+    {
+        abort_if($this->activeInstitution()->type === 'consultancy', 403, 'Consultancies cannot manage program subjects.');
+    }
+
     protected function resourceQuery(): Builder
     {
         return InstitutionProgramSubject::query()

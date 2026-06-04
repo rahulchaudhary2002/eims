@@ -19,7 +19,8 @@ class ConsultancyServiceController extends Controller
 
     public function index(Request $request): View
     {
-        $query = ConsultancyService::with('institution');
+        $query = ConsultancyService::with('institution')
+            ->whereHas('institution', fn ($q) => $q->where('type', 'consultancy'));
         $this->applyInstitutionScope($query);
 
         if ($institutionId = $request->input('institution_id')) {
@@ -62,6 +63,7 @@ class ConsultancyServiceController extends Controller
     {
         $data = $request->validated();
         $this->authorizeInstitution((int) $data['institution_id']);
+        $this->assertConsultancyType((int) $data['institution_id']);
 
         $service = ConsultancyService::create($data);
 
@@ -92,6 +94,7 @@ class ConsultancyServiceController extends Controller
         $this->authorizeServiceAccess($consultancyService);
         $data = $request->validated();
         $this->authorizeInstitution((int) $data['institution_id']);
+        $this->assertConsultancyType((int) $data['institution_id']);
 
         $consultancyService->update($data);
 
@@ -118,9 +121,18 @@ class ConsultancyServiceController extends Controller
         return back()->with('success', $msg);
     }
 
+    private function assertConsultancyType(int $institutionId): void
+    {
+        abort_unless(
+            Institution::where('id', $institutionId)->where('type', 'consultancy')->exists(),
+            422,
+            'Only consultancy institutions can have services.'
+        );
+    }
+
     private function institutionDropdownQuery(): Builder
     {
-        $query = Institution::orderBy('name');
+        $query = Institution::where('type', 'consultancy')->orderBy('name');
         $scope = $this->institutionScope();
 
         if ($scope !== null) {
@@ -154,6 +166,7 @@ class ConsultancyServiceController extends Controller
 
     private function authorizeInstitution(int $institutionId): void
     {
+        /** @var \App\Models\User|null $user */
         $user = auth('web')->user();
 
         if ($user?->is_super_admin) {
@@ -170,6 +183,7 @@ class ConsultancyServiceController extends Controller
 
     private function currentInstitutionIsAssigned(): bool
     {
+        /** @var \App\Models\User|null $user */
         $user = auth('web')->user();
 
         if ($user?->is_super_admin) {

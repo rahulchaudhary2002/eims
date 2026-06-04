@@ -39,6 +39,8 @@
     <a href="{{ Storage::url($value) }}" target="_blank" class="text-blue-600 hover:underline">View file</a>
 @elseif(is_bool($value))
     <span class="badge {{ $value ? 'badge-green' : 'badge-secondary' }}">{{ $display }}</span>
+@elseif(($fieldType ?? null) === 'ckeditor')
+    <div class="prose prose-sm max-w-none">{!! $display ?: '-' !!}</div>
 @else
     {{ $display ?: '-' }}
 @endif
