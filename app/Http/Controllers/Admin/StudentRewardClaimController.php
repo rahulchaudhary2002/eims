@@ -195,9 +195,9 @@ class StudentRewardClaimController extends Controller
         abort_unless($referral->status === 'accepted', 422, 'Reward claim can only be created for accepted referrals.');
 
         $request->validate([
-            'payment_method'        => ['required', 'in:' . implode(',', array_keys(StudentRewardClaim::PAYMENT_METHODS))],
-            'claimed_reward_amount' => ['nullable', 'numeric', 'min:0'],
-            'admin_note'            => ['nullable', 'string', 'max:2000'],
+            'payment_method'         => ['required', 'in:' . implode(',', array_keys(StudentRewardClaim::PAYMENT_METHODS))],
+            'approved_reward_amount' => ['required', 'numeric', 'min:0'],
+            'admin_note'             => ['nullable', 'string', 'max:2000'],
         ]);
 
         if ($referral->rewardClaims()->exists()) {
@@ -206,6 +206,7 @@ class StudentRewardClaimController extends Controller
 
         $claimNumber = $this->generateClaimNumber();
         $admission   = $referral->admission;
+        $adminId     = auth('web')->id();
 
         StudentRewardClaim::create([
             'claim_number'           => $claimNumber,
@@ -217,11 +218,14 @@ class StudentRewardClaimController extends Controller
             'admission_id'           => $admission?->id,
             'admission_date'         => $admission?->admission_date?->toDateString(),
             'admission_number'       => $admission?->admission_number,
-            'claimed_reward_amount'  => $request->input('claimed_reward_amount', 0),
+            'claimed_reward_amount'  => $request->input('approved_reward_amount'),
+            'approved_reward_amount' => $request->input('approved_reward_amount'),
             'payment_method'         => $request->input('payment_method'),
             'admin_note'             => $request->input('admin_note'),
-            'status'                 => 'submitted',
+            'status'                 => 'approved',
             'submitted_at'           => now(),
+            'approved_at'            => now(),
+            'approved_by'            => $adminId,
         ]);
 
         return back()->with('success', 'Reward claim created successfully.');

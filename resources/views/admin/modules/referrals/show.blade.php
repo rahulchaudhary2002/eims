@@ -175,10 +175,10 @@
                         </div>
 
                         <div>
-                            <label class="form-label text-xs">Reward Amount</label>
-                            <input type="number" name="claimed_reward_amount" value="{{ old('claimed_reward_amount') }}"
-                                   step="0.01" min="0" class="form-control text-sm" placeholder="0.00">
-                            @error('claimed_reward_amount') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                            <label class="form-label text-xs">Approved Amount <span class="text-red-500">*</span></label>
+                            <input type="number" name="approved_reward_amount" value="{{ old('approved_reward_amount') }}"
+                                   step="0.01" min="0" class="form-control text-sm" placeholder="0.00" required>
+                            @error('approved_reward_amount') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <div>
