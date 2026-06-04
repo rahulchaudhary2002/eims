@@ -1,5 +1,12 @@
 {{-- Usage: @include('website.partials.institution-card', ['institution' => $institution]) --}}
-<a href="{{ route($institution->type === 'college' ? 'website.colleges.show' : 'website.institutions.show', $institution->slug) }}"
+@php
+    $cardRoute = match($institution->type) {
+        'college'     => 'website.colleges.show',
+        'consultancy' => 'website.consultancies.show',
+        default       => 'website.institutions.show',
+    };
+@endphp
+<a href="{{ route($cardRoute, $institution->slug) }}"
    class="block bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl border border-gray-200 no-underline group">
     <div class="relative h-44 overflow-hidden bg-[#f7fafc]">
         @if ($institution->cover_image)
