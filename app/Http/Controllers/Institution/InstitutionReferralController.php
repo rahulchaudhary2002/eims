@@ -50,6 +50,7 @@ class InstitutionReferralController extends Controller
             'institutionProgram',
             'accessLogs.user',
             'referredBy',
+            'rewardClaims',
         ]);
 
         // Log preview view on first visit

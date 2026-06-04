@@ -15,7 +15,7 @@ class StudentProfileController extends Controller
     public function index(Request $request): View
     {
         $student = $request->user('student');
-        $student->load(['profile', 'academicRecords']);
+        $student->load(['profile', 'academicRecords', 'documents']);
 
         $profileCompletion = $student->profileCompletion();
 

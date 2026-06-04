@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\Concerns\ScopesForInstitution;
 use App\Http\Controllers\Controller;
 use App\Models\Institution;
+use App\Models\Referral;
 use App\Models\Student;
 use App\Models\StudentRewardClaim;
 use App\Models\StudentRewardClaimDocument;
@@ -66,7 +67,8 @@ class StudentRewardClaimController extends Controller
             'student',
             'institution',
             'institutionProgram',
-            'application',
+            'application.admission',
+            'application.allReferrals',
             'referral',
             'admission',
             'documents.verifiedBy',
@@ -76,15 +78,26 @@ class StudentRewardClaimController extends Controller
             'paidBy',
         ]);
 
-        return view('admin.modules.student-reward-claims.show', compact('studentRewardClaim'));
+        $availableReferrals = $studentRewardClaim->application?->allReferrals
+            ?->sortByDesc('id')
+            ->values() ?? collect();
+        $linkedAdmission = $studentRewardClaim->admission ?? $studentRewardClaim->application?->admission;
+
+        return view('admin.modules.student-reward-claims.show', compact(
+            'studentRewardClaim',
+            'availableReferrals',
+            'linkedAdmission'
+        ));
     }
 
     public function updateStatus(Request $request, StudentRewardClaim $studentRewardClaim): RedirectResponse
     {
         $request->validate([
-            'status'                => ['required', 'in:' . implode(',', StudentRewardClaim::STATUSES)],
+            'status'                => ['required', 'in:' . implode(',', array_keys(StudentRewardClaim::STATUSES))],
             'approved_reward_amount' => ['nullable', 'numeric', 'min:0'],
             'rejection_reason'      => ['nullable', 'string', 'max:2000'],
+            'payment_method'        => ['nullable', 'in:' . implode(',', array_keys(StudentRewardClaim::PAYMENT_METHODS))],
+            'transaction_reference' => ['nullable', 'string', 'max:255'],
         ]);
 
         $status = $request->input('status');
@@ -100,10 +113,15 @@ class StudentRewardClaimController extends Controller
         } elseif ($status === 'paid') {
             $data['paid_at'] = now();
             $data['paid_by'] = auth('web')->id();
+            $data['payment_method'] = $request->input('payment_method') ?: $studentRewardClaim->payment_method;
 
             StudentRewardPayment::create([
                 'student_reward_claim_id' => $studentRewardClaim->id,
+                'student_id'              => $studentRewardClaim->student_id,
                 'amount'                  => $studentRewardClaim->approved_reward_amount,
+                'payment_method'          => $request->input('payment_method') ?: $studentRewardClaim->payment_method,
+                'transaction_reference'   => $request->input('transaction_reference'),
+                'status'                  => 'paid',
                 'paid_by'                 => auth('web')->id(),
                 'paid_at'                 => now(),
             ]);
@@ -141,8 +159,19 @@ class StudentRewardClaimController extends Controller
             'referral_id' => ['required', 'exists:referrals,id'],
         ]);
 
+        $referralId = (int) $request->input('referral_id');
+        $belongsToApplication = $studentRewardClaim->application()
+            ->whereHas('allReferrals', fn (Builder $query) => $query->whereKey($referralId))
+            ->exists();
+
+        if (! $belongsToApplication) {
+            return back()->withErrors([
+                'referral_id' => 'Please select a referral for this application.',
+            ]);
+        }
+
         $studentRewardClaim->update([
-            'referral_id' => $request->input('referral_id'),
+            'referral_id' => $referralId,
         ]);
 
         return back()->with('success', 'Referral linked successfully.');
@@ -159,6 +188,52 @@ class StudentRewardClaimController extends Controller
         ]);
 
         return back()->with('success', 'Admission linked successfully.');
+    }
+
+    public function storeFromReferral(Request $request, Referral $referral): RedirectResponse
+    {
+        abort_unless($referral->status === 'accepted', 422, 'Reward claim can only be created for accepted referrals.');
+
+        $request->validate([
+            'payment_method'        => ['required', 'in:' . implode(',', array_keys(StudentRewardClaim::PAYMENT_METHODS))],
+            'claimed_reward_amount' => ['nullable', 'numeric', 'min:0'],
+            'admin_note'            => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        if ($referral->rewardClaims()->exists()) {
+            return back()->withErrors(['payment_method' => 'A reward claim already exists for this referral.']);
+        }
+
+        $claimNumber = $this->generateClaimNumber();
+        $admission   = $referral->admission;
+
+        StudentRewardClaim::create([
+            'claim_number'           => $claimNumber,
+            'student_id'             => $referral->student_id,
+            'institution_id'         => $referral->institution_id,
+            'institution_program_id' => $referral->institution_program_id,
+            'application_id'         => $referral->application_id,
+            'referral_id'            => $referral->id,
+            'admission_id'           => $admission?->id,
+            'admission_date'         => $admission?->admission_date?->toDateString(),
+            'admission_number'       => $admission?->admission_number,
+            'claimed_reward_amount'  => $request->input('claimed_reward_amount', 0),
+            'payment_method'         => $request->input('payment_method'),
+            'admin_note'             => $request->input('admin_note'),
+            'status'                 => 'submitted',
+            'submitted_at'           => now(),
+        ]);
+
+        return back()->with('success', 'Reward claim created successfully.');
+    }
+
+    private function generateClaimNumber(): string
+    {
+        do {
+            $number = 'RWD-' . now()->format('Ymd') . '-' . random_int(1000, 9999);
+        } while (StudentRewardClaim::where('claim_number', $number)->exists());
+
+        return $number;
     }
 
     private function institutionDropdownQuery(): Builder

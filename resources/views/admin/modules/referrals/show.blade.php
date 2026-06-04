@@ -137,6 +137,62 @@
                     </form>
                 </div>
             </div>
+
+            {{-- Reward Claims --}}
+            <div class="eims-card p-5">
+                <h3 class="text-sm font-semibold text-slate-700 mb-3">Reward Claims</h3>
+
+                @if($referral->rewardClaims->count())
+                    <div class="space-y-2 mb-4">
+                        @foreach($referral->rewardClaims as $claim)
+                            <div class="border border-slate-100 rounded-lg p-3 flex items-center justify-between gap-2">
+                                <div>
+                                    <a href="{{ route('admin.student-reward-claims.show', $claim) }}" class="text-sm font-semibold text-blue-600 hover:underline">{{ $claim->claim_number }}</a>
+                                    <p class="text-xs text-slate-400 mt-0.5">{{ $claim->submitted_at?->format('d M Y') ?? $claim->created_at->format('d M Y') }}</p>
+                                </div>
+                                <span class="badge text-xs shrink-0">{{ \App\Models\StudentRewardClaim::STATUSES[$claim->status] ?? $claim->status }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <p class="text-slate-400 text-xs mb-4">No reward claims yet.</p>
+                @endif
+
+                @if($referral->status === 'accepted' && $referral->rewardClaims->isEmpty())
+                    <form action="{{ route('admin.referrals.reward-claim.store', $referral) }}" method="POST" class="space-y-3 border-t border-slate-100 pt-4">
+                        @csrf
+                        <p class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Add Reward Collection</p>
+
+                        <div>
+                            <label class="form-label text-xs">Payment Method <span class="text-red-500">*</span></label>
+                            <select name="payment_method" class="form-control text-sm" required>
+                                <option value="">Select Method</option>
+                                @foreach(\App\Models\StudentRewardClaim::PAYMENT_METHODS as $value => $label)
+                                    <option value="{{ $value }}" {{ old('payment_method') === $value ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @error('payment_method') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="form-label text-xs">Reward Amount</label>
+                            <input type="number" name="claimed_reward_amount" value="{{ old('claimed_reward_amount') }}"
+                                   step="0.01" min="0" class="form-control text-sm" placeholder="0.00">
+                            @error('claimed_reward_amount') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="form-label text-xs">Admin Note</label>
+                            <textarea name="admin_note" rows="2" class="form-control text-sm"
+                                      placeholder="Internal note...">{{ old('admin_note') }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-full text-sm">
+                            Create Reward Claim
+                        </button>
+                    </form>
+                @endif
+            </div>
         </div>
 
     </div>

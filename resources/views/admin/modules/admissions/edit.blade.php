@@ -22,7 +22,6 @@
         @csrf
         @method('PUT')
         <div class="eims-card p-6">
-            <h2 class="font-semibold text-slate-700 mb-5">Admission Details</h2>
             @include('admin.modules.admissions.partials.form')
             <div class="flex justify-end gap-3 mt-6 pt-5 border-t border-slate-100">
                 <a href="{{ route('admin.admissions.show', $admission) }}" class="btn btn-secondary">Cancel</a>

@@ -18,6 +18,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ReferralController extends Controller
@@ -78,12 +79,12 @@ class ReferralController extends Controller
             $application = Application::with(['student', 'institution', 'institutionProgram'])->find($applicationId);
         }
 
-        $institutions      = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $applications      = $this->applicationDropdownQuery()->get(['id', 'application_number', 'student_id', 'institution_id']);
-        $students          = Student::orderBy('name')->get(['id', 'name', 'email']);
-        $users             = User::orderBy('name')->get(['id', 'name', 'email']);
+        $institutions       = $this->institutionDropdownQuery()->get(['id', 'name']);
+        $applications       = $this->applicationDropdownQuery()
+            ->with(['student:id,name', 'institutionProgram:id,program_id,title', 'institutionProgram.program:id,name'])
+            ->get(['id', 'application_number', 'student_id', 'institution_id', 'institution_program_id']);
         $referralAgreements = ReferralAgreement::where('status', 'active')->orderBy('id')->get();
-        $statuses          = Referral::STATUSES;
+        $statuses           = Referral::STATUSES;
         $selectedInstitutionId = $request->input('institution_id') ?? $application?->institution_id;
         $selectedApplicationId = $request->input('application_id');
 
@@ -95,8 +96,6 @@ class ReferralController extends Controller
             'application',
             'institutions',
             'applications',
-            'students',
-            'users',
             'referralAgreements',
             'statuses',
             'selectedInstitutionId',
@@ -107,11 +106,16 @@ class ReferralController extends Controller
     public function store(StoreReferralRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $this->authorizeInstitution((int) $data['institution_id']);
+        $application = $this->resolveReferralApplication((int) $data['application_id'], (int) $data['institution_id']);
+
+        $this->authorizeInstitution((int) $application->institution_id);
 
         $data['referral_number'] = ($data['referral_number'] ?? '') ?: $this->nextReferralNumber();
         $data['referred_at']     = $data['referred_at'] ?? now();
-        $data['referred_by']     = $data['referred_by'] ?? auth('web')->id();
+        $data['institution_id']  = $application->institution_id;
+        $data['student_id']      = $application->student_id;
+        $data['institution_program_id'] = $application->institution_program_id;
+        $data['referred_by']     = auth('web')->id();
 
         if (empty($data['status'])) {
             $data['status'] = 'sent';
@@ -119,17 +123,12 @@ class ReferralController extends Controller
 
         $referral = Referral::create($data);
 
-        if (! empty($data['application_id'])) {
-            $application = Application::find($data['application_id']);
-            if ($application) {
-                $fromStatus = $application->status;
-                $application->update([
-                    'status'      => 'referred_to_institution',
-                    'referred_at' => now(),
-                ]);
-                $this->recordApplicationStatusLog($application, $fromStatus, 'referred_to_institution');
-            }
-        }
+        $fromStatus = $application->status;
+        $application->update([
+            'status'      => 'referred_to_institution',
+            'referred_at' => now(),
+        ]);
+        $this->recordApplicationStatusLog($application, $fromStatus, 'referred_to_institution');
 
         return redirect()->route('admin.referrals.show', $referral)
             ->with('success', 'Referral created successfully.');
@@ -162,9 +161,9 @@ class ReferralController extends Controller
         $referral->load(['application', 'student', 'institution', 'referredBy']);
 
         $institutions       = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $applications       = $this->applicationDropdownQuery()->get(['id', 'application_number', 'student_id', 'institution_id']);
-        $students           = Student::orderBy('name')->get(['id', 'name', 'email']);
-        $users              = User::orderBy('name')->get(['id', 'name', 'email']);
+        $applications       = $this->applicationDropdownQuery($referral->application_id)
+            ->with(['student:id,name', 'institutionProgram:id,program_id,title', 'institutionProgram.program:id,name'])
+            ->get(['id', 'application_number', 'student_id', 'institution_id', 'institution_program_id']);
         $referralAgreements = ReferralAgreement::where('status', 'active')->orderBy('id')->get();
         $statuses           = Referral::STATUSES;
 
@@ -172,8 +171,6 @@ class ReferralController extends Controller
             'referral',
             'institutions',
             'applications',
-            'students',
-            'users',
             'referralAgreements',
             'statuses'
         ));
@@ -183,9 +180,15 @@ class ReferralController extends Controller
     {
         $this->authorizeReferralAccess($referral);
         $data = $request->validated();
-        $this->authorizeInstitution((int) $data['institution_id']);
+        $application = $this->resolveReferralApplication((int) $data['application_id'], (int) $data['institution_id']);
 
-        $data['referral_number'] = ($data['referral_number'] ?? '') ?: $referral->referral_number;
+        $this->authorizeInstitution((int) $application->institution_id);
+
+        $data['referral_number']         = ($data['referral_number'] ?? '') ?: $referral->referral_number;
+        $data['institution_id']          = $application->institution_id;
+        $data['student_id']              = $application->student_id;
+        $data['institution_program_id']  = $application->institution_program_id;
+        $data['referred_by']             = auth('web')->id() ?? $referral->referred_by;
 
         $referral->update($data);
 
@@ -254,9 +257,17 @@ class ReferralController extends Controller
         return $number;
     }
 
-    private function applicationDropdownQuery(): Builder
+    private function applicationDropdownQuery(?int $includeApplicationId = null): Builder
     {
-        $query = Application::orderBy('application_number');
+        $query = Application::orderBy('application_number')
+            ->where(function (Builder $query) use ($includeApplicationId) {
+                $query->whereDoesntHave('referral');
+
+                if ($includeApplicationId) {
+                    $query->orWhereKey($includeApplicationId);
+                }
+            });
+
         $scope = $this->institutionScope();
 
         if ($scope !== null) {
@@ -350,5 +361,21 @@ class ReferralController extends Controller
             'changed_by_id'   => $user?->id,
             'remarks'         => null,
         ]);
+    }
+
+    private function resolveReferralApplication(int $applicationId, int $institutionId): Application
+    {
+        $application = Application::query()
+            ->whereKey($applicationId)
+            ->where('institution_id', $institutionId)
+            ->first();
+
+        if (! $application) {
+            throw ValidationException::withMessages([
+                'application_id' => 'Please select a valid application for the selected institution.',
+            ]);
+        }
+
+        return $application;
     }
 }

@@ -20,7 +20,6 @@
     <form action="{{ route('admin.admissions.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="eims-card p-6">
-            <h2 class="font-semibold text-slate-700 mb-5">Admission Details</h2>
             @include('admin.modules.admissions.partials.form', ['admission' => null])
             <div class="flex justify-end gap-3 mt-6 pt-5 border-t border-slate-100">
                 <a href="{{ route('admin.admissions.index') }}" class="btn btn-secondary">Cancel</a>

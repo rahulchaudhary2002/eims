@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\InstitutionProgram;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateInstitutionProgramRequest extends FormRequest
 {
@@ -13,11 +15,22 @@ class UpdateInstitutionProgramRequest extends FormRequest
 
     public function rules(): array
     {
-        $institutionProgram = $this->route('institutionProgram');
+        $institutionProgram = $this->route('institutionProgram')
+            ?? $this->route('institution_program');
+
+        if (! $institutionProgram instanceof InstitutionProgram) {
+            abort(404);
+        }
 
         return [
             'institution_id'       => ['required', 'exists:institutions,id'],
-            'program_id'           => ['required', 'exists:programs,id', 'unique:institution_programs,program_id,' . $institutionProgram->id . ',id,institution_id,' . $this->input('institution_id')],
+            'program_id'           => [
+                'required',
+                'exists:programs,id',
+                Rule::unique('institution_programs', 'program_id')
+                    ->ignore($institutionProgram->id)
+                    ->where(fn ($query) => $query->where('institution_id', $this->input('institution_id'))),
+            ],
             'title'                => ['nullable', 'string', 'max:255'],
             'admission_fee'        => ['nullable', 'numeric', 'min:0'],
             'monthly_fee'          => ['nullable', 'numeric', 'min:0'],

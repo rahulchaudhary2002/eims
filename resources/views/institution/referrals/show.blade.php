@@ -31,7 +31,7 @@
             <div class="eims-card p-6">
                 <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wide mb-3">Status</h3>
                 <div class="mb-4">
-                    <span class="badge text-sm">{{ \App\Models\ApplicationReferral::STATUSES[$referral->status] ?? $referral->status }}</span>
+                    <span class="badge text-sm">{{ \App\Models\Referral::STATUSES[$referral->status] ?? $referral->status }}</span>
                 </div>
                 @if(!in_array($referral->status, ['accepted', 'rejected']))
                     <div class="space-y-2">
@@ -43,7 +43,7 @@
                             @csrf @method('PATCH')
                             <button type="submit" class="btn btn-danger w-full">Reject Referral</button>
                         </form>
-                        <form action="{{ route('institution.referrals.request-info', $referral) }}" method="POST">
+                        <form action="{{ route('institution.referrals.request-more-info', $referral) }}" method="POST">
                             @csrf @method('PATCH')
                             <button type="submit" class="btn btn-secondary w-full">Request More Info</button>
                         </form>

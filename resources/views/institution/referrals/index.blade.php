@@ -75,7 +75,7 @@
                             </td>
                             <td class="text-sm text-slate-600">{{ $referral->institutionProgram?->title ?: ($referral->institutionProgram?->program?->name ?? '-') }}</td>
                             <td class="text-xs text-slate-500">{{ $referral->referred_at?->format('d M Y') ?? '-' }}</td>
-                            <td><span class="badge">{{ \App\Models\ApplicationReferral::STATUSES[$referral->status] ?? $referral->status }}</span></td>
+                            <td><span class="badge">{{ \App\Models\Referral::STATUSES[$referral->status] ?? $referral->status }}</span></td>
                             <td>
                                 @if($referral->is_profile_unlocked)
                                     <span class="inline-flex items-center gap-1 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 rounded-full px-2.5 py-0.5">

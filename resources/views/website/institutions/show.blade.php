@@ -123,6 +123,51 @@
                     </div>
                 @endif
 
+                {{-- Services --}}
+                @if ($institution->consultancyServices->isNotEmpty())
+                    <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 p-6 md:p-8">
+                        <div class="mb-6">
+                            <h2 class="relative inline-block text-[2rem] font-bold text-[#2c5aa0] mb-4 after:content-[''] after:absolute after:left-0 after:-bottom-2 after:w-[70px] after:h-[3px] after:bg-[#4299e1]">Services Offered</h2>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            @foreach ($institution->consultancyServices as $service)
+                                <div class="rounded-xl bg-[#f7fafc] border border-gray-200 p-5">
+                                    <span class="inline-block text-xs bg-[#4299e1]/10 text-[#2c5aa0] font-semibold px-2.5 py-1 rounded-full mb-3">
+                                        {{ \App\Models\ConsultancyService::SERVICE_TYPES[$service->service_type] ?? $service->service_type }}
+                                    </span>
+                                    <h3 class="font-bold text-gray-900 mb-2">{{ $service->title }}</h3>
+                                    @if ($service->description)
+                                        <p class="text-gray-500 text-sm leading-relaxed">{{ Str::limit(strip_tags($service->description), 100) }}</p>
+                                    @endif
+                                    @if ($service->service_fee)
+                                        <p class="text-[#2c5aa0] font-bold mt-3">NPR {{ number_format($service->service_fee) }}</p>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Destinations --}}
+                @if ($institution->consultancyDestinations->isNotEmpty())
+                    <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 p-6 md:p-8">
+                        <div class="mb-6">
+                            <h2 class="relative inline-block text-[2rem] font-bold text-[#2c5aa0] mb-4 after:content-[''] after:absolute after:left-0 after:-bottom-2 after:w-[70px] after:h-[3px] after:bg-[#4299e1]">Study Destinations</h2>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            @foreach ($institution->consultancyDestinations as $dest)
+                                <span class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#4299e1]/10 border border-[#4299e1]/20 text-[#2c5aa0] font-semibold rounded-xl">
+                                    <i class="fas fa-globe text-[#4299e1]"></i>
+                                    {{ $dest->country }}
+                                    @if ($dest->city)
+                                        <span class="text-[#2c5aa0]/60">·</span> {{ $dest->city }}
+                                    @endif
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
                 @if ($institution->profile)
                     @php $profile = $institution->profile; @endphp
                     <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 p-6 md:p-8">

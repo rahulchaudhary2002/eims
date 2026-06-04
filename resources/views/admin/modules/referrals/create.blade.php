@@ -23,7 +23,7 @@
     <form action="{{ route('admin.referrals.store') }}" method="POST">
         @csrf
         <div class="eims-card p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="space-y-5">
                 @include('admin.modules.referrals.partials.form')
             </div>
             <div class="flex justify-end gap-3 mt-6 pt-5 border-t border-slate-100">

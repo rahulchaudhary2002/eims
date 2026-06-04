@@ -116,7 +116,7 @@ class Referral extends Model
 
     public function admission(): HasOne
     {
-        return $this->hasOne(Admission::class);
+        return $this->hasOne(Admission::class, 'application_referral_id');
     }
 
     public function rewardClaims(): HasMany

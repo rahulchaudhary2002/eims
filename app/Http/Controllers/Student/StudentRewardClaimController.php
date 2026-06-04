@@ -82,7 +82,7 @@ class StudentRewardClaimController extends Controller
             'admission_id'           => $admission?->id,
             'admission_date'         => $admission?->admission_date ?? $application->admitted_at?->toDateString(),
             'admission_number'       => $admission?->admission_number,
-            'claimed_reward_amount'  => $data['claimed_reward_amount'] ?? null,
+            'claimed_reward_amount'  => $data['claimed_reward_amount'] ?? 0,
             'payment_method'         => $data['payment_method'] ?? null,
             'student_note'           => $data['student_note'] ?? null,
             'status'                 => 'submitted',

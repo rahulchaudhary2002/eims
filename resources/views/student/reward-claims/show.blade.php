@@ -19,11 +19,11 @@ $sc = [
         <div class="flex items-center gap-3">
             <a href="{{ route('student.reward-claims.index') }}" class="text-white/70 hover:text-white no-underline"><i class="fas fa-arrow-left"></i></a>
             <div>
-                <h1 class="text-2xl md:text-3xl font-bold">{{ $claim->institution?->name ?? 'Reward Claim' }}</h1>
-                <p class="text-white/70 text-sm mt-1">{{ $claim->claim_number }}</p>
+                <h1 class="text-2xl md:text-3xl font-bold">{{ $rewardClaim->institution?->name ?? 'Reward Claim' }}</h1>
+                <p class="text-white/70 text-sm mt-1">{{ $rewardClaim->claim_number }}</p>
             </div>
             <span class="ml-auto shrink-0 text-sm font-bold px-3 py-1.5 rounded-full bg-white/20 border border-white/30">
-                {{ \App\Models\StudentRewardClaim::STATUSES[$claim->status] ?? $claim->status }}
+                {{ \App\Models\StudentRewardClaim::STATUSES[$rewardClaim->status] ?? $rewardClaim->status }}
             </span>
         </div>
     </div>
@@ -34,23 +34,23 @@ $sc = [
         <div class="max-w-2xl space-y-5">
 
             {{-- Rejection Notice --}}
-            @if($claim->status === 'rejected' && $claim->rejection_reason)
+            @if($rewardClaim->status === 'rejected' && $rewardClaim->rejection_reason)
             <div class="bg-red-50 border border-red-200 rounded-xl px-6 py-4 flex items-start gap-3">
                 <i class="fas fa-times-circle text-red-500 mt-0.5"></i>
                 <div>
                     <p class="text-sm font-bold text-red-700">Claim Rejected</p>
-                    <p class="text-sm text-red-600 mt-1">{{ $claim->rejection_reason }}</p>
+                    <p class="text-sm text-red-600 mt-1">{{ $rewardClaim->rejection_reason }}</p>
                 </div>
             </div>
             @endif
 
             {{-- Admin Note --}}
-            @if($claim->admin_note)
+            @if($rewardClaim->admin_note)
             <div class="bg-blue-50 border border-blue-200 rounded-xl px-6 py-4 flex items-start gap-3">
                 <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
                 <div>
                     <p class="text-sm font-bold text-blue-700">Note from Platform</p>
-                    <p class="text-sm text-blue-600 mt-1">{{ $claim->admin_note }}</p>
+                    <p class="text-sm text-blue-600 mt-1">{{ $rewardClaim->admin_note }}</p>
                 </div>
             </div>
             @endif
@@ -62,12 +62,12 @@ $sc = [
                 </div>
                 <dl class="divide-y divide-gray-50">
                     @foreach([
-                        ['Claim Number', $claim->claim_number],
-                        ['Institution', $claim->institution?->name],
-                        ['Program', $claim->institutionProgram?->title ?: ($claim->institutionProgram?->program?->name ?? null)],
-                        ['Admission Date', $claim->admission_date?->format('M d, Y')],
-                        ['Admission Number', $claim->admission_number],
-                        ['Intake', $claim->intake],
+                        ['Claim Number', $rewardClaim->claim_number],
+                        ['Institution', $rewardClaim->institution?->name],
+                        ['Program', $rewardClaim->institutionProgram?->title ?: ($rewardClaim->institutionProgram?->program?->name ?? null)],
+                        ['Admission Date', $rewardClaim->admission_date?->format('M d, Y')],
+                        ['Admission Number', $rewardClaim->admission_number],
+                        ['Intake', $rewardClaim->intake],
                     ] as [$label, $value])
                     @if($value)
                     <div class="flex px-6 py-3">
@@ -77,37 +77,37 @@ $sc = [
                     @endif
                     @endforeach
 
-                    @if($claim->claimed_reward_amount !== null)
+                    @if($rewardClaim->claimed_reward_amount !== null)
                     <div class="flex px-6 py-3">
                         <dt class="text-sm text-gray-500 w-44 shrink-0">Claimed Amount</dt>
-                        <dd class="text-sm font-semibold text-gray-700 font-mono">{{ number_format((float) $claim->claimed_reward_amount, 2) }}</dd>
+                        <dd class="text-sm font-semibold text-gray-700 font-mono">{{ number_format((float) $rewardClaim->claimed_reward_amount, 2) }}</dd>
                     </div>
                     @endif
 
-                    @if($claim->approved_reward_amount !== null)
+                    @if($rewardClaim->approved_reward_amount !== null)
                     <div class="flex px-6 py-3">
                         <dt class="text-sm text-gray-500 w-44 shrink-0">Approved Amount</dt>
-                        <dd class="text-sm font-bold text-green-700 font-mono">{{ number_format((float) $claim->approved_reward_amount, 2) }}</dd>
+                        <dd class="text-sm font-bold text-green-700 font-mono">{{ number_format((float) $rewardClaim->approved_reward_amount, 2) }}</dd>
                     </div>
                     @endif
 
-                    @if($claim->payment_method)
+                    @if($rewardClaim->payment_method)
                     <div class="flex px-6 py-3">
                         <dt class="text-sm text-gray-500 w-44 shrink-0">Payment Method</dt>
-                        <dd class="text-sm font-semibold text-gray-700">{{ \App\Models\StudentRewardClaim::PAYMENT_METHODS[$claim->payment_method] ?? $claim->payment_method }}</dd>
+                        <dd class="text-sm font-semibold text-gray-700">{{ \App\Models\StudentRewardClaim::PAYMENT_METHODS[$rewardClaim->payment_method] ?? $rewardClaim->payment_method }}</dd>
                     </div>
                     @endif
                 </dl>
             </div>
 
             {{-- Documents Card --}}
-            @if($claim->documents->count())
+            @if($rewardClaim->documents->count())
             <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100">
                     <h3 class="text-sm font-bold text-gray-700">Documents</h3>
                 </div>
                 <div class="px-6 py-4 space-y-3">
-                    @foreach($claim->documents as $document)
+                    @foreach($rewardClaim->documents as $document)
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex items-center gap-2.5 min-w-0">
                             <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
@@ -140,10 +140,10 @@ $sc = [
                 </div>
                 <div class="px-6 py-4 space-y-3">
                     @foreach([
-                        ['fas fa-paper-plane', 'Submitted', $claim->submitted_at, 'text-blue-500'],
-                        ['fas fa-search', 'Under Review', $claim->verified_at, 'text-yellow-500'],
-                        ['fas fa-check-circle', 'Approved', $claim->approved_at, 'text-green-500'],
-                        ['fas fa-money-bill-wave', 'Paid', $claim->paid_at, 'text-purple-500'],
+                        ['fas fa-paper-plane', 'Submitted', $rewardClaim->submitted_at, 'text-blue-500'],
+                        ['fas fa-search', 'Under Review', $rewardClaim->verified_at, 'text-yellow-500'],
+                        ['fas fa-check-circle', 'Approved', $rewardClaim->approved_at, 'text-green-500'],
+                        ['fas fa-money-bill-wave', 'Paid', $rewardClaim->paid_at, 'text-purple-500'],
                     ] as [$icon, $label, $timestamp, $color])
                     @if($timestamp)
                     <div class="flex items-start gap-3">
@@ -158,12 +158,12 @@ $sc = [
                     @endif
                     @endforeach
 
-                    @if(!$claim->submitted_at && !$claim->verified_at && !$claim->approved_at && !$claim->paid_at)
+                    @if(!$rewardClaim->submitted_at && !$rewardClaim->verified_at && !$rewardClaim->approved_at && !$rewardClaim->paid_at)
                         <div class="flex items-start gap-3">
                             <div class="w-2 h-2 rounded-full bg-[#4299e1] shrink-0 mt-1.5"></div>
                             <div>
                                 <p class="text-sm font-semibold text-gray-700">Claim Submitted</p>
-                                <p class="text-xs text-gray-400">{{ $claim->created_at->format('M d, Y H:i') }}</p>
+                                <p class="text-xs text-gray-400">{{ $rewardClaim->created_at->format('M d, Y H:i') }}</p>
                             </div>
                         </div>
                     @endif
@@ -171,13 +171,13 @@ $sc = [
             </div>
 
             {{-- Payment History --}}
-            @if(isset($payments) && $payments->count())
+            @if($rewardClaim->payments->count())
             <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100">
                     <h3 class="text-sm font-bold text-gray-700">Payment History</h3>
                 </div>
                 <div class="px-6 py-4 space-y-3">
-                    @foreach($payments as $payment)
+                    @foreach($rewardClaim->payments as $payment)
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-semibold text-gray-700 font-mono">{{ number_format((float) $payment->amount, 2) }}</p>
