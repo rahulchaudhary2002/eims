@@ -15,7 +15,7 @@
                 <nav class="hidden md:flex items-center gap-6" x-data="{ moreOpen: false }">
                     @foreach([
                         ['Home', 'website.home', 'website.home'],
-                        ['Institutions', 'website.institutions.index', 'website.institutions.*'],
+                        ['Colleges', 'website.colleges.index', 'website.colleges.*'],
                         ['Programs', 'website.programs.index', 'website.programs.*'],
                         ['Scholarships', 'website.scholarships.index', 'website.scholarships.*'],
                     ] as [$label, $route, $pattern])
@@ -30,7 +30,7 @@
                     <div class="relative" @mouseleave="moreOpen = false">
                         <button @mouseenter="moreOpen = true" @click="moreOpen = !moreOpen"
                                 class="inline-flex items-center gap-1 text-[15px] py-2 transition-colors no-underline whitespace-nowrap
-                                    {{ request()->routeIs('website.posts.*', 'website.consultancies.*', 'website.compare.*', 'website.contact.*', 'website.about', 'website.inquiry.*') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }}">
+                                    {{ request()->routeIs('website.institutions.*', 'website.posts.*', 'website.consultancies.*', 'website.compare.*', 'website.contact.*', 'website.about', 'website.inquiry.*') ? 'text-[#4299e1] font-semibold border-b-2 border-[#4299e1]' : 'text-[#2d3748] hover:text-[#4299e1]' }}">
                             More
                             <i class="fas fa-chevron-down text-[11px] transition-transform duration-200" :class="moreOpen ? 'rotate-180' : ''"></i>
                         </button>
@@ -46,6 +46,7 @@
                              class="absolute left-0 top-full pt-2 w-52 z-50">
                             <div class="bg-white border border-gray-200 rounded-xl shadow-xl py-2">
                                 @foreach([
+                                    ['fas fa-university',   'Institutions',   'website.institutions.index',    'website.institutions.*'],
                                     ['fas fa-newspaper',    'Blog',           'website.posts.index',          'website.posts.*'],
                                     ['fas fa-handshake',    'Consultancies',  'website.consultancies.index',   'website.consultancies.*'],
                                     ['fas fa-balance-scale','Compare',        'website.compare.index',         'website.compare.*'],
@@ -232,6 +233,7 @@
                 {{-- Main nav --}}
                 @foreach([
                     ['fas fa-home',         'Home',           'website.home',                   'website.home'],
+                    ['fas fa-graduation-cap','Colleges',      'website.colleges.index',          'website.colleges.*'],
                     ['fas fa-university',   'Institutions',   'website.institutions.index',      'website.institutions.*'],
                     ['fas fa-book-open',    'Programs',       'website.programs.index',          'website.programs.*'],
                     ['fas fa-award',        'Scholarships',   'website.scholarships.index',      'website.scholarships.*'],

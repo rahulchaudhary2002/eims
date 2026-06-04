@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Website\ApplicationController;
+use App\Http\Controllers\Website\CollegeListingController;
 use App\Http\Controllers\Website\CompareController;
 use App\Http\Controllers\Website\ConsultancyListingController;
 use App\Http\Controllers\Website\ContactController;
@@ -18,8 +19,16 @@ Route::name('website.')->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    // Institutions
+    // Institutions (all types)
     Route::get('/institutions', [InstitutionListingController::class, 'index'])->name('institutions.index');
+
+    // Colleges (colleges only)
+    Route::get('/colleges', [CollegeListingController::class, 'index'])->name('colleges.index');
+    Route::get('/colleges/{institution:slug}', [InstitutionDetailController::class, 'show'])->name('colleges.show');
+    Route::get('/colleges/{institution:slug}/programs', [InstitutionDetailController::class, 'programs'])->name('colleges.programs');
+    Route::get('/colleges/{institution:slug}/programs/{institutionProgram:slug}', [InstitutionDetailController::class, 'programDetail'])->name('colleges.programs.show')->withoutScopedBindings();
+
+    // Institutions (all types)
     Route::get('/institutions/{institution:slug}', [InstitutionDetailController::class, 'show'])->name('institutions.show');
     Route::get('/institutions/{institution:slug}/programs', [InstitutionDetailController::class, 'programs'])->name('institutions.programs');
     Route::get('/institutions/{institution:slug}/programs/{institutionProgram:slug}', [InstitutionDetailController::class, 'programDetail'])->name('institutions.programs.show')->withoutScopedBindings();
@@ -58,6 +67,8 @@ Route::name('website.')->group(function () {
     Route::middleware('auth:student')->group(function () {
         Route::post('/institutions/{institution:slug}/favorite', [InstitutionDetailController::class, 'toggleFavorite'])->name('institutions.favorite');
         Route::post('/institutions/{institution:slug}/review', [InstitutionDetailController::class, 'storeReview'])->name('institutions.review');
+        Route::post('/colleges/{institution:slug}/favorite', [InstitutionDetailController::class, 'toggleFavorite'])->name('colleges.favorite');
+        Route::post('/colleges/{institution:slug}/review', [InstitutionDetailController::class, 'storeReview'])->name('colleges.review');
     });
 
     // Contact

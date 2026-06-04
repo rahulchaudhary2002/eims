@@ -12,11 +12,16 @@
 
 <section class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] pt-[150px] pb-28 text-white">
     <div class="container max-w-7xl mx-auto px-4">
+        @php
+            $isCollegeRoute = $routePrefix === 'website.colleges';
+            $listingLabel = $isCollegeRoute ? 'Colleges' : 'Institutions';
+            $listingRoute = $isCollegeRoute ? route('website.colleges.index') : route('website.institutions.index');
+        @endphp
         @include('website.partials.breadcrumb', [
             'variant' => 'dark',
             'breadcrumbs' => [
-                ['label' => 'Institutions', 'url' => route('website.institutions.index')],
-                ['label' => $institution->name, 'url' => route('website.institutions.show', $institution->slug)],
+                ['label' => $listingLabel, 'url' => $listingRoute],
+                ['label' => $institution->name, 'url' => route($routePrefix . '.show', $institution->slug)],
                 ['label' => 'Programs'],
             ],
         ])
@@ -56,7 +61,7 @@
                         <p class="text-xs text-white/70 mt-1">Programs</p>
                     </div>
                     <div class="rounded-xl bg-white/10 border border-white/15 p-4 text-center">
-                        <a href="{{ route('website.institutions.show', $institution->slug) }}"
+                        <a href="{{ route($routePrefix . '.show', $institution->slug) }}"
                            class="text-sm font-semibold text-[#4299e1] hover:text-white transition no-underline flex items-center justify-center gap-1 h-full">
                             <i class="fas fa-arrow-left"></i> Institution Page
                         </a>
@@ -74,7 +79,7 @@
                 <i class="fas fa-graduation-cap text-gray-200 text-6xl mb-5"></i>
                 <h2 class="text-lg font-semibold text-gray-700 mb-2">No Programs Available</h2>
                 <p class="text-gray-500 text-sm mb-6">This institution has no active programs listed at this time.</p>
-                <a href="{{ route('website.institutions.show', $institution->slug) }}"
+                <a href="{{ route($routePrefix . '.show', $institution->slug) }}"
                    class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#4299e1] to-[#2c5aa0] text-white font-semibold rounded-xl hover:from-[#2c5aa0] hover:to-[#1a365d] transition no-underline">
                     <i class="fas fa-arrow-left"></i> Back to Institution
                 </a>

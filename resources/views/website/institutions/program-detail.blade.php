@@ -17,12 +17,17 @@
 
 <section class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] pt-[150px] pb-28 text-white">
     <div class="container max-w-7xl mx-auto px-4">
+        @php
+            $isCollegeRoute = $routePrefix === 'website.colleges';
+            $listingLabel = $isCollegeRoute ? 'Colleges' : 'Institutions';
+            $listingRoute = $isCollegeRoute ? route('website.colleges.index') : route('website.institutions.index');
+        @endphp
         @include('website.partials.breadcrumb', [
             'variant' => 'dark',
             'breadcrumbs' => [
-                ['label' => 'Institutions', 'url' => route('website.institutions.index')],
-                ['label' => $institution->name, 'url' => route('website.institutions.show', $institution->slug)],
-                ['label' => 'Programs', 'url' => route('website.institutions.programs', $institution->slug)],
+                ['label' => $listingLabel, 'url' => $listingRoute],
+                ['label' => $institution->name, 'url' => route($routePrefix . '.show', $institution->slug)],
+                ['label' => 'Programs', 'url' => route($routePrefix . '.programs', $institution->slug)],
                 ['label' => $institutionProgram->display_name],
             ],
         ])
@@ -51,7 +56,7 @@
 
                 <h1 class="text-[2.4rem] md:text-[3.2rem] font-bold leading-[1.15] mb-4">{{ $institutionProgram->display_name }}</h1>
 
-                <a href="{{ route('website.institutions.show', $institution->slug) }}"
+                <a href="{{ route($routePrefix . '.show', $institution->slug) }}"
                    class="inline-flex items-center gap-3 mt-2 text-white hover:text-[#4299e1] transition no-underline">
                     <span class="h-12 w-12 rounded-xl bg-white flex items-center justify-center overflow-hidden">
                         @if ($logo)

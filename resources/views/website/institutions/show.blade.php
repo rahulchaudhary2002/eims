@@ -25,10 +25,15 @@
     <div class="absolute inset-0 bg-gradient-to-br from-[#2c5aa0]/95 to-[#1a365d]/95"></div>
 
     <div class="container max-w-7xl mx-auto px-4 relative z-10">
+        @php
+            $isCollegeRoute = $routePrefix === 'website.colleges';
+            $listingLabel = $isCollegeRoute ? 'Colleges' : 'Institutions';
+            $listingRoute = $isCollegeRoute ? route('website.colleges.index') : route('website.institutions.index');
+        @endphp
         @include('website.partials.breadcrumb', [
             'variant' => 'dark',
             'breadcrumbs' => [
-                ['label' => 'Institutions', 'url' => route('website.institutions.index')],
+                ['label' => $listingLabel, 'url' => $listingRoute],
                 ['label' => $institution->name],
             ],
         ])
@@ -205,13 +210,13 @@
                                 <h2 class="text-[2rem] font-bold text-[#2c5aa0] mb-2">Programs Offered</h2>
                                 <p class="text-gray-600 text-[0.95rem]">Popular programs currently open or upcoming.</p>
                             </div>
-                            <a href="{{ route('website.institutions.programs', $institution->slug) }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#4299e1] text-white font-semibold hover:bg-[#2c5aa0] transition no-underline">
+                            <a href="{{ route($routePrefix . '.programs', $institution->slug) }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#4299e1] text-white font-semibold hover:bg-[#2c5aa0] transition no-underline">
                                 View All <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @foreach ($institution->programs->take(4) as $ip)
-                                <a href="{{ route('website.institutions.programs.show', [$institution->slug, $ip->slug]) }}" class="block border border-gray-200 rounded-xl p-5 hover:border-[#4299e1] hover:shadow-[0_5px_15px_rgba(0,0,0,0.08)] transition no-underline">
+                                <a href="{{ route($routePrefix . '.programs.show', [$institution->slug, $ip->slug]) }}" class="block border border-gray-200 rounded-xl p-5 hover:border-[#4299e1] hover:shadow-[0_5px_15px_rgba(0,0,0,0.08)] transition no-underline">
                                     <div class="flex items-start justify-between gap-4">
                                         <div>
                                             <p class="text-sm text-[#4299e1] font-semibold mb-1">{{ $ip->program?->faculty?->name ?? 'General' }}</p>
@@ -300,7 +305,7 @@
                     @auth('student')
                         <div class="mt-8 border-t border-gray-200 pt-6">
                             <h3 class="text-xl font-bold text-[#2c5aa0] mb-4">Write a Review</h3>
-                            <form method="POST" action="{{ route('website.institutions.review', $institution->slug) }}" class="space-y-4">
+                            <form method="POST" action="{{ route($routePrefix . '.review', $institution->slug) }}" class="space-y-4">
                                 @csrf
                                 @if (session('error'))
                                     <div class="bg-red-50 text-red-700 text-sm px-4 py-3 rounded-xl">{{ session('error') }}</div>
@@ -359,7 +364,7 @@
                         @endauth
 
                         @auth('student')
-                            <form method="POST" action="{{ route('website.institutions.favorite', $institution->slug) }}">
+                            <form method="POST" action="{{ route($routePrefix . '.favorite', $institution->slug) }}">
                                 @csrf
                                 <button type="submit" class="w-full px-5 py-3.5 bg-white border-2 border-gray-200 text-gray-700 font-bold rounded-xl hover:border-[#4299e1] hover:text-[#2c5aa0] transition flex items-center justify-center gap-2">
                                     <i class="fas fa-heart"></i>

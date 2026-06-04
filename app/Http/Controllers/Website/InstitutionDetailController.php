@@ -15,9 +15,16 @@ use Illuminate\View\View;
 
 class InstitutionDetailController extends Controller
 {
+    private function routePrefix(): string
+    {
+        return request()->routeIs('website.colleges.*') ? 'website.colleges' : 'website.institutions';
+    }
+
     public function show(Institution $institution): View
     {
         abort_unless($institution->status === 'active', 404);
+
+        $routePrefix = $this->routePrefix();
 
         $institution->load([
             'profile',
@@ -53,12 +60,14 @@ class InstitutionDetailController extends Controller
             $compareItems = session('website_compare', []);
         }
 
-        return view('website.institutions.show', compact('institution', 'isFavorited', 'compareItems'));
+        return view('website.institutions.show', compact('institution', 'isFavorited', 'compareItems', 'routePrefix'));
     }
 
     public function programs(Institution $institution): View
     {
         abort_unless($institution->status === 'active', 404);
+
+        $routePrefix = $this->routePrefix();
 
         $programs = $institution->programs()
             ->with('program.faculty')
@@ -67,7 +76,7 @@ class InstitutionDetailController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        return view('website.institutions.programs', compact('institution', 'programs'));
+        return view('website.institutions.programs', compact('institution', 'programs', 'routePrefix'));
     }
 
     public function programDetail(Institution $institution, InstitutionProgram $institutionProgram): View
@@ -75,9 +84,11 @@ class InstitutionDetailController extends Controller
         abort_unless($institution->status === 'active', 404);
         abort_unless($institutionProgram->institution_id === $institution->id, 404);
 
+        $routePrefix = $this->routePrefix();
+
         $institutionProgram->load(['program.faculty', 'subjects', 'scholarships' => fn($q) => $q->where('status', 'active')]);
 
-        return view('website.institutions.program-detail', compact('institution', 'institutionProgram'));
+        return view('website.institutions.program-detail', compact('institution', 'institutionProgram', 'routePrefix'));
     }
 
     public function toggleFavorite(Institution $institution): RedirectResponse
