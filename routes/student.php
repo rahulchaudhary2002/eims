@@ -8,7 +8,11 @@ use App\Http\Controllers\Student\StudentCounselingSessionController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Student\StudentDocumentController;
 use App\Http\Controllers\Student\StudentFavoriteInstitutionController;
+use App\Http\Controllers\Student\StudentFeedController;
+use App\Http\Controllers\Student\StudentFollowController;
 use App\Http\Controllers\Student\StudentMessageController;
+use App\Http\Controllers\Student\StudentPostCommentController;
+use App\Http\Controllers\Student\StudentPostReactionController;
 use App\Http\Controllers\Student\StudentProfileController;
 use App\Http\Controllers\Student\StudentRecommendationController;
 use App\Http\Controllers\Student\StudentReviewController;
@@ -88,4 +92,21 @@ Route::middleware(['auth:student'])
         // Reward Claims
         Route::resource('reward-claims', \App\Http\Controllers\Student\StudentRewardClaimController::class)
             ->only(['index', 'create', 'store', 'show']);
+
+        // Feed
+        Route::get('/feed', [StudentFeedController::class, 'index'])->name('feed.index');
+
+        // Follow / Unfollow institutions
+        Route::post('/follow/{institution}', [StudentFollowController::class, 'store'])->name('follow.store');
+        Route::delete('/follow/{institution}', [StudentFollowController::class, 'destroy'])->name('follow.destroy');
+
+        // Post reactions
+        Route::post('/posts/{post:slug}/react', [StudentPostReactionController::class, 'toggle'])->name('posts.react');
+
+        // Post comments
+        Route::post('/posts/{post:slug}/comments', [StudentPostCommentController::class, 'store'])->name('posts.comments.store');
+        Route::delete('/comments/{postComment}', [StudentPostCommentController::class, 'destroy'])->name('comments.destroy');
+
+        // Share post to conversation
+        Route::post('/posts/{post:slug}/share-to-chat', [StudentPostReactionController::class, 'shareToChat'])->name('posts.share-to-chat');
     });

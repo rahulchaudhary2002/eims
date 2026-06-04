@@ -88,6 +88,11 @@ class Student extends Authenticatable
         return $this->hasMany(\App\Models\InstitutionFollower::class);
     }
 
+    public function follows(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\InstitutionFollower::class);
+    }
+
     public function counselingSessions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(\App\Models\CounselingSession::class);

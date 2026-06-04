@@ -25,12 +25,17 @@ class Post extends Model
     }
 
     const TYPES = [
-        'article'       => 'Article',
-        'news'          => 'News',
-        'announcement'  => 'Announcement',
-        'event_recap'   => 'Event Recap',
-        'blog'          => 'Blog',
-        'other'         => 'Other',
+        'article'           => 'Article',
+        'news'              => 'News',
+        'announcement'      => 'Announcement',
+        'event_recap'       => 'Event Recap',
+        'blog'              => 'Blog',
+        'other'             => 'Other',
+        'event'             => 'Event',
+        'admission_notice'  => 'Admission Notice',
+        'scholarship_offer' => 'Scholarship Offer',
+        'seminar'           => 'Seminar / Webinar',
+        'campus_update'     => 'Campus Update',
     ];
 
     protected $fillable = [

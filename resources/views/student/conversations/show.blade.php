@@ -143,10 +143,18 @@
                         <p class="text-sm leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
                         @endif
                         @if($msg->attachment)
+                        @php $attachExt = strtolower(pathinfo($msg->attachment, PATHINFO_EXTENSION)); $attachIsImage = in_array($attachExt, ['jpg','jpeg','png','gif','webp','avif']); @endphp
+                        @if($attachIsImage)
+                        <a href="{{ Storage::url($msg->attachment) }}" target="_blank" class="block mt-2 no-underline">
+                            <img src="{{ Storage::url($msg->attachment) }}" alt="Image"
+                                 class="rounded-xl max-w-[220px] max-h-[160px] object-cover border {{ $isStudent ? 'border-white/20' : 'border-gray-200' }}">
+                        </a>
+                        @else
                         <a href="{{ Storage::url($msg->attachment) }}" target="_blank"
                            class="inline-flex items-center gap-1.5 text-xs {{ $isStudent ? 'text-white/80 hover:text-white' : 'text-[#4299e1]' }} mt-1.5 no-underline hover:underline">
                             <i class="fas fa-paperclip"></i> Attachment
                         </a>
+                        @endif
                         @endif
                     </div>
                     {{-- Timestamp --}}
@@ -301,9 +309,18 @@ document.getElementById('conv-search')?.addEventListener('input', function () {
                     ? 'bg-[#2c5aa0] text-white rounded-br-none'
                     : 'bg-white text-gray-800 rounded-bl-none shadow-[0_1px_6px_rgba(0,0,0,0.08)]'}">
                     ${data.message ? `<p class="text-sm leading-relaxed whitespace-pre-line">${escapeHtml(data.message)}</p>` : ''}
-                    ${data.attachment ? `<a href="/storage/${data.attachment}" target="_blank"
-                        class="inline-flex items-center gap-1.5 text-xs ${isStudent ? 'text-white/80 hover:text-white' : 'text-[#4299e1]'} mt-1.5 no-underline hover:underline">
-                        <i class="fas fa-paperclip"></i> Attachment</a>` : ''}
+                    ${data.attachment ? (() => {
+                        const ext = data.attachment.split('.').pop().toLowerCase();
+                        const isImg = ['jpg','jpeg','png','gif','webp','avif'].includes(ext);
+                        return isImg
+                            ? `<a href="/storage/${data.attachment}" target="_blank" class="block mt-2 no-underline">
+                                <img src="/storage/${data.attachment}" alt="Image"
+                                     class="rounded-xl max-w-[220px] max-h-[160px] object-cover border ${isStudent ? 'border-white/20' : 'border-gray-200'}">
+                               </a>`
+                            : `<a href="/storage/${data.attachment}" target="_blank"
+                                class="inline-flex items-center gap-1.5 text-xs ${isStudent ? 'text-white/80 hover:text-white' : 'text-[#4299e1]'} mt-1.5 no-underline hover:underline">
+                                <i class="fas fa-paperclip"></i> Attachment</a>`;
+                    })() : ''}
                 </div>
                 <p class="text-[10px] text-gray-400 mt-1 px-1 ${isStudent ? 'text-right' : ''}">
                     ${data.created_at}

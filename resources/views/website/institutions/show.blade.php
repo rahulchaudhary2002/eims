@@ -338,6 +338,27 @@
                         </a>
 
                         @auth('student')
+                        @php
+                            $isFollowing = auth('student')->user()->follows()->where('institution_id', $institution->id)->exists();
+                        @endphp
+                        @if($isFollowing)
+                        <form action="{{ route('student.follow.destroy', $institution) }}" method="POST">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="w-full px-5 py-3.5 bg-white border-2 border-[#4299e1] text-[#4299e1] font-bold rounded-xl hover:bg-[#4299e1]/10 transition flex items-center justify-center gap-2">
+                                <i class="fas fa-user-check"></i> Following
+                            </button>
+                        </form>
+                        @else
+                        <form action="{{ route('student.follow.store', $institution) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="w-full px-5 py-3.5 bg-[#4299e1] text-white font-bold rounded-xl hover:bg-[#2c5aa0] transition flex items-center justify-center gap-2">
+                                <i class="fas fa-user-plus"></i> Follow Institution
+                            </button>
+                        </form>
+                        @endif
+                        @endauth
+
+                        @auth('student')
                             <form method="POST" action="{{ route('website.institutions.favorite', $institution->slug) }}">
                                 @csrf
                                 <button type="submit" class="w-full px-5 py-3.5 bg-white border-2 border-gray-200 text-gray-700 font-bold rounded-xl hover:border-[#4299e1] hover:text-[#2c5aa0] transition flex items-center justify-center gap-2">
