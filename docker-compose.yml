@@ -58,6 +58,23 @@ services:
     networks:
       - eims-services
 
+  eims-reverb:
+    image: eims-app
+    container_name: eims-reverb
+    restart: unless-stopped
+    working_dir: /var/www
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+    ports:
+      - "8101:8080"
+    volumes:
+      - .:/var/www
+      - ./.dockerfile/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    depends_on:
+      - eims-postgres
+      - eims-redis
+    networks:
+      - eims-services
+
   eims-webserver:
     image: nginx:alpine
     container_name: eims-webserver

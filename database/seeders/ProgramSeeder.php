@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Program;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProgramSeeder extends Seeder
@@ -13,40 +12,28 @@ class ProgramSeeder extends Seeder
      */
     public function run(): void
     {
-        $program = Program::create([
+        Program::updateOrCreate(['slug' => 'bachelor-in-computer-application'], [
+            'faculty_id' => 1,
+            'level' => 'Bachelor',
             'name' => 'Bachelor In Computer Application',
-            'slug' => 'bachelor-in-computer-application',
-            'level_id' => 1,
-            'affiliation_id' => 1,
-            'category_id' => 1,
-            'duration' => '3 years',
-            'fee' => 550000,
+            'description' => 'Undergraduate program focused on software, databases, networks, and application development.',
             'is_active' => true,
         ]);
-        $program->courses()->attach([1, 2, 5, 9]);
 
-        $program = Program::create([
+        Program::updateOrCreate(['slug' => 'bachelor-in-business-administration'], [
+            'faculty_id' => 2,
+            'level' => 'Bachelor',
             'name' => 'Bachelor In Business Administration',
-            'slug' => 'bachelor-in-business-administration',
-            'level_id' => 1,
-            'affiliation_id' => 1,
-            'category_id' => 1,
-            'duration' => '3 years',
-            'fee' => 350000,
+            'description' => 'Undergraduate program in management, accounting, marketing, and business operations.',
             'is_active' => true,
         ]);
-        $program->courses()->attach([3, 4, 5, 8]);
 
-        $program = Program::create([
+        Program::updateOrCreate(['slug' => 'bachelor-in-commerce'], [
+            'faculty_id' => 2,
+            'level' => 'Bachelor',
             'name' => 'Bachelor In Commerce',
-            'slug' => 'bachelor-in-commerce',
-            'level_id' => 1,
-            'affiliation_id' => 1,
-            'category_id' => 1,
-            'duration' => '3 years',
-            'fee' => 400000,
+            'description' => 'Undergraduate commerce program covering finance, accounting, economics, and business law.',
             'is_active' => true,
         ]);
-        $program->courses()->attach([3, 4, 6, 7]);
     }
 }

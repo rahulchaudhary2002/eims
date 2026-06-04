@@ -13,15 +13,29 @@ return new class extends Migration
     {
         Schema::create('admissions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->foreignId('institution_id')
-                ->constrained()
-                ->cascadeOnDelete();
-            $table->longText('description')->nullable();
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->unsignedBigInteger('application_id')->unique();
+            $table->unsignedBigInteger('student_id');
+            $table->foreignId('institution_id')->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('institution_program_id');
+            $table->string('admission_number')->unique();
+            $table->date('admission_date');
+            $table->decimal('paid_amount', 12, 2)->nullable();
+            $table->string('payment_proof')->nullable();
+            $table->string('verification_status', 30)->default('pending');
+            $table->foreignId('verified_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('verified_at')->nullable();
+            $table->text('remarks')->nullable();
+            $table->unsignedBigInteger('application_referral_id')->nullable();
+            $table->string('source', 40)->default('direct_institution');
+            $table->boolean('is_commission_claimable')->default(false);
+            $table->string('commission_status', 30)->default('not_eligible');
             $table->timestamps();
+
+            $table->index(['student_id', 'institution_id']);
+            $table->index(['source', 'commission_status']);
+            $table->index(['institution_id', 'verification_status']);
+            $table->index(['institution_program_id', 'verification_status']);
+            $table->index(['student_id', 'admission_date']);
         });
     }
 

@@ -23,20 +23,18 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            LevelSeeder::class,
             UserSeeder::class,
-            VendorSeeder::class,
-            AffiliationSeeder::class,
-            InstitutionSeeder::class,
-            CourseSeeder::class,
-            AffiliationInstitutionSeeder::class,
-            VendorInstitutionSeeder::class,
-            CourseDescriptionSeeder::class,
-            QuestionSeeder::class,
-            ReplySeeder::class,
-            EnquirySeeder::class,
-            ProgramSeeder::class,
-            InstitutionProgramSeeder::class,
+            // FacultySeeder::class,
+            // InstitutionSeeder::class,
+            // InstitutionUserSeeder::class,
+            // StudentSeeder::class,
+            // ProgramSeeder::class,
+            // InstitutionProgramSeeder::class,
+            // InstitutionProgramSubjectSeeder::class,
+            // ScholarshipSeeder::class,
+            // ApplicationSeeder::class,
+            // AdmissionSeeder::class,
+            // DemoSeeder::class,
         ]);
     }
 }

@@ -1,4 +1,4 @@
-@php $user = auth()->guard('admin')->user(); @endphp
+@php $user = auth('web')->user(); @endphp
 
 <header id="app-header" class="transition-all duration-300">
 
@@ -31,7 +31,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
                 </svg>
-                @if(auth('admin')->user()->unreadNotifications->count() > 0)
+                @if(auth('web')->user()->unreadNotifications->count() > 0)
                 <span class="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full ring-2 ring-white"></span>
                 @endif
             </button>
@@ -50,7 +50,7 @@
                     </form>
                 </div>
                 <ul class="max-h-80 overflow-y-auto divide-y divide-slate-50">
-                    @forelse(auth('admin')->user()->notifications()->latest()->take(8)->get() as $notification)
+                    @forelse(auth('web')->user()->notifications()->latest()->take(8)->get() as $notification)
                     <li class="px-4 py-3 hover:bg-slate-50 flex items-start gap-3 transition-colors {{ $notification->read_at ? 'opacity-60' : '' }}">
                         <div class="mt-1.5 shrink-0">
                             @if($notification->read_at)
@@ -104,6 +104,11 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
                     Profile Settings
                 </a>
+                @if($user->activeInstitutions()->exists())
+                    <a href="{{ route('institution.dashboard') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 transition-colors">
+                        Institution Dashboard
+                    </a>
+                @endif
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
                     <button type="submit" class="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-danger hover:bg-danger-light transition-colors">

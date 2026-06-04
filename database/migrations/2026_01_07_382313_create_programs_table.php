@@ -13,15 +13,11 @@ return new class extends Migration
     {
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('faculty_id')->nullable()->index();
+            $table->string('level')->nullable();
             $table->string('name')->unique();
             $table->string('slug')->unique();
-            $table->string('code')->unique()->nullable();
-            $table->string('duration')->nullable();
-            $table->decimal('fee', 10, 2);
             $table->text('description')->nullable();
-            $table->foreignId('level_id')->constrained('levels')->restrictOnDelete();
-            $table->foreignId('affiliation_id')->nullable()->constrained('affiliations')->nullOnDelete();
-            $table->foreignId('category_id')->constrained('program_categories')->restrictOnDelete();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

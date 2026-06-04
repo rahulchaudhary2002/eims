@@ -11,12 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('institution_program', function (Blueprint $table) {
+        Schema::create('institution_programs', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('institution_id')->constrained()->onDelete('cascade');
             $table->foreignId('program_id')->constrained()->onDelete('cascade');
-            $table->decimal('commission_amount', 10, 2)->default(0);
+            $table->string('title')->nullable();
+            $table->string('slug')->nullable()->unique();
+            $table->decimal('admission_fee', 12, 2)->nullable();
+            $table->decimal('monthly_fee', 12, 2)->nullable();
+            $table->decimal('semester_fee', 12, 2)->nullable();
+            $table->decimal('annual_fee', 12, 2)->nullable();
+            $table->decimal('total_fee', 12, 2)->nullable();
+            $table->unsignedSmallInteger('duration_months')->nullable();
+            $table->unsignedSmallInteger('total_seats')->nullable();
+            $table->unsignedSmallInteger('available_seats')->nullable();
+            $table->decimal('minimum_gpa', 4, 2)->nullable();
+            $table->decimal('minimum_percentage', 5, 2)->nullable();
+            $table->date('admission_start_date')->nullable();
+            $table->date('admission_end_date')->nullable();
+            $table->string('status', 20)->default('closed');
 
             $table->unique(['institution_id', 'program_id']);
+            $table->timestamps();
         });
     }
 
@@ -25,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('institution_program');
+        Schema::dropIfExists('institution_programs');
     }
 };

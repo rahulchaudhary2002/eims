@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -69,9 +71,6 @@ body {
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
 }
-
-/* Import Inter font */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 .no-tailwind * {
   all: revert;
@@ -145,6 +144,119 @@ body {
 
 .nav-link.active {
   @apply bg-primary-100 text-primary-700 font-semibold;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Public website pages use the legacy Sikuna visual system from modules/home. */
+.legacy-sikuna main > div[class*="max-w-"] {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.legacy-sikuna main > div[class*="max-w-"] > .mb-6,
+.legacy-sikuna .legacy-page-heading {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.legacy-sikuna main > div[class*="max-w-"] > .mb-6 h1,
+.legacy-sikuna .legacy-page-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: #2c5aa0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.legacy-sikuna main > div[class*="max-w-"] > .mb-6 h1::after,
+.legacy-sikuna .legacy-page-title::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -0.625rem;
+    width: 5rem;
+    height: 0.25rem;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: #4299e1;
+}
+
+.legacy-sikuna main > div[class*="max-w-"] > .mb-6 p,
+.legacy-sikuna .legacy-page-subtitle {
+    max-width: 42rem;
+    margin: 0 auto;
+    color: #4a5568;
+    font-size: 1.1rem;
+}
+
+.legacy-sikuna .bg-white.rounded-2xl,
+.legacy-sikuna .bg-white.rounded-xl {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.legacy-sikuna .shadow-sm {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.legacy-sikuna .border-gray-100,
+.legacy-sikuna .border-gray-200 {
+    border-color: #e2e8f0 !important;
+}
+
+.legacy-sikuna input[type="text"],
+.legacy-sikuna input[type="email"],
+.legacy-sikuna input[type="number"],
+.legacy-sikuna input[type="tel"],
+.legacy-sikuna input[type="url"],
+.legacy-sikuna input[type="date"],
+.legacy-sikuna select,
+.legacy-sikuna textarea {
+    border-color: #e2e8f0;
+    border-radius: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.legacy-sikuna input:focus,
+.legacy-sikuna select:focus,
+.legacy-sikuna textarea:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.1);
+}
+
+.legacy-sikuna .bg-blue-600 {
+    background-color: #4299e1 !important;
+}
+
+.legacy-sikuna .hover\:bg-blue-700:hover {
+    background-color: #2c5aa0 !important;
+}
+
+.legacy-sikuna .text-blue-600 {
+    color: #4299e1 !important;
+}
+
+.legacy-sikuna h1.text-gray-900,
+.legacy-sikuna h2.text-gray-900,
+.legacy-sikuna h3.text-gray-900 {
+    color: #2c5aa0 !important;
+}
+
+.legacy-sikuna .grid.gap-5 {
+    gap: 1.75rem;
 }
 
 /* =============================================
@@ -612,6 +724,9 @@ body {
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
 }
+.form-control.with-icon {
+    padding-left: 2.25rem;
+}
 .form-control.is-invalid {
     border-color: var(--color-danger);
 }
@@ -649,6 +764,252 @@ select.form-control {
     font-size: 13px;
     color: var(--color-danger);
     margin-top: 4px;
+}
+
+/* =============================================
+   Student Form Pages
+   ============================================= */
+.student-form-shell {
+    max-width: 48rem;
+}
+
+.student-form-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .student-form-card {
+        padding: 2rem;
+    }
+}
+
+.student-form-header {
+    margin-bottom: 1.75rem;
+}
+
+.student-form-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: #2c5aa0;
+    line-height: 1.15;
+}
+
+.student-form-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.5rem;
+    width: 70px;
+    height: 3px;
+    background: #4299e1;
+}
+
+.student-form-description {
+    color: #4b5563;
+    font-size: 0.95rem;
+    line-height: 1.65;
+}
+
+.student-form-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.student-form-errors {
+    border-radius: 0.75rem;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.student-form-errors ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.student-form-errors li + li {
+    margin-top: 0.25rem;
+}
+
+.student-form-label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.student-form-control {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background: #ffffff;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: #1f2937;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    outline: none;
+}
+
+.student-form-control:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.1);
+}
+
+.student-form-control.is-invalid {
+    border-color: #f87171;
+}
+
+.student-form-textarea {
+    min-height: 110px;
+    resize: none;
+}
+
+.student-form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 2.5rem;
+}
+
+.student-form-file {
+    display: block;
+    width: 100%;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.student-form-file::file-selector-button {
+    margin-right: 0.75rem;
+    border: 0;
+    border-radius: 0.75rem;
+    background: #ebf8ff;
+    color: #2c5aa0;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.student-form-file::file-selector-button:hover {
+    background: #bee3f8;
+}
+
+.student-form-help {
+    margin-top: 0.35rem;
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.student-form-error {
+    margin-top: 0.35rem;
+    font-size: 0.75rem;
+    color: #ef4444;
+}
+
+.student-form-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(66, 153, 225, 0.2);
+    background: rgba(66, 153, 225, 0.1);
+    color: #2c5aa0;
+    padding: 1rem;
+    font-size: 0.875rem;
+}
+
+.student-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.student-form-btn-primary,
+.student-form-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.student-form-btn-primary {
+    background: linear-gradient(90deg, #4299e1 0%, #2c5aa0 100%);
+    color: #ffffff;
+}
+
+.student-form-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(44, 90, 160, 0.22);
+}
+
+.student-form-btn-secondary {
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #4b5563;
+}
+
+.student-form-btn-secondary:hover {
+    background: #f9fafb;
+    color: #2c5aa0;
+    border-color: #bfdbfe;
+}
+
+.student-form-panel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.student-form-panel-head {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.student-form-panel-head h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.student-form-panel-head p {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.student-form-panel-body {
+    padding: 1.25rem 1.5rem;
 }
 
 /* =============================================
@@ -954,6 +1315,263 @@ select.form-control {
     box-shadow: 0 0 0 3px rgba(37,99,235,0.12) !important;
 }
 
+
+/* =============================================
+   CKEditor 5 – Tailwind compatibility
+   =============================================
+   Strategy:
+   - CKEditor's own CSS (ckeditor5.css, loaded AFTER app.css)
+     already uses high-specificity .ck-* selectors that beat
+     Tailwind's element-level resets. DO NOT re-override those
+     with !important — that breaks internal state management.
+   - We only add:
+     1. Visual integration (border, focus ring, toolbar tint)
+     2. Content-area typography Tailwind wipes out
+     3. Fullscreen feature
+   ============================================= */
+
+/* ── Wrapper ─────────────────────────────────────────────
+   Set CKEditor's own border variable to our design colour.
+   This makes its internal borders (toolbar separator,
+   editable outline) use the right colour automatically.     */
+.ck.ck-editor {
+    --ck-color-base-border: #E2E8F0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    font-family: inherit;
+}
+/* Focus ring on the outer wrapper */
+.ck.ck-editor:focus-within {
+    outline: 2px solid #2563EB;
+    outline-offset: -1px;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+
+/* Toolbar tint — CKEditor leaves this transparent by default */
+.ck.ck-toolbar {
+    background-color: #f8fafc !important;
+}
+
+/* Minimum editable height */
+.ck.ck-editor__main > .ck-editor__editable {
+    min-height: 200px;
+}
+
+/* ── Content-area typography ──────────────────────────────
+   Tailwind's @tailwind base resets heading sizes, list
+   bullets, link colours, etc. for ALL elements globally.
+   CKEditor's own CSS doesn't restore them — we must.        */
+.ck-editor__editable {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--color-body);
+    padding: 14px 18px;
+}
+.ck-editor__editable p { margin-bottom: 0.5em; }
+
+.ck-editor__editable h2,
+.ck-editor__editable h3,
+.ck-editor__editable h4 {
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--color-heading);
+    margin-top: 1.25em;
+    margin-bottom: 0.4em;
+}
+.ck-editor__editable h2 { font-size: 1.375em; }
+.ck-editor__editable h3 { font-size: 1.15em; }
+.ck-editor__editable h4 { font-size: 1em; }
+
+.ck-editor__editable ul {
+    list-style-type: disc;
+    padding-left: 1.75em;
+    margin: 0.4em 0;
+}
+.ck-editor__editable ol {
+    list-style-type: decimal;
+    padding-left: 1.75em;
+    margin: 0.4em 0;
+}
+.ck-editor__editable li { margin: 0.2em 0; }
+.ck-editor__editable ul ul { list-style-type: circle; }
+
+.ck-editor__editable a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.ck-editor__editable a:hover { opacity: 0.75; }
+
+.ck-editor__editable blockquote {
+    border-left: 3px solid var(--color-primary);
+    padding-left: 1em;
+    margin: 0.75em 0;
+    color: var(--color-muted);
+    font-style: italic;
+}
+
+.ck-editor__editable hr {
+    border: none;
+    border-top: 2px solid #E2E8F0;
+    margin: 1em 0;
+}
+
+.ck-editor__editable table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.75em 0;
+    font-size: 0.875em;
+}
+.ck-editor__editable table td,
+.ck-editor__editable table th {
+    border: 1px solid #E2E8F0;
+    padding: 0.5em 0.75em;
+    min-width: 2em;
+    vertical-align: top;
+}
+.ck-editor__editable table th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: var(--color-heading);
+    text-align: left;
+}
+
+.ck-editor__editable strong { font-weight: 700; }
+.ck-editor__editable em    { font-style: italic; }
+.ck-editor__editable u     { text-decoration: underline; }
+.ck-editor__editable s     { text-decoration: line-through; }
+
+/* ── View output – same typography as the editor ─────────
+   Apply class="ck-content" to any div that renders CKEditor
+   HTML so the saved output looks identical to the edit view. */
+.ck-content {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--color-body);
+}
+.ck-content p { margin-bottom: 0.5em; }
+
+.ck-content h2,
+.ck-content h3,
+.ck-content h4 {
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--color-heading);
+    margin-top: 1.25em;
+    margin-bottom: 0.4em;
+}
+.ck-content h2 { font-size: 1.375em; }
+.ck-content h3 { font-size: 1.15em; }
+.ck-content h4 { font-size: 1em; }
+
+.ck-content ul {
+    list-style-type: disc;
+    padding-left: 1.75em;
+    margin: 0.4em 0;
+}
+.ck-content ol {
+    list-style-type: decimal;
+    padding-left: 1.75em;
+    margin: 0.4em 0;
+}
+.ck-content li { margin: 0.2em 0; }
+.ck-content ul ul { list-style-type: circle; }
+
+.ck-content a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.ck-content a:hover { opacity: 0.75; }
+
+.ck-content blockquote {
+    border-left: 3px solid var(--color-primary);
+    padding-left: 1em;
+    margin: 0.75em 0;
+    color: var(--color-muted);
+    font-style: italic;
+}
+
+.ck-content hr {
+    border: none;
+    border-top: 2px solid #E2E8F0;
+    margin: 1em 0;
+}
+
+.ck-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.75em 0;
+    font-size: 0.875em;
+}
+.ck-content table td,
+.ck-content table th {
+    border: 1px solid #E2E8F0;
+    padding: 0.5em 0.75em;
+    min-width: 2em;
+    vertical-align: top;
+}
+.ck-content table th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: var(--color-heading);
+    text-align: left;
+}
+
+.ck-content strong { font-weight: 700; }
+.ck-content em    { font-style: italic; }
+.ck-content u     { text-decoration: underline; }
+.ck-content s     { text-decoration: line-through; }
+
+/* ── Fullscreen toggle button (plain DOM, injected via JS) */
+/* Spacer grows to fill space between toolbar items and button */
+.ck-fullscreen-spacer {
+    flex: 1;
+    display: block;
+    min-width: 6px;
+    pointer-events: none;
+}
+/* Button inherits .ck.ck-button styles from CKEditor's own CSS.
+   We only need to ensure the SVG icon renders correctly.       */
+.ck-fullscreen-toggle svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+/* ── Fullscreen mode ──────────────────────────────────── */
+.ck.ck-editor.ck-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    border-radius: 0;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    box-shadow: none !important;
+}
+.ck.ck-editor.ck-fullscreen .ck.ck-toolbar {
+    border-radius: 0 !important;
+    flex-shrink: 0;
+}
+.ck.ck-editor.ck-fullscreen .ck.ck-editor__main {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.ck.ck-editor.ck-fullscreen .ck.ck-editor__main > .ck-editor__editable {
+    flex: 1;
+    min-height: 0;
+    max-height: none !important;
+    height: 100% !important;
+}
+body.ck-fullscreen-open {
+    overflow: hidden;
+}
+
 /* =============================================
    No-tailwind zone (TinyMCE etc.)
    ============================================= */
@@ -982,4 +1600,3 @@ select.form-control {
 .no-tailwind th { font-weight: 600; color: #374151; }
 .no-tailwind tr:last-child td { border-bottom: none; }
 .no-tailwind tbody tr:hover { background-color: #f1f5f9; }
-

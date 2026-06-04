@@ -2,57 +2,101 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Admission extends Model
 {
-    use HasFactory, HasSlug;
+    public const VERIFICATION_STATUSES = [
+        'pending'  => 'Pending',
+        'verified' => 'Verified',
+        'rejected' => 'Rejected',
+    ];
+
+    public const SOURCES = [
+        'platform_referral'  => 'Platform Referral',
+        'direct_institution' => 'Direct Institution',
+        'manual_admin'       => 'Manual (Admin)',
+        'imported'           => 'Imported',
+    ];
+
+    public const COMMISSION_STATUSES = [
+        'pending'      => 'Pending',
+        'eligible'     => 'Eligible',
+        'not_eligible' => 'Not Eligible',
+        'disputed'     => 'Disputed',
+        'paid'         => 'Paid',
+        'cancelled'    => 'Cancelled',
+    ];
 
     protected $fillable = [
-        'title',
-        'slug',
+        'application_id',
+        'application_referral_id',
+        'student_id',
         'institution_id',
-        'description',
-        'start_date',
-        'end_date',
+        'institution_program_id',
+        'admission_number',
+        'admission_date',
+        'paid_amount',
+        'payment_proof',
+        'verification_status',
+        'verified_by',
+        'verified_at',
+        'remarks',
+        'source',
+        'is_commission_claimable',
+        'commission_status',
     ];
 
-    protected $dates = [
-        'start_date',
-        'end_date',
-    ];
-
-    /**
-     * Get the options for generating the slug.
-     */
-    public function getSlugOptions(): SlugOptions
+    protected function casts(): array
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom('title')
-            ->saveSlugsTo('slug');
+        return [
+            'admission_date'          => 'date',
+            'paid_amount'             => 'decimal:2',
+            'verified_at'             => 'datetime',
+            'is_commission_claimable' => 'boolean',
+        ];
     }
 
-    public function institution()
+    public function application(): BelongsTo
+    {
+        return $this->belongsTo(Application::class);
+    }
+
+    public function referral(): BelongsTo
+    {
+        return $this->belongsTo(Referral::class, 'application_referral_id');
+    }
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function institution(): BelongsTo
     {
         return $this->belongsTo(Institution::class);
     }
 
-    public function programs()
+    public function institutionProgram(): BelongsTo
     {
-        return $this->belongsToMany(Program::class, 'admission_program');
+        return $this->belongsTo(InstitutionProgram::class);
     }
 
-    public function getIsOpenAttribute(): bool
+    public function verifiedBy(): BelongsTo
     {
-        $now = now();
-        return $now->between($this->start_date, $this->end_date);
+        return $this->belongsTo(User::class, 'verified_by');
     }
 
-    public function applications()
+    public function commissionInvoice(): HasOne
     {
-        return $this->hasMany(AdmissionApplication::class);
+        return $this->hasOne(\App\Models\CommissionInvoice::class);
+    }
+
+    public function rewardClaims(): HasMany
+    {
+        return $this->hasMany(StudentRewardClaim::class);
     }
 }

@@ -1,0 +1,130 @@
+@extends('admin.layouts.app')
+@section('title', 'Commission Payments')
+@section('page-title', 'Commission Payments')
+
+@section('content')
+<div class="space-y-5">
+    <x-admin.page-header
+        title="Commission Payments"
+        subtitle="Payments recorded against commission invoices."
+        :breadcrumbs="[
+            ['label' => 'Dashboard', 'route' => 'admin.dashboard'],
+            ['label' => 'Commission Payments'],
+        ]">
+        <x-slot:actions>
+            <a href="{{ route('admin.commission-payments.create') }}" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                Record Payment
+            </a>
+        </x-slot:actions>
+    </x-admin.page-header>
+
+    <x-admin.alert type="success" :message="session('success')" />
+
+    <div class="eims-card p-4">
+        <form method="GET" action="{{ route('admin.commission-payments.index') }}" class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-3 items-end">
+            <div>
+                <label class="form-label text-xs">Commission Invoice</label>
+                <select name="commission_invoice_id" class="form-control">
+                    <option value="">All Invoices</option>
+                    @foreach($invoices as $invoice)
+                        <option value="{{ $invoice->id }}" {{ request('commission_invoice_id') == $invoice->id ? 'selected' : '' }}>
+                            {{ $invoice->invoice_number }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="form-label text-xs">Payment Method</label>
+                <select name="payment_method" class="form-control">
+                    <option value="">All Methods</option>
+                    @foreach($paymentMethods as $value => $label)
+                        <option value="{{ $value }}" {{ request('payment_method') === $value ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="form-label text-xs">Paid From</label>
+                <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-control">
+            </div>
+            <div>
+                <label class="form-label text-xs">Paid To</label>
+                <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-control">
+            </div>
+            <div class="flex gap-2 md:col-span-3 xl:col-span-4">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="{{ route('admin.commission-payments.index') }}" class="btn btn-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="eims-card overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="eims-table">
+                <thead>
+                    <tr>
+                        <th>Invoice #</th>
+                        <th>Institution</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Transaction Ref</th>
+                        <th>Payment Date</th>
+                        <th>Proof</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($payments as $payment)
+                        <tr>
+                            <td>
+                                @if($payment->commissionInvoice)
+                                    <a href="{{ route('admin.commission-invoices.show', $payment->commissionInvoice) }}" class="text-blue-600 hover:underline font-mono text-sm">
+                                        {{ $payment->commissionInvoice->invoice_number }}
+                                    </a>
+                                @else
+                                    <span class="text-slate-400">-</span>
+                                @endif
+                            </td>
+                            <td class="text-sm">{{ $payment->commissionInvoice?->institution?->name ?? '-' }}</td>
+                            <td class="font-mono text-sm font-semibold">{{ number_format((float) $payment->amount, 2) }}</td>
+                            <td class="text-sm">{{ $paymentMethods[$payment->payment_method] ?? $payment->payment_method }}</td>
+                            <td class="font-mono text-xs text-slate-500">{{ $payment->transaction_reference ?? '-' }}</td>
+                            <td class="text-xs text-slate-500">{{ $payment->payment_date?->format('d M Y') ?? '-' }}</td>
+                            <td>
+                                @if($payment->payment_proof)
+                                    <a href="{{ Storage::url($payment->payment_proof) }}" target="_blank" class="text-blue-600 hover:underline text-xs">View</a>
+                                @else
+                                    <span class="text-slate-400 text-xs">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-1">
+                                    <a href="{{ route('admin.commission-payments.show', $payment) }}" class="btn-icon btn-icon-view" title="View">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                    </a>
+                                    <a href="{{ route('admin.commission-payments.edit', $payment) }}" class="btn-icon btn-icon-edit" title="Edit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+                                    </a>
+                                    <form action="{{ route('admin.commission-payments.destroy', $payment) }}" method="POST" onsubmit="return confirm('Delete this payment? Invoice status will be recalculated.')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn-icon btn-icon-delete" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center text-slate-400 py-10">No commission payments found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($payments->hasPages())
+            <div class="px-4 py-3 border-t border-slate-100">{{ $payments->links() }}</div>
+        @endif
+    </div>
+</div>
+@endsection

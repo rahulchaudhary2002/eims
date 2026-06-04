@@ -4,85 +4,38 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Program extends Model
 {
-    use HasSlug;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
+        'faculty_id',
+        'level',
         'name',
         'slug',
-        'code',
         'description',
-        'level_id',
-        'affiliation_id',
-        'category_id',
-        'fee',
-        'duration',
         'is_active',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
-
-    public function getSlugOptions(): SlugOptions
+    protected function casts(): array
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
+        return [
+            'is_active' => 'boolean',
+        ];
     }
 
-    public function courses(): BelongsToMany
+    public function faculty(): BelongsTo
     {
-        return $this->belongsToMany(Course::class, 'course_program');
+        return $this->belongsTo(Faculty::class);
     }
 
-    public function level(): BelongsTo
+    public function institutionPrograms(): HasMany
     {
-        return $this->belongsTo(Level::class);
-    }
-
-    public function affiliation(): BelongsTo
-    {
-        return $this->belongsTo(Affiliation::class);
-    }
-
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(ProgramCategory::class, 'category_id');
-    }
-
-    public function institutions()
-    {
-        return $this->belongsToMany(Institution::class, 'institution_program')->withPivot('commission_amount');
-    }
-
-    public function admissions()
-    {
-        return $this->hasMany(Admission::class);
+        return $this->hasMany(InstitutionProgram::class);
     }
 
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
-    }
-
-    public function getDisplayNameAttribute(): string
-    {
-        return "{$this->name} ({$this->code})";
     }
 }
