@@ -45,23 +45,63 @@
 
     <div class="grid grid-cols-[300px_1fr] gap-10 max-lg:grid-cols-1">
         <aside>
-            <form method="GET" action="{{ route('website.consultancies.index') }}" class="bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border border-gray-200 h-fit sticky top-[120px]">
+            <form method="GET" action="{{ route('website.consultancies.index') }}"
+                  class="bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border border-gray-200 h-fit sticky top-[120px] max-h-[calc(100vh-140px)] overflow-y-auto max-lg:static max-lg:max-h-none">
                 <div class="p-6">
-                <h3 class="text-[1.2rem] font-bold text-[#2c5aa0] mb-4">Services</h3>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-[0.95rem] font-semibold text-[#2d3748] mb-2">Service Type</label>
-                        <select name="service" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition">
-                            <option value="">All Services</option>
+
+                    {{-- Service Type --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Service Type</h3>
+                            <a href="{{ route('website.consultancies.index', request()->except(['service', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <div class="flex flex-col gap-3">
                             @foreach ($serviceTypes as $key => $label)
-                                <option value="{{ $key }}" {{ request('service') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="radio" name="service" value="{{ $key }}" {{ request('service') === $key ? 'checked' : '' }}>
+                                <span class="flex-1 text-[#2d3748]">{{ $label }}</span>
+                            </label>
                             @endforeach
-                        </select>
+                        </div>
                     </div>
-                </div>
+
+                    {{-- Province --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Province</h3>
+                            <a href="{{ route('website.consultancies.index', request()->except(['province', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            @foreach ($provinces as $province)
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="radio" name="province" value="{{ $province }}" {{ request('province') === $province ? 'checked' : '' }}>
+                                <span class="flex-1 text-[#2d3748]">{{ $province }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Destination --}}
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Study Destination</h3>
+                            <a href="{{ route('website.consultancies.index', request()->except(['destination', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            @foreach ($destinations as $dest)
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="radio" name="destination" value="{{ $dest }}" {{ request('destination') === $dest ? 'checked' : '' }}>
+                                <span class="flex-1 text-[#2d3748]">{{ $dest }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+
                 </div>
                 <div class="sticky bottom-0 bg-white border-t border-gray-200 p-5 rounded-b-xl">
-                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold border-2 border-[#4299e1] text-[#4299e1] hover:bg-[#4299e1]/10 hover:-translate-y-0.5 transition">Apply Filters</button>
+                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold border-2 border-[#4299e1] text-[#4299e1] hover:bg-[#4299e1]/10 hover:-translate-y-0.5 transition">
+                        <i class="fas fa-redo"></i> Apply Filters
+                    </button>
                 </div>
             </form>
         </aside>

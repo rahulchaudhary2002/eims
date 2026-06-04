@@ -42,17 +42,87 @@
 
 <section class="bg-[#f7fafc] py-20">
     <div class="max-w-[1200px] mx-auto px-5">
-        <div class="text-[1.1rem] text-[#2d3748] mb-8">Showing <strong class="text-[#2c5aa0]">{{ $posts->count() }}</strong> of <strong class="text-[#2c5aa0]">{{ $posts->total() }}</strong> posts</div>
-        @if ($posts->isEmpty())
-            <div class="text-center py-20"><h3 class="text-[1.5rem] font-bold text-gray-600 mb-3">No posts found.</h3></div>
-        @else
-            <div class="grid grid-cols-[repeat(auto-fill,minmax(330px,1fr))] gap-7 mb-12 max-sm:grid-cols-1">
-                @foreach ($posts as $post)
-                    @include('website.partials.post-card', ['post' => $post])
-                @endforeach
+        <div class="grid grid-cols-[300px_1fr] gap-10 max-lg:grid-cols-1">
+
+            {{-- Sidebar --}}
+            <form method="GET" action="{{ route('website.posts.index') }}"
+                  class="bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border border-gray-200 h-fit sticky top-[120px] max-h-[calc(100vh-140px)] overflow-y-auto max-lg:static max-lg:max-h-none">
+                <div class="p-6">
+
+                    {{-- Post Type --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Post Type</h3>
+                            <a href="{{ route('website.posts.index', request()->except(['type', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            @foreach ($types as $key => $label)
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="radio" name="type" value="{{ $key }}" {{ request('type') === $key ? 'checked' : '' }}>
+                                <span class="flex-1 text-[#2d3748]">{{ $label }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Institution --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Institution</h3>
+                            <a href="{{ route('website.posts.index', request()->except(['institution', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <select name="institution" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm">
+                            <option value="">All Institutions</option>
+                            @foreach ($institutions as $inst)
+                            <option value="{{ $inst->id }}" {{ request('institution') == $inst->id ? 'selected' : '' }}>{{ $inst->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Date Range --}}
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Date Range</h3>
+                            <a href="{{ route('website.posts.index', request()->except(['from', 'to', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-[0.85rem] font-semibold text-[#2d3748] block mb-1">From</label>
+                                <input type="date" name="from" value="{{ request('from') }}"
+                                       class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm">
+                            </div>
+                            <div>
+                                <label class="text-[0.85rem] font-semibold text-[#2d3748] block mb-1">To</label>
+                                <input type="date" name="to" value="{{ request('to') }}"
+                                       class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="sticky bottom-0 bg-white border-t border-gray-200 p-5 rounded-b-xl">
+                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold border-2 border-[#4299e1] text-[#4299e1] hover:bg-[#4299e1]/10 hover:-translate-y-0.5 transition">
+                        <i class="fas fa-redo"></i> Apply Filters
+                    </button>
+                </div>
+            </form>
+
+            {{-- Results --}}
+            <div>
+                <div class="text-[1.1rem] text-[#2d3748] mb-8">Showing <strong class="text-[#2c5aa0]">{{ $posts->count() }}</strong> of <strong class="text-[#2c5aa0]">{{ $posts->total() }}</strong> posts</div>
+                @if ($posts->isEmpty())
+                    <div class="text-center py-20"><h3 class="text-[1.5rem] font-bold text-gray-600 mb-3">No posts found.</h3></div>
+                @else
+                    <div class="grid grid-cols-[repeat(auto-fill,minmax(330px,1fr))] gap-7 mb-12 max-sm:grid-cols-1">
+                        @foreach ($posts as $post)
+                            @include('website.partials.post-card', ['post' => $post])
+                        @endforeach
+                    </div>
+                    @include('website.partials.pagination', ['paginator' => $posts])
+                @endif
             </div>
-            @include('website.partials.pagination', ['paginator' => $posts])
-        @endif
+
+        </div>
     </div>
 </section>
 @endsection

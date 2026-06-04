@@ -71,21 +71,76 @@
 <section class="bg-[#f7fafc] py-20">
     <div class="max-w-[1200px] mx-auto px-5">
         <div class="grid grid-cols-[300px_1fr] gap-10 max-lg:grid-cols-1">
-            <form method="get" action="{{ route('website.programs.index') }}" class="bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border border-gray-200 h-fit sticky top-[120px]">
-                <div class="p-6 space-y-7">
-                    <div class="pb-5 border-b border-gray-200">
-                        <h3 class="text-[1.2rem] font-bold text-[#2c5aa0] mb-4">Institution</h3>
-                        <select name="institution" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition">
-                            <option value="">All Institutions</option>
-                            @foreach ($institutions as $inst)
-                                <option value="{{ $inst->id }}" {{ request('institution') == $inst->id ? 'selected' : '' }}>{{ $inst->name }}</option>
+            <form method="get" action="{{ route('website.programs.index') }}"
+                  class="bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border border-gray-200 h-fit sticky top-[120px] max-h-[calc(100vh-140px)] overflow-y-auto max-lg:static max-lg:max-h-none">
+                <div class="p-6">
+
+                    {{-- Faculty --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Faculty / Stream</h3>
+                            <a href="{{ route('website.programs.index', request()->except(['faculty', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            @foreach ($faculties as $faculty)
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="radio" name="faculty" value="{{ $faculty->slug }}" {{ request('faculty') === $faculty->slug ? 'checked' : '' }}>
+                                <span class="flex-1 text-[#2d3748]">{{ $faculty->name }}</span>
+                            </label>
                             @endforeach
-                        </select>
+                        </div>
                     </div>
-                    <div class="pb-5 border-b border-gray-200">
-                        <h3 class="text-[1.2rem] font-bold text-[#2c5aa0] mb-4">Maximum Fee</h3>
-                        <input type="number" name="fee_max" value="{{ request('fee_max') }}" min="0" step="10000" placeholder="e.g. 500000" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition">
+
+                    {{-- Level --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Level</h3>
+                            <a href="{{ route('website.programs.index', request()->except(['level', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            @foreach ($levels as $level)
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="radio" name="level" value="{{ $level }}" {{ request('level') === $level ? 'checked' : '' }}>
+                                <span class="flex-1 text-[#2d3748]">{{ $level }}</span>
+                            </label>
+                            @endforeach
+                        </div>
                     </div>
+
+                    {{-- Status --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Admission Status</h3>
+                            <a href="{{ route('website.programs.index', request()->except(['status', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            @foreach ($statuses as $key => $label)
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="radio" name="status" value="{{ $key }}" {{ request('status') === $key ? 'checked' : '' }}>
+                                <span class="flex-1 text-[#2d3748]">{{ $label }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Max Fee --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Maximum Fee</h3>
+                            <a href="{{ route('website.programs.index', request()->except(['fee_max', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <input type="number" name="fee_max" value="{{ request('fee_max') }}" min="0" step="10000" placeholder="e.g. 500000"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition">
+                    </div>
+
+                    {{-- Admission Open --}}
+                    <div>
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" name="admission_open" value="1" {{ request('admission_open') ? 'checked' : '' }} class="w-[18px] h-[18px] accent-[#4299e1]">
+                            <span class="font-semibold text-[#2d3748]">Admission Open Only</span>
+                        </label>
+                    </div>
+
                 </div>
                 <div class="sticky bottom-0 bg-white border-t border-gray-200 p-5 rounded-b-xl">
                     <button class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold border-2 border-[#4299e1] text-[#4299e1] hover:bg-[#4299e1]/10 hover:-translate-y-0.5 transition">

@@ -65,14 +65,72 @@
 <section class="bg-[#f7fafc] py-20">
     <div class="max-w-[1200px] mx-auto px-5">
         <div class="grid grid-cols-[300px_1fr] gap-10 max-lg:grid-cols-1">
-            <form method="get" action="{{ route('website.scholarships.index') }}" class="bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border border-gray-200 h-fit sticky top-[120px]">
+            <form method="get" action="{{ route('website.scholarships.index') }}"
+                  class="bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border border-gray-200 h-fit sticky top-[120px] max-h-[calc(100vh-140px)] overflow-y-auto max-lg:static max-lg:max-h-none">
                 <div class="p-6">
-                    <h3 class="text-[1.2rem] font-bold text-[#2c5aa0] mb-4">Eligibility</h3>
-                    <label class="mb-2 font-semibold text-[#2d3748] text-[0.95rem] block">My GPA</label>
-                    <input type="number" name="min_gpa" value="{{ request('min_gpa') }}" step="0.1" min="0" max="4" placeholder="e.g. 3.5" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition">
+
+                    {{-- Type --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Scholarship Type</h3>
+                            <a href="{{ route('website.scholarships.index', request()->except(['type', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            @foreach ($types as $key => $label)
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="radio" name="type" value="{{ $key }}" {{ request('type') === $key ? 'checked' : '' }}>
+                                <span class="flex-1 text-[#2d3748]">{{ $label }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Benefit Type --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Benefit Type</h3>
+                            <a href="{{ route('website.scholarships.index', request()->except(['benefit_type', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            @foreach ($benefitTypes as $key => $label)
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-[18px] h-[18px] accent-[#4299e1]" type="radio" name="benefit_type" value="{{ $key }}" {{ request('benefit_type') === $key ? 'checked' : '' }}>
+                                <span class="flex-1 text-[#2d3748]">{{ $label }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Institution --}}
+                    <div class="pb-5 mb-7 border-b border-gray-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">Institution</h3>
+                            <a href="{{ route('website.scholarships.index', request()->except(['institution', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <select name="institution" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm">
+                            <option value="">All Institutions</option>
+                            @foreach ($institutions as $inst)
+                            <option value="{{ $inst->id }}" {{ request('institution') == $inst->id ? 'selected' : '' }}>{{ $inst->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Min GPA --}}
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-[1.2rem] font-bold text-[#2c5aa0]">My GPA</h3>
+                            <a href="{{ route('website.scholarships.index', request()->except(['min_gpa', 'page'])) }}" class="text-[0.8rem] text-[#4299e1] no-underline">Clear</a>
+                        </div>
+                        <input type="number" name="min_gpa" value="{{ request('min_gpa') }}" step="0.1" min="0" max="4" placeholder="e.g. 3.5"
+                               class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition">
+                        <p class="text-xs text-gray-400 mt-1.5">Shows scholarships you're eligible for</p>
+                    </div>
+
                 </div>
                 <div class="sticky bottom-0 bg-white border-t border-gray-200 p-5 rounded-b-xl">
-                    <button class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold border-2 border-[#4299e1] text-[#4299e1] hover:bg-[#4299e1]/10 hover:-translate-y-0.5 transition"><i class="fas fa-redo"></i> Apply Filters</button>
+                    <button class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold border-2 border-[#4299e1] text-[#4299e1] hover:bg-[#4299e1]/10 hover:-translate-y-0.5 transition">
+                        <i class="fas fa-redo"></i> Apply Filters
+                    </button>
                 </div>
             </form>
             <div>
