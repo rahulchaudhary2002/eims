@@ -128,7 +128,7 @@
         </div>
 
         <div>
-            <label class="form-label" for="gpa">GPA <span class="text-slate-400 font-normal">(0–4)</span></label>
+            <label class="form-label" for="gpa">GPA <span class="text-slate-400 font-normal">(0-4)</span></label>
             <input type="number" name="gpa" id="gpa" step="0.01"
                 class="form-control @error('gpa') is-invalid @enderror"
                 value="{{ old('gpa', $studentAcademicRecord->gpa ?? '') }}"
@@ -137,7 +137,7 @@
         </div>
 
         <div>
-            <label class="form-label" for="percentage">Percentage <span class="text-slate-400 font-normal">(0–100)</span></label>
+            <label class="form-label" for="percentage">Percentage <span class="text-slate-400 font-normal">(0-100)</span></label>
             <input type="number" name="percentage" id="percentage" step="0.01"
                 class="form-control @error('percentage') is-invalid @enderror"
                 value="{{ old('percentage', $studentAcademicRecord->percentage ?? '') }}"

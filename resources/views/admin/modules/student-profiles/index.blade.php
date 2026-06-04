@@ -117,7 +117,7 @@
                         <td class="text-sm">
                             @if($profile->budget_min !== null || $profile->budget_max !== null)
                                 {{ number_format($profile->budget_min ?? 0) }}
-                                –
+                                -
                                 {{ $profile->budget_max ? number_format($profile->budget_max) : '∞' }}
                             @else
                                 <span class="text-slate-300">-</span>

@@ -53,7 +53,7 @@
                                 : '$' . number_format($agreement->commission_value, 2);
                         @endphp
                         <option value="{{ $agreement->id }}" {{ request('referral_agreement_id') == $agreement->id ? 'selected' : '' }}>
-                            Agreement #{{ $agreement->id }} — {{ $typeLabel }} {{ $valueDisplay }}
+                            Agreement #{{ $agreement->id }} - {{ $typeLabel }} {{ $valueDisplay }}
                         </option>
                     @endforeach
                 </select>

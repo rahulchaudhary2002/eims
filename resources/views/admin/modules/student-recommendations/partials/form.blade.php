@@ -45,7 +45,7 @@
 
 {{-- Score --}}
 <div>
-    <label for="score" class="form-label">Score <span class="text-slate-400 text-xs">(0 – 100)</span></label>
+    <label for="score" class="form-label">Score <span class="text-slate-400 text-xs">(0 - 100)</span></label>
     <input type="number" id="score" name="score" step="0.01" min="0" max="100"
         value="{{ old('score', $studentRecommendation->score ?? '') }}"
         class="form-control @error('score') is-invalid @enderror"

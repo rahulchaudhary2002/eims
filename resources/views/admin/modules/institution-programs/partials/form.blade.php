@@ -125,14 +125,14 @@
             @error('available_seats') <p class="form-error">{{ $message }}</p> @enderror
         </div>
         <div>
-            <label class="form-label" for="minimum_gpa">Minimum GPA <span class="text-slate-400 text-xs">(0–4)</span></label>
+            <label class="form-label" for="minimum_gpa">Minimum GPA <span class="text-slate-400 text-xs">(0-4)</span></label>
             <input type="number" id="minimum_gpa" name="minimum_gpa" min="0" max="4" step="0.01"
                 class="form-control @error('minimum_gpa') is-invalid @enderror"
                 value="{{ old('minimum_gpa', $ip?->minimum_gpa) }}" placeholder="e.g. 2.50">
             @error('minimum_gpa') <p class="form-error">{{ $message }}</p> @enderror
         </div>
         <div>
-            <label class="form-label" for="minimum_percentage">Minimum % <span class="text-slate-400 text-xs">(0–100)</span></label>
+            <label class="form-label" for="minimum_percentage">Minimum % <span class="text-slate-400 text-xs">(0-100)</span></label>
             <input type="number" id="minimum_percentage" name="minimum_percentage" min="0" max="100" step="0.01"
                 class="form-control @error('minimum_percentage') is-invalid @enderror"
                 value="{{ old('minimum_percentage', $ip?->minimum_percentage) }}" placeholder="e.g. 45.00">

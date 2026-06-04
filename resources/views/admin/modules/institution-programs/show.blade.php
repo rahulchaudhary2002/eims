@@ -136,7 +136,7 @@
                         <dd class="text-slate-800">
                             @if($ip->admission_start_date || $ip->admission_end_date)
                                 {{ $ip->admission_start_date?->format('d M Y') ?? '?' }}
-                                –
+                                -
                                 {{ $ip->admission_end_date?->format('d M Y') ?? '?' }}
                             @else
                                 -

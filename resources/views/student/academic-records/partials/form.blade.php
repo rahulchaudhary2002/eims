@@ -43,7 +43,7 @@
              class="student-form-control">
     </div>
     <div>
-         <label class="student-form-label">GPA (0–4.0)</label>
+         <label class="student-form-label">GPA (0-4.0)</label>
         <input type="number" step="0.01" name="gpa" value="{{ old('gpa', $record?->gpa) }}" min="0" max="4"
              class="student-form-control">
     </div>

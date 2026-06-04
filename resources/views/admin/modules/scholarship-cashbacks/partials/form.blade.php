@@ -74,7 +74,7 @@
     <input type="number" id="cashback_percentage" name="cashback_percentage" step="0.0001" min="0" max="100"
         value="{{ old('cashback_percentage', $scholarshipCashback->cashback_percentage ?? '0') }}"
         class="form-control @error('cashback_percentage') is-invalid @enderror"
-        placeholder="0 – 100">
+        placeholder="0 - 100">
     @error('cashback_percentage') <p class="form-error">{{ $message }}</p> @enderror
 </div>
 

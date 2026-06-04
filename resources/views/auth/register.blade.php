@@ -185,7 +185,7 @@
                     @if(session('institution_registered'))
                         <div class="bg-green-50 border border-green-200 text-green-800 rounded-xl px-4 py-3 text-sm mb-4">
                             <p class="font-semibold mb-1">Registration submitted!</p>
-                            <p>Your institution registration request has been received. Our team will review it and contact you within 2–3 business days.</p>
+                            <p>Your institution registration request has been received. Our team will review it and contact you within 2-3 business days.</p>
                         </div>
                     @endif
 

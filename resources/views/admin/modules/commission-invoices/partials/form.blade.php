@@ -59,7 +59,7 @@
                 data-cashback-percentage="{{ $agreement->student_cashback_percentage }}"
                 data-status="{{ $agreement->status }}"
                 {{ old('referral_agreement_id', $commissionInvoice->referral_agreement_id ?? $selectedAgreementId ?? '') == $agreement->id ? 'selected' : '' }}>
-                Agreement #{{ $agreement->id }} — {{ $typeLabel }} {{ $valueDisplay }} | Cashback {{ number_format($agreement->student_cashback_percentage, 2) }}% | {{ $statusLabel }}
+                Agreement #{{ $agreement->id }} - {{ $typeLabel }} {{ $valueDisplay }} | Cashback {{ number_format($agreement->student_cashback_percentage, 2) }}% | {{ $statusLabel }}
             </option>
         @endforeach
     </select>

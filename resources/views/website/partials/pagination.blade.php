@@ -1,7 +1,7 @@
 @if ($paginator->hasPages())
 <nav class="flex items-center justify-between mt-8" aria-label="Pagination">
     <div class="text-sm text-gray-500">
-        Showing {{ $paginator->firstItem() }}–{{ $paginator->lastItem() }} of {{ $paginator->total() }} results
+        Showing {{ $paginator->firstItem() }}-{{ $paginator->lastItem() }} of {{ $paginator->total() }} results
     </div>
     <div class="flex items-center gap-1">
         {{-- Previous --}}

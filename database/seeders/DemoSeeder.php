@@ -245,7 +245,7 @@ class DemoSeeder extends Seeder
             );
         }
 
-        // ── 8. USER–INSTITUTION LINKS ──────────────────────────────────
+        // ── 8. USER-INSTITUTION LINKS ──────────────────────────────────
         $roles = ['owner', 'admin', 'admission_officer', 'counselor'];
         foreach ($institutions as $i => $inst) {
             $user = $staffUsers[$i % count($staffUsers)];

@@ -1,5 +1,5 @@
 /*
- * Select2 theme — loaded AFTER select2.min.css in the same bundle,
+ * Select2 theme - loaded AFTER select2.min.css in the same bundle,
  * so these rules reliably override Select2 defaults.
  * Mirrors the project's .form-control design exactly.
  */
@@ -19,7 +19,7 @@ html.select2-open {
 
 /* ── Selection box (single) ──────────────────────────────── */
 .select2-container--default .select2-selection--single {
-    height: var(--btn-height);          /* 48px — same as .form-control */
+    height: var(--btn-height);          /* 48px - same as .form-control */
     padding: 0 40px 0 14px;            /* same left/right as form-control + room for arrow */
     border: 1px solid var(--color-border);
     border-radius: var(--input-radius);
@@ -57,7 +57,7 @@ html.select2-open {
     border-color: #CBD5E1;             /* one step darker than --color-border */
 }
 
-/* ── Focus / open — identical to .form-control:focus ─────── */
+/* ── Focus / open - identical to .form-control:focus ─────── */
 .select2-container--default.select2-container--focus .select2-selection--single,
 .select2-container--default.select2-container--focus .select2-selection--multiple,
 .select2-container--default.select2-container--open  .select2-selection--single,

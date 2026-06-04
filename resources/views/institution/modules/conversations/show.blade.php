@@ -308,7 +308,7 @@ document.getElementById('conv-search')?.addEventListener('input', function () {
         container.scrollTop = container.scrollHeight;
     }
 
-    // AJAX form submission — no page reload, keeps Echo subscription alive
+    // AJAX form submission - no page reload, keeps Echo subscription alive
     const form = document.getElementById('msg-form');
     const sendBtn = form?.querySelector('button[type="submit"]');
     if (form) {

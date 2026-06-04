@@ -108,7 +108,7 @@
                                         {{ $conversation->unread_count > 99 ? '99+' : $conversation->unread_count }}
                                     </span>
                                     @else
-                                    <span class="text-slate-300 text-xs">—</span>
+                                    <span class="text-slate-300 text-xs">-</span>
                                     @endif
                                 </td>
                                 <td class="text-xs text-slate-500">{{ $conversation->created_at->format('d M Y, H:i') }}</td>

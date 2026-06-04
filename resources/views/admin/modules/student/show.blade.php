@@ -227,7 +227,7 @@
                 @if($student->profile->budget_min !== null || $student->profile->budget_max !== null)
                     <p class="text-slate-800 font-medium">
                         {{ number_format($student->profile->budget_min ?? 0) }}
-                        –
+                        -
                         {{ $student->profile->budget_max ? number_format($student->profile->budget_max) : '∞' }}
                     </p>
                 @else

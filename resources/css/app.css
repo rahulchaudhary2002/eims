@@ -1317,13 +1317,13 @@ select.form-control {
 
 
 /* =============================================
-   CKEditor 5 – Tailwind compatibility
+   CKEditor 5 - Tailwind compatibility
    =============================================
    Strategy:
    - CKEditor's own CSS (ckeditor5.css, loaded AFTER app.css)
      already uses high-specificity .ck-* selectors that beat
      Tailwind's element-level resets. DO NOT re-override those
-     with !important — that breaks internal state management.
+     with !important - that breaks internal state management.
    - We only add:
      1. Visual integration (border, focus ring, toolbar tint)
      2. Content-area typography Tailwind wipes out
@@ -1347,7 +1347,7 @@ select.form-control {
     box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
 }
 
-/* Toolbar tint — CKEditor leaves this transparent by default */
+/* Toolbar tint - CKEditor leaves this transparent by default */
 .ck.ck-toolbar {
     background-color: #f8fafc !important;
 }
@@ -1360,7 +1360,7 @@ select.form-control {
 /* ── Content-area typography ──────────────────────────────
    Tailwind's @tailwind base resets heading sizes, list
    bullets, link colours, etc. for ALL elements globally.
-   CKEditor's own CSS doesn't restore them — we must.        */
+   CKEditor's own CSS doesn't restore them - we must.        */
 .ck-editor__editable {
     font-size: 0.875rem;
     line-height: 1.7;
@@ -1441,7 +1441,7 @@ select.form-control {
 .ck-editor__editable u     { text-decoration: underline; }
 .ck-editor__editable s     { text-decoration: line-through; }
 
-/* ── View output – same typography as the editor ─────────
+/* ── View output - same typography as the editor ─────────
    Apply class="ck-content" to any div that renders CKEditor
    HTML so the saved output looks identical to the edit view. */
 .ck-content {

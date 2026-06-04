@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Broadcast;
 |--------------------------------------------------------------------------
 */
 
-// Private conversation channel — authorizes students, institution users, and super admins.
+// Private conversation channel - authorizes students, institution users, and super admins.
 Broadcast::channel('conversation.{conversationId}', function ($user, int $conversationId) {
     $conversation = Conversation::find($conversationId);
 
@@ -22,7 +22,7 @@ Broadcast::channel('conversation.{conversationId}', function ($user, int $conver
         return true;
     }
 
-    // Institution user (web guard) — must belong to the conversation's institution
+    // Institution user (web guard) - must belong to the conversation's institution
     if ($user instanceof \App\Models\User) {
         return $user->institutions()
             ->where('institutions.id', $conversation->institution_id)
@@ -30,7 +30,7 @@ Broadcast::channel('conversation.{conversationId}', function ($user, int $conver
             ->exists();
     }
 
-    // Student (student guard) — must own the conversation
+    // Student (student guard) - must own the conversation
     if ($user instanceof \App\Models\Student) {
         return (int) $user->id === (int) $conversation->student_id;
     }

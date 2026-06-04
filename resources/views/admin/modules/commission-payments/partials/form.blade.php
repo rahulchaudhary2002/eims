@@ -53,7 +53,7 @@
             amountInput.value = remaining.toFixed(4);
         }
 
-        amountHint.textContent = `Invoice: ${total.toFixed(2)} — Already paid: ${paid.toFixed(2)} — Remaining: ${remaining.toFixed(2)}`;
+        amountHint.textContent = `Invoice: ${total.toFixed(2)} - Already paid: ${paid.toFixed(2)} - Remaining: ${remaining.toFixed(2)}`;
         amountHint.classList.remove('hidden');
     }
 

@@ -757,7 +757,7 @@
                                 <td class="font-mono text-sm">{{ number_format((float) $agreement->commission_value, 4) }}</td>
                                 <td class="font-mono text-sm">{{ number_format((float) $agreement->student_cashback_percentage, 4) }}%</td>
                                 <td class="text-xs text-slate-500">
-                                    {{ $agreement->start_date?->format('d M Y') ?? '-' }} – {{ $agreement->end_date?->format('d M Y') ?? '-' }}
+                                    {{ $agreement->start_date?->format('d M Y') ?? '-' }} - {{ $agreement->end_date?->format('d M Y') ?? '-' }}
                                 </td>
                                 <td><span class="badge">{{ \App\Models\ReferralAgreement::STATUSES[$agreement->status] ?? $agreement->status }}</span></td>
                                 <td>
@@ -1431,7 +1431,7 @@
                                 <td class="font-mono text-sm">{{ $promo->amount !== null ? number_format((float) $promo->amount, 2) : '-' }}</td>
                                 <td class="text-xs text-slate-500">
                                     {{ $promo->start_date?->format('d M Y') ?? '-' }}
-                                    @if($promo->end_date) – {{ $promo->end_date->format('d M Y') }} @endif
+                                    @if($promo->end_date) - {{ $promo->end_date->format('d M Y') }} @endif
                                 </td>
                                 <td><span class="badge">{{ \App\Models\Promotion::STATUSES[$promo->status] ?? $promo->status }}</span></td>
                                 <td>

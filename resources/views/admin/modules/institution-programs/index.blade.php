@@ -125,7 +125,7 @@
                         <td class="text-xs text-slate-600">
                             @if($ip->admission_start_date || $ip->admission_end_date)
                                 <span>{{ $ip->admission_start_date?->format('d M Y') ?? '?' }}</span>
-                                <span class="text-slate-400">–</span>
+                                <span class="text-slate-400">-</span>
                                 <span>{{ $ip->admission_end_date?->format('d M Y') ?? '?' }}</span>
                             @else
                                 <span class="text-slate-400">-</span>
