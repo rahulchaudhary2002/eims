@@ -19,7 +19,6 @@ class Institution extends Model
         'consultancy'      => 'Consultancy',
         'institute'        => 'Institute',
         'training_center'  => 'Training Center',
-        'platform_partner' => 'Platform Partner',
         'other'            => 'Other',
     ];
 

@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('institutions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('parent_id')->nullable()->constrained('institutions')->nullOnDelete();
-            $table->string('type')->default('other'); // university, college, school, consultancy, institute, training_center, platform_partner, other
+            $table->string('type')->default('other'); // university, college, school, consultancy, institute, training_center, other
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('code')->nullable()->unique();
