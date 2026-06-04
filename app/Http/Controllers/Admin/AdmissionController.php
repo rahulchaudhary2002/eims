@@ -75,16 +75,11 @@ class AdmissionController extends Controller
 
     public function create(Request $request): View
     {
-        $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $institutionPrograms = $this->institutionProgramDropdownQuery()->get();
-        $applications = $this->applicationDropdownQuery()->get();
-        $users = User::orderBy('name')->get(['id', 'name', 'email']);
+        $applications = $this->applicationDropdownQuery()->get(['id', 'application_number', 'student_id', 'institution_id', 'institution_program_id']);
         $verificationStatuses = Admission::VERIFICATION_STATUSES;
         $selectedApplicationId = $request->input('application_id');
-        $selectedStudentId = $request->input('student_id');
         $selectedInstitutionId = $request->input('institution_id');
-        $selectedInstitutionProgramId = $request->input('institution_program_id');
 
         if ($selectedApplicationId) {
             $this->authorizeApplication((int) $selectedApplicationId);
@@ -92,29 +87,26 @@ class AdmissionController extends Controller
         if ($selectedInstitutionId) {
             $this->authorizeInstitution((int) $selectedInstitutionId);
         }
-        if ($selectedInstitutionProgramId) {
-            $this->authorizeInstitutionProgram((int) $selectedInstitutionProgramId);
-        }
 
         return view('admin.modules.admissions.create', compact(
-            'students',
             'institutions',
-            'institutionPrograms',
             'applications',
-            'users',
             'verificationStatuses',
             'selectedApplicationId',
-            'selectedStudentId',
-            'selectedInstitutionId',
-            'selectedInstitutionProgramId'
+            'selectedInstitutionId'
         ));
     }
 
     public function store(StoreAdmissionRequest $request): RedirectResponse
     {
         $data = $this->prepareData($request);
+        $application = $this->resolveAdmissionApplication((int) $data['application_id'], (int) $data['institution_id']);
+
+        $data['student_id'] = $application->student_id;
+        $data['institution_id'] = $application->institution_id;
+        $data['institution_program_id'] = $application->institution_program_id;
+
         $this->authorizeInstitution((int) $data['institution_id']);
-        $this->validateRelationships($data);
 
         $admission = Admission::create($data);
 
@@ -134,29 +126,19 @@ class AdmissionController extends Controller
     {
         $this->authorizeAdmissionAccess($admission);
 
-        $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $institutionPrograms = $this->institutionProgramDropdownQuery()->get();
-        $applications = $this->applicationDropdownQuery($admission)->get();
-        $users = User::orderBy('name')->get(['id', 'name', 'email']);
+        $applications = $this->applicationDropdownQuery($admission)->get(['id', 'application_number', 'student_id', 'institution_id', 'institution_program_id']);
         $verificationStatuses = Admission::VERIFICATION_STATUSES;
         $selectedApplicationId = null;
-        $selectedStudentId = null;
         $selectedInstitutionId = null;
-        $selectedInstitutionProgramId = null;
 
         return view('admin.modules.admissions.edit', compact(
             'admission',
-            'students',
             'institutions',
-            'institutionPrograms',
             'applications',
-            'users',
             'verificationStatuses',
             'selectedApplicationId',
-            'selectedStudentId',
-            'selectedInstitutionId',
-            'selectedInstitutionProgramId'
+            'selectedInstitutionId'
         ));
     }
 
@@ -165,8 +147,13 @@ class AdmissionController extends Controller
         $this->authorizeAdmissionAccess($admission);
 
         $data = $this->prepareData($request, $admission);
+        $application = $this->resolveAdmissionApplication((int) $data['application_id'], (int) $data['institution_id']);
+
+        $data['student_id'] = $application->student_id;
+        $data['institution_id'] = $application->institution_id;
+        $data['institution_program_id'] = $application->institution_program_id;
+
         $this->authorizeInstitution((int) $data['institution_id']);
-        $this->validateRelationships($data);
 
         $admission->update($data);
 
@@ -209,8 +196,15 @@ class AdmissionController extends Controller
     {
         $data = $request->validated();
         $data['admission_number'] = ($data['admission_number'] ?? '') ?: $this->nextAdmissionNumber();
-        $data['verified_by'] = ($data['verified_by'] ?? null) ?: null;
-        $data['verified_at'] = ($data['verified_at'] ?? null) ?: null;
+        $verificationStatus = $data['verification_status'] ?? 'pending';
+
+        if ($verificationStatus === 'pending') {
+            $data['verified_by'] = null;
+            $data['verified_at'] = null;
+        } else {
+            $data['verified_by'] = auth('web')->id();
+            $data['verified_at'] = ($data['verified_at'] ?? null) ?: now();
+        }
 
         if ($request->hasFile('payment_proof')) {
             if ($admission?->payment_proof) {
@@ -234,19 +228,20 @@ class AdmissionController extends Controller
         return $number;
     }
 
-    private function validateRelationships(array $data): void
+    private function resolveAdmissionApplication(int $applicationId, int $institutionId): Application
     {
-        $application = Application::findOrFail($data['application_id']);
+        $application = Application::query()
+            ->whereKey($applicationId)
+            ->where('institution_id', $institutionId)
+            ->first();
 
-        if (
-            (int) $application->student_id !== (int) $data['student_id']
-            || (int) $application->institution_id !== (int) $data['institution_id']
-            || (int) $application->institution_program_id !== (int) $data['institution_program_id']
-        ) {
+        if (! $application) {
             throw ValidationException::withMessages([
-                'application_id' => 'The selected application does not match the selected student, institution, and institution program.',
+                'application_id' => 'Please select a valid application for the selected institution.',
             ]);
         }
+
+        return $application;
     }
 
     private function applicationDropdownQuery(?Admission $admission = null): Builder

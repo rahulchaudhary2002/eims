@@ -20,7 +20,8 @@ class StoreStudentRewardClaimRequest extends FormRequest
                 'required',
                 Rule::exists('applications', 'id')->where(fn ($query) => $query
                     ->where('student_id', $this->user('student')?->id)),
-                Rule::unique('student_reward_claims', 'application_id'),
+                Rule::unique('student_reward_claims', 'application_id')
+                    ->where(fn ($query) => $query->whereNull('deleted_at')),
             ],
             'claimed_reward_amount'        => ['nullable', 'numeric', 'min:0'],
             'payment_method'               => ['required', 'in:' . implode(',', array_keys(StudentRewardClaim::PAYMENT_METHODS))],

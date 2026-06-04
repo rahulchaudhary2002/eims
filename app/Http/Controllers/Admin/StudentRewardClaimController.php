@@ -66,7 +66,8 @@ class StudentRewardClaimController extends Controller
             'student',
             'institution',
             'institutionProgram',
-            'application',
+            'application.admission',
+            'application.allReferrals',
             'referral',
             'admission',
             'documents.verifiedBy',
@@ -76,15 +77,26 @@ class StudentRewardClaimController extends Controller
             'paidBy',
         ]);
 
-        return view('admin.modules.student-reward-claims.show', compact('studentRewardClaim'));
+        $availableReferrals = $studentRewardClaim->application?->allReferrals
+            ?->sortByDesc('id')
+            ->values() ?? collect();
+        $linkedAdmission = $studentRewardClaim->admission ?? $studentRewardClaim->application?->admission;
+
+        return view('admin.modules.student-reward-claims.show', compact(
+            'studentRewardClaim',
+            'availableReferrals',
+            'linkedAdmission'
+        ));
     }
 
     public function updateStatus(Request $request, StudentRewardClaim $studentRewardClaim): RedirectResponse
     {
         $request->validate([
-            'status'                => ['required', 'in:' . implode(',', StudentRewardClaim::STATUSES)],
+            'status'                => ['required', 'in:' . implode(',', array_keys(StudentRewardClaim::STATUSES))],
             'approved_reward_amount' => ['nullable', 'numeric', 'min:0'],
             'rejection_reason'      => ['nullable', 'string', 'max:2000'],
+            'payment_method'        => ['nullable', 'in:' . implode(',', array_keys(StudentRewardClaim::PAYMENT_METHODS))],
+            'transaction_reference' => ['nullable', 'string', 'max:255'],
         ]);
 
         $status = $request->input('status');
@@ -100,10 +112,15 @@ class StudentRewardClaimController extends Controller
         } elseif ($status === 'paid') {
             $data['paid_at'] = now();
             $data['paid_by'] = auth('web')->id();
+            $data['payment_method'] = $request->input('payment_method') ?: $studentRewardClaim->payment_method;
 
             StudentRewardPayment::create([
                 'student_reward_claim_id' => $studentRewardClaim->id,
+                'student_id'              => $studentRewardClaim->student_id,
                 'amount'                  => $studentRewardClaim->approved_reward_amount,
+                'payment_method'          => $request->input('payment_method') ?: $studentRewardClaim->payment_method,
+                'transaction_reference'   => $request->input('transaction_reference'),
+                'status'                  => 'paid',
                 'paid_by'                 => auth('web')->id(),
                 'paid_at'                 => now(),
             ]);
@@ -141,8 +158,19 @@ class StudentRewardClaimController extends Controller
             'referral_id' => ['required', 'exists:referrals,id'],
         ]);
 
+        $referralId = (int) $request->input('referral_id');
+        $belongsToApplication = $studentRewardClaim->application()
+            ->whereHas('allReferrals', fn (Builder $query) => $query->whereKey($referralId))
+            ->exists();
+
+        if (! $belongsToApplication) {
+            return back()->withErrors([
+                'referral_id' => 'Please select a referral for this application.',
+            ]);
+        }
+
         $studentRewardClaim->update([
-            'referral_id' => $request->input('referral_id'),
+            'referral_id' => $referralId,
         ]);
 
         return back()->with('success', 'Referral linked successfully.');
