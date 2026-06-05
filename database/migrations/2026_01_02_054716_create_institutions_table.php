@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('institutions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('parent_id')->nullable()->constrained('institutions')->nullOnDelete();
-            $table->string('type')->default('other'); // university, college, school, consultancy, institute, training_center, other
+            $table->enum('type', ['university', 'college', 'school', 'consultancy', 'institute', 'training_center', 'other'])->default('other');
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('code')->nullable()->unique();
@@ -32,7 +32,7 @@ return new class extends Migration
             $table->decimal('longitude', 11, 8)->nullable();
             $table->boolean('is_verified')->default(false);
             $table->timestamp('verified_at')->nullable();
-            $table->string('status')->default('active'); // active, inactive, pending, suspended
+            $table->enum('status', ['active', 'inactive', 'pending', 'suspended'])->default('active');
             $table->boolean('is_featured')->default(false);
             $table->unsignedSmallInteger('sort_order')->default(0);
             $table->softDeletes();
