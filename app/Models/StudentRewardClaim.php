@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StudentRewardClaim extends Model
@@ -45,7 +46,8 @@ class StudentRewardClaim extends Model
     protected $fillable = [
         'student_id',
         'institution_id',
-        'institution_program_id',
+        'applicable_type',
+        'applicable_id',
         'application_id',
         'referral_id',
         'admission_id',
@@ -94,9 +96,9 @@ class StudentRewardClaim extends Model
         return $this->belongsTo(Institution::class);
     }
 
-    public function institutionProgram(): BelongsTo
+    public function applicable(): MorphTo
     {
-        return $this->belongsTo(InstitutionProgram::class);
+        return $this->morphTo();
     }
 
     public function application(): BelongsTo

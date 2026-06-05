@@ -85,7 +85,7 @@
             <div class="eims-card p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wide">Applications</h3>
-                    <a href="{{ route('admin.applications.create', ['institution_id' => $scholarship->institution_id, 'institution_program_id' => $scholarship->institution_program_id, 'scholarship_id' => $scholarship->id]) }}" class="btn btn-primary btn-sm text-xs py-1 px-3">
+                    <a href="{{ route('admin.applications.create', ['institution_id' => $scholarship->institution_id, 'applicable_type' => \App\Models\InstitutionProgram::class, 'applicable_id' => $scholarship->institution_program_id, 'scholarship_id' => $scholarship->id]) }}" class="btn btn-primary btn-sm text-xs py-1 px-3">
                         Add Application
                     </a>
                 </div>
@@ -137,15 +137,13 @@
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wide">Scholarship Applications</h3>
                     <div class="flex items-center gap-2">
-                        @if($scholarship->scholarshipApplications->isNotEmpty())
+                        @if($scholarship->applications->isNotEmpty())
                             <a href="{{ route('admin.scholarship-applications.index', ['scholarship_id' => $scholarship->id]) }}"
                                class="text-xs text-indigo-600 hover:underline">View all →</a>
                         @endif
-                        <a href="{{ route('admin.scholarship-applications.create', ['scholarship_id' => $scholarship->id]) }}"
-                           class="btn btn-primary btn-sm text-xs py-1 px-3">Add</a>
                     </div>
                 </div>
-                @if($scholarship->scholarshipApplications->isEmpty())
+                @if($scholarship->applications->isEmpty())
                     <p class="text-slate-400 text-sm">No scholarship applications yet.</p>
                 @else
                     <div class="overflow-x-auto">
@@ -154,23 +152,20 @@
                                 <tr>
                                     <th>Student</th>
                                     <th>Approved Amt</th>
-                                    <th>Status</th>
+                                    <th>Scholarship Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($scholarship->scholarshipApplications->take(5) as $sa)
+                                @foreach($scholarship->applications->take(5) as $sa)
                                     <tr>
                                         <td>{{ $sa->student->name ?? '-' }}</td>
-                                        <td class="font-mono">{{ $sa->approved_amount !== null ? number_format((float) $sa->approved_amount, 2) : '-' }}</td>
-                                        <td><span class="badge">{{ \App\Models\ScholarshipApplication::STATUSES[$sa->status] ?? $sa->status }}</span></td>
+                                        <td class="font-mono">{{ $sa->scholarship_approved_amount !== null ? number_format((float) $sa->scholarship_approved_amount, 4) : '-' }}</td>
+                                        <td><span class="badge">{{ \App\Models\Application::SCHOLARSHIP_STATUSES[$sa->scholarship_status] ?? ($sa->scholarship_status ?? '-') }}</span></td>
                                         <td>
                                             <div class="flex items-center gap-1">
                                                 <a href="{{ route('admin.scholarship-applications.show', $sa) }}" class="btn-icon btn-icon-view" title="View">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                                </a>
-                                                <a href="{{ route('admin.scholarship-applications.edit', $sa) }}" class="btn-icon btn-icon-edit" title="Edit">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
                                                 </a>
                                             </div>
                                         </td>

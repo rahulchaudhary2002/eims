@@ -87,7 +87,7 @@
                         <td class="text-slate-600">{{ $application->institution->name ?? '-' }}</td>
                         <td class="text-slate-600">{{ $application->student->email ?? '-' }}</td>
                         <td class="hidden md:table-cell text-slate-600">{{ $application->student->phone ?? '-' }}</td>
-                        <td class="hidden lg:table-cell text-slate-600">{{ $application->institutionProgram->program->name ?? $application->institutionProgram->title ?? '-' }}</td>
+                        <td class="hidden lg:table-cell text-slate-600">{{ $application->applicable_label }}</td>
                         <td class="hidden sm:table-cell text-slate-500 text-xs">{{ $application->created_at->format('M d, Y') }}</td>
                         <td><x-admin.status-badge :status="$application->status ?? 'pending'" /></td>
                     </tr>

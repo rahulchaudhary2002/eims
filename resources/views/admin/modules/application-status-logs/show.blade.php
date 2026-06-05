@@ -52,7 +52,7 @@
                     </div>
                     <div><dt class="text-slate-400 text-xs mb-1">Student</dt><dd>{{ $application->student->name ?? '-' }}</dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Institution</dt><dd>{{ $application->institution->name ?? '-' }}</dd></div>
-                    <div><dt class="text-slate-400 text-xs mb-1">Program</dt><dd>{{ $application->institutionProgram?->title ?: ($application->institutionProgram?->program?->name ?? '-') }}</dd></div>
+                    <div><dt class="text-slate-400 text-xs mb-1">Applied For</dt><dd>{{ $applicationStatusLog->application->applicable_label }}</dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Scholarship</dt><dd>{{ $application->scholarship->title ?? '-' }}</dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Current Status</dt><dd>{{ \App\Models\Application::STATUSES[$application->status] ?? $application->status }}</dd></div>
                 </dl>

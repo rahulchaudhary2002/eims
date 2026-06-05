@@ -142,6 +142,9 @@ trait HandlesInstitutionResources
         if (in_array('institutionProgram', $relationships, true)) {
             $relationships[] = 'institutionProgram.program';
         }
+        if (in_array('applicable', $relationships, true)) {
+            // morphTo — no nested eager-load needed
+        }
 
         return $relationships;
     }

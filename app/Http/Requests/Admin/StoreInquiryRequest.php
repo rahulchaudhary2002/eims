@@ -15,19 +15,18 @@ class StoreInquiryRequest extends FormRequest
 
     public function rules(): array
     {
-        $institutionRule        = Rule::exists('institutions', 'id');
-        $institutionProgramRule = Rule::exists('institution_programs', 'id');
+        $institutionRule = Rule::exists('institutions', 'id');
 
         if (! auth('web')->user()?->is_super_admin) {
             $scope = (int) session('current_institution_id', 0);
             $institutionRule->where('id', $scope);
-            $institutionProgramRule->where('institution_id', $scope);
         }
 
         return [
             'student_id'              => ['nullable', Rule::exists('students', 'id')],
             'institution_id'          => ['nullable', $institutionRule],
-            'institution_program_id'  => ['nullable', $institutionProgramRule],
+            'applicable_type'         => ['nullable', 'string'],
+            'applicable_id'           => ['nullable', 'integer', 'min:1'],
             'name'                    => ['required', 'string', 'max:255'],
             'email'                   => ['required', 'email', 'max:255'],
             'phone'                   => ['nullable', 'string', 'max:50'],

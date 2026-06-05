@@ -14,7 +14,7 @@ $sc = ['draft' => 'bg-gray-100 text-gray-600', 'submitted' => 'bg-blue-100 text-
             <a href="{{ route('student.applications.index') }}" class="text-white/70 hover:text-white no-underline"><i class="fas fa-arrow-left"></i></a>
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold">{{ $application->institution?->name }}</h1>
-                <p class="text-white/70 text-sm mt-1">{{ $application->institutionProgram?->program?->name ?? '-' }} · {{ $application->application_number }}</p>
+                <p class="text-white/70 text-sm mt-1">{{ $application->applicable_label }} · {{ $application->application_number }}</p>
             </div>
             <span class="ml-auto shrink-0 text-sm font-bold px-3 py-1.5 rounded-full bg-white/20 border border-white/30">
                 {{ \App\Models\Application::STATUSES[$application->status] ?? $application->status }}

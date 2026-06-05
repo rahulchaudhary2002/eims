@@ -45,7 +45,8 @@ class InquiryController extends Controller
         $inquiry = Inquiry::create([
             'student_id'            => $student?->id,
             'institution_id'        => $data['institution_id'] ?? null,
-            'institution_program_id' => $data['institution_program_id'] ?? null,
+            'applicable_type'        => $data['applicable_type'] ?? null,
+            'applicable_id'          => $data['applicable_id'] ?? null,
             'name'                  => $data['name'],
             'email'                 => $data['email'],
             'phone'                 => $data['phone'],

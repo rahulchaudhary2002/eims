@@ -131,7 +131,7 @@
                                             {{ $application->institution?->name ?? 'Institution' }}
                                         </p>
                                         <p class="text-xs text-gray-500 mt-1 truncate">
-                                            {{ $application->institutionProgram?->display_name ?? $application->program?->name ?? 'Program' }}
+                                            {{ $application->applicable_label }}
                                         </p>
                                     </div>
                                     <p class="text-xs text-gray-400 mt-auto">

@@ -64,7 +64,7 @@ $sc = [
                     @foreach([
                         ['Claim Number', $rewardClaim->claim_number],
                         ['Institution', $rewardClaim->institution?->name],
-                        ['Program', $rewardClaim->institutionProgram?->title ?: ($rewardClaim->institutionProgram?->program?->name ?? null)],
+                        ['Applied For', $rewardClaim->applicable_label ?: null],
                         ['Admission Date', $rewardClaim->admission_date?->format('M d, Y')],
                         ['Admission Number', $rewardClaim->admission_number],
                         ['Intake', $rewardClaim->intake],

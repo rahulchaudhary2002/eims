@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Application extends Model
 {
@@ -17,6 +18,21 @@ class Application extends Model
         'featured_listing'        => 'Featured Listing',
         'campaign'                => 'Campaign',
         'consultancy_referral'    => 'Consultancy Referral',
+    ];
+
+    public const APPLICABLE_TYPES = [
+        \App\Models\InstitutionProgram::class       => 'Program',
+        \App\Models\InstitutionCourse::class        => 'Course',
+        \App\Models\InstitutionCertification::class => 'Certification',
+        \App\Models\ConsultancyService::class       => 'Service',
+    ];
+
+    public const SCHOLARSHIP_STATUSES = [
+        'pending'      => 'Pending',
+        'under_review' => 'Under Review',
+        'approved'     => 'Approved',
+        'rejected'     => 'Rejected',
+        'withdrawn'    => 'Withdrawn',
     ];
 
     public const STATUSES = [
@@ -40,8 +56,12 @@ class Application extends Model
         'application_number',
         'student_id',
         'institution_id',
-        'institution_program_id',
+        'applicable_type',
+        'applicable_id',
         'scholarship_id',
+        'scholarship_status',
+        'scholarship_approved_amount',
+        'scholarship_remarks',
         'source',
         'status',
         'student_message',
@@ -72,7 +92,8 @@ class Application extends Model
             'more_info_requested_at'   => 'datetime',
             'approved_for_referral_at' => 'datetime',
             'institution_rejected_at'  => 'datetime',
-            'cancelled_at'             => 'datetime',
+            'cancelled_at'                  => 'datetime',
+            'scholarship_approved_amount'   => 'decimal:4',
         ];
     }
 
@@ -86,9 +107,19 @@ class Application extends Model
         return $this->belongsTo(Institution::class);
     }
 
-    public function institutionProgram(): BelongsTo
+    public function applicable(): MorphTo
     {
-        return $this->belongsTo(InstitutionProgram::class);
+        return $this->morphTo();
+    }
+
+    public function getApplicableLabelAttribute(): string
+    {
+        $item = $this->applicable;
+        if (!$item) return '-';
+        if ($item instanceof \App\Models\InstitutionProgram) {
+            return $item->title ?: ($item->program?->name ?? 'Program');
+        }
+        return $item->title ?? '-';
     }
 
     public function scholarship(): BelongsTo

@@ -75,8 +75,5 @@ class Scholarship extends Model
         return $this->hasMany(Application::class);
     }
 
-    public function scholarshipApplications(): HasMany
-    {
-        return $this->hasMany(\App\Models\ScholarshipApplication::class);
-    }
+
 }

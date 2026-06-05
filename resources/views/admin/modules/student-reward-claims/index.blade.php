@@ -78,7 +78,7 @@
                             </td>
                             <td>
                                 <div class="font-medium text-slate-800">{{ $claim->institution->name ?? '-' }}</div>
-                                <div class="text-xs text-slate-400">{{ $claim->institutionProgram?->title ?: ($claim->institutionProgram?->program?->name ?? '-') }}</div>
+                                <div class="text-xs text-slate-400">{{ $claim->applicable_label }}</div>
                             </td>
                             <td><span class="badge">{{ \App\Models\StudentRewardClaim::STATUSES[$claim->status] ?? $claim->status }}</span></td>
                             <td class="text-xs text-slate-500">{{ $claim->admission_date?->format('d M Y') ?? '-' }}</td>

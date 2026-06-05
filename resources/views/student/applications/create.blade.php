@@ -36,15 +36,28 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Program <span class="text-red-500">*</span></label>
-                        <select name="institution_program_id" id="program-select"
-                                class="w-full px-4 py-3 text-sm border {{ $errors->has('institution_program_id') ? 'border-red-400' : 'border-gray-200' }} rounded-xl focus:outline-none focus:border-[#4299e1]">
-                            <option value="">Select program</option>
-                            @if($selectedProgram)
-                                <option value="{{ $selectedProgram->id }}" selected>{{ $selectedProgram->program?->name ?? $selectedProgram->title }}</option>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Type <span class="text-red-500">*</span></label>
+                        <select name="applicable_type" id="type-select"
+                                class="w-full px-4 py-3 text-sm border {{ $errors->has('applicable_type') ? 'border-red-400' : 'border-gray-200' }} rounded-xl focus:outline-none focus:border-[#4299e1]"
+                                onchange="filterApplicables()">
+                            <option value="">Select type</option>
+                            @foreach(\App\Models\Application::APPLICABLE_TYPES as $typeClass => $typeLabel)
+                                <option value="{{ $typeClass }}" {{ old('applicable_type') === $typeClass ? 'selected' : '' }}>{{ $typeLabel }}</option>
+                            @endforeach
+                        </select>
+                        @error('applicable_type')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Item <span class="text-red-500">*</span></label>
+                        <select name="applicable_id" id="applicable-select"
+                                class="w-full px-4 py-3 text-sm border {{ $errors->has('applicable_id') ? 'border-red-400' : 'border-gray-200' }} rounded-xl focus:outline-none focus:border-[#4299e1]">
+                            <option value="">Select type first</option>
+                            @if($selectedApplicable)
+                                <option value="{{ $selectedApplicable->id }}" selected>{{ method_exists($selectedApplicable, 'getDisplayNameAttribute') ? $selectedApplicable->display_name : $selectedApplicable->title }}</option>
                             @endif
                         </select>
-                        @error('institution_program_id')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
+                        @error('applicable_id')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
                     </div>
 
                     <div>
@@ -87,4 +100,28 @@
     </div>
 </section>
 
+@push('scripts')
+<script>
+const applicablesData = @json(collect($applicables)->map(fn($items, $type) => $items->map(fn($item) => ['id' => $item->id, 'institution_id' => $item->institution_id, 'label' => method_exists($item, 'getDisplayNameAttribute') ? $item->display_name : $item->title]))->toArray());
+
+function filterApplicables() {
+    const typeSelect = document.getElementById('type-select');
+    const institutionSelect = document.getElementById('institution-select');
+    const applicableSelect = document.getElementById('applicable-select');
+    const type = typeSelect.value;
+    const institutionId = institutionSelect.value;
+    applicableSelect.innerHTML = '<option value="">Select item</option>';
+    if (!type || !institutionId) return;
+    const items = (applicablesData[type] ?? []).filter(i => String(i.institution_id) === String(institutionId));
+    items.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.id;
+        opt.textContent = item.label;
+        applicableSelect.appendChild(opt);
+    });
+}
+
+document.getElementById('institution-select')?.addEventListener('change', filterApplicables);
+</script>
+@endpush
 @endsection

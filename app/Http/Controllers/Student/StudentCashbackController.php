@@ -13,7 +13,7 @@ class StudentCashbackController extends Controller
     {
         $studentId = $request->user('student')->id;
         $cashbacks = ScholarshipCashback::where('student_id', $studentId)
-            ->with(['application.institution', 'application.institutionProgram.program'])
+            ->with(['application.institution', 'application.applicable'])
             ->latest()
             ->paginate(12);
 
@@ -28,7 +28,7 @@ class StudentCashbackController extends Controller
     {
         abort_if($cashback->student_id !== $request->user('student')->id, 403);
 
-        $cashback->load(['application.institution', 'application.institutionProgram.program', 'commissionInvoice']);
+        $cashback->load(['application.institution', 'application.applicable', 'commissionInvoice']);
 
         return view('student.cashbacks.show', compact('cashback'));
     }

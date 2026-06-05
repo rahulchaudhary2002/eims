@@ -109,8 +109,9 @@
                         </div>
                     @endif
 
-                    @if ($institutionProgram)
-                        <input type="hidden" name="institution_program_id" value="{{ $institutionProgram->id }}">
+                    @if ($institutionProgram ?? null)
+                        <input type="hidden" name="applicable_type" value="{{ \App\Models\InstitutionProgram::class }}">
+                        <input type="hidden" name="applicable_id" value="{{ $institutionProgram->id }}">
                         <div class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700">
                             Program: <strong>{{ $institutionProgram->display_name }}</strong>
                         </div>

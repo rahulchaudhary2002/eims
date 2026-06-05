@@ -42,16 +42,16 @@
                     <div class="flex items-start justify-between gap-3 flex-wrap">
                         <div>
                             <h3 class="text-sm font-bold text-gray-800">{{ $app->scholarship?->title ?? 'Unknown' }}</h3>
-                            @if($app->application)
-                            <p class="text-xs text-gray-500 mt-0.5">via {{ $app->application->institution?->name }}</p>
+                            @if($app->institution)
+                            <p class="text-xs text-gray-500 mt-0.5">via {{ $app->institution->name }}</p>
                             @endif
                         </div>
-                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $sc[$app->status] ?? '' }}">
-                            {{ \App\Models\ScholarshipApplication::STATUSES[$app->status] ?? $app->status }}
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full {{ $sc[$app->scholarship_status] ?? '' }}">
+                            {{ \App\Models\Application::SCHOLARSHIP_STATUSES[$app->scholarship_status] ?? ($app->scholarship_status ?? 'Pending') }}
                         </span>
                     </div>
-                    @if($app->approved_amount)
-                    <p class="text-xs text-green-600 font-bold mt-1">Approved: NPR {{ number_format($app->approved_amount) }}</p>
+                    @if($app->scholarship_approved_amount)
+                    <p class="text-xs text-green-600 font-bold mt-1">Approved: NPR {{ number_format($app->scholarship_approved_amount) }}</p>
                     @endif
                     <p class="text-xs text-gray-400 mt-1">{{ $app->created_at->diffForHumans() }}</p>
                 </div>

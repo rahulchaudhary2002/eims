@@ -79,10 +79,7 @@
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Program</dt>
-                        <dd class="mt-1 text-slate-700 text-sm">
-                            {{ $referral->application?->institutionProgram?->title
-                                ?: ($referral->application?->institutionProgram?->program?->name ?? '-') }}
-                        </dd>
+                        <dd class="mt-1 text-slate-700 text-sm">{{ $referral->application?->applicable_label ?? '-' }}</dd>
                     </div>
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Referred At</dt>

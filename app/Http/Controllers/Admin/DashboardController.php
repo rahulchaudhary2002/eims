@@ -23,7 +23,7 @@ class DashboardController extends Controller
             $pendingComission = 0;
             $receivedComission = 0;
 
-            $recentApplications = Application::with(['student', 'institution', 'institutionProgram.program'])
+            $recentApplications = Application::with(['student', 'institution', 'applicable'])
                 ->where('institution_id', $scope)
                 ->latest()
                 ->limit(10)
@@ -39,7 +39,7 @@ class DashboardController extends Controller
             $institutionCount = Institution::active()->count();
             $pendingComission = 0;
             $receivedComission = 0;
-            $recentApplications = Application::with(['student', 'institution', 'institutionProgram.program'])->latest()->limit(10)->get();
+            $recentApplications = Application::with(['student', 'institution', 'applicable'])->latest()->limit(10)->get();
             $studentCount = Student::count();
         }
 

@@ -117,8 +117,7 @@ class ScholarshipController extends Controller
         $scholarship->load([
             'institution',
             'institutionProgram.program.faculty',
-            'applications.student',
-            'scholarshipApplications' => fn ($q) => $q->with('student')->latest(),
+            'applications' => fn ($q) => $q->with('student')->latest(),
         ]);
 
         return view('admin.modules.scholarships.show', compact('scholarship'));

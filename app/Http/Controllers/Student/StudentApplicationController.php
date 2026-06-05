@@ -19,7 +19,7 @@ class StudentApplicationController extends Controller
     {
         $studentId    = $request->user('student')->id;
         $applications = Application::where('student_id', $studentId)
-            ->with(['institution', 'institutionProgram.program', 'scholarship'])
+            ->with(['institution', 'applicable', 'scholarship'])
             ->latest()
             ->paginate(12);
 
@@ -73,7 +73,7 @@ class StudentApplicationController extends Controller
     {
         abort_if($application->student_id !== $request->user('student')->id, 403);
 
-        $application->load(['institution', 'institutionProgram.program', 'scholarship', 'statusLogs', 'admission']);
+        $application->load(['institution', 'applicable', 'scholarship', 'statusLogs', 'admission']);
 
         return view('student.applications.show', compact('application'));
     }

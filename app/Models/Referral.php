@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Referral extends Model
@@ -43,7 +44,8 @@ class Referral extends Model
         'application_id',
         'student_id',
         'institution_id',
-        'institution_program_id',
+        'applicable_type',
+        'applicable_id',
         'referral_agreement_id',
         'referred_by',
         'status',
@@ -89,9 +91,9 @@ class Referral extends Model
         return $this->belongsTo(Institution::class);
     }
 
-    public function institutionProgram(): BelongsTo
+    public function applicable(): MorphTo
     {
-        return $this->belongsTo(InstitutionProgram::class);
+        return $this->morphTo();
     }
 
     public function referralAgreement(): BelongsTo

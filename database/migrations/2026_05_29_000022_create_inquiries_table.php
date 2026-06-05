@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('institution_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('institution_program_id')->nullable()->constrained()->nullOnDelete();
+            $table->nullableMorphs('applicable');
             $table->string('name');
             $table->string('email');
             $table->string('phone')->nullable();

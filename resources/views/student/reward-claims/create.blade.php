@@ -73,8 +73,8 @@
                                 <option value="{{ $application->id }}" {{ (string) old('application_id', $selectedApplicationId) === (string) $application->id ? 'selected' : '' }}>
                                     {{ $application->application_number ?: ('Application #' . $application->id) }}
                                     - {{ $application->institution?->name ?? 'Institution' }}
-                                    @if($application->institutionProgram?->title || $application->institutionProgram?->program?->name)
-                                        / {{ $application->institutionProgram?->title ?: $application->institutionProgram?->program?->name }}
+                                    @if($application->applicable_label)
+                                        / {{ $application->applicable_label }}
                                     @endif
                                     / {{ \App\Models\Application::STATUSES[$application->status] ?? $application->status }}
                                 </option>

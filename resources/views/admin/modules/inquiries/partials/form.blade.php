@@ -70,19 +70,32 @@
     @error('institution_id') <p class="form-error">{{ $message }}</p> @enderror
 </div>
 
-{{-- Institution Program --}}
+{{-- Applicable Type + Item --}}
 <div>
-    <label for="institution_program_id" class="form-label">Institution Program</label>
-    <select id="institution_program_id" name="institution_program_id" class="form-control @error('institution_program_id') is-invalid @enderror">
+    <label for="applicable_type" class="form-label">Type</label>
+    <select id="applicable_type" name="applicable_type" class="form-control @error('applicable_type') is-invalid @enderror">
         <option value="">Not specified</option>
-        @foreach($institutionPrograms as $program)
-            <option value="{{ $program->id }}"
-                {{ old('institution_program_id', $inquiry->institution_program_id ?? '') == $program->id ? 'selected' : '' }}>
-                {{ $program->title ?: ($program->program->name ?? 'Program #' . $program->id) }}
-            </option>
+        @foreach(\App\Models\Application::APPLICABLE_TYPES as $typeClass => $typeLabel)
+            <option value="{{ $typeClass }}" {{ old('applicable_type', $inquiry->applicable_type ?? '') === $typeClass ? 'selected' : '' }}>{{ $typeLabel }}</option>
         @endforeach
     </select>
-    @error('institution_program_id') <p class="form-error">{{ $message }}</p> @enderror
+    @error('applicable_type') <p class="form-error">{{ $message }}</p> @enderror
+</div>
+<div>
+    <label for="applicable_id" class="form-label">Item</label>
+    <select id="applicable_id" name="applicable_id" class="form-control @error('applicable_id') is-invalid @enderror">
+        <option value="">Not specified</option>
+        @foreach($applicables ?? [] as $typeClass => $items)
+            @foreach($items as $item)
+                <option value="{{ $item->id }}"
+                    data-type="{{ $typeClass }}"
+                    {{ old('applicable_id', $inquiry->applicable_id ?? '') == $item->id && old('applicable_type', $inquiry->applicable_type ?? '') === $typeClass ? 'selected' : '' }}>
+                    {{ $item->display_name ?? $item->title }} ({{ \App\Models\Application::APPLICABLE_TYPES[$typeClass] ?? '' }})
+                </option>
+            @endforeach
+        @endforeach
+    </select>
+    @error('applicable_id') <p class="form-error">{{ $message }}</p> @enderror
 </div>
 
 {{-- Student --}}

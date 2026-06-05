@@ -61,7 +61,7 @@
                     <div><dt class="text-slate-400 text-xs mb-1">Application</dt><dd><a href="{{ route('admin.applications.show', $admission->application) }}" class="text-blue-600 hover:underline">{{ $admission->application->application_number ?? '-' }}</a></dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Student</dt><dd><a href="{{ route('admin.students.show', $admission->student) }}" class="text-blue-600 hover:underline">{{ $admission->student->name ?? '-' }}</a></dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Institution</dt><dd><a href="{{ route('admin.institutions.show', $admission->institution) }}" class="text-blue-600 hover:underline">{{ $admission->institution->name ?? '-' }}</a></dd></div>
-                    <div><dt class="text-slate-400 text-xs mb-1">Institution Program</dt><dd><a href="{{ route('admin.institution-programs.show', $admission->institutionProgram) }}" class="text-blue-600 hover:underline">{{ $admission->institutionProgram->title ?: ($admission->institutionProgram->program->name ?? 'Program') }}</a></dd></div>
+                    <div><dt class="text-slate-400 text-xs mb-1">Applied For</dt><dd>{{ $admission->applicable_label }}</dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Admission Date</dt><dd>{{ $admission->admission_date?->format('d M Y') ?? '-' }}</dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Verification Status</dt><dd>{{ \App\Models\Admission::VERIFICATION_STATUSES[$admission->verification_status] ?? $admission->verification_status }}</dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Verified By</dt><dd>{{ $admission->verifiedBy->name ?? '-' }}</dd></div>

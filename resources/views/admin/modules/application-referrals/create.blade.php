@@ -38,8 +38,8 @@
                         <dd>{{ $application->institution->name ?? '-' }}</dd>
                     </div>
                     <div>
-                        <dt class="text-slate-400 text-xs mb-1">Program</dt>
-                        <dd>{{ $application->institutionProgram?->title ?: ($application->institutionProgram?->program?->name ?? '-') }}</dd>
+                        <dt class="text-slate-400 text-xs mb-1">{{ \App\Models\Application::APPLICABLE_TYPES[$application->applicable_type] ?? 'Applicable' }}</dt>
+                        <dd>{{ $application->applicable_label }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Application Status</dt>
@@ -60,7 +60,6 @@
                     <input type="hidden" name="application_id" value="{{ $application->id }}">
                     <input type="hidden" name="student_id" value="{{ $application->student_id }}">
                     <input type="hidden" name="institution_id" value="{{ $application->institution_id }}">
-                    <input type="hidden" name="institution_program_id" value="{{ $application->institution_program_id }}">
 
                     <div>
                         <label class="form-label">Referral Agreement <span class="text-slate-400 font-normal">(optional)</span></label>

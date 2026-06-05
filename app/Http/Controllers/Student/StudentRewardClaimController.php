@@ -19,7 +19,7 @@ class StudentRewardClaimController extends Controller
         $studentId = auth('student')->id();
 
         $claims = StudentRewardClaim::where('student_id', $studentId)
-            ->with(['institution', 'institutionProgram', 'documents'])
+            ->with(['institution', 'applicable', 'documents'])
             ->withCount('documents')
             ->latest()
             ->paginate(10);
@@ -35,7 +35,7 @@ class StudentRewardClaimController extends Controller
             ->whereDoesntHave('rewardClaim')
             ->with([
                 'institution:id,name',
-                'institutionProgram.program:id,name',
+                'applicable',
                 'admission:id,application_id,admission_number,admission_date',
             ])
             ->orderByDesc('id')
@@ -77,7 +77,8 @@ class StudentRewardClaimController extends Controller
             'claim_number'           => $claimNumber,
             'student_id'             => $studentId,
             'institution_id'         => $application->institution_id,
-            'institution_program_id' => $application->institution_program_id,
+            'applicable_type'        => $application->applicable_type,
+            'applicable_id'          => $application->applicable_id,
             'application_id'         => $application->id,
             'admission_id'           => $admission?->id,
             'admission_date'         => $admission?->admission_date ?? $application->admitted_at?->toDateString(),
@@ -124,7 +125,7 @@ class StudentRewardClaimController extends Controller
 
         $rewardClaim->load([
             'institution',
-            'institutionProgram',
+            'applicable',
             'documents.verifiedBy',
             'payments',
             'referral',

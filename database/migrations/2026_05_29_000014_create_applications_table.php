@@ -13,8 +13,11 @@ return new class extends Migration
             $table->string('application_number')->unique();
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->foreignId('institution_id')->constrained('institutions')->onDelete('cascade');
-            $table->foreignId('institution_program_id')->constrained('institution_programs')->onDelete('cascade');
+            $table->nullableMorphs('applicable'); // InstitutionProgram, ConsultancyService, InstitutionCourse, InstitutionCertification
             $table->foreignId('scholarship_id')->nullable()->constrained('scholarships')->nullOnDelete();
+            $table->string('scholarship_status', 30)->nullable();
+            $table->decimal('scholarship_approved_amount', 14, 4)->nullable();
+            $table->text('scholarship_remarks')->nullable();
             $table->string('source', 40);
             $table->string('status', 30)->default('draft');
             $table->text('student_message')->nullable();
@@ -35,7 +38,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['institution_id', 'status']);
-            $table->index(['institution_program_id', 'status']);
             $table->index(['student_id', 'status']);
             $table->index(['source', 'status']);
         });

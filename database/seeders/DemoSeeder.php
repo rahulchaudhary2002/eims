@@ -33,7 +33,6 @@ use App\Models\Promotion;
 use App\Models\Referral;
 use App\Models\ReferralAgreement;
 use App\Models\Scholarship;
-use App\Models\ScholarshipApplication;
 use App\Models\ScholarshipCashback;
 use App\Models\Student;
 use App\Models\StudentAcademicRecord;
@@ -487,7 +486,8 @@ class DemoSeeder extends Seeder
                 [
                     'student_id'             => $st->id,
                     'institution_id'         => $inst->id,
-                    'institution_program_id' => $ip->id,
+                    'applicable_type'        => \App\Models\InstitutionProgram::class,
+                    'applicable_id'          => $ip->id,
                     'scholarship_id'         => $scholarships[$i % count($scholarships)]?->id ?? null,
                     'source'                 => 'direct',
                     'status'                 => $status,
@@ -532,7 +532,8 @@ class DemoSeeder extends Seeder
                 [
                     'student_id'             => $app->student_id,
                     'institution_id'         => $app->institution_id,
-                    'institution_program_id' => $app->institution_program_id,
+                    'applicable_type'        => $app->applicable_type,
+                    'applicable_id'          => $app->applicable_id,
                     'admission_number'       => 'ADM-DEMO-' . strtoupper(Str::random(6)),
                     'admission_date'         => now()->subDays(5)->toDateString(),
                     'paid_amount'            => 50000,
@@ -587,17 +588,15 @@ class DemoSeeder extends Seeder
 
         // ── 24. SCHOLARSHIP APPLICATIONS ──────────────────────────────
         foreach ($students as $i => $st) {
-            $sc = $scholarships[$i % count($scholarships)] ?? null;
-            if (! $sc) continue;
-            ScholarshipApplication::firstOrCreate(
-                ['scholarship_id' => $sc->id, 'student_id' => $st->id],
-                [
-                    'application_id'  => $applications[$i]?->id,
-                    'status'          => ['pending', 'under_review', 'approved', 'rejected'][$i % 4],
-                    'approved_amount' => $i % 4 === 2 ? 30000 : null,
-                    'remarks'         => 'I have consistently scored above 80% in my academics.',
-                ]
-            );
+            $sc  = $scholarships[$i % count($scholarships)] ?? null;
+            $app = $applications[$i] ?? null;
+            // Mark the application as having a scholarship application
+            if ($sc && $app) {
+                $app->update([
+                    'scholarship_status'          => 'approved',
+                    'scholarship_approved_amount' => $sc->benefit_value,
+                ]);
+            }
         }
 
         // ── 25. SCHOLARSHIP CASHBACKS ──────────────────────────────────
@@ -644,7 +643,8 @@ class DemoSeeder extends Seeder
             $inq   = Inquiry::firstOrCreate(
                 ['student_id' => $st->id, 'institution_id' => $inst->id],
                 [
-                    'institution_program_id' => $ip->id,
+                    'applicable_type'        => \App\Models\InstitutionProgram::class,
+                    'applicable_id'          => $ip->id,
                     'name'                   => $st->name,
                     'email'                  => $st->email,
                     'phone'                  => $st->phone,

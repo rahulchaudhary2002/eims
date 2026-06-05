@@ -15,13 +15,13 @@ class InstitutionApplicationController extends Controller
         $this->modelClass = Application::class;
         $this->routeBase = 'applications';
         $this->title = 'Application';
-        $this->readOnlyFields = ['application_number', 'student_id', 'institution_id', 'institution_program_id', 'scholarship_id', 'source', 'admin_remarks'];
+        $this->readOnlyFields = ['application_number', 'student_id', 'institution_id', 'applicable_type', 'applicable_id', 'scholarship_id', 'source', 'admin_remarks'];
         $this->selectOptions = ['status' => Application::STATUSES];
-        $this->relationships = ['student', 'institutionProgram', 'scholarship'];
+        $this->relationships = ['student', 'applicable', 'scholarship'];
         $this->fields = [
             'application_number' => ['label' => 'Application Number'],
             'student_id' => ['label' => 'Student'],
-            'institution_program_id' => ['label' => 'Program'],
+            'applicable_label' => ['label' => 'Applied For'],
             'scholarship_id' => ['label' => 'Scholarship'],
             'source' => ['label' => 'Source'],
             'status' => ['label' => 'Status', 'type' => 'select', 'rules' => ['required', 'string']],

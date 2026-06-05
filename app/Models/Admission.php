@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Admission extends Model
 {
@@ -36,7 +37,8 @@ class Admission extends Model
         'application_referral_id',
         'student_id',
         'institution_id',
-        'institution_program_id',
+        'applicable_type',
+        'applicable_id',
         'admission_number',
         'admission_date',
         'paid_amount',
@@ -80,9 +82,9 @@ class Admission extends Model
         return $this->belongsTo(Institution::class);
     }
 
-    public function institutionProgram(): BelongsTo
+    public function applicable(): MorphTo
     {
-        return $this->belongsTo(InstitutionProgram::class);
+        return $this->morphTo();
     }
 
     public function verifiedBy(): BelongsTo

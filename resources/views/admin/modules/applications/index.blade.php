@@ -46,13 +46,11 @@
                 </select>
             </div>
             <div>
-                <label class="form-label text-xs">Institution Program</label>
-                <select name="institution_program_id" class="form-control">
-                    <option value="">All Programs</option>
-                    @foreach($institutionPrograms as $institutionProgram)
-                        <option value="{{ $institutionProgram->id }}" {{ request('institution_program_id') == $institutionProgram->id ? 'selected' : '' }}>
-                            {{ $institutionProgram->institution->name ?? 'Institution' }} - {{ $institutionProgram->title ?: ($institutionProgram->program->name ?? 'Program') }}
-                        </option>
+                <label class="form-label text-xs">Applicable Type</label>
+                <select name="applicable_type" class="form-control">
+                    <option value="">All Types</option>
+                    @foreach(\App\Models\Application::APPLICABLE_TYPES as $typeClass => $typeLabel)
+                        <option value="{{ $typeClass }}" {{ request('applicable_type') === $typeClass ? 'selected' : '' }}>{{ $typeLabel }}</option>
                     @endforeach
                 </select>
             </div>
@@ -126,7 +124,7 @@
                             </td>
                             <td>
                                 <div class="font-medium text-slate-800">{{ $application->institution->name ?? '-' }}</div>
-                                <div class="text-xs text-slate-400">{{ $application->institutionProgram?->title ?: ($application->institutionProgram?->program?->name ?? '-') }}</div>
+                                <div class="text-xs text-slate-400">{{ $application->applicable_label }}</div>
                             </td>
                             <td>{{ $application->scholarship->title ?? '-' }}</td>
                             <td>{{ $sources[$application->source] ?? $application->source }}</td>

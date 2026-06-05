@@ -85,16 +85,8 @@
                         </dd>
                     </div>
                     <div>
-                        <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Program</dt>
-                        <dd class="mt-1 text-slate-700">
-                            @if($inquiry->institutionProgram)
-                                <a href="{{ route('admin.institution-programs.show', $inquiry->institutionProgram) }}" class="text-blue-600 hover:underline">
-                                    {{ $inquiry->institutionProgram->title ?: ($inquiry->institutionProgram->program->name ?? '-') }}
-                                </a>
-                            @else
-                                <span class="text-slate-400">-</span>
-                            @endif
-                        </dd>
+                        <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">Applied For</dt>
+                        <dd class="mt-1 text-slate-700">{{ $inquiry->applicable_label }}</dd>
                     </div>
                 </dl>
 

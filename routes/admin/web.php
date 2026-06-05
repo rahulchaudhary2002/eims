@@ -154,7 +154,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->
 
     Route::resource('commission-payments', CommissionPaymentController::class);
 
-    Route::resource('scholarship-applications', ScholarshipApplicationController::class);
+    Route::get('scholarship-applications', [ScholarshipApplicationController::class, 'index'])->name('scholarship-applications.index');
+    Route::get('scholarship-applications/{scholarshipApplication}', [ScholarshipApplicationController::class, 'show'])->name('scholarship-applications.show');
     Route::patch('scholarship-applications/{scholarshipApplication}/status', [ScholarshipApplicationController::class, 'updateStatus'])
         ->name('scholarship-applications.update-status');
 

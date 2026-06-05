@@ -62,8 +62,8 @@
                         <dd><a href="{{ route('admin.institutions.show', $application->institution) }}" class="text-blue-600 hover:underline">{{ $application->institution->name ?? '-' }}</a></dd>
                     </div>
                     <div>
-                        <dt class="text-slate-400 text-xs mb-1">Institution Program</dt>
-                        <dd><a href="{{ route('admin.institution-programs.show', $application->institutionProgram) }}" class="text-blue-600 hover:underline">{{ $application->institutionProgram->title ?: ($application->institutionProgram->program->name ?? 'Program') }}</a></dd>
+                        <dt class="text-slate-400 text-xs mb-1">{{ \App\Models\Application::APPLICABLE_TYPES[$application->applicable_type] ?? 'Applicable' }}</dt>
+                        <dd>{{ $application->applicable_label }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Scholarship</dt>
@@ -135,7 +135,6 @@
                             'application_id' => $application->id,
                             'student_id' => $application->student_id,
                             'institution_id' => $application->institution_id,
-                            'institution_program_id' => $application->institution_program_id,
                         ]) }}" class="btn btn-primary btn-sm text-xs py-1 px-3">Create Admission</a>
                     @endif
                 </div>

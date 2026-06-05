@@ -61,7 +61,7 @@ class ApplicationStatusLogController extends Controller
     public function show(ApplicationStatusLog $applicationStatusLog): View
     {
         $this->authorizeLogAccess($applicationStatusLog);
-        $applicationStatusLog->load(['application.student', 'application.institution', 'application.institutionProgram.program', 'application.scholarship', 'changedBy']);
+        $applicationStatusLog->load(['application.student', 'application.institution', 'application.applicable', 'application.scholarship', 'changedBy']);
 
         return view('admin.modules.application-status-logs.show', compact('applicationStatusLog'));
     }

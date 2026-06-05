@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Website\ApplicationRequest;
 use App\Models\Application;
 use App\Models\Institution;
+use App\Models\ConsultancyService;
+use App\Models\InstitutionCertification;
+use App\Models\InstitutionCourse;
 use App\Models\InstitutionProgram;
 use App\Models\Scholarship;
 use Illuminate\Support\Facades\Auth;
@@ -18,26 +21,67 @@ class ApplicationController extends Controller
         $student = Auth::guard('student')->user();
 
         $institutions = Institution::active()->orderBy('name')->get(['id', 'name', 'slug']);
-        $programs     = InstitutionProgram::where('status', 'open')
-            ->with(['institution', 'program'])
-            ->whereHas('institution', fn($q) => $q->active())
-            ->get();
+
+        $applicables = [
+            \App\Models\InstitutionProgram::class => InstitutionProgram::where('status', 'open')
+                ->with(['institution', 'program'])
+                ->whereHas('institution', fn($q) => $q->active())
+                ->get(),
+            \App\Models\InstitutionCourse::class => InstitutionCourse::where('is_active', true)
+                ->with('institution')
+                ->whereHas('institution', fn($q) => $q->active())
+                ->get(),
+            \App\Models\InstitutionCertification::class => InstitutionCertification::where('is_active', true)
+                ->with('institution')
+                ->whereHas('institution', fn($q) => $q->active())
+                ->get(),
+            \App\Models\ConsultancyService::class => ConsultancyService::where('is_active', true)
+                ->with('institution')
+                ->whereHas('institution', fn($q) => $q->active())
+                ->get(),
+        ];
 
         $scholarships = Scholarship::where('status', 'active')
             ->whereDate('end_date', '>=', now())
             ->with('institution')
-            ->get(['id', 'title', 'institution_id', 'institution_program_id']);
+            ->get(['id', 'title', 'institution_id']);
 
-        $selectedInstitutionId = null;
-        $selectedProgramId     = null;
-        $selectedScholarshipId = null;
+        $selectedInstitutionId  = null;
+        $selectedApplicableType = null;
+        $selectedApplicableId   = null;
+        $selectedScholarshipId  = null;
 
         if ($slug = $request->input('institution')) {
             $selectedInstitutionId = Institution::where('slug', $slug)->value('id');
         }
 
         if ($slug = $request->input('program')) {
-            $selectedProgramId = InstitutionProgram::where('slug', $slug)->value('id');
+            $prog = InstitutionProgram::where('slug', $slug)->first();
+            if ($prog) {
+                $selectedApplicableType = InstitutionProgram::class;
+                $selectedApplicableId   = $prog->id;
+            }
+        }
+        if ($slug = $request->input('course')) {
+            $course = InstitutionCourse::where('slug', $slug)->first();
+            if ($course) {
+                $selectedApplicableType = InstitutionCourse::class;
+                $selectedApplicableId   = $course->id;
+            }
+        }
+        if ($slug = $request->input('certification')) {
+            $cert = InstitutionCertification::where('slug', $slug)->first();
+            if ($cert) {
+                $selectedApplicableType = InstitutionCertification::class;
+                $selectedApplicableId   = $cert->id;
+            }
+        }
+        if ($slug = $request->input('service')) {
+            $svc = ConsultancyService::where('id', $slug)->first();
+            if ($svc) {
+                $selectedApplicableType = ConsultancyService::class;
+                $selectedApplicableId   = $svc->id;
+            }
         }
 
         if ($slug = $request->input('scholarship')) {
@@ -45,8 +89,8 @@ class ApplicationController extends Controller
         }
 
         return view('website.applications.create', compact(
-            'student', 'institutions', 'programs', 'scholarships',
-            'selectedInstitutionId', 'selectedProgramId', 'selectedScholarshipId'
+            'student', 'institutions', 'applicables', 'scholarships',
+            'selectedInstitutionId', 'selectedApplicableType', 'selectedApplicableId', 'selectedScholarshipId'
         ));
     }
 
@@ -56,7 +100,8 @@ class ApplicationController extends Controller
         $data    = $request->validated();
 
         $alreadyApplied = Application::where('student_id', $student->id)
-            ->where('institution_program_id', $data['institution_program_id'])
+            ->where('applicable_type', $data['applicable_type'])
+            ->where('applicable_id', $data['applicable_id'])
             ->whereNotIn('status', ['withdrawn', 'rejected'])
             ->exists();
 
@@ -65,15 +110,16 @@ class ApplicationController extends Controller
         }
 
         Application::create([
-            'application_number'    => 'APP-' . now()->year . '-' . strtoupper(Str::random(6)),
-            'student_id'            => $student->id,
-            'institution_id'        => $data['institution_id'],
-            'institution_program_id' => $data['institution_program_id'],
-            'scholarship_id'        => $data['scholarship_id'] ?? null,
-            'source'                => $data['source'] ?? 'direct',
-            'student_message'       => $data['student_message'] ?? null,
-            'status'                => 'submitted',
-            'submitted_at'          => now(),
+            'application_number' => 'APP-' . now()->year . '-' . strtoupper(Str::random(6)),
+            'student_id'         => $student->id,
+            'institution_id'     => $data['institution_id'],
+            'applicable_type'    => $data['applicable_type'],
+            'applicable_id'      => $data['applicable_id'],
+            'scholarship_id'     => $data['scholarship_id'] ?? null,
+            'source'             => $data['source'] ?? 'direct',
+            'student_message'    => $data['student_message'] ?? null,
+            'status'             => 'submitted',
+            'submitted_at'       => now(),
         ]);
 
         return redirect()->route('student.dashboard')->with('success', 'Application submitted successfully!');

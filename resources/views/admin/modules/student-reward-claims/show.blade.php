@@ -120,7 +120,7 @@
                             @endif
                         </dd>
                     </div>
-                    <div><dt class="text-slate-400 text-xs mb-1">Program</dt><dd>{{ $studentRewardClaim->institutionProgram?->title ?: ($studentRewardClaim->institutionProgram?->program?->name ?? '-') }}</dd></div>
+                    <div><dt class="text-slate-400 text-xs mb-1">Applied For</dt><dd>{{ $studentRewardClaim->applicable_label }}</dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Admission Date</dt><dd>{{ $studentRewardClaim->admission_date?->format('d M Y') ?? '-' }}</dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Admission Number</dt><dd>{{ $studentRewardClaim->admission_number ?? '-' }}</dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Intake</dt><dd>{{ $studentRewardClaim->intake ?? '-' }}</dd></div>

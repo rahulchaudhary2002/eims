@@ -19,7 +19,8 @@ class AdmissionSeeder extends Seeder
             ], [
                 'student_id' => $application->student_id,
                 'institution_id' => $application->institution_id,
-                'institution_program_id' => $application->institution_program_id,
+                'applicable_type' => $application->applicable_type,
+                'applicable_id'   => $application->applicable_id,
                 'admission_number' => 'ADM-' . now()->format('Y') . '-' . str_pad((string) $application->id, 5, '0', STR_PAD_LEFT),
                 'admission_date' => now()->toDateString(),
                 'paid_amount' => 25000,

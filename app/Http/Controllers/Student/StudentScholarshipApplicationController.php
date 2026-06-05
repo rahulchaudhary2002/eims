@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StoreStudentScholarshipApplicationRequest;
 use App\Models\Application;
 use App\Models\Scholarship;
-use App\Models\ScholarshipApplication;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,8 +15,9 @@ class StudentScholarshipApplicationController extends Controller
     public function index(Request $request): View
     {
         $studentId = $request->user('student')->id;
-        $applications = ScholarshipApplication::where('student_id', $studentId)
-            ->with(['scholarship', 'application.institution'])
+        $applications = Application::where('student_id', $studentId)
+            ->whereNotNull('scholarship_id')
+            ->with(['scholarship', 'institution', 'applicable'])
             ->latest()
             ->paginate(12);
 
@@ -55,18 +55,19 @@ class StudentScholarshipApplicationController extends Controller
             abort_if($app->student_id !== $studentId, 403);
         }
 
-        ScholarshipApplication::create($data);
+        Application::create($data);
 
         return redirect()->route('student.scholarship-applications.index')
             ->with('success', 'Scholarship application submitted successfully.');
     }
 
-    public function show(Request $request, ScholarshipApplication $scholarshipApplication): View
+    public function show(Request $request, Application $application): View
     {
-        abort_if($scholarshipApplication->student_id !== $request->user('student')->id, 403);
+        abort_if($application->student_id !== $request->user('student')->id, 403);
+        abort_if(is_null($application->scholarship_id), 404);
 
-        $scholarshipApplication->load(['scholarship', 'application.institution', 'application.institutionProgram.program']);
+        $application->load(['scholarship', 'institution', 'applicable']);
 
-        return view('student.scholarship-applications.show', compact('scholarshipApplication'));
+        return view('student.scholarship-applications.show', compact('application'));
     }
 }

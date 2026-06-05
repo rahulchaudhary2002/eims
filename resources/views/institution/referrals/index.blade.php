@@ -73,7 +73,7 @@
                                     @endif
                                 </div>
                             </td>
-                            <td class="text-sm text-slate-600">{{ $referral->institutionProgram?->title ?: ($referral->institutionProgram?->program?->name ?? '-') }}</td>
+                            <td class="text-sm text-slate-600">{{ $referral->applicable_label }}</td>
                             <td class="text-xs text-slate-500">{{ $referral->referred_at?->format('d M Y') ?? '-' }}</td>
                             <td><span class="badge">{{ \App\Models\Referral::STATUSES[$referral->status] ?? $referral->status }}</span></td>
                             <td>

@@ -33,13 +33,11 @@
                 </select>
             </div>
             <div>
-                <label class="form-label text-xs">Program</label>
-                <select name="institution_program_id" class="form-control">
-                    <option value="">All Programs</option>
-                    @foreach($institutionPrograms as $program)
-                        <option value="{{ $program->id }}" {{ request('institution_program_id') == $program->id ? 'selected' : '' }}>
-                            {{ $program->title ?: ($program->program->name ?? 'Program #' . $program->id) }}
-                        </option>
+                <label class="form-label text-xs">Applicable Type</label>
+                <select name="applicable_type" class="form-control">
+                    <option value="">All Types</option>
+                    @foreach(\App\Models\Application::APPLICABLE_TYPES as $typeClass => $typeLabel)
+                        <option value="{{ $typeClass }}" {{ request('applicable_type') === $typeClass ? 'selected' : '' }}>{{ $typeLabel }}</option>
                     @endforeach
                 </select>
             </div>
@@ -122,11 +120,7 @@
                             </td>
                             <td class="text-sm">
                                 <div>{{ $inquiry->institution->name ?? '-' }}</div>
-                                @if($inquiry->institutionProgram)
-                                    <div class="text-xs text-slate-400">
-                                        {{ $inquiry->institutionProgram->title ?: ($inquiry->institutionProgram->program->name ?? '') }}
-                                    </div>
-                                @endif
+                                <div class="text-xs text-slate-400">{{ $inquiry->applicable_label }}</div>
                             </td>
                             <td class="text-sm">{{ $sources[$inquiry->source] ?? ($inquiry->source ?: '-') }}</td>
                             <td class="text-sm">{{ $inquiry->assignedTo->name ?? '-' }}</td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -17,7 +18,7 @@ class DashboardController extends Controller
             'applications'           => $student->applications()->count(),
             'applications_pending'   => $student->applications()->where('status', 'pending')->count(),
             'applications_approved'  => $student->applications()->whereIn('status', ['approved', 'accepted'])->count(),
-            'scholarship_applications' => $student->scholarshipApplications()->count(),
+            'scholarship_applications' => Application::where('student_id', $student->id)->whereNotNull('scholarship_id')->count(),
             'favorite_institutions'  => $student->favoriteInstitutions()->count(),
             'followed_institutions'  => $student->followedInstitutions()->count(),
         ];

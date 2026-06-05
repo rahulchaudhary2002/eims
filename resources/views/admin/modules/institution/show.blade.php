@@ -615,7 +615,7 @@
                             <tr>
                                 <td class="font-medium text-slate-800">{{ $application->application_number }}</td>
                                 <td>{{ $application->student->name ?? '-' }}</td>
-                                <td>{{ $application->institutionProgram?->title ?: ($application->institutionProgram?->program?->name ?? '-') }}</td>
+                                <td>{{ $application->applicable_label }}</td>
                                 <td>{{ $application->scholarship->title ?? '-' }}</td>
                                 <td><span class="badge">{{ \App\Models\Application::STATUSES[$application->status] ?? $application->status }}</span></td>
                                 <td>

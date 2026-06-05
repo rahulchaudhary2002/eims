@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('application_id')->unique();
             $table->unsignedBigInteger('student_id');
             $table->foreignId('institution_id')->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger('institution_program_id');
+            $table->nullableMorphs('applicable'); // InstitutionProgram, ConsultancyService, InstitutionCourse, InstitutionCertification
             $table->string('admission_number')->unique();
             $table->date('admission_date');
             $table->decimal('paid_amount', 12, 2)->nullable();
@@ -34,7 +34,6 @@ return new class extends Migration
             $table->index(['student_id', 'institution_id']);
             $table->index(['source', 'commission_status']);
             $table->index(['institution_id', 'verification_status']);
-            $table->index(['institution_program_id', 'verification_status']);
             $table->index(['student_id', 'admission_date']);
         });
     }

@@ -2,10 +2,7 @@
     $selectedInstitutionId = (string) old('institution_id', $referral->institution_id ?? $selectedInstitutionId ?? '');
     $selectedApplicationId = (string) old('application_id', $referral->application_id ?? $selectedApplicationId ?? '');
     $applicationOptions = $applications->map(function ($application) {
-        $programName = $application->institutionProgram?->display_name
-            ?? $application->institutionProgram?->title
-            ?? $application->institutionProgram?->program?->name
-            ?? 'Program not set';
+        $programName = $application->applicable_label ?? 'Program not set';
 
         return [
             'id' => (string) $application->id,

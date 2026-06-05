@@ -17,22 +17,21 @@ class UpdateApplicationRequest extends FormRequest
     {
         $applicationId = $this->route('application')?->id;
         $institutionRule = Rule::exists('institutions', 'id');
-        $institutionProgramRule = Rule::exists('institution_programs', 'id');
         $scholarshipRule = Rule::exists('scholarships', 'id');
 
         if (! auth('web')->user()?->is_super_admin) {
             $scope = (int) session('current_institution_id', 0);
             $institutionRule->where('id', $scope);
-            $institutionProgramRule->where('institution_id', $scope);
             $scholarshipRule->where('institution_id', $scope);
         }
 
         return [
-            'application_number'     => ['nullable', 'string', 'max:50', Rule::unique('applications', 'application_number')->ignore($applicationId)],
-            'student_id'             => ['required', 'exists:students,id'],
-            'institution_id'         => ['required', $institutionRule],
-            'institution_program_id' => ['required', $institutionProgramRule],
-            'scholarship_id'         => ['nullable', $scholarshipRule],
+            'application_number' => ['nullable', 'string', 'max:50', Rule::unique('applications', 'application_number')->ignore($applicationId)],
+            'student_id'         => ['required', 'exists:students,id'],
+            'institution_id'     => ['required', $institutionRule],
+            'applicable_type'    => ['required', 'string', Rule::in(array_keys(\App\Models\Application::APPLICABLE_TYPES))],
+            'applicable_id'      => ['required', 'integer', 'min:1'],
+            'scholarship_id'     => ['nullable', $scholarshipRule],
             'source'                 => ['required', Rule::in(array_keys(Application::SOURCES))],
             'status'                 => ['required', Rule::in(array_keys(Application::STATUSES))],
             'student_message'        => ['nullable', 'string'],

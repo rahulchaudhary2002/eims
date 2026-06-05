@@ -108,7 +108,7 @@
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Program</dt>
-                        <dd>{{ $referral->institutionProgram?->title ?: ($referral->institutionProgram?->program?->name ?? '-') }}</dd>
+                        <dd>{{ $referral->applicable_label }}</dd>
                     </div>
                     <div>
                         <dt class="text-slate-400 text-xs mb-1">Application Status</dt>

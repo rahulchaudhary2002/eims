@@ -9,7 +9,6 @@ use App\Http\Requests\Admin\UpdateReferralRequest;
 use App\Models\Application;
 use App\Models\ApplicationStatusLog;
 use App\Models\Institution;
-use App\Models\InstitutionProgram;
 use App\Models\Referral;
 use App\Models\ReferralAccessLog;
 use App\Models\ReferralAgreement;
@@ -27,7 +26,7 @@ class ReferralController extends Controller
 
     public function index(Request $request): View
     {
-        $query = Referral::with(['application', 'student', 'institution', 'institutionProgram', 'referredBy']);
+        $query = Referral::with(['application', 'student', 'institution', 'applicable', 'referredBy']);
         $this->applyInstitutionScope($query);
 
         if ($applicationId = $request->input('application_id')) {
@@ -76,13 +75,13 @@ class ReferralController extends Controller
     {
         $application = null;
         if ($applicationId = $request->input('application_id')) {
-            $application = Application::with(['student', 'institution', 'institutionProgram'])->find($applicationId);
+            $application = Application::with(['student', 'institution', 'applicable'])->find($applicationId);
         }
 
         $institutions       = $this->institutionDropdownQuery()->get(['id', 'name']);
         $applications       = $this->applicationDropdownQuery()
-            ->with(['student:id,name', 'institutionProgram:id,program_id,title', 'institutionProgram.program:id,name'])
-            ->get(['id', 'application_number', 'student_id', 'institution_id', 'institution_program_id']);
+            ->with(['student:id,name', 'applicable'])
+            ->get(['id', 'application_number', 'student_id', 'institution_id', 'applicable_type', 'applicable_id']);
         $referralAgreements = ReferralAgreement::where('status', 'active')->orderBy('id')->get();
         $statuses           = Referral::STATUSES;
         $selectedInstitutionId = $request->input('institution_id') ?? $application?->institution_id;
@@ -114,7 +113,8 @@ class ReferralController extends Controller
         $data['referred_at']     = $data['referred_at'] ?? now();
         $data['institution_id']  = $application->institution_id;
         $data['student_id']      = $application->student_id;
-        $data['institution_program_id'] = $application->institution_program_id;
+        $data['applicable_type'] = $application->applicable_type;
+        $data['applicable_id']   = $application->applicable_id;
         $data['referred_by']     = auth('web')->id();
 
         if (empty($data['status'])) {
@@ -138,13 +138,13 @@ class ReferralController extends Controller
     {
         $this->authorizeReferralAccess($referral);
         $referral->load([
-            'application.institutionProgram.program',
+            'application.applicable',
             'student',
             'student.profile',
             'student.documents',
             'student.academicRecords',
             'institution',
-            'institutionProgram',
+            'applicable',
             'referredBy',
             'profileUnlockedBy',
             'accessLogs.user',
@@ -162,8 +162,8 @@ class ReferralController extends Controller
 
         $institutions       = $this->institutionDropdownQuery()->get(['id', 'name']);
         $applications       = $this->applicationDropdownQuery($referral->application_id)
-            ->with(['student:id,name', 'institutionProgram:id,program_id,title', 'institutionProgram.program:id,name'])
-            ->get(['id', 'application_number', 'student_id', 'institution_id', 'institution_program_id']);
+            ->with(['student:id,name', 'applicable'])
+            ->get(['id', 'application_number', 'student_id', 'institution_id', 'applicable_type', 'applicable_id']);
         $referralAgreements = ReferralAgreement::where('status', 'active')->orderBy('id')->get();
         $statuses           = Referral::STATUSES;
 
@@ -184,11 +184,12 @@ class ReferralController extends Controller
 
         $this->authorizeInstitution((int) $application->institution_id);
 
-        $data['referral_number']         = ($data['referral_number'] ?? '') ?: $referral->referral_number;
-        $data['institution_id']          = $application->institution_id;
-        $data['student_id']              = $application->student_id;
-        $data['institution_program_id']  = $application->institution_program_id;
-        $data['referred_by']             = auth('web')->id() ?? $referral->referred_by;
+        $data['referral_number']  = ($data['referral_number'] ?? '') ?: $referral->referral_number;
+        $data['institution_id']   = $application->institution_id;
+        $data['student_id']       = $application->student_id;
+        $data['applicable_type']  = $application->applicable_type;
+        $data['applicable_id']    = $application->applicable_id;
+        $data['referred_by']      = auth('web')->id() ?? $referral->referred_by;
 
         $referral->update($data);
 

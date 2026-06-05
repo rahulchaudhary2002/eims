@@ -182,7 +182,7 @@
             <div class="eims-card p-6">
                 <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wide mb-4">Application Info</h3>
                 <dl class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div><dt class="text-slate-400 text-xs mb-1">Program</dt><dd>{{ $referral->institutionProgram?->title ?: ($referral->institutionProgram?->program?->name ?? '-') }}</dd></div>
+                    <div><dt class="text-slate-400 text-xs mb-1">Applied For</dt><dd>{{ $referral->applicable_label }}</dd></div>
                     <div><dt class="text-slate-400 text-xs mb-1">Application Status</dt><dd><span class="badge">{{ \App\Models\Application::STATUSES[$referral->application?->status] ?? ($referral->application?->status ?? '-') }}</span></dd></div>
                     @if($referral->application?->student_message)
                         <div class="md:col-span-2">

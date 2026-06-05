@@ -68,19 +68,27 @@
                     </div>
 
                     <div>
-                        <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Program <span class="text-red-500">*</span></label>
-                        <select name="institution_program_id" x-model="programId" required
-                                class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('institution_program_id') border-red-400 @enderror">
-                            <option value="">Select Program</option>
-                            @foreach ($programs as $prog)
-                                <option value="{{ $prog->id }}"
-                                        data-institution="{{ $prog->institution_id }}"
-                                        :class="institutionId && String({{ $prog->institution_id }}) !== String(institutionId) ? 'hidden' : ''"
-                                        {{ (old('institution_program_id') ?: $selectedProgramId) == $prog->id ? 'selected' : '' }}>
-                                    {{ $prog->display_name }} - {{ $prog->institution?->name }}
-                                </option>
+                        <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Type <span class="text-red-500">*</span></label>
+                        <select name="applicable_type" x-model="applicableType" @change="applicableId = ''" required
+                                class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('applicable_type') border-red-400 @enderror">
+                            <option value="">Select Type</option>
+                            @foreach(\App\Models\Application::APPLICABLE_TYPES as $typeClass => $typeLabel)
+                                <option value="{{ $typeClass }}" {{ (old('applicable_type') ?: ($selectedApplicableType ?? '')) === $typeClass ? 'selected' : '' }}>{{ $typeLabel }}</option>
                             @endforeach
                         </select>
+                        @error('applicable_type') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Item <span class="text-red-500">*</span></label>
+                        <select name="applicable_id" x-model="applicableId" required :disabled="!applicableType || !institutionId"
+                                class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('applicable_id') border-red-400 @enderror">
+                            <option value="" x-text="(!applicableType || !institutionId) ? 'Select institution & type first' : 'Select item'"></option>
+                            <template x-for="item in filteredApplicables" :key="item.id">
+                                <option :value="item.id" x-text="item.label"></option>
+                            </template>
+                        </select>
+                        @error('applicable_id') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
@@ -166,19 +174,16 @@
 function appForm() {
     return {
         institutionId: `{{ old('institution_id', $selectedInstitutionId ?? '') }}`,
-        programId: `{{ old('institution_program_id', $selectedProgramId ?? '') }}`,
+        applicableType: `{{ old('applicable_type', $selectedApplicableType ?? '') }}`,
+        applicableId: `{{ old('applicable_id', $selectedApplicableId ?? '') }}`,
+        applicables: @js(collect($applicables)->map(fn($items, $type) => $items->map(fn($item) => ['id' => (string)$item->id, 'institution_id' => (string)$item->institution_id, 'label' => method_exists($item, 'getDisplayNameAttribute') ? $item->display_name : $item->title]))->toArray()),
+        get filteredApplicables() {
+            if (!this.applicableType || !this.institutionId) return [];
+            const items = this.applicables[this.applicableType] ?? [];
+            return items.filter(i => i.institution_id === String(this.institutionId));
+        },
         init() {},
-        filterPrograms() {
-            document.querySelectorAll('select[name="institution_program_id"] option[data-institution]').forEach(opt => {
-                if (this.institutionId && opt.dataset.institution !== this.institutionId) {
-                    opt.classList.add('hidden');
-                    opt.disabled = true;
-                } else {
-                    opt.classList.remove('hidden');
-                    opt.disabled = false;
-                }
-            });
-        }
+        filterPrograms() {}
     }
 }
 </script>

@@ -60,7 +60,7 @@ class Student extends Authenticatable
 
     public function scholarshipApplications(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(\App\Models\ScholarshipApplication::class);
+        return $this->hasMany(\App\Models\Application::class)->whereNotNull('scholarship_id');
     }
 
     public function scholarshipCashbacks(): \Illuminate\Database\Eloquent\Relations\HasMany

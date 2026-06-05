@@ -9,7 +9,6 @@ use App\Http\Requests\Admin\UpdateAdmissionRequest;
 use App\Models\Admission;
 use App\Models\Application;
 use App\Models\Institution;
-use App\Models\InstitutionProgram;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,7 +24,7 @@ class AdmissionController extends Controller
 
     public function index(Request $request): View
     {
-        $query = Admission::with(['application', 'student', 'institution', 'institutionProgram.program', 'verifiedBy']);
+        $query = Admission::with(['application', 'student', 'institution', 'applicable', 'verifiedBy']);
         $this->applyInstitutionScope($query);
 
         if ($search = $request->input('search')) {
@@ -41,9 +40,6 @@ class AdmissionController extends Controller
         if ($institutionId = $request->input('institution_id')) {
             $query->where('institution_id', $institutionId);
         }
-        if ($institutionProgramId = $request->input('institution_program_id')) {
-            $query->where('institution_program_id', $institutionProgramId);
-        }
         if ($verificationStatus = $request->input('verification_status')) {
             $query->where('verification_status', $verificationStatus);
         }
@@ -57,7 +53,6 @@ class AdmissionController extends Controller
         $admissions = $query->latest()->paginate(20)->withQueryString();
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $institutionPrograms = $this->institutionProgramDropdownQuery()->get();
         $applications = $this->applicationDropdownQuery()->get();
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $verificationStatuses = Admission::VERIFICATION_STATUSES;
@@ -66,7 +61,6 @@ class AdmissionController extends Controller
             'admissions',
             'students',
             'institutions',
-            'institutionPrograms',
             'applications',
             'users',
             'verificationStatuses'
@@ -76,7 +70,7 @@ class AdmissionController extends Controller
     public function create(Request $request): View
     {
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $applications = $this->applicationDropdownQuery()->get(['id', 'application_number', 'student_id', 'institution_id', 'institution_program_id']);
+        $applications = $this->applicationDropdownQuery()->get(['id', 'application_number', 'student_id', 'institution_id', 'applicable_type', 'applicable_id']);
         $verificationStatuses = Admission::VERIFICATION_STATUSES;
         $selectedApplicationId = $request->input('application_id');
         $selectedInstitutionId = $request->input('institution_id');
@@ -104,7 +98,8 @@ class AdmissionController extends Controller
 
         $data['student_id'] = $application->student_id;
         $data['institution_id'] = $application->institution_id;
-        $data['institution_program_id'] = $application->institution_program_id;
+        $data['applicable_type'] = $application->applicable_type;
+        $data['applicable_id']   = $application->applicable_id;
 
         $this->authorizeInstitution((int) $data['institution_id']);
 
@@ -117,7 +112,7 @@ class AdmissionController extends Controller
     public function show(Admission $admission): View
     {
         $this->authorizeAdmissionAccess($admission);
-        $admission->load(['application.statusLogs.changedBy', 'student', 'institution', 'institutionProgram.program.faculty', 'verifiedBy', 'commissionInvoice']);
+        $admission->load(['application.statusLogs.changedBy', 'student', 'institution', 'applicable', 'verifiedBy', 'commissionInvoice']);
 
         return view('admin.modules.admissions.show', compact('admission'));
     }
@@ -127,7 +122,7 @@ class AdmissionController extends Controller
         $this->authorizeAdmissionAccess($admission);
 
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $applications = $this->applicationDropdownQuery($admission)->get(['id', 'application_number', 'student_id', 'institution_id', 'institution_program_id']);
+        $applications = $this->applicationDropdownQuery($admission)->get(['id', 'application_number', 'student_id', 'institution_id', 'applicable_type', 'applicable_id']);
         $verificationStatuses = Admission::VERIFICATION_STATUSES;
         $selectedApplicationId = null;
         $selectedInstitutionId = null;
@@ -151,7 +146,8 @@ class AdmissionController extends Controller
 
         $data['student_id'] = $application->student_id;
         $data['institution_id'] = $application->institution_id;
-        $data['institution_program_id'] = $application->institution_program_id;
+        $data['applicable_type'] = $application->applicable_type;
+        $data['applicable_id']   = $application->applicable_id;
 
         $this->authorizeInstitution((int) $data['institution_id']);
 
@@ -246,7 +242,7 @@ class AdmissionController extends Controller
 
     private function applicationDropdownQuery(?Admission $admission = null): Builder
     {
-        $query = Application::with(['student', 'institution', 'institutionProgram.program'])
+        $query = Application::with(['student', 'institution', 'applicable'])
             ->where(function (Builder $q) use ($admission) {
                 $q->whereDoesntHave('admission');
 
@@ -285,22 +281,6 @@ class AdmissionController extends Controller
         return $query;
     }
 
-    private function institutionProgramDropdownQuery(): Builder
-    {
-        $query = InstitutionProgram::with(['institution', 'program'])->orderBy('id');
-        $scope = $this->institutionScope();
-
-        if ($scope !== null) {
-            if (! $this->currentInstitutionIsAssigned()) {
-                $query->whereRaw('1 = 0');
-            } else {
-                $query->where('institution_id', $scope);
-            }
-        }
-
-        return $query;
-    }
-
     private function applyInstitutionScope(Builder $query): void
     {
         $scope = $this->institutionScope();
@@ -322,12 +302,6 @@ class AdmissionController extends Controller
     {
         $application = Application::findOrFail($applicationId);
         $this->authorizeInstitution((int) $application->institution_id);
-    }
-
-    private function authorizeInstitutionProgram(int $institutionProgramId): void
-    {
-        $program = InstitutionProgram::findOrFail($institutionProgramId);
-        $this->authorizeInstitution((int) $program->institution_id);
     }
 
     private function authorizeInstitution(int $institutionId): void

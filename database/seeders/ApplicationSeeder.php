@@ -33,7 +33,8 @@ class ApplicationSeeder extends Seeder
             ], [
                 'student_id' => $student->id,
                 'institution_id' => $institutionProgram->institution_id,
-                'institution_program_id' => $institutionProgram->id,
+                'applicable_type' => \App\Models\InstitutionProgram::class,
+                'applicable_id'   => $institutionProgram->id,
                 'scholarship_id' => $scholarship?->id,
                 'source' => $scholarship ? 'scholarship' : 'direct',
                 'status' => $status,

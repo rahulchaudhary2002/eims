@@ -39,4 +39,19 @@ class ConsultancyService extends Model
     {
         return $this->belongsTo(Institution::class);
     }
+
+    public function applications(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(Application::class, 'applicable');
+    }
+
+    public function referrals(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(Referral::class, 'applicable');
+    }
+
+    public function admissions(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(Admission::class, 'applicable');
+    }
 }

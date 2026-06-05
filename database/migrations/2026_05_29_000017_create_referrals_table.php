@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained()->cascadeOnDelete();
             $table->foreignId('institution_id')->constrained()->cascadeOnDelete();
             $table->foreignId('referred_by')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('institution_program_id')->nullable()->constrained('institution_programs')->nullOnDelete();
+            $table->nullableMorphs('applicable'); // InstitutionProgram, ConsultancyService, InstitutionCourse, InstitutionCertification
             $table->foreignId('referral_agreement_id')->nullable()->constrained('referral_agreements')->nullOnDelete();
             $table->string('status', 40)->default('sent');
             $table->timestamp('referred_at')->nullable();

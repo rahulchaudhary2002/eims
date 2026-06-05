@@ -46,17 +46,6 @@
                 </select>
             </div>
             <div>
-                <label class="form-label text-xs">Institution Program</label>
-                <select name="institution_program_id" class="form-control">
-                    <option value="">All Programs</option>
-                    @foreach($institutionPrograms as $institutionProgram)
-                        <option value="{{ $institutionProgram->id }}" {{ request('institution_program_id') == $institutionProgram->id ? 'selected' : '' }}>
-                            {{ $institutionProgram->institution->name ?? 'Institution' }} - {{ $institutionProgram->title ?: ($institutionProgram->program->name ?? 'Program') }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
                 <label class="form-label text-xs">Verification</label>
                 <select name="verification_status" class="form-control">
                     <option value="">All Statuses</option>
@@ -104,7 +93,7 @@
                             <td>{{ $admission->student->name ?? '-' }}</td>
                             <td>
                                 <div class="font-medium text-slate-800">{{ $admission->institution->name ?? '-' }}</div>
-                                <div class="text-xs text-slate-400">{{ $admission->institutionProgram?->title ?: ($admission->institutionProgram?->program?->name ?? '-') }}</div>
+                                <div class="text-xs text-slate-400">{{ $admission->applicable_label ?? '-' }}</div>
                             </td>
                             <td>{{ $admission->paid_amount !== null ? number_format((float) $admission->paid_amount, 2) : '-' }}</td>
                             <td class="text-xs text-slate-500">{{ $admission->admission_date?->format('d M Y') ?? '-' }}</td>

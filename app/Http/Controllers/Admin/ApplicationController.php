@@ -9,6 +9,9 @@ use App\Http\Requests\Admin\UpdateApplicationRequest;
 use App\Models\Application;
 use App\Models\ApplicationStatusLog;
 use App\Models\Institution;
+use App\Models\ConsultancyService;
+use App\Models\InstitutionCertification;
+use App\Models\InstitutionCourse;
 use App\Models\InstitutionProgram;
 use App\Models\Scholarship;
 use App\Models\Student;
@@ -24,7 +27,7 @@ class ApplicationController extends Controller
 
     public function index(Request $request): View
     {
-        $query = Application::with(['student', 'institution', 'institutionProgram.program', 'scholarship']);
+        $query = Application::with(['student', 'institution', 'applicable', 'scholarship']);
         $this->applyInstitutionScope($query);
 
         if ($search = $request->input('search')) {
@@ -39,8 +42,11 @@ class ApplicationController extends Controller
         if ($institutionId = $request->input('institution_id')) {
             $query->where('institution_id', $institutionId);
         }
-        if ($institutionProgramId = $request->input('institution_program_id')) {
-            $query->where('institution_program_id', $institutionProgramId);
+        if ($applicableType = $request->input('applicable_type')) {
+            $query->where('applicable_type', $applicableType);
+        }
+        if ($applicableId = $request->input('applicable_id')) {
+            $query->where('applicable_id', $applicableId);
         }
         if ($scholarshipId = $request->input('scholarship_id')) {
             $query->where('scholarship_id', $scholarshipId);
@@ -61,7 +67,7 @@ class ApplicationController extends Controller
         $applications = $query->latest()->paginate(20)->withQueryString();
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $institutionPrograms = $this->institutionProgramDropdownQuery()->get();
+        $applicables = $this->applicablesForDropdown();
         $scholarships = $this->scholarshipDropdownQuery()->get();
         $sources = Application::SOURCES;
         $statuses = Application::STATUSES;
@@ -70,7 +76,7 @@ class ApplicationController extends Controller
             'applications',
             'students',
             'institutions',
-            'institutionPrograms',
+            'applicables',
             'scholarships',
             'sources',
             'statuses'
@@ -81,20 +87,18 @@ class ApplicationController extends Controller
     {
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $institutionPrograms = $this->institutionProgramDropdownQuery()->get();
+        $applicables = $this->applicablesForDropdown();
         $scholarships = $this->scholarshipDropdownQuery()->get();
         $sources = Application::SOURCES;
         $statuses = Application::STATUSES;
         $selectedStudentId = $request->input('student_id');
         $selectedInstitutionId = $request->input('institution_id');
-        $selectedInstitutionProgramId = $request->input('institution_program_id');
+        $selectedApplicableType = $request->input('applicable_type');
+        $selectedApplicableId = $request->input('applicable_id');
         $selectedScholarshipId = $request->input('scholarship_id');
 
         if ($selectedInstitutionId) {
             $this->authorizeInstitution((int) $selectedInstitutionId);
-        }
-        if ($selectedInstitutionProgramId) {
-            $this->authorizeInstitutionProgram((int) $selectedInstitutionProgramId);
         }
         if ($selectedScholarshipId) {
             $this->authorizeScholarship((int) $selectedScholarshipId);
@@ -103,13 +107,14 @@ class ApplicationController extends Controller
         return view('admin.modules.applications.create', compact(
             'students',
             'institutions',
-            'institutionPrograms',
+            'applicables',
             'scholarships',
             'sources',
             'statuses',
             'selectedStudentId',
             'selectedInstitutionId',
-            'selectedInstitutionProgramId',
+            'selectedApplicableType',
+            'selectedApplicableId',
             'selectedScholarshipId'
         ));
     }
@@ -132,7 +137,7 @@ class ApplicationController extends Controller
     public function show(Application $application): View
     {
         $this->authorizeApplicationAccess($application);
-        $application->load(['student', 'institution', 'institutionProgram.program.faculty', 'scholarship', 'statusLogs.changedBy', 'admission.verifiedBy', 'referral.referredBy']);
+        $application->load(['student', 'institution', 'applicable', 'scholarship', 'statusLogs.changedBy', 'admission.verifiedBy', 'referral.referredBy']);
 
         return view('admin.modules.applications.show', compact('application'));
     }
@@ -143,26 +148,28 @@ class ApplicationController extends Controller
 
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $institutionPrograms = $this->institutionProgramDropdownQuery()->get();
+        $applicables = $this->applicablesForDropdown();
         $scholarships = $this->scholarshipDropdownQuery()->get();
         $sources = Application::SOURCES;
         $statuses = Application::STATUSES;
         $selectedStudentId = null;
         $selectedInstitutionId = null;
-        $selectedInstitutionProgramId = null;
+        $selectedApplicableType = null;
+        $selectedApplicableId = null;
         $selectedScholarshipId = null;
 
         return view('admin.modules.applications.edit', compact(
             'application',
             'students',
             'institutions',
-            'institutionPrograms',
+            'applicables',
             'scholarships',
             'sources',
             'statuses',
             'selectedStudentId',
             'selectedInstitutionId',
-            'selectedInstitutionProgramId',
+            'selectedApplicableType',
+            'selectedApplicableId',
             'selectedScholarshipId'
         ));
     }
@@ -265,20 +272,27 @@ class ApplicationController extends Controller
         return $query;
     }
 
-    private function institutionProgramDropdownQuery(): Builder
+    private function applicablesForDropdown(): array
     {
-        $query = InstitutionProgram::with(['institution', 'program'])->orderBy('id');
         $scope = $this->institutionScope();
+        $notAssigned = $scope !== null && !$this->currentInstitutionIsAssigned();
 
-        if ($scope !== null) {
-            if (! $this->currentInstitutionIsAssigned()) {
-                $query->whereRaw('1 = 0');
-            } else {
+        $fetch = function ($query) use ($scope, $notAssigned) {
+            if ($notAssigned) {
+                return $query->whereRaw('1 = 0')->get();
+            }
+            if ($scope !== null) {
                 $query->where('institution_id', $scope);
             }
-        }
+            return $query->get();
+        };
 
-        return $query;
+        return [
+            \App\Models\InstitutionProgram::class      => $fetch(\App\Models\InstitutionProgram::with('program')->orderBy('id')),
+            \App\Models\InstitutionCourse::class        => $fetch(\App\Models\InstitutionCourse::orderBy('title')),
+            \App\Models\InstitutionCertification::class => $fetch(\App\Models\InstitutionCertification::orderBy('title')),
+            \App\Models\ConsultancyService::class       => $fetch(\App\Models\ConsultancyService::orderBy('title')),
+        ];
     }
 
     private function scholarshipDropdownQuery(): Builder
@@ -311,20 +325,31 @@ class ApplicationController extends Controller
 
     private function validateRelationships(array $data): void
     {
-        if (! InstitutionProgram::whereKey($data['institution_program_id'])
-            ->where('institution_id', $data['institution_id'])
-            ->exists()) {
+        $type = $data['applicable_type'] ?? null;
+        $id   = $data['applicable_id'] ?? null;
+        $allowedTypes = array_keys(Application::APPLICABLE_TYPES);
+
+        if (!$type || !in_array($type, $allowedTypes, true)) {
             throw ValidationException::withMessages([
-                'institution_program_id' => 'The selected institution program does not belong to the selected institution.',
+                'applicable_type' => 'Please select a valid applicable type.',
             ]);
         }
 
-        if (! empty($data['scholarship_id']) && ! Scholarship::whereKey($data['scholarship_id'])
+        $exists = $type::whereKey($id)
             ->where('institution_id', $data['institution_id'])
-            ->where('institution_program_id', $data['institution_program_id'])
+            ->exists();
+
+        if (!$exists) {
+            throw ValidationException::withMessages([
+                'applicable_id' => 'The selected item does not belong to the selected institution.',
+            ]);
+        }
+
+        if (!empty($data['scholarship_id']) && !Scholarship::whereKey($data['scholarship_id'])
+            ->where('institution_id', $data['institution_id'])
             ->exists()) {
             throw ValidationException::withMessages([
-                'scholarship_id' => 'The selected scholarship does not belong to the selected institution program.',
+                'scholarship_id' => 'The selected scholarship does not belong to the selected institution.',
             ]);
         }
     }
@@ -348,12 +373,6 @@ class ApplicationController extends Controller
             403,
             'You do not have access to this institution.'
         );
-    }
-
-    private function authorizeInstitutionProgram(int $institutionProgramId): void
-    {
-        $program = InstitutionProgram::findOrFail($institutionProgramId);
-        $this->authorizeInstitution((int) $program->institution_id);
     }
 
     private function authorizeScholarship(int $scholarshipId): void

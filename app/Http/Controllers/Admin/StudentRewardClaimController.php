@@ -25,7 +25,7 @@ class StudentRewardClaimController extends Controller
         $query = StudentRewardClaim::with([
             'student',
             'institution',
-            'institutionProgram',
+            'applicable',
             'referral',
         ]);
 
@@ -66,7 +66,7 @@ class StudentRewardClaimController extends Controller
         $studentRewardClaim->load([
             'student',
             'institution',
-            'institutionProgram',
+            'applicable',
             'application.admission',
             'application.allReferrals',
             'referral',
@@ -212,7 +212,8 @@ class StudentRewardClaimController extends Controller
             'claim_number'           => $claimNumber,
             'student_id'             => $referral->student_id,
             'institution_id'         => $referral->institution_id,
-            'institution_program_id' => $referral->institution_program_id,
+            'applicable_type'        => $referral->applicable_type,
+            'applicable_id'          => $referral->applicable_id,
             'application_id'         => $referral->application_id,
             'referral_id'            => $referral->id,
             'admission_id'           => $admission?->id,

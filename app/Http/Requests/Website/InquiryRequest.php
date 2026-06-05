@@ -15,7 +15,8 @@ class InquiryRequest extends FormRequest
     {
         return [
             'institution_id'         => ['nullable', 'integer', 'exists:institutions,id'],
-            'institution_program_id' => ['nullable', 'integer', 'exists:institution_programs,id'],
+            'applicable_type'        => ['nullable', 'string'],
+            'applicable_id'          => ['nullable', 'integer', 'min:1'],
             'name'                   => ['required', 'string', 'max:255'],
             'email'                  => ['required', 'email', 'max:255'],
             'phone'                  => ['required', 'string', 'max:20'],

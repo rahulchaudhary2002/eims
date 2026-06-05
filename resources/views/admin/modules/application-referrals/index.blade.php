@@ -87,7 +87,7 @@
                             </td>
                             <td>
                                 <div class="font-medium text-slate-800">{{ $referral->institution->name ?? '-' }}</div>
-                                <div class="text-xs text-slate-400">{{ $referral->institutionProgram?->title ?: ($referral->institutionProgram?->program?->name ?? '-') }}</div>
+                                <div class="text-xs text-slate-400">{{ $referral->applicable_label }}</div>
                             </td>
                             <td><span class="badge">{{ \App\Models\ApplicationReferral::STATUSES[$referral->status] ?? $referral->status }}</span></td>
                             <td class="text-xs text-slate-500">{{ $referral->referred_at?->format('d M Y, H:i') ?? '-' }}</td>

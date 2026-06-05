@@ -17,8 +17,8 @@ class InstitutionAdmissionController extends Controller
         $this->title = 'Admission';
         $this->fileFields = ['payment_proof' => 'admissions'];
         $this->selectOptions = ['verification_status' => Admission::VERIFICATION_STATUSES];
-        $this->readOnlyFields = ['application_id', 'student_id', 'institution_id', 'institution_program_id', 'admission_number', 'verified_by', 'verified_at'];
-        $this->relationships = ['application', 'student', 'institutionProgram'];
+        $this->readOnlyFields = ['application_id', 'student_id', 'institution_id', 'applicable_type', 'applicable_id', 'admission_number', 'verified_by', 'verified_at'];
+        $this->relationships = ['application', 'student', 'applicable'];
         $this->fields = [
             'admission_number' => ['label' => 'Admission Number'],
             'admission_date' => ['label' => 'Admission Date', 'type' => 'date', 'rules' => ['nullable', 'date']],

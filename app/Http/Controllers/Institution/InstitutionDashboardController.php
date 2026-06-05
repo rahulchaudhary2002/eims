@@ -50,13 +50,13 @@ class InstitutionDashboardController extends Controller
             'Applications by month' => $this->monthCount(Application::class),
             'Inquiries by status' => $this->groupCount(Inquiry::class, 'status'),
             'Admissions by month' => $this->monthCount(Admission::class),
-            'Program-wise applications' => Application::query()
-                ->selectRaw('institution_program_id, count(*) as total')
+            'Applicable-wise applications' => Application::query()
+                ->selectRaw('applicable_type, applicable_id, count(*) as total')
                 ->where('institution_id', $institutionId)
-                ->groupBy('institution_program_id')
-                ->with('institutionProgram.program')
+                ->groupBy('applicable_type', 'applicable_id')
+                ->with('applicable')
                 ->get()
-                ->mapWithKeys(fn ($row) => [($row->institutionProgram?->display_name ?? 'Program #'.$row->institution_program_id) => $row->total])
+                ->mapWithKeys(fn ($row) => [($row->applicable_label) => $row->total])
                 ->all(),
             'Scholarship usage' => Scholarship::where('institution_id', $institutionId)->pluck('used_slots', 'title')->all(),
             'Review rating distribution' => $this->groupCount(InstitutionReview::class, 'rating'),

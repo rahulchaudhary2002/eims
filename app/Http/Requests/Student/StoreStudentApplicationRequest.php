@@ -15,8 +15,9 @@ class StoreStudentApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'institution_id'         => ['required', 'integer', 'exists:institutions,id'],
-            'institution_program_id' => ['required', 'integer', 'exists:institution_programs,id'],
+            'institution_id'  => ['required', 'integer', 'exists:institutions,id'],
+            'applicable_type' => ['required', 'string', 'in:' . implode(',', array_keys(\App\Models\Application::APPLICABLE_TYPES))],
+            'applicable_id'   => ['required', 'integer', 'min:1'],
             'scholarship_id'         => ['nullable', 'integer', 'exists:scholarships,id'],
             'source'                 => ['nullable', 'in:' . implode(',', array_keys(Application::SOURCES))],
             'student_message'        => ['nullable', 'string', 'max:2000'],

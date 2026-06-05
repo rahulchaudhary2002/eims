@@ -255,7 +255,7 @@
             <div class="eims-card p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wide">Applications</h3>
-                    <a href="{{ route('admin.applications.create', ['institution_id' => $ip->institution_id, 'institution_program_id' => $ip->id]) }}" class="btn btn-primary btn-sm text-xs py-1 px-3">
+                    <a href="{{ route('admin.applications.create', ['institution_id' => $ip->institution_id, 'applicable_type' => \App\Models\InstitutionProgram::class, 'applicable_id' => $ip->id]) }}" class="btn btn-primary btn-sm text-xs py-1 px-3">
                         + Add Application
                     </a>
                 </div>
@@ -296,7 +296,7 @@
                         </table>
                     </div>
                     <div class="mt-3 text-right">
-                        <a href="{{ route('admin.applications.index', ['institution_program_id' => $ip->id]) }}" class="text-xs text-indigo-600 hover:underline">
+                        <a href="{{ route('admin.applications.index', ['applicable_type' => \App\Models\InstitutionProgram::class, 'applicable_id' => $ip->id]) }}" class="text-xs text-indigo-600 hover:underline">
                             View all applications →
                         </a>
                     </div>

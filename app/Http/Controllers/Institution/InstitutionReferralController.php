@@ -21,7 +21,7 @@ class InstitutionReferralController extends Controller
         $query = Referral::with([
             'application',
             'student',
-            'institutionProgram',
+            'applicable',
             'referredBy',
         ])->where('institution_id', $institutionId);
 
@@ -47,7 +47,7 @@ class InstitutionReferralController extends Controller
             'student.documents',
             'student.academicRecords',
             'institution',
-            'institutionProgram',
+            'applicable',
             'accessLogs.user',
             'referredBy',
             'rewardClaims',

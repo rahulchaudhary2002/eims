@@ -19,30 +19,50 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div
+        x-data="{
+            institutionId: '{{ old('institution_id', $application->institution_id ?? $selectedInstitutionId ?? '') }}',
+            applicableType: '{{ old('applicable_type', $application->applicable_type ?? '') }}',
+            applicableId: '{{ old('applicable_id', $application->applicable_id ?? '') }}',
+            applicables: @js(collect($applicables)->map(fn($items, $type) => $items->map(fn($item) => ['id' => (string)$item->id, 'institution_id' => (string)$item->institution_id, 'label' => method_exists($item, 'getDisplayNameAttribute') ? $item->display_name : $item->title]))->toArray()),
+            get filteredItems() {
+                if (!this.applicableType || !this.institutionId) return [];
+                const items = this.applicables[this.applicableType] ?? [];
+                return items.filter(i => i.institution_id === this.institutionId);
+            }
+        }"
+        x-effect="if (applicableId && !filteredItems.some(i => i.id === applicableId)) { applicableId = ''; }"
+        class="grid grid-cols-1 md:grid-cols-2 gap-5"
+    >
         <div>
             <label for="institution_id" class="form-label">Institution <span class="text-red-500">*</span></label>
-            <select name="institution_id" id="institution_id" class="form-control @error('institution_id') border-red-400 @enderror">
+            <select name="institution_id" id="institution_id" x-model="institutionId" class="form-control @error('institution_id') border-red-400 @enderror">
                 <option value="">Select Institution</option>
                 @foreach($institutions as $institution)
-                    <option value="{{ $institution->id }}" {{ old('institution_id', $application->institution_id ?? $selectedInstitutionId ?? '') == $institution->id ? 'selected' : '' }}>
-                        {{ $institution->name }}
-                    </option>
+                    <option value="{{ $institution->id }}">{{ $institution->name }}</option>
                 @endforeach
             </select>
             @error('institution_id') <p class="form-error">{{ $message }}</p> @enderror
         </div>
         <div>
-            <label for="institution_program_id" class="form-label">Institution Program <span class="text-red-500">*</span></label>
-            <select name="institution_program_id" id="institution_program_id" class="form-control @error('institution_program_id') border-red-400 @enderror">
-                <option value="">Select Institution Program</option>
-                @foreach($institutionPrograms as $institutionProgram)
-                    <option value="{{ $institutionProgram->id }}" {{ old('institution_program_id', $application->institution_program_id ?? $selectedInstitutionProgramId ?? '') == $institutionProgram->id ? 'selected' : '' }}>
-                        {{ $institutionProgram->institution->name ?? 'Institution' }} - {{ $institutionProgram->title ?: ($institutionProgram->program->name ?? 'Program') }}
-                    </option>
+            <label for="applicable_type" class="form-label">Applicable Type <span class="text-red-500">*</span></label>
+            <select name="applicable_type" id="applicable_type" x-model="applicableType" @change="applicableId = ''" class="form-control @error('applicable_type') border-red-400 @enderror">
+                <option value="">Select Type</option>
+                @foreach(\App\Models\Application::APPLICABLE_TYPES as $typeClass => $typeLabel)
+                    <option value="{{ $typeClass }}">{{ $typeLabel }}</option>
                 @endforeach
             </select>
-            @error('institution_program_id') <p class="form-error">{{ $message }}</p> @enderror
+            @error('applicable_type') <p class="form-error">{{ $message }}</p> @enderror
+        </div>
+        <div class="md:col-span-2">
+            <label for="applicable_id" class="form-label">Item <span class="text-red-500">*</span></label>
+            <select name="applicable_id" id="applicable_id" x-model="applicableId" :disabled="!applicableType || !institutionId" class="form-control @error('applicable_id') border-red-400 @enderror">
+                <option value="" x-text="(!applicableType || !institutionId) ? 'Select type and institution first' : 'Select item'"></option>
+                <template x-for="item in filteredItems" :key="item.id">
+                    <option :value="item.id" x-text="item.label"></option>
+                </template>
+            </select>
+            @error('applicable_id') <p class="form-error">{{ $message }}</p> @enderror
         </div>
     </div>
 

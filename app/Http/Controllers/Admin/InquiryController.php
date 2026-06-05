@@ -6,8 +6,11 @@ use App\Http\Controllers\Admin\Concerns\ScopesForInstitution;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreInquiryRequest;
 use App\Http\Requests\Admin\UpdateInquiryRequest;
+use App\Models\ConsultancyService;
 use App\Models\Institution;
 use App\Models\Inquiry;
+use App\Models\InstitutionCertification;
+use App\Models\InstitutionCourse;
 use App\Models\InstitutionProgram;
 use App\Models\Student;
 use App\Models\User;
@@ -22,7 +25,7 @@ class InquiryController extends Controller
 
     public function index(Request $request): View
     {
-        $query = Inquiry::with(['student', 'institution', 'institutionProgram.program', 'assignedTo']);
+        $query = Inquiry::with(['student', 'institution', 'applicable', 'assignedTo']);
         $this->applyInstitutionScope($query);
 
         if ($studentId = $request->input('student_id')) {
@@ -31,8 +34,11 @@ class InquiryController extends Controller
         if ($institutionId = $request->input('institution_id')) {
             $query->where('institution_id', $institutionId);
         }
-        if ($programId = $request->input('institution_program_id')) {
-            $query->where('institution_program_id', $programId);
+        if ($applicableType = $request->input('applicable_type')) {
+            $query->where('applicable_type', $applicableType);
+            if ($applicableId = $request->input('applicable_id')) {
+                $query->where('applicable_id', $applicableId);
+            }
         }
         if ($source = $request->input('source')) {
             $query->where('source', $source);
@@ -52,7 +58,7 @@ class InquiryController extends Controller
 
         $inquiries = $query->latest()->paginate(20)->withQueryString();
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $institutionPrograms = $this->institutionProgramDropdownQuery()->get(['id', 'title', 'institution_id', 'program_id']);
+        $applicables = $this->applicablesForDropdown();
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $sources = Inquiry::SOURCES;
@@ -61,7 +67,7 @@ class InquiryController extends Controller
         return view('admin.modules.inquiries.index', compact(
             'inquiries',
             'institutions',
-            'institutionPrograms',
+            'applicables',
             'students',
             'users',
             'sources',
@@ -72,7 +78,7 @@ class InquiryController extends Controller
     public function create(Request $request): View
     {
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $institutionPrograms = $this->institutionProgramDropdownQuery()->get(['id', 'title', 'institution_id', 'program_id']);
+        $applicables = $this->applicablesForDropdown();
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $sources = Inquiry::SOURCES;
@@ -86,7 +92,7 @@ class InquiryController extends Controller
 
         return view('admin.modules.inquiries.create', compact(
             'institutions',
-            'institutionPrograms',
+            'applicables',
             'students',
             'users',
             'sources',
@@ -116,7 +122,7 @@ class InquiryController extends Controller
         $inquiry->load([
             'student',
             'institution',
-            'institutionProgram.program',
+            'applicable',
             'assignedTo',
             'notes' => fn ($q) => $q->with('user')->latest(),
             'followUps' => fn ($q) => $q->with('assignedTo')->orderBy('follow_up_at'),
@@ -128,10 +134,10 @@ class InquiryController extends Controller
     public function edit(Inquiry $inquiry): View
     {
         $this->authorizeInquiryAccess($inquiry);
-        $inquiry->load(['student', 'institution', 'institutionProgram', 'assignedTo']);
+        $inquiry->load(['student', 'institution', 'applicable', 'assignedTo']);
 
         $institutions = $this->institutionDropdownQuery()->get(['id', 'name']);
-        $institutionPrograms = $this->institutionProgramDropdownQuery()->get(['id', 'title', 'institution_id', 'program_id']);
+        $applicables = $this->applicablesForDropdown();
         $students = Student::orderBy('name')->get(['id', 'name', 'email']);
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $sources = Inquiry::SOURCES;
@@ -140,7 +146,7 @@ class InquiryController extends Controller
         return view('admin.modules.inquiries.edit', compact(
             'inquiry',
             'institutions',
-            'institutionPrograms',
+            'applicables',
             'students',
             'users',
             'sources',
@@ -202,20 +208,23 @@ class InquiryController extends Controller
         return $query;
     }
 
-    private function institutionProgramDropdownQuery(): Builder
+    private function applicablesForDropdown(): array
     {
-        $query = InstitutionProgram::orderBy('id');
         $scope = $this->institutionScope();
+        $notAssigned = $scope !== null && !$this->currentInstitutionIsAssigned();
 
-        if ($scope !== null) {
-            if (! $this->currentInstitutionIsAssigned()) {
-                $query->whereRaw('1 = 0');
-            } else {
-                $query->where('institution_id', $scope);
-            }
-        }
+        $fetch = function ($query) use ($scope, $notAssigned) {
+            if ($notAssigned) return $query->whereRaw('1 = 0')->get();
+            if ($scope !== null) $query->where('institution_id', $scope);
+            return $query->get();
+        };
 
-        return $query;
+        return [
+            InstitutionProgram::class      => $fetch(InstitutionProgram::with('program')->orderBy('id')),
+            InstitutionCourse::class        => $fetch(InstitutionCourse::orderBy('title')),
+            InstitutionCertification::class => $fetch(InstitutionCertification::orderBy('title')),
+            ConsultancyService::class       => $fetch(ConsultancyService::orderBy('title')),
+        ];
     }
 
     private function applyInstitutionScope(Builder $query): void

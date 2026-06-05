@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inquiry extends Model
@@ -31,7 +32,8 @@ class Inquiry extends Model
     protected $fillable = [
         'student_id',
         'institution_id',
-        'institution_program_id',
+        'applicable_type',
+        'applicable_id',
         'name',
         'email',
         'phone',
@@ -56,9 +58,9 @@ class Inquiry extends Model
         return $this->belongsTo(Institution::class);
     }
 
-    public function institutionProgram(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function applicable(): MorphTo
     {
-        return $this->belongsTo(InstitutionProgram::class);
+        return $this->morphTo();
     }
 
     public function assignedTo(): \Illuminate\Database\Eloquent\Relations\BelongsTo

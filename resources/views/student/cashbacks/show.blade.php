@@ -23,7 +23,7 @@
                 <dl class="divide-y divide-gray-50">
                     @foreach([
                         ['Institution', $cashback->application?->institution?->name],
-                        ['Program', $cashback->application?->institutionProgram?->program?->name],
+                        ['Applied For', $cashback->application?->applicable_label],
                         ['Status', \App\Models\ScholarshipCashback::STATUSES[$cashback->status] ?? $cashback->status],
                         ['Payment Method', $cashback->payment_method ? (\App\Models\ScholarshipCashback::PAYMENT_METHODS[$cashback->payment_method] ?? $cashback->payment_method) : null],
                         ['Transaction Ref', $cashback->transaction_reference],
