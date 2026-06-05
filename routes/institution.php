@@ -56,7 +56,7 @@ Route::middleware(['auth:web', 'institution.user'])
             Route::resource('inquiries', InstitutionInquiryController::class);
             Route::resource('lead-notes', InstitutionLeadNoteController::class);
             Route::resource('lead-follow-ups', InstitutionLeadFollowUpController::class);
-            Route::resource('counseling-sessions', InstitutionCounselingSessionController::class);
+            Route::resource('counseling-sessions', InstitutionCounselingSessionController::class)->only(['index', 'show', 'edit', 'update'])->whereNumber('counseling_session');
             Route::resource('posts', InstitutionPostController::class);
             Route::resource('post-media', InstitutionPostMediaController::class);
             Route::resource('reviews', InstitutionReviewController::class)->only(['index', 'show']);

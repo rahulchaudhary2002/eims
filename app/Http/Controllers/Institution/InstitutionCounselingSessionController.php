@@ -18,6 +18,7 @@ class InstitutionCounselingSessionController extends Controller
         $this->routeBase = 'counseling-sessions';
         $this->title = 'Counseling Session';
         $this->relationships = ['student', 'counselor'];
+        $this->readOnlyFields = ['student_id'];
         $this->selectOptions = ['mode' => CounselingSession::MODES, 'status' => CounselingSession::STATUSES];
         $this->fields = [
             'student_id' => ['label' => 'Student', 'type' => 'number', 'rules' => ['nullable', 'integer', 'exists:students,id']],
