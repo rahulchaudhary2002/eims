@@ -185,10 +185,10 @@
                                     </div>
                                     <div class="min-w-0">
                                         <p class="font-semibold text-gray-900 text-sm truncate">
-                                            {{ $rec->institution?->name ?? $rec->program?->name ?? 'Recommendation' }}
+                                            {{ $rec->institution?->name ?? $rec->institutionProgram?->title ?? 'Recommendation' }}
                                         </p>
-                                        @if ($rec->institution && $rec->program)
-                                            <p class="text-xs text-gray-400 truncate mt-0.5">{{ $rec->program->name }}</p>
+                                        @if ($rec->institution && $rec->institutionProgram)
+                                            <p class="text-xs text-gray-400 truncate mt-0.5">{{ $rec->institutionProgram->title }}</p>
                                         @endif
                                     </div>
                                 </div>

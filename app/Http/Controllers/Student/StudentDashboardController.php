@@ -34,7 +34,7 @@ class StudentDashboardController extends Controller
             ->get();
 
         $recommendations = StudentRecommendation::where('student_id', $studentId)
-            ->with(['institution', 'applicable'])
+            ->with(['institution', 'institutionProgram'])
             ->latest()
             ->limit(4)
             ->get();
