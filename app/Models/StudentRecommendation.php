@@ -39,4 +39,9 @@ class StudentRecommendation extends Model
     {
         return $this->belongsTo(InstitutionProgram::class);
     }
+
+    public function program(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->institutionProgram();
+    }
 }

@@ -21,22 +21,30 @@ class StudentRecommendationController extends Controller
         return view('student.recommendations.index', compact('recommendations'));
     }
 
-    public function show(Request $request, StudentRecommendation $studentRecommendation): View
+    public function show(Request $request, $recommendationId): View
     {
-        abort_if($studentRecommendation->student_id !== $request->user('student')->id, 403);
+        $student = $request->user('student');
 
-        if (!$studentRecommendation->is_viewed) {
+        $studentRecommendation = StudentRecommendation::with(['institution', 'institutionProgram.program'])->find($recommendationId);
+
+        abort_unless($studentRecommendation, 404);
+        abort_if($studentRecommendation->student_id !== $student->id, 403);
+
+        if (! $studentRecommendation->is_viewed) {
             $studentRecommendation->update(['is_viewed' => true]);
         }
-
-        $studentRecommendation->load(['institution', 'institutionProgram.program']);
 
         return view('student.recommendations.show', compact('studentRecommendation'));
     }
 
-    public function markViewed(Request $request, StudentRecommendation $studentRecommendation): RedirectResponse
+    public function markViewed(Request $request, $recommendationId): RedirectResponse
     {
-        abort_if($studentRecommendation->student_id !== $request->user('student')->id, 403);
+        $student = $request->user('student');
+
+        $studentRecommendation = StudentRecommendation::find($recommendationId);
+
+        abort_unless($studentRecommendation, 404);
+        abort_if($studentRecommendation->student_id !== $student->id, 403);
 
         $studentRecommendation->update(['is_viewed' => true]);
 
