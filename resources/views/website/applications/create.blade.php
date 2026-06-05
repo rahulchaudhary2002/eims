@@ -51,12 +51,12 @@
                 @endif
 
                 <form method="POST" action="{{ route('website.applications.store') }}" class="space-y-5"
-                      x-data="appForm()" x-init="init()">
+                      x-data="appForm()">
                     @csrf
 
                     <div>
                         <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Institution <span class="text-red-500">*</span></label>
-                        <select name="institution_id" x-model="institutionId" @change="filterPrograms()" required
+                        <select name="institution_id" x-model="institutionId" @change="applicableId = ''" required
                                 class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('institution_id') border-red-400 @enderror">
                             <option value="">Select Institution</option>
                             @foreach ($institutions as $inst)
@@ -81,11 +81,12 @@
 
                     <div>
                         <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Item <span class="text-red-500">*</span></label>
-                        <select name="applicable_id" x-model="applicableId" required :disabled="!applicableType || !institutionId"
+                        <select name="applicable_id" required :disabled="!applicableType || !institutionId"
+                                @change="applicableId = $event.target.value"
                                 class="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition @error('applicable_id') border-red-400 @enderror">
                             <option value="" x-text="(!applicableType || !institutionId) ? 'Select institution & type first' : 'Select item'"></option>
                             <template x-for="item in filteredApplicables" :key="item.id">
-                                <option :value="item.id" x-text="item.label"></option>
+                                <option :value="item.id" :selected="item.id === applicableId" x-text="item.label"></option>
                             </template>
                         </select>
                         @error('applicable_id') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
@@ -181,15 +182,6 @@ function appForm() {
             if (!this.applicableType || !this.institutionId) return [];
             const items = this.applicables[this.applicableType] ?? [];
             return items.filter(i => i.institution_id === String(this.institutionId));
-        },
-        init() {
-            // x-for renders options asynchronously; reset and re-set applicableId
-            // after the next tick so x-model finds the rendered option to select.
-            const preselected = this.applicableId;
-            if (preselected) {
-                this.applicableId = '';
-                this.$nextTick(() => { this.applicableId = preselected; });
-            }
         },
         filterPrograms() {}
     }

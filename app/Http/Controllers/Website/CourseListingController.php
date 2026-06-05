@@ -33,4 +33,21 @@ class CourseListingController extends Controller
 
         return view('website.courses.index', compact('courses', 'institutions'));
     }
+
+    public function show(InstitutionCourse $course)
+    {
+        abort_unless($course->is_active, 404);
+
+        $course->loadMissing('institution');
+
+        $relatedCourses = InstitutionCourse::with('institution')
+            ->where('institution_id', $course->institution_id)
+            ->where('id', '!=', $course->id)
+            ->where('is_active', true)
+            ->orderBy('title')
+            ->limit(4)
+            ->get();
+
+        return view('website.courses.show', compact('course', 'relatedCourses'));
+    }
 }

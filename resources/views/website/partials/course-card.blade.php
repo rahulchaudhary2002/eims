@@ -38,8 +38,14 @@
         </div>
 
         <div class="flex gap-2 justify-end">
+            @if($course->slug)
+                <a href="{{ route('website.courses.show', $course->slug) }}"
+                   class="text-center px-4 py-2 text-sm font-semibold text-[#4299e1] border-2 border-[#4299e1] rounded-xl hover:bg-[#4299e1]/10 transition-all no-underline">
+                    Details
+                </a>
+            @endif
             @auth('student')
-                <a href="{{ route('website.applications.create', ['institution' => $inst?->slug, 'course' => $course->slug]) }}"
+                <a href="{{ route('website.applications.create', array_filter(['institution' => $inst?->slug, 'course' => $course->slug])) }}"
                    class="text-center px-4 py-2 text-sm font-semibold text-white bg-[#4299e1] rounded-xl hover:bg-[#2c5aa0] hover:-translate-y-0.5 transition-all no-underline">
                     Apply
                 </a>

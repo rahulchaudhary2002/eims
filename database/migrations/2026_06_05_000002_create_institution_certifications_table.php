@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('institution_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->string('slug')->nullable()->unique();
+            $table->string('slug')->unique();
             $table->decimal('fee', 12, 2)->nullable();
             $table->unsignedSmallInteger('duration_hours')->nullable();
             $table->text('description')->nullable();

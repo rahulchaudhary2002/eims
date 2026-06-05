@@ -33,4 +33,21 @@ class CertificationListingController extends Controller
 
         return view('website.certifications.index', compact('certifications', 'institutions'));
     }
+
+    public function show(InstitutionCertification $certification)
+    {
+        abort_unless($certification->is_active, 404);
+
+        $certification->loadMissing('institution');
+
+        $relatedCertifications = InstitutionCertification::with('institution')
+            ->where('institution_id', $certification->institution_id)
+            ->where('id', '!=', $certification->id)
+            ->where('is_active', true)
+            ->orderBy('title')
+            ->limit(4)
+            ->get();
+
+        return view('website.certifications.show', compact('certification', 'relatedCertifications'));
+    }
 }

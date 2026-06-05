@@ -41,9 +41,11 @@ Route::name('website.')->group(function () {
 
     // Courses
     Route::get('/courses', [CourseListingController::class, 'index'])->name('courses.index');
+    Route::get('/courses/{course:slug}', [CourseListingController::class, 'show'])->name('courses.show');
 
     // Certifications
     Route::get('/certifications', [CertificationListingController::class, 'index'])->name('certifications.index');
+    Route::get('/certifications/{certification:slug}', [CertificationListingController::class, 'show'])->name('certifications.show');
 
     // Scholarships
     Route::get('/scholarships', [ScholarshipListingController::class, 'index'])->name('scholarships.index');

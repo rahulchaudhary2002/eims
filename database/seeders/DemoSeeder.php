@@ -320,18 +320,25 @@ class DemoSeeder extends Seeder
         ];
 
         $courses = [];
-        foreach ($coursesData as [$slug, $title, $fee, $hours, $desc]) {
-            $inst = $instMap[$slug] ?? null;
+        foreach ($coursesData as [$instSlug, $title, $fee, $hours, $desc]) {
+            $inst = $instMap[$instSlug] ?? null;
             if (! $inst) continue;
-            $courses[] = InstitutionCourse::firstOrCreate(
+            $courseSlug = Str::slug($title);
+            $course = InstitutionCourse::firstOrCreate(
                 ['institution_id' => $inst->id, 'title' => $title],
                 [
+                    'slug'           => $courseSlug,
                     'fee'            => $fee,
                     'duration_hours' => $hours,
                     'description'    => $desc,
                     'is_active'      => true,
                 ]
             );
+            // Backfill slug for records that existed before slug generation was added
+            if (! $course->slug) {
+                $course->updateQuietly(['slug' => $courseSlug]);
+            }
+            $courses[] = $course;
         }
 
         // ── 11. INSTITUTION CERTIFICATIONS ────────────────────────────
@@ -348,18 +355,25 @@ class DemoSeeder extends Seeder
         ];
 
         $certifications = [];
-        foreach ($certificationsData as [$slug, $title, $fee, $hours, $desc]) {
-            $inst = $instMap[$slug] ?? null;
+        foreach ($certificationsData as [$instSlug, $title, $fee, $hours, $desc]) {
+            $inst = $instMap[$instSlug] ?? null;
             if (! $inst) continue;
-            $certifications[] = InstitutionCertification::firstOrCreate(
+            $certSlug = Str::slug($title);
+            $cert = InstitutionCertification::firstOrCreate(
                 ['institution_id' => $inst->id, 'title' => $title],
                 [
+                    'slug'           => $certSlug,
                     'fee'            => $fee,
                     'duration_hours' => $hours,
                     'description'    => $desc,
                     'is_active'      => true,
                 ]
             );
+            // Backfill slug for records that existed before slug generation was added
+            if (! $cert->slug) {
+                $cert->updateQuietly(['slug' => $certSlug]);
+            }
+            $certifications[] = $cert;
         }
 
         // ── 12. INSTITUTION PROGRAM SUBJECTS ──────────────────────────
