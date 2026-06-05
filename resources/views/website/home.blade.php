@@ -114,6 +114,52 @@
 </section>
 @endif
 
+{{-- Featured Courses --}}
+@if ($featuredCourses->isNotEmpty())
+<section class="py-24 px-4 bg-white" id="courses">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl text-[#2c5aa0] mb-4 font-bold relative inline-block after:content-[''] after:absolute after:-bottom-2.5 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-[#4299e1] after:rounded">Popular Courses</h2>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto">Skill-based and professional courses offered by leading institutions</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+            @foreach ($featuredCourses as $course)
+                @include('website.partials.course-card', ['course' => $course])
+            @endforeach
+        </div>
+        <div class="text-center mt-12">
+            <a href="{{ route('website.courses.index') }}" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-[#2c5aa0] bg-white border-2 border-[#4299e1] hover:bg-[#4299e1]/10 transition no-underline">
+                View All Courses
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+@endif
+
+{{-- Featured Certifications --}}
+@if ($featuredCertifications->isNotEmpty())
+<section class="py-24 px-4 bg-[#f7fafc]/80" id="certifications">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl text-[#2c5aa0] mb-4 font-bold relative inline-block after:content-[''] after:absolute after:-bottom-2.5 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-[#4299e1] after:rounded">Professional Certifications</h2>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto">Industry-recognized certifications to advance your career</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+            @foreach ($featuredCertifications as $certification)
+                @include('website.partials.certification-card', ['certification' => $certification])
+            @endforeach
+        </div>
+        <div class="text-center mt-12">
+            <a href="{{ route('website.certifications.index') }}" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-[#2c5aa0] bg-white border-2 border-[#4299e1] hover:bg-[#4299e1]/10 transition no-underline">
+                View All Certifications
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+@endif
+
 {{-- Featured Colleges --}}
 @if ($featuredInstitutions->isNotEmpty())
 <section class="py-24 px-4 bg-white" id="institutions">

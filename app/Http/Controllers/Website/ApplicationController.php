@@ -60,6 +60,7 @@ class ApplicationController extends Controller
             if ($prog) {
                 $selectedApplicableType = InstitutionProgram::class;
                 $selectedApplicableId   = $prog->id;
+                $selectedInstitutionId  ??= $prog->institution_id;
             }
         }
         if ($slug = $request->input('course')) {
@@ -67,6 +68,7 @@ class ApplicationController extends Controller
             if ($course) {
                 $selectedApplicableType = InstitutionCourse::class;
                 $selectedApplicableId   = $course->id;
+                $selectedInstitutionId  ??= $course->institution_id;
             }
         }
         if ($slug = $request->input('certification')) {
@@ -74,13 +76,15 @@ class ApplicationController extends Controller
             if ($cert) {
                 $selectedApplicableType = InstitutionCertification::class;
                 $selectedApplicableId   = $cert->id;
+                $selectedInstitutionId  ??= $cert->institution_id;
             }
         }
-        if ($slug = $request->input('service')) {
-            $svc = ConsultancyService::where('id', $slug)->first();
+        if ($id = $request->input('service')) {
+            $svc = ConsultancyService::find($id);
             if ($svc) {
                 $selectedApplicableType = ConsultancyService::class;
                 $selectedApplicableId   = $svc->id;
+                $selectedInstitutionId  ??= $svc->institution_id;
             }
         }
 

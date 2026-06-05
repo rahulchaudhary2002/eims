@@ -173,16 +173,24 @@
 <script>
 function appForm() {
     return {
-        institutionId: `{{ old('institution_id', $selectedInstitutionId ?? '') }}`,
-        applicableType: `{{ old('applicable_type', $selectedApplicableType ?? '') }}`,
-        applicableId: `{{ old('applicable_id', $selectedApplicableId ?? '') }}`,
+        institutionId: @js((string) old('institution_id', $selectedInstitutionId ?? '')),
+        applicableType: @js(old('applicable_type', $selectedApplicableType ?? '')),
+        applicableId: @js((string) old('applicable_id', $selectedApplicableId ?? '')),
         applicables: @js(collect($applicables)->map(fn($items, $type) => $items->map(fn($item) => ['id' => (string)$item->id, 'institution_id' => (string)$item->institution_id, 'label' => method_exists($item, 'getDisplayNameAttribute') ? $item->display_name : $item->title]))->toArray()),
         get filteredApplicables() {
             if (!this.applicableType || !this.institutionId) return [];
             const items = this.applicables[this.applicableType] ?? [];
             return items.filter(i => i.institution_id === String(this.institutionId));
         },
-        init() {},
+        init() {
+            // x-for renders options asynchronously; reset and re-set applicableId
+            // after the next tick so x-model finds the rendered option to select.
+            const preselected = this.applicableId;
+            if (preselected) {
+                this.applicableId = '';
+                this.$nextTick(() => { this.applicableId = preselected; });
+            }
+        },
         filterPrograms() {}
     }
 }

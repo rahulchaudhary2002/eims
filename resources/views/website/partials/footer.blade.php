@@ -29,6 +29,8 @@
                     @foreach ([
                         ['route' => 'website.home', 'label' => 'Home'],
                         ['route' => 'website.programs.index', 'label' => 'Programs'],
+                        ['route' => 'website.courses.index', 'label' => 'Courses'],
+                        ['route' => 'website.certifications.index', 'label' => 'Certifications'],
                         ['route' => 'website.institutions.index', 'label' => 'Institutions'],
                         ['route' => 'website.colleges.index', 'label' => 'Colleges'],
                         ['route' => 'website.scholarships.index', 'label' => 'Scholarships'],

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Website;
 use App\Http\Controllers\Controller;
 use App\Models\Faculty;
 use App\Models\Institution;
+use App\Models\InstitutionCertification;
+use App\Models\InstitutionCourse;
 use App\Models\InstitutionProgram;
 use App\Models\InstitutionReview;
 use App\Models\Post;
@@ -44,6 +46,20 @@ class HomeController extends Controller
             ->limit(4)
             ->get();
 
+        $featuredCourses = InstitutionCourse::where('is_active', true)
+            ->with('institution')
+            ->whereHas('institution', fn($q) => $q->active())
+            ->orderByDesc('id')
+            ->limit(6)
+            ->get();
+
+        $featuredCertifications = InstitutionCertification::where('is_active', true)
+            ->with('institution')
+            ->whereHas('institution', fn($q) => $q->active())
+            ->orderByDesc('id')
+            ->limit(6)
+            ->get();
+
         $latestPosts = Post::where('is_published', true)
             ->with('institution')
             ->orderByDesc('published_at')
@@ -69,6 +85,8 @@ class HomeController extends Controller
         return view('website.home', compact(
             'featuredInstitutions',
             'openPrograms',
+            'featuredCourses',
+            'featuredCertifications',
             'activeScholarships',
             'consultancies',
             'latestPosts',

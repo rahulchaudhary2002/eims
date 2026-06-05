@@ -14,6 +14,8 @@ use App\Models\CounselingSession;
 use App\Models\Faculty;
 use App\Models\Inquiry;
 use App\Models\Institution;
+use App\Models\InstitutionCertification;
+use App\Models\InstitutionCourse;
 use App\Models\InstitutionDocument;
 use App\Models\InstitutionFollower;
 use App\Models\InstitutionProfile;
@@ -304,7 +306,63 @@ class DemoSeeder extends Seeder
             $ipMap[$inst->id . '_' . $prog->id] = $ip;
         }
 
-        // ── 10. INSTITUTION PROGRAM SUBJECTS ──────────────────────────
+        // ── 10. INSTITUTION COURSES ────────────────────────────────────
+        $coursesData = [
+            // [institution_slug, title, fee, duration_hours, description]
+            ['tribhuvan-university',        'Python Programming Fundamentals',       8000,  40, 'Learn Python from scratch with hands-on projects covering data types, loops, functions, and OOP.'],
+            ['tribhuvan-university',        'Web Development Bootcamp',             12000,  60, 'Build responsive websites using HTML, CSS, JavaScript, and an intro to modern frameworks.'],
+            ['ace-institute-of-management', 'Digital Marketing Essentials',          9000,  30, 'Master SEO, SEM, social media marketing, and analytics tools used by industry professionals.'],
+            ['ace-institute-of-management', 'Financial Modelling with Excel',       10000,  35, 'Build dynamic financial models, valuation templates, and dashboards in Microsoft Excel.'],
+            ['pu-college-of-science',       'Machine Learning with Python',         15000,  50, 'Hands-on ML course covering regression, classification, clustering, and scikit-learn.'],
+            ['pu-college-of-science',       'Data Analysis with R',                 11000,  40, 'Statistical data analysis and visualization using R and tidyverse.'],
+            ['national-medical-college',    'Basic Life Support (BLS) Training',     5000,  16, 'Certified BLS course covering CPR, AED use, and emergency response protocols.'],
+            ['national-medical-college',    'First Aid & Emergency Care',            4500,  20, 'Practical first aid skills for handling medical emergencies in everyday situations.'],
+        ];
+
+        $courses = [];
+        foreach ($coursesData as [$slug, $title, $fee, $hours, $desc]) {
+            $inst = $instMap[$slug] ?? null;
+            if (! $inst) continue;
+            $courses[] = InstitutionCourse::firstOrCreate(
+                ['institution_id' => $inst->id, 'title' => $title],
+                [
+                    'fee'            => $fee,
+                    'duration_hours' => $hours,
+                    'description'    => $desc,
+                    'is_active'      => true,
+                ]
+            );
+        }
+
+        // ── 11. INSTITUTION CERTIFICATIONS ────────────────────────────
+        $certificationsData = [
+            // [institution_slug, title, fee, duration_hours, description]
+            ['tribhuvan-university',        'AWS Cloud Practitioner Prep',          18000,  45, 'Structured preparation for the AWS Certified Cloud Practitioner exam with practice tests.'],
+            ['tribhuvan-university',        'Microsoft Office Specialist (MOS)',      7500,  25, 'Official certification prep for Word, Excel, and PowerPoint at the specialist level.'],
+            ['ace-institute-of-management', 'Chartered Financial Analyst (CFA) L1', 25000,  80, 'Comprehensive CFA Level 1 preparation covering ethics, quantitative methods, and portfolio management.'],
+            ['ace-institute-of-management', 'Project Management Professional (PMP)', 22000,  60, 'PMP exam preparation aligned with the PMBOK Guide, including process groups and knowledge areas.'],
+            ['pu-college-of-science',       'Cisco CCNA Certification',             20000,  55, 'Networking fundamentals and CCNA exam prep covering routing, switching, and network security.'],
+            ['pu-college-of-science',       'Certified Ethical Hacker (CEH)',       28000,  70, 'Ethical hacking techniques, penetration testing, and cybersecurity best practices.'],
+            ['national-medical-college',    'Phlebotomy Technician Certification',   8000,  30, 'Theory and practical training for blood collection techniques and lab safety.'],
+            ['national-medical-college',    'Medical Coding & Billing (ICD-10)',    12000,  40, 'ICD-10 coding standards and healthcare billing processes for clinical settings.'],
+        ];
+
+        $certifications = [];
+        foreach ($certificationsData as [$slug, $title, $fee, $hours, $desc]) {
+            $inst = $instMap[$slug] ?? null;
+            if (! $inst) continue;
+            $certifications[] = InstitutionCertification::firstOrCreate(
+                ['institution_id' => $inst->id, 'title' => $title],
+                [
+                    'fee'            => $fee,
+                    'duration_hours' => $hours,
+                    'description'    => $desc,
+                    'is_active'      => true,
+                ]
+            );
+        }
+
+        // ── 12. INSTITUTION PROGRAM SUBJECTS ──────────────────────────
         $subjectSets = [
             'Bachelor of Business Administration (BBA)' => ['Business Mathematics', 'Microeconomics', 'Financial Accounting', 'Business Communication', 'Marketing Principles'],
             'Bachelor of Science (BSc CSIT)'            => ['C Programming', 'Discrete Mathematics', 'Digital Logic', 'Data Structures', 'Database Management'],
@@ -884,6 +942,6 @@ class DemoSeeder extends Seeder
             );
         }
 
-        $this->command->info('DemoSeeder complete. Seeded: users, students, institutions, programs, applications, admissions, scholarships, commissions, messages, and more.');
+        $this->command->info('DemoSeeder complete. Seeded: users, students, institutions, programs, courses, certifications, applications, admissions, scholarships, commissions, messages, and more.');
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Website\ApplicationController;
+use App\Http\Controllers\Website\CertificationListingController;
 use App\Http\Controllers\Website\CollegeListingController;
 use App\Http\Controllers\Website\CompareController;
 use App\Http\Controllers\Website\ConsultancyListingController;
 use App\Http\Controllers\Website\ContactController;
+use App\Http\Controllers\Website\CourseListingController;
 use App\Http\Controllers\Website\HomeController;
 use App\Http\Controllers\Website\InquiryController;
 use App\Http\Controllers\Website\InstitutionDetailController;
@@ -36,6 +38,12 @@ Route::name('website.')->group(function () {
     // Programs
     Route::get('/programs', [ProgramListingController::class, 'index'])->name('programs.index');
     Route::get('/programs/{program:slug}', [ProgramListingController::class, 'show'])->name('programs.show');
+
+    // Courses
+    Route::get('/courses', [CourseListingController::class, 'index'])->name('courses.index');
+
+    // Certifications
+    Route::get('/certifications', [CertificationListingController::class, 'index'])->name('certifications.index');
 
     // Scholarships
     Route::get('/scholarships', [ScholarshipListingController::class, 'index'])->name('scholarships.index');
