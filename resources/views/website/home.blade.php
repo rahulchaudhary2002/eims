@@ -56,18 +56,28 @@
 {{-- Search --}}
 <section class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] p-10 rounded-xl shadow-lg relative z-[10] -mt-16 mx-4 lg:mx-auto max-w-7xl" id="search">
     <div>
-        <div class="text-center mb-12">
+        <div class="text-center mb-8">
             <h2 class="text-3xl md:text-4xl text-white mb-4 font-bold relative inline-block after:content-[''] after:absolute after:-bottom-2.5 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-[#4299e1] after:rounded">Find Your Program</h2>
-            <p class="text-white/90 text-lg max-w-2xl mx-auto">Search programs, colleges, and scholarships across Nepal</p>
+            <p class="text-white/90 text-lg max-w-2xl mx-auto">Search from thousands of courses and programs across Nepal</p>
         </div>
-        <form method="get" action="{{ route('website.programs.index') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 bg-white/10 p-8 rounded-xl backdrop-blur-sm">
+
+        {{-- Tabs --}}
+        <div class="flex gap-2.5 mb-6 justify-center flex-wrap">
+            <button type="button" class="search-tab px-6 py-2.5 bg-white text-[#2c5aa0] font-semibold rounded-xl shadow transition-all" data-tab="programs">Programs</button>
+            <button type="button" class="search-tab px-6 py-2.5 bg-white/10 text-white/80 font-semibold rounded-xl hover:bg-white/20 transition-all" data-tab="courses">Courses</button>
+            <button type="button" class="search-tab px-6 py-2.5 bg-white/10 text-white/80 font-semibold rounded-xl hover:bg-white/20 transition-all" data-tab="colleges">Colleges</button>
+            <button type="button" class="search-tab px-6 py-2.5 bg-white/10 text-white/80 font-semibold rounded-xl hover:bg-white/20 transition-all" data-tab="scholarships">Scholarships</button>
+        </div>
+
+        {{-- Programs Form --}}
+        <form method="get" action="{{ route('website.programs.index') }}" class="search-form grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 bg-white/10 p-8 rounded-xl backdrop-blur-sm" data-tab="programs">
             <div class="flex flex-col">
-                <label for="homeSearch" class="mb-2 font-semibold text-white">What do you want to study?</label>
-                <input type="text" name="search" id="homeSearch" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50" placeholder="e.g., BIM, MBBS, Computer Engineering">
+                <label class="mb-2 font-semibold text-white text-sm">What do you want to study?</label>
+                <input type="text" name="search" class="h-[54px] px-4 border-none rounded-xl text-base bg-white focus:outline-none focus:ring-4 focus:ring-white/50" placeholder="e.g., BIM, MBBS, Engineering">
             </div>
             <div class="flex flex-col">
-                <label for="homeFaculty" class="mb-2 font-semibold text-white">Faculty</label>
-                <select id="homeFaculty" name="faculty" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
+                <label class="mb-2 font-semibold text-white text-sm">Faculty</label>
+                <select name="faculty" data-no-select2 class="h-[54px] px-4 border-none rounded-xl text-base bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
                     <option value="">Any Faculty</option>
                     @foreach($faculties as $faculty)
                         <option value="{{ $faculty->slug }}">{{ $faculty->name }}</option>
@@ -75,21 +85,120 @@
                 </select>
             </div>
             <div class="flex flex-col">
-                <label for="homeStatus" class="mb-2 font-semibold text-white">Admission Status</label>
-                <select id="homeStatus" name="status" class="p-4 border-none rounded-xl text-base transition-all bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
+                <label class="mb-2 font-semibold text-white text-sm">Admission Status</label>
+                <select name="status" data-no-select2 class="h-[54px] px-4 border-none rounded-xl text-base bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
                     <option value="">Any Status</option>
                     <option value="open">Open</option>
                     <option value="upcoming">Upcoming</option>
                     <option value="closed">Closed</option>
                 </select>
             </div>
-            <button type="submit" class="self-end h-[58px] bg-white text-[#2c5aa0] font-bold text-lg rounded-xl hover:bg-[#4299e1] hover:text-white inline-flex items-center gap-2 justify-center transition-all">
-                <i class="fas fa-search"></i>
-                Search Now
-            </button>
+            <div class="flex flex-col">
+                <label class="mb-2 font-semibold text-white text-sm opacity-0 select-none">Search</label>
+                <button type="submit" class="h-[54px] bg-white text-[#2c5aa0] font-bold text-base rounded-xl hover:bg-[#4299e1] hover:text-white inline-flex items-center gap-2 justify-center transition-all">
+                    <i class="fas fa-search"></i> Search Now
+                </button>
+            </div>
+        </form>
+
+        {{-- Courses Form --}}
+        <form method="get" action="{{ route('website.courses.index') }}" class="search-form hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 bg-white/10 p-8 rounded-xl backdrop-blur-sm" data-tab="courses">
+            <div class="flex flex-col md:col-span-2 lg:col-span-3">
+                <label class="mb-2 font-semibold text-white text-sm">What course are you looking for?</label>
+                <input type="text" name="search" class="h-[54px] px-4 border-none rounded-xl text-base bg-white focus:outline-none focus:ring-4 focus:ring-white/50" placeholder="e.g., Web Development, Graphic Design, Photography">
+            </div>
+            <div class="flex flex-col">
+                <label class="mb-2 font-semibold text-white text-sm opacity-0 select-none">Search</label>
+                <button type="submit" class="h-[54px] bg-white text-[#2c5aa0] font-bold text-base rounded-xl hover:bg-[#4299e1] hover:text-white inline-flex items-center gap-2 justify-center transition-all">
+                    <i class="fas fa-search"></i> Search Now
+                </button>
+            </div>
+        </form>
+
+        {{-- Colleges Form --}}
+        <form method="get" action="{{ route('website.colleges.index') }}" class="search-form hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 bg-white/10 p-8 rounded-xl backdrop-blur-sm" data-tab="colleges">
+            <div class="flex flex-col">
+                <label class="mb-2 font-semibold text-white text-sm">College name or city</label>
+                <input type="text" name="search" class="h-[54px] px-4 border-none rounded-xl text-base bg-white focus:outline-none focus:ring-4 focus:ring-white/50" placeholder="e.g., Kathmandu, Pokhara">
+            </div>
+            <div class="flex flex-col">
+                <label class="mb-2 font-semibold text-white text-sm">Province</label>
+                <select name="province" data-no-select2 class="h-[54px] px-4 border-none rounded-xl text-base bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
+                    <option value="">Any Province</option>
+                    @foreach($provinces as $province)
+                        <option value="{{ $province }}">{{ $province }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="flex flex-col">
+                <label class="mb-2 font-semibold text-white text-sm">Faculty</label>
+                <select name="faculty" data-no-select2 class="h-[54px] px-4 border-none rounded-xl text-base bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
+                    <option value="">Any Faculty</option>
+                    @foreach($faculties as $faculty)
+                        <option value="{{ $faculty->slug }}">{{ $faculty->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="flex flex-col">
+                <label class="mb-2 font-semibold text-white text-sm opacity-0 select-none">Search</label>
+                <button type="submit" class="h-[54px] bg-white text-[#2c5aa0] font-bold text-base rounded-xl hover:bg-[#4299e1] hover:text-white inline-flex items-center gap-2 justify-center transition-all">
+                    <i class="fas fa-search"></i> Search Now
+                </button>
+            </div>
+        </form>
+
+        {{-- Scholarships Form --}}
+        <form method="get" action="{{ route('website.scholarships.index') }}" class="search-form hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 bg-white/10 p-8 rounded-xl backdrop-blur-sm" data-tab="scholarships">
+            <div class="flex flex-col md:col-span-1 lg:col-span-2">
+                <label class="mb-2 font-semibold text-white text-sm">Scholarship name or institution</label>
+                <input type="text" name="search" class="h-[54px] px-4 border-none rounded-xl text-base bg-white focus:outline-none focus:ring-4 focus:ring-white/50" placeholder="e.g., Merit Scholarship, TU">
+            </div>
+            <div class="flex flex-col">
+                <label class="mb-2 font-semibold text-white text-sm">Scholarship Type</label>
+                <select name="type" data-no-select2 class="h-[54px] px-4 border-none rounded-xl text-base bg-white focus:outline-none focus:ring-4 focus:ring-white/50">
+                    <option value="">Any Type</option>
+                    @foreach(\App\Models\Scholarship::TYPES as $value => $label)
+                        <option value="{{ $value }}">{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="flex flex-col">
+                <label class="mb-2 font-semibold text-white text-sm opacity-0 select-none">Search</label>
+                <button type="submit" class="h-[54px] bg-white text-[#2c5aa0] font-bold text-base rounded-xl hover:bg-[#4299e1] hover:text-white inline-flex items-center gap-2 justify-center transition-all">
+                    <i class="fas fa-search"></i> Search Now
+                </button>
+            </div>
         </form>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.search-tab');
+    const forms = document.querySelectorAll('.search-form');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function () {
+            const target = this.dataset.tab;
+
+            tabs.forEach(t => {
+                t.classList.remove('bg-white', 'text-[#2c5aa0]', 'shadow');
+                t.classList.add('bg-white/10', 'text-white/80', 'hover:bg-white/20');
+            });
+            this.classList.add('bg-white', 'text-[#2c5aa0]', 'shadow');
+            this.classList.remove('bg-white/10', 'text-white/80', 'hover:bg-white/20');
+
+            forms.forEach(form => {
+                if (form.dataset.tab === target) {
+                    form.classList.remove('hidden');
+                } else {
+                    form.classList.add('hidden');
+                }
+            });
+        });
+    });
+});
+</script>
 
 {{-- Open Programs --}}
 @if ($openPrograms->isNotEmpty())
