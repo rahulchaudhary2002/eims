@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+use App\Models\StudentFavoriteInstitution;
+use App\Models\StudentRecommendation;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -20,8 +22,8 @@ class StudentDashboardController extends Controller
             'applications'             => Application::where('student_id', $studentId)->count(),
             'applications_pending'     => Application::where('student_id', $studentId)->whereIn('status', ['draft', 'submitted', 'under_review'])->count(),
             'applications_approved'    => Application::where('student_id', $studentId)->where('status', 'admitted')->count(),
-            'scholarship_applications' => \App\Models\Application::where('student_id', $studentId)->whereNotNull('scholarship_id')->count(),
-            'favorite_institutions'    => \App\Models\StudentFavoriteInstitution::where('student_id', $studentId)->count(),
+            'scholarship_applications' => Application::where('student_id', $studentId)->whereNotNull('scholarship_id')->count(),
+            'favorite_institutions'    => StudentFavoriteInstitution::where('student_id', $studentId)->count(),
             'followed_institutions'    => 0,
         ];
 
@@ -31,7 +33,7 @@ class StudentDashboardController extends Controller
             ->limit(4)
             ->get();
 
-        $recommendations = \App\Models\StudentRecommendation::where('student_id', $studentId)
+        $recommendations = StudentRecommendation::where('student_id', $studentId)
             ->with(['institution', 'applicable'])
             ->latest()
             ->limit(4)
