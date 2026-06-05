@@ -122,6 +122,8 @@ class InstitutionController extends Controller
             'inquiries' => fn ($q) => $q->with('assignedTo')->latest(),
             'posts' => fn ($q) => $q->with('creator')->latest(),
             'followers' => fn ($q) => $q->with('student')->latest(),
+            'courses' => fn ($q) => $q->orderBy('title'),
+            'certifications' => fn ($q) => $q->orderBy('title'),
             'consultancyDestinations' => fn ($q) => $q->orderBy('country')->orderBy('city'),
             'consultancyServices' => fn ($q) => $q->orderBy('title'),
             'counselingSessions' => fn ($q) => $q->with(['student', 'counselor'])->orderBy('scheduled_at'),

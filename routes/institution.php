@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Institution\InstitutionAdmissionController;
+use App\Http\Controllers\Institution\InstitutionCertificationController;
 use App\Http\Controllers\Institution\InstitutionConsultancyDestinationController;
 use App\Http\Controllers\Institution\InstitutionConsultancyServiceController;
+use App\Http\Controllers\Institution\InstitutionCourseController;
 use App\Http\Controllers\Institution\InstitutionApplicationController;
 use App\Http\Controllers\Institution\InstitutionCommissionInvoiceController;
 use App\Http\Controllers\Institution\InstitutionCommissionPaymentController;
@@ -44,6 +46,8 @@ Route::middleware(['auth:web', 'institution.user'])
             Route::resource('documents', InstitutionDocumentController::class);
             Route::resource('programs', InstitutionProgramController::class);
             Route::resource('program-subjects', InstitutionProgramSubjectController::class);
+            Route::resource('courses', InstitutionCourseController::class);
+            Route::resource('certifications', InstitutionCertificationController::class);
             Route::resource('consultancy-destinations', InstitutionConsultancyDestinationController::class);
             Route::resource('consultancy-services', InstitutionConsultancyServiceController::class);
             Route::resource('scholarships', InstitutionScholarshipController::class);

@@ -1,16 +1,21 @@
 @php
     $sidebarInstitution = \App\Models\Institution::find(session('active_institution_id'));
-    $isConsultancy = $sidebarInstitution && $sidebarInstitution->type === 'consultancy';
+    $sidebarType = $sidebarInstitution ? $sidebarInstitution->type : null;
+    $isConsultancy   = $sidebarType === 'consultancy';
+    $isProgramType   = in_array($sidebarType, ['college', 'university', 'school'], true);
+    $isCourseType    = true; // all institution types can manage courses & certifications
 
     $groups = [
         'Institution Profile' => array_filter([
             ['Institution Details', 'institution.institutions.index', 'institution.institutions.*'],
             ['Profile', 'institution.profile.index', 'institution.profile.*'],
             ['Documents', 'institution.documents.index', 'institution.documents.*'],
-            $isConsultancy ? null : ['Programs', 'institution.programs.index', 'institution.programs.*'],
-            $isConsultancy ? null : ['Program Subjects', 'institution.program-subjects.index', 'institution.program-subjects.*'],
-            $isConsultancy ? ['Destinations', 'institution.consultancy-destinations.index', 'institution.consultancy-destinations.*'] : null,
-            $isConsultancy ? ['Services', 'institution.consultancy-services.index', 'institution.consultancy-services.*'] : null,
+            $isProgramType  ? ['Programs', 'institution.programs.index', 'institution.programs.*']                                           : null,
+            $isProgramType  ? ['Program Subjects', 'institution.program-subjects.index', 'institution.program-subjects.*']                  : null,
+            $isCourseType   ? ['Courses', 'institution.courses.index', 'institution.courses.*']                                             : null,
+            $isCourseType   ? ['Certifications', 'institution.certifications.index', 'institution.certifications.*']                        : null,
+            $isConsultancy  ? ['Destinations', 'institution.consultancy-destinations.index', 'institution.consultancy-destinations.*']      : null,
+            $isConsultancy  ? ['Services', 'institution.consultancy-services.index', 'institution.consultancy-services.*']                  : null,
             ['Scholarships', 'institution.scholarships.index', 'institution.scholarships.*'],
         ]),
         'Applications & Admissions' => [

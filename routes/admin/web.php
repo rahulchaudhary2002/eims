@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\ConsultancyDestinationController;
 use App\Http\Controllers\Admin\ConsultancyServiceController;
+use App\Http\Controllers\Admin\InstitutionCourseController;
+use App\Http\Controllers\Admin\InstitutionCertificationController;
 use App\Http\Controllers\Admin\InstitutionReviewController;
 use App\Http\Controllers\Admin\InstitutionSubscriptionController;
 use App\Http\Controllers\Admin\PromotionController;
@@ -98,6 +100,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:web', 'admin.user'])->
     Route::resource('institution-programs', InstitutionProgramController::class);
     Route::patch('institution-programs/{institutionProgram}/status', [InstitutionProgramController::class, 'updateStatus'])
         ->name('institution-programs.update-status');
+
+    Route::resource('institution-courses', InstitutionCourseController::class);
+    Route::patch('institution-courses/{institutionCourse}/status', [InstitutionCourseController::class, 'updateStatus'])
+        ->name('institution-courses.update-status');
+
+    Route::resource('institution-certifications', InstitutionCertificationController::class);
+    Route::patch('institution-certifications/{institutionCertification}/status', [InstitutionCertificationController::class, 'updateStatus'])
+        ->name('institution-certifications.update-status');
 
     Route::resource('institution-program-subjects', InstitutionProgramSubjectController::class);
 

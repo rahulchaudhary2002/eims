@@ -26,9 +26,15 @@ class InstitutionProgramSubjectController extends Controller
         ];
     }
 
+    private const PROGRAM_TYPES = ['college', 'university', 'school'];
+
     protected function beforeAction(): void
     {
-        abort_if($this->activeInstitution()->type === 'consultancy', 403, 'Consultancies cannot manage program subjects.');
+        abort_unless(
+            in_array($this->activeInstitution()->type, self::PROGRAM_TYPES, true),
+            403,
+            'Only colleges, universities, and schools can manage program subjects.'
+        );
     }
 
     protected function resourceQuery(): Builder

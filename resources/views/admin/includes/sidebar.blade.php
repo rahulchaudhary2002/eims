@@ -69,7 +69,7 @@
         @php
             $webUser = auth('web')->user();
             $canViewProgramSubjects = $webUser && ($webUser->is_super_admin || session('current_institution_id'));
-            $isInstitutionGroup = request()->routeIs('admin.institutions.*') || request()->routeIs('admin.institution-profiles.*') || request()->routeIs('admin.institution-documents.*') || request()->routeIs('admin.institution-programs.*') || request()->routeIs('admin.institution-program-subjects.*') || request()->routeIs('admin.institution-followers.*') || request()->routeIs('admin.institution-reviews.*');
+            $isInstitutionGroup = request()->routeIs('admin.institutions.*') || request()->routeIs('admin.institution-profiles.*') || request()->routeIs('admin.institution-documents.*') || request()->routeIs('admin.institution-programs.*') || request()->routeIs('admin.institution-program-subjects.*') || request()->routeIs('admin.institution-courses.*') || request()->routeIs('admin.institution-certifications.*') || request()->routeIs('admin.institution-followers.*') || request()->routeIs('admin.institution-reviews.*');
         @endphp
         <div class="px-3 pt-2">
             <div x-data="sidebarGroup('institution', {{ $isInstitutionGroup ? 'true' : 'false' }})" class="relative">
@@ -95,6 +95,10 @@
                         <a href="{{ route('admin.institution-program-subjects.index') }}"
                            class="{{ request()->routeIs('admin.institution-program-subjects.*') ? 'active' : '' }}">Program Subjects</a>
                     @endif
+                    <a href="{{ route('admin.institution-courses.index') }}"
+                       class="{{ request()->routeIs('admin.institution-courses.*') ? 'active' : '' }}">Institution Courses</a>
+                    <a href="{{ route('admin.institution-certifications.index') }}"
+                       class="{{ request()->routeIs('admin.institution-certifications.*') ? 'active' : '' }}">Institution Certifications</a>
                     @auth('web')
                         <a href="{{ route('admin.institution-followers.index') }}"
                            class="{{ request()->routeIs('admin.institution-followers.*') ? 'active' : '' }}">Institution Followers</a>
@@ -115,6 +119,8 @@
                         @if($canViewProgramSubjects)
                             <a href="{{ route('admin.institution-program-subjects.index') }}" class="{{ request()->routeIs('admin.institution-program-subjects.*') ? 'active' : '' }}">Program Subjects</a>
                         @endif
+                        <a href="{{ route('admin.institution-courses.index') }}" class="{{ request()->routeIs('admin.institution-courses.*') ? 'active' : '' }}">Institution Courses</a>
+                        <a href="{{ route('admin.institution-certifications.index') }}" class="{{ request()->routeIs('admin.institution-certifications.*') ? 'active' : '' }}">Institution Certifications</a>
                         @auth('web')
                             <a href="{{ route('admin.institution-followers.index') }}" class="{{ request()->routeIs('admin.institution-followers.*') ? 'active' : '' }}">Institution Followers</a>
                             <a href="{{ route('admin.institution-reviews.index') }}" class="{{ request()->routeIs('admin.institution-reviews.*') ? 'active' : '' }}">Institution Reviews</a>

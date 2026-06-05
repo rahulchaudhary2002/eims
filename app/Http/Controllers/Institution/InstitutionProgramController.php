@@ -37,9 +37,16 @@ class InstitutionProgramController extends Controller
         ];
     }
 
+    // Only these institution types may manage programs
+    private const PROGRAM_TYPES = ['college', 'university', 'school'];
+
     protected function beforeAction(): void
     {
-        abort_if($this->activeInstitution()->type === 'consultancy', 403, 'Consultancies cannot manage programs.');
+        abort_unless(
+            in_array($this->activeInstitution()->type, self::PROGRAM_TYPES, true),
+            403,
+            'Only colleges, universities, and schools can manage programs.'
+        );
     }
 
     protected function selectOptions(): array

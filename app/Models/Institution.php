@@ -151,6 +151,16 @@ class Institution extends Model
         return $this->hasMany(\App\Models\InstitutionFollower::class);
     }
 
+    public function courses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\InstitutionCourse::class);
+    }
+
+    public function certifications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\InstitutionCertification::class);
+    }
+
     public function consultancyDestinations(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(\App\Models\ConsultancyDestination::class);
