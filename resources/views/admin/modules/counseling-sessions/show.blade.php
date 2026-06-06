@@ -101,6 +101,17 @@
                 <h3 class="text-sm font-semibold text-slate-700 mb-3">Status</h3>
                 <span class="badge text-sm">{{ \App\Models\CounselingSession::STATUSES[$counselingSession->status] ?? $counselingSession->status }}</span>
 
+                @if($counselingSession->status === 'pending')
+                <form action="{{ route('admin.counseling-sessions.update-status', $counselingSession) }}" method="POST" class="mt-3">
+                    @csrf @method('PATCH')
+                    <input type="hidden" name="status" value="scheduled">
+                    <button type="submit" class="btn btn-primary w-full text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Approve & Schedule
+                    </button>
+                </form>
+                @endif
+
                 <form action="{{ route('admin.counseling-sessions.update-status', $counselingSession) }}" method="POST" class="mt-4 space-y-2">
                     @csrf @method('PATCH')
                     <select name="status" class="form-control text-sm">

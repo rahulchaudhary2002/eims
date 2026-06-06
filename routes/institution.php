@@ -57,6 +57,7 @@ Route::middleware(['auth:web', 'institution.user'])
             Route::resource('lead-notes', InstitutionLeadNoteController::class);
             Route::resource('lead-follow-ups', InstitutionLeadFollowUpController::class);
             Route::resource('counseling-sessions', InstitutionCounselingSessionController::class)->only(['index', 'show', 'edit', 'update'])->whereNumber('counseling_session');
+            Route::patch('counseling-sessions/{counseling_session}/approve', [InstitutionCounselingSessionController::class, 'approve'])->name('counseling-sessions.approve');
             Route::resource('posts', InstitutionPostController::class);
             Route::resource('post-media', InstitutionPostMediaController::class);
             Route::resource('reviews', InstitutionReviewController::class)->only(['index', 'show']);

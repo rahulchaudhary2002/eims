@@ -17,6 +17,7 @@ class CounselingSession extends Model
     ];
 
     const STATUSES = [
+        'pending'    => 'Pending Approval',
         'scheduled'  => 'Scheduled',
         'completed'  => 'Completed',
         'cancelled'  => 'Cancelled',

@@ -29,7 +29,7 @@
         @endif
 
         @php
-        $sc = ['scheduled' => 'bg-blue-100 text-blue-700', 'completed' => 'bg-green-100 text-green-700', 'cancelled' => 'bg-gray-100 text-gray-500', 'no_show' => 'bg-red-100 text-red-700', 'rescheduled' => 'bg-yellow-100 text-yellow-700'];
+        $sc = ['pending' => 'bg-orange-100 text-orange-700', 'scheduled' => 'bg-blue-100 text-blue-700', 'completed' => 'bg-green-100 text-green-700', 'cancelled' => 'bg-gray-100 text-gray-500', 'no_show' => 'bg-red-100 text-red-700', 'rescheduled' => 'bg-yellow-100 text-yellow-700'];
         @endphp
 
         @forelse($sessions as $session)
@@ -56,7 +56,15 @@
             <div class="flex items-center justify-end gap-2 px-5 py-3 border-t border-gray-50 bg-gray-50/50">
                 <a href="{{ route('student.counseling-sessions.show', $session) }}"
                    class="text-xs font-semibold text-[#4299e1] px-3 py-1.5 border border-[#bee3f8] rounded-lg hover:bg-[#ebf8ff] transition no-underline">View</a>
-                @if(in_array($session->status, ['scheduled', 'rescheduled']))
+                @if($session->status === 'pending')
+                <span class="text-xs text-orange-600 font-medium px-2 py-1">Awaiting approval</span>
+                <a href="{{ route('student.counseling-sessions.edit', $session) }}"
+                   class="text-xs font-semibold text-gray-600 px-3 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition no-underline">Edit Request</a>
+                <form method="POST" action="{{ route('student.counseling-sessions.cancel', $session) }}" onsubmit="return confirm('Cancel this request?')">
+                    @csrf @method('PATCH')
+                    <button type="submit" class="text-xs font-semibold text-red-500 px-3 py-1.5 border border-red-200 rounded-lg hover:bg-red-50 transition">Cancel</button>
+                </form>
+                @elseif(in_array($session->status, ['scheduled', 'rescheduled']))
                 <a href="{{ route('student.counseling-sessions.edit', $session) }}"
                    class="text-xs font-semibold text-gray-600 px-3 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition no-underline">Reschedule</a>
                 <form method="POST" action="{{ route('student.counseling-sessions.cancel', $session) }}" onsubmit="return confirm('Cancel this session?')">

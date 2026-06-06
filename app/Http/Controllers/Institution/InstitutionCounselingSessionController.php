@@ -7,6 +7,8 @@ use App\Http\Controllers\Institution\Concerns\HandlesInstitutionResources;
 use App\Models\CounselingSession;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class InstitutionCounselingSessionController extends Controller
 {
@@ -29,6 +31,16 @@ class InstitutionCounselingSessionController extends Controller
             'student_message' => ['label' => 'Student Message', 'type' => 'textarea', 'rules' => ['nullable', 'string']],
             'counselor_notes' => ['label' => 'Counselor Notes', 'type' => 'textarea', 'rules' => ['nullable', 'string']],
         ];
+    }
+
+    public function approve(Request $request, CounselingSession $counselingSession): RedirectResponse
+    {
+        abort_if($counselingSession->institution_id !== $this->activeInstitutionId(), 403);
+        abort_if($counselingSession->status !== 'pending', 422);
+
+        $counselingSession->update(['status' => 'scheduled']);
+
+        return back()->with('success', 'Session approved and scheduled.');
     }
 
     protected function forceInstitutionScope(array $data, ?Model $record = null): array
