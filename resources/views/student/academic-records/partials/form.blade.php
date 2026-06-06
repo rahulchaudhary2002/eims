@@ -42,15 +42,36 @@
         <input type="text" name="symbol_number" value="{{ old('symbol_number', $record?->symbol_number) }}"
              class="student-form-control">
     </div>
-    <div>
-         <label class="student-form-label">GPA (0-4.0)</label>
-        <input type="number" step="0.01" name="gpa" value="{{ old('gpa', $record?->gpa) }}" min="0" max="4"
-             class="student-form-control">
-    </div>
-    <div>
-         <label class="student-form-label">Percentage (%)</label>
-        <input type="number" step="0.01" name="percentage" value="{{ old('percentage', $record?->percentage) }}" min="0" max="100"
-             class="student-form-control">
+    @php
+        $gradeType = old('grade_type', $record?->percentage !== null ? 'percentage' : 'gpa');
+    @endphp
+    <div x-data="{ gradeType: '{{ $gradeType }}' }" class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+            <label class="student-form-label">Grade Type <span class="text-red-500">*</span></label>
+            <select name="grade_type" x-model="gradeType" class="student-form-control student-form-select {{ $errors->has('grade_type') ? 'is-invalid' : '' }}">
+                <option value="gpa">GPA (0–4.0)</option>
+                <option value="percentage">Percentage (%)</option>
+            </select>
+            @error('grade_type')<p class="student-form-error">{{ $message }}</p>@enderror
+        </div>
+        <div>
+            <template x-if="gradeType === 'gpa'">
+                <div>
+                    <label class="student-form-label">GPA <span class="text-red-500">*</span></label>
+                    <input type="number" step="0.01" name="gpa" value="{{ old('gpa', $record?->gpa) }}"
+                           min="0" max="4" placeholder="e.g. 3.60" class="student-form-control {{ $errors->has('gpa') ? 'is-invalid' : '' }}">
+                    @error('gpa')<p class="student-form-error">{{ $message }}</p>@enderror
+                </div>
+            </template>
+            <template x-if="gradeType === 'percentage'">
+                <div>
+                    <label class="student-form-label">Percentage <span class="text-red-500">*</span></label>
+                    <input type="number" step="0.01" name="percentage" value="{{ old('percentage', $record?->percentage) }}"
+                           min="0" max="100" placeholder="e.g. 85.50" class="student-form-control {{ $errors->has('percentage') ? 'is-invalid' : '' }}">
+                    @error('percentage')<p class="student-form-error">{{ $message }}</p>@enderror
+                </div>
+            </template>
+        </div>
     </div>
     <div>
          <label class="student-form-label">Transcript File</label>

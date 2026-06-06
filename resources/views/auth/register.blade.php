@@ -89,42 +89,11 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Phone <span class="text-red-500">*</span></label>
-                                <input type="tel" name="phone" value="{{ old('phone') }}"
-                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
-                                    placeholder="+977 98XXXXXXXX" required>
-                            </div>
-                            <div>
-                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Date of Birth <span class="text-red-500">*</span></label>
-                                <input type="date" name="dob" value="{{ old('dob') }}"
-                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
-                                    required>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Education Level</label>
-                                <select name="education_level_id"
-                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm bg-white">
-                                    <option value="">Select level</option>
-                                    @foreach($educationLevels as $level)
-                                        <option value="{{ $level->id }}" {{ old('education_level_id') == $level->id ? 'selected' : '' }}>{{ $level->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Field of Interest</label>
-                                <select name="field_of_interest"
-                                    class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm bg-white">
-                                    <option value="">Select field</option>
-                                    @foreach($educationFields as $field)
-                                        <option value="{{ $field->name }}" {{ old('field_of_interest') === $field->name ? 'selected' : '' }}>{{ $field->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div>
+                            <label class="block text-[0.95rem] font-semibold text-gray-700 mb-1.5">Phone <span class="text-red-500">*</span></label>
+                            <input type="tel" name="phone" value="{{ old('phone') }}"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#4299e1] focus:ring-4 focus:ring-[#4299e1]/10 transition text-sm"
+                                placeholder="+977 98XXXXXXXX" required>
                         </div>
 
                         <div>

@@ -15,7 +15,7 @@ class UpdateStudentDocumentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'document_type' => ['required', 'in:' . implode(',', array_keys(StudentDocument::TYPES))],
+            'document_type' => ['required', 'in:' . implode(',', array_keys(StudentDocument::DOCUMENT_TYPES))],
             'title'         => ['required', 'string', 'max:255'],
             'file_path'     => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
             'remarks'       => ['nullable', 'string', 'max:500'],
