@@ -111,6 +111,10 @@
                             </td>
                             <td class="px-5 py-4">
                                 <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('student.academic-records.show', $record) }}"
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition no-underline">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
                                     <a href="{{ route('student.academic-records.edit', $record) }}"
                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#4299e1] border border-[#bee3f8] rounded-lg hover:bg-[#ebf8ff] transition no-underline">
                                         <i class="fas fa-pen"></i> Edit

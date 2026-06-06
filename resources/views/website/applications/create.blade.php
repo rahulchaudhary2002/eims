@@ -4,7 +4,7 @@
 @section('meta-description', 'Submit your application to your chosen institution and program.')
 
 @section('content')
-<section class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] pt-[150px] pb-28 text-white">
+<section class="bg-gradient-to-br from-[#2c5aa0] to-[#1a365d] pt-[120px] pb-12 text-white">
     <div class="container max-w-7xl mx-auto px-4">
         @include('website.partials.breadcrumb', [
             'variant' => 'dark',
@@ -13,11 +13,7 @@
             ],
         ])
 
-        <div class="mt-12 max-w-3xl">
-            <span class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm font-semibold mb-5">
-                <i class="fas fa-paper-plane text-[#4299e1]"></i>
-                Application
-            </span>
+        <div class="mt-8 max-w-3xl">
             <h1 class="text-[2.6rem] md:text-[3.4rem] font-bold leading-[1.15] mb-5">Submit Application</h1>
             <p class="text-[1.05rem] md:text-[1.15rem] text-white/85 leading-relaxed max-w-2xl">
                 Applying as <strong>{{ $student->name }}</strong>. Choose your institution and program, then submit your application directly.

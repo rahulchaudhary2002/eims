@@ -63,6 +63,8 @@ class StudentAcademicRecordController extends Controller
     {
         abort_if($academicRecord->student_id !== $request->user('student')->id, 403);
 
+        $academicRecord->load('additionalDocuments');
+
         return view('student.academic-records.show', compact('academicRecord'));
     }
 
