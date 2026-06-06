@@ -79,7 +79,7 @@
                     ? 'bg-[#2c5aa0] text-white shadow'
                     : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'"
                 class="flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all whitespace-nowrap">
-                <i class="fas fa-file-alt"></i> Documents
+                <i class="fas fa-file-alt"></i> Additional Documents
             </button>
         </div>
 
@@ -308,7 +308,7 @@
             <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden">
                 <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 gap-3">
                     <div>
-                        <h2 class="text-base font-bold text-gray-800">Documents</h2>
+                        <h2 class="text-base font-bold text-gray-800">Additional Documents</h2>
                         <p class="text-xs text-gray-400 mt-0.5">Upload and manage your identity and supporting documents</p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
