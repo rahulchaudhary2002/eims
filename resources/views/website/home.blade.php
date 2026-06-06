@@ -500,4 +500,67 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 </section>
 
+{{-- ── COMING SOON MODAL ────────────────────────────────────────────── --}}
+<div
+    x-data="{ show: false }"
+    x-on:open-modal.window="$event.detail === 'coming-soon' ? show = true : null"
+    x-on:keydown.escape.window="show = false"
+    x-show="show"
+    class="fixed inset-0 flex items-center justify-center"
+    style="z-index: 9999; display: none;"
+>
+    {{-- Backdrop --}}
+    <div
+        x-show="show"
+        x-on:click="show = false"
+        x-transition:enter="ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm"
+    ></div>
+
+    {{-- Modal Box --}}
+    <div
+        x-show="show"
+        x-transition:enter="ease-out duration-300"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="ease-in duration-200"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-10 text-center"
+    >
+        <button
+            type="button"
+            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            x-on:click="show = false"
+        >
+            <i class="fas fa-times text-lg"></i>
+        </button>
+        <div class="flex items-center justify-center w-24 h-24 mx-auto mb-6 rounded-full bg-blue-50">
+            <i class="fas fa-rocket text-5xl text-blue-500 animate-bounce"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-3">Something Exciting Is Coming Soon!</h2>
+        <p class="text-gray-500 mb-7">We're working hard to bring you an amazing new experience. Stay tuned, big things are on the way!</p>
+        <button
+            type="button"
+            class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+            x-on:click="show = false"
+        >
+            Got it!
+        </button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('open-modal', { detail: 'coming-soon' }));
+        }, 800);
+    });
+</script>
+
 @endsection
