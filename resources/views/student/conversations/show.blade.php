@@ -40,8 +40,8 @@
                data-name="{{ strtolower($conv->institution?->name ?? '') }}">
 
                 {{-- Avatar --}}
-                @if($conv->institution?->logo)
-                    <img src="{{ Storage::url($conv->institution->logo) }}" class="w-12 h-12 rounded-full object-cover shrink-0">
+                @if(storage_exists($conv->institution?->logo))
+                    <img src="{{ storage_url($conv->institution->logo) }}" class="w-12 h-12 rounded-full object-cover shrink-0">
                 @else
                     <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
                         <span class="text-white font-bold text-sm">{{ strtoupper(substr($conv->institution?->name ?? 'I', 0, 1)) }}</span>
@@ -93,8 +93,8 @@
             </a>
 
             {{-- Avatar --}}
-            @if($conversation->institution?->logo)
-                <img src="{{ Storage::url($conversation->institution->logo) }}" class="w-10 h-10 rounded-full object-cover shrink-0">
+            @if(storage_exists($conversation->institution?->logo))
+                <img src="{{ storage_url($conversation->institution->logo) }}" class="w-10 h-10 rounded-full object-cover shrink-0">
             @else
                 <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
                     <span class="text-white font-bold text-sm">{{ strtoupper(substr($conversation->institution?->name ?? 'I', 0, 1)) }}</span>
@@ -125,8 +125,8 @@
 
                 {{-- Institution avatar --}}
                 @if(!$isStudent)
-                @if($conversation->institution?->logo)
-                    <img src="{{ Storage::url($conversation->institution->logo) }}" class="w-7 h-7 rounded-full object-cover shrink-0">
+                @if(storage_exists($conversation->institution?->logo))
+                    <img src="{{ storage_url($conversation->institution->logo) }}" class="w-7 h-7 rounded-full object-cover shrink-0">
                 @else
                     <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
                         <span class="text-[10px] font-bold text-white">{{ strtoupper(substr($conversation->institution?->name ?? 'A', 0, 1)) }}</span>
@@ -142,15 +142,15 @@
                         @if($msg->message)
                         <p class="text-sm leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
                         @endif
-                        @if($msg->attachment)
+                        @if(storage_exists($msg->attachment))
                         @php $attachExt = strtolower(pathinfo($msg->attachment, PATHINFO_EXTENSION)); $attachIsImage = in_array($attachExt, ['jpg','jpeg','png','gif','webp','avif']); @endphp
                         @if($attachIsImage)
-                        <a href="{{ Storage::url($msg->attachment) }}" target="_blank" class="block mt-2 no-underline">
-                            <img src="{{ Storage::url($msg->attachment) }}" alt="Image"
+                        <a href="{{ storage_url($msg->attachment) }}" target="_blank" class="block mt-2 no-underline">
+                            <img src="{{ storage_url($msg->attachment) }}" alt="Image"
                                  class="rounded-xl max-w-[220px] max-h-[160px] object-cover border {{ $isStudent ? 'border-white/20' : 'border-gray-200' }}">
                         </a>
                         @else
-                        <a href="{{ Storage::url($msg->attachment) }}" target="_blank"
+                        <a href="{{ storage_url($msg->attachment) }}" target="_blank"
                            class="inline-flex items-center gap-1.5 text-xs {{ $isStudent ? 'text-white/80 hover:text-white' : 'text-[#4299e1]' }} mt-1.5 no-underline hover:underline">
                             <i class="fas fa-paperclip"></i> Attachment
                         </a>
@@ -276,7 +276,7 @@ document.getElementById('conv-search')?.addEventListener('input', function () {
 (function () {
     const STUDENT_CLASS   = 'App\\Models\\Student';
     const institutionName = @json($conversation->institution?->name ?? 'I');
-    const institutionLogo = @json($conversation->institution?->logo ? Storage::url($conversation->institution->logo) : null);
+    const institutionLogo = @json($conversation->institution?->logo ? storage_url($conversation->institution->logo) : null);
     const conversationId  = {{ $conversation->id }};
     const studentInitial  = @json(strtoupper(substr(auth('student')->user()->name, 0, 1)));
     const msgAction       = @json(route('student.conversations.messages.store', $conversation));

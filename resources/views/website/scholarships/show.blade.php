@@ -13,8 +13,8 @@
         ? max((int) $scholarship->total_slots - (int) $scholarship->used_slots, 0)
         : null;
 
-    $institutionLogo = $scholarship->institution?->logo && Storage::disk('public')->exists($scholarship->institution->logo)
-        ? Storage::url($scholarship->institution->logo)
+    $institutionLogo = $scholarship->institution?->logo && Storage::disk('public')->exists(storage_exists($scholarship->institution->logo))
+        ? storage_url($scholarship->institution->logo)
         : null;
 @endphp
 

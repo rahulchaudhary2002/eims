@@ -4,12 +4,12 @@
 
 @section('content')
 @php
-    $coverImage = $institution?->cover_image && Storage::disk('public')->exists($institution->cover_image)
-        ? Storage::url($institution->cover_image)
+    $coverImage = $institution?->cover_image && Storage::disk('public')->exists(storage_exists($institution->cover_image))
+        ? storage_url($institution->cover_image)
         : asset('assets/images/logo.png');
 
-    $logoImage = $institution?->logo && Storage::disk('public')->exists($institution->logo)
-        ? Storage::url($institution->logo)
+    $logoImage = $institution?->logo && Storage::disk('public')->exists(storage_exists($institution->logo))
+        ? storage_url($institution->logo)
         : null;
 @endphp
 

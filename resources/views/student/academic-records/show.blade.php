@@ -100,26 +100,26 @@
             </div>
 
             <div class="divide-y divide-gray-50">
-                @if($academicRecord->transcript_file)
+                @if(storage_exists($academicRecord->transcript_file))
                 <div class="flex items-center justify-between px-6 py-3.5">
                     <div class="flex items-center gap-3">
                         <i class="fas fa-file-pdf text-red-400 text-base w-5 text-center"></i>
                         <span class="text-sm text-gray-700 font-medium">Transcript</span>
                     </div>
-                    <a href="{{ Storage::url($academicRecord->transcript_file) }}" target="_blank"
+                    <a href="{{ storage_url($academicRecord->transcript_file) }}" target="_blank"
                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#4299e1] border border-[#bee3f8] px-3 py-1.5 rounded-lg hover:bg-[#ebf8ff] transition no-underline">
                         <i class="fas fa-eye"></i> View
                     </a>
                 </div>
                 @endif
 
-                @if($academicRecord->character_certificate_file)
+                @if(storage_exists($academicRecord->character_certificate_file))
                 <div class="flex items-center justify-between px-6 py-3.5">
                     <div class="flex items-center gap-3">
                         <i class="fas fa-file-pdf text-red-400 text-base w-5 text-center"></i>
                         <span class="text-sm text-gray-700 font-medium">Character Certificate</span>
                     </div>
-                    <a href="{{ Storage::url($academicRecord->character_certificate_file) }}" target="_blank"
+                    <a href="{{ storage_url($academicRecord->character_certificate_file) }}" target="_blank"
                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#4299e1] border border-[#bee3f8] px-3 py-1.5 rounded-lg hover:bg-[#ebf8ff] transition no-underline">
                         <i class="fas fa-eye"></i> View
                     </a>
@@ -136,7 +136,7 @@
                         <i class="fas fa-file-alt text-sky-400 text-base w-5 text-center"></i>
                         <span class="text-sm text-gray-700 font-medium">{{ $docName }}</span>
                     </div>
-                    <a href="{{ Storage::url($doc->file_path) }}" target="_blank"
+                    <a href="{{ storage_url($doc->file_path) }}" target="_blank"
                        class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#4299e1] border border-[#bee3f8] px-3 py-1.5 rounded-lg hover:bg-[#ebf8ff] transition no-underline">
                         <i class="fas fa-eye"></i> View
                     </a>

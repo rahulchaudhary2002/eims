@@ -53,7 +53,7 @@
                     @elseif($type === 'file')
                         <input type="file" name="{{ $field }}" id="{{ $field }}" class="form-control @error($field) is-invalid @enderror">
                         @if($record->{$field})
-                            <p class="text-xs text-slate-500 mt-1">Current: <a class="text-blue-600 hover:underline" href="{{ Storage::url($record->{$field}) }}" target="_blank">View file</a></p>
+                            <p class="text-xs text-slate-500 mt-1">Current: <a class="text-blue-600 hover:underline" href="{{ storage_url($record->{$field}) }}" target="_blank">View file</a></p>
                         @endif
                     @else
                         <input type="{{ $type }}" name="{{ $field }}" id="{{ $field }}" value="{{ $value instanceof \Carbon\CarbonInterface ? $value->format($type === 'date' ? 'Y-m-d' : 'Y-m-d\TH:i') : $value }}" class="form-control @error($field) is-invalid @enderror">

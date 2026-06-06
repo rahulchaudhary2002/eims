@@ -18,8 +18,8 @@
             <a href="{{ route('student.recommendations.show', $rec) }}"
                class="block bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border {{ !$rec->is_viewed ? 'border-[#bee3f8]' : 'border-gray-200' }} overflow-hidden hover:shadow-md transition-all no-underline group">
                 <div class="flex items-center gap-3 px-5 py-4 border-b border-gray-50">
-                    @if($rec->institution?->logo)
-                        <img src="{{ Storage::url($rec->institution->logo) }}" class="w-10 h-10 rounded-lg object-cover shrink-0">
+                    @if(storage_exists($rec->institution?->logo))
+                        <img src="{{ storage_url($rec->institution->logo) }}" class="w-10 h-10 rounded-lg object-cover shrink-0">
                     @else
                         <div class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center shrink-0">
                             <span class="text-yellow-600 font-bold">{{ strtoupper(substr($rec->institution?->name ?? 'I', 0, 1)) }}</span>

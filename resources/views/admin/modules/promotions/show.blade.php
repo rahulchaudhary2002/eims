@@ -30,9 +30,9 @@
 
         {{-- Main Details --}}
         <div class="lg:col-span-2 space-y-5">
-            @if($promotion->image)
+            @if(storage_exists($promotion->image))
                 <div class="eims-card overflow-hidden">
-                    <img src="{{ Storage::url($promotion->image) }}" alt="{{ $promotion->title }}"
+                    <img src="{{ storage_url($promotion->image) }}" alt="{{ $promotion->title }}"
                         class="w-full h-48 object-cover">
                 </div>
             @endif

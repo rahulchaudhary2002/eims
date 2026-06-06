@@ -24,15 +24,15 @@
     {{-- Cover + Logo Banner --}}
     <div class="eims-card p-0 overflow-hidden">
         <div class="h-40 bg-gradient-to-r from-[#2c5aa0] to-[#1a365d] relative">
-            @if($institution->cover_image)
-            <img src="{{ Storage::url($institution->cover_image) }}" alt="Cover"
+            @if(storage_exists($institution->cover_image))
+            <img src="{{ storage_url($institution->cover_image) }}" alt="Cover"
                  class="absolute inset-0 w-full h-full object-cover opacity-80">
             @endif
         </div>
         <div class="px-6 py-4 flex items-end gap-5 -mt-10 relative">
             <div class="w-20 h-20 rounded-xl bg-white shadow-md border border-slate-200 flex items-center justify-center overflow-hidden shrink-0">
-                @if($institution->logo)
-                <img src="{{ Storage::url($institution->logo) }}" alt="Logo" class="w-full h-full object-contain p-1">
+                @if(storage_exists($institution->logo))
+                <img src="{{ storage_url($institution->logo) }}" alt="Logo" class="w-full h-full object-contain p-1">
                 @else
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21"/></svg>
                 @endif
@@ -294,8 +294,8 @@
                     <tr>
                         <td>
                             <div class="flex items-center gap-3">
-                                @if($usr->avatar)
-                                    <img src="{{ Storage::url($usr->avatar) }}" alt=""
+                                @if(storage_exists($usr->avatar))
+                                    <img src="{{ storage_url($usr->avatar) }}" alt=""
                                          class="w-8 h-8 rounded-full object-cover shrink-0">
                                 @else
                                     <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
@@ -459,7 +459,7 @@
                         <td><span class="badge badge-blue">{{ \App\Models\InstitutionDocument::DOCUMENT_TYPES[$doc->document_type] ?? $doc->document_type }}</span></td>
                         <td class="text-sm text-slate-700 max-w-xs truncate">{{ $doc->title }}</td>
                         <td>
-                            <a href="{{ Storage::url($doc->file_path) }}" target="_blank" rel="noopener"
+                            <a href="{{ storage_url($doc->file_path) }}" target="_blank" rel="noopener"
                                class="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
                                 View

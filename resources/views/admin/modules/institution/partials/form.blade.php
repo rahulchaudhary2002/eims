@@ -220,9 +220,9 @@
         {{-- Logo --}}
         <div>
             <label class="form-label">Logo</label>
-            @if(isset($institution) && $institution->logo)
+            @if(isset($institution) && storage_exists($institution->logo))
             <div class="mb-2 flex items-center gap-3">
-                <img src="{{ Storage::url($institution->logo) }}" alt="Logo" class="h-16 w-16 object-contain rounded border border-slate-200 bg-slate-50 p-1">
+                <img src="{{ storage_url($institution->logo) }}" alt="Logo" class="h-16 w-16 object-contain rounded border border-slate-200 bg-slate-50 p-1">
                 <span class="text-xs text-slate-500">Current logo</span>
             </div>
             @endif
@@ -235,9 +235,9 @@
         {{-- Cover Image --}}
         <div>
             <label class="form-label">Cover Image</label>
-            @if(isset($institution) && $institution->cover_image)
+            @if(isset($institution) && storage_exists($institution->cover_image))
             <div class="mb-2">
-                <img src="{{ Storage::url($institution->cover_image) }}" alt="Cover" class="h-16 w-full object-cover rounded border border-slate-200">
+                <img src="{{ storage_url($institution->cover_image) }}" alt="Cover" class="h-16 w-full object-cover rounded border border-slate-200">
             </div>
             @endif
             <input type="file" name="cover_image" accept="image/*"

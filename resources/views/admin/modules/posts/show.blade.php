@@ -32,9 +32,9 @@
         <div class="lg:col-span-2 space-y-5">
 
             {{-- Thumbnail --}}
-            @if($post->thumbnail)
+            @if(storage_exists($post->thumbnail))
                 <div class="eims-card overflow-hidden">
-                    <img src="{{ Storage::url($post->thumbnail) }}" alt="{{ $post->title }}"
+                    <img src="{{ storage_url($post->thumbnail) }}" alt="{{ $post->title }}"
                         class="w-full h-56 object-cover">
                 </div>
             @endif
@@ -287,7 +287,7 @@
                     @php $ext = pathinfo($item->file_path, PATHINFO_EXTENSION); $isImage = in_array(strtolower($ext), ['jpg','jpeg','png','gif','webp']); @endphp
                     <div class="group relative rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
                         @if($isImage)
-                            <img src="{{ Storage::url($item->file_path) }}" alt="{{ $item->caption ?? 'Media' }}"
+                            <img src="{{ storage_url($item->file_path) }}" alt="{{ $item->caption ?? 'Media' }}"
                                 class="w-full h-28 object-cover">
                         @else
                             <div class="w-full h-28 flex flex-col items-center justify-center gap-1 text-slate-400">

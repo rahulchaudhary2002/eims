@@ -35,8 +35,8 @@
                class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors border-b border-slate-50 no-underline conv-item"
                data-name="{{ strtolower($conv->student?->name ?? '') }}">
 
-                @if($conv->student?->avatar)
-                    <img src="{{ Storage::url($conv->student->avatar) }}" class="w-10 h-10 rounded-full object-cover shrink-0">
+                @if(storage_exists($conv->student?->avatar))
+                    <img src="{{ storage_url($conv->student->avatar) }}" class="w-10 h-10 rounded-full object-cover shrink-0">
                 @else
                     <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-white font-semibold text-sm" style="background-color:#2563eb">
                         {{ strtoupper(substr($conv->student?->name ?? 'S', 0, 1)) }}

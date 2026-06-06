@@ -31,8 +31,8 @@
         @forelse($favorites as $fav)
         <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 flex items-center justify-between px-5 py-4 hover:shadow-md transition-shadow">
             <div class="flex items-center gap-4 min-w-0">
-                @if($fav->institution?->logo)
-                    <img src="{{ Storage::url($fav->institution->logo) }}" class="w-12 h-12 rounded-xl object-cover shrink-0">
+                @if(storage_exists($fav->institution?->logo))
+                    <img src="{{ storage_url($fav->institution->logo) }}" class="w-12 h-12 rounded-xl object-cover shrink-0">
                 @else
                     <div class="w-12 h-12 rounded-xl bg-[#ebf8ff] flex items-center justify-center shrink-0">
                         <span class="text-[#2c5aa0] text-lg font-bold">{{ strtoupper(substr($fav->institution?->name ?? 'I', 0, 1)) }}</span>

@@ -76,15 +76,15 @@
     <div>
          <label class="student-form-label">Transcript File</label>
         <input type="file" name="transcript_file" accept=".pdf,.jpg,.jpeg,.png" class="student-form-file">
-        @if($record?->transcript_file)
-            <a href="{{ Storage::url($record->transcript_file) }}" target="_blank" class="text-xs text-[#4299e1] hover:underline mt-1 block no-underline">View current file</a>
+        @if(storage_exists($record?->transcript_file))
+            <a href="{{ storage_url($record->transcript_file) }}" target="_blank" class="text-xs text-[#4299e1] hover:underline mt-1 block no-underline">View current file</a>
         @endif
     </div>
     <div>
          <label class="student-form-label">Character Certificate</label>
         <input type="file" name="character_certificate_file" accept=".pdf,.jpg,.jpeg,.png" class="student-form-file">
-        @if($record?->character_certificate_file)
-            <a href="{{ Storage::url($record->character_certificate_file) }}" target="_blank" class="text-xs text-[#4299e1] hover:underline mt-1 block no-underline">View current file</a>
+        @if(storage_exists($record?->character_certificate_file))
+            <a href="{{ storage_url($record->character_certificate_file) }}" target="_blank" class="text-xs text-[#4299e1] hover:underline mt-1 block no-underline">View current file</a>
         @endif
     </div>
 
@@ -121,7 +121,7 @@
             <div class="flex items-center gap-3 bg-gray-50 rounded-lg px-4 py-2.5 border border-gray-200">
                 <i class="fas fa-file-alt text-sky-500 shrink-0"></i>
                 <span class="text-sm text-gray-700 flex-1 truncate">{{ $doc->title }}</span>
-                <a href="{{ Storage::url($doc->file_path) }}" target="_blank"
+                <a href="{{ storage_url($doc->file_path) }}" target="_blank"
                    class="text-xs text-[#4299e1] hover:underline no-underline shrink-0">View</a>
                 <form method="POST" action="{{ route('student.academic-records.documents.destroy', $doc) }}"
                       onsubmit="return confirm('Remove this document?')" class="shrink-0">

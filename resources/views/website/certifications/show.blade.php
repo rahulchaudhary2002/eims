@@ -6,8 +6,8 @@
 @section('content')
 @php
     $inst = $certification->institution;
-    $logo = $inst?->logo && Storage::disk('public')->exists($inst->logo)
-        ? Storage::url($inst->logo)
+    $logo = $inst?->logo && Storage::disk('public')->exists(storage_exists($inst->logo))
+        ? storage_url($inst->logo)
         : null;
     $applyUrl = route('website.applications.create', [
         'institution'   => $inst?->slug,

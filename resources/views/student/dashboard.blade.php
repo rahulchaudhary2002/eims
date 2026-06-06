@@ -11,8 +11,8 @@
     <div class="container max-w-7xl mx-auto px-4">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 mt-4">
             <div class="flex items-center gap-4">
-                @if ($student->avatar)
-                    <img src="{{ Storage::url($student->avatar) }}" alt="Avatar"
+                @if(storage_exists($student->avatar))
+                    <img src="{{ storage_url($student->avatar) }}" alt="Avatar"
                          class="w-16 h-16 rounded-full object-cover border-4 border-white/30 flex-shrink-0">
                 @else
                     <div class="w-16 h-16 rounded-full bg-white/20 border-4 border-white/30 flex items-center justify-center text-2xl font-bold flex-shrink-0">
@@ -208,8 +208,8 @@
                     {{-- Profile Card --}}
                     <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.06)] border border-gray-200 overflow-hidden">
                         <div class="bg-gradient-to-br from-[#2c5aa0] to-[#4299e1] p-4 text-white text-center">
-                            @if ($student->avatar)
-                                <img src="{{ Storage::url($student->avatar) }}" alt="Avatar"
+                            @if(storage_exists($student->avatar))
+                                <img src="{{ storage_url($student->avatar) }}" alt="Avatar"
                                      class="w-12 h-12 rounded-full object-cover border-4 border-white/30 mx-auto mb-2">
                             @else
                                 <div class="w-12 h-12 rounded-full bg-white/20 border-4 border-white/30 flex items-center justify-center text-lg font-bold mx-auto mb-2">

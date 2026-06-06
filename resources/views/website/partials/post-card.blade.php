@@ -2,8 +2,8 @@
 <div class="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl border border-gray-200 group">
     {{-- Thumbnail --}}
     <div class="relative h-48 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden">
-        @if ($post->thumbnail)
-            <img src="{{ Storage::url($post->thumbnail) }}" alt="{{ $post->title }}"
+        @if(storage_exists($post->thumbnail))
+            <img src="{{ storage_url($post->thumbnail) }}" alt="{{ $post->title }}"
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
         @else
             <div class="w-full h-full flex items-center justify-center">

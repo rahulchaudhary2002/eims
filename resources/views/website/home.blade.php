@@ -333,8 +333,8 @@ document.addEventListener('DOMContentLoaded', function () {
             @foreach ($consultancies as $consultancy)
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
                     <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-3">
-                        @if ($consultancy->logo)
-                            <img src="{{ Storage::url($consultancy->logo) }}" alt="{{ $consultancy->name }}" class="w-10 h-10 object-contain">
+                        @if(storage_exists($consultancy->logo))
+                            <img src="{{ storage_url($consultancy->logo) }}" alt="{{ $consultancy->name }}" class="w-10 h-10 object-contain">
                         @else
                             <i class="fas fa-handshake text-blue-500"></i>
                         @endif

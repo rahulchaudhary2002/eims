@@ -10,8 +10,8 @@
         </div>
         @forelse($latestPosts as $post)
         <a href="{{ route('website.posts.show', $post) }}" class="flex gap-3 px-5 py-3 border-b border-gray-50 hover:bg-gray-50 transition no-underline group last:border-0">
-            @if($post->thumbnail)
-                <img src="{{ Storage::url($post->thumbnail) }}" alt="" class="w-14 h-14 rounded-lg object-cover shrink-0">
+            @if(storage_exists($post->thumbnail))
+                <img src="{{ storage_url($post->thumbnail) }}" alt="" class="w-14 h-14 rounded-lg object-cover shrink-0">
             @else
                 <div class="w-14 h-14 rounded-lg bg-[#ebf8ff] flex items-center justify-center shrink-0">
                     <i class="fas fa-newspaper text-[#4299e1]"></i>
@@ -64,8 +64,8 @@
         </div>
         @forelse($featuredInstitutions as $institution)
         <a href="{{ route('website.institutions.show', $institution) }}" class="flex items-center gap-3 px-5 py-3 border-b border-gray-50 hover:bg-gray-50 transition no-underline group last:border-0">
-            @if($institution->logo)
-                <img src="{{ Storage::url($institution->logo) }}" alt="" class="w-12 h-12 rounded-lg object-contain border border-gray-100 shrink-0 p-1">
+            @if(storage_exists($institution->logo))
+                <img src="{{ storage_url($institution->logo) }}" alt="" class="w-12 h-12 rounded-lg object-contain border border-gray-100 shrink-0 p-1">
             @else
                 <div class="w-12 h-12 rounded-lg bg-[#ebf8ff] flex items-center justify-center shrink-0">
                     <i class="fas fa-university text-[#4299e1]"></i>

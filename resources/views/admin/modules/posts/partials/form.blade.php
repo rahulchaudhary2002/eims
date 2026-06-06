@@ -63,9 +63,9 @@
 {{-- Thumbnail --}}
 <div>
     <label for="thumbnail" class="form-label">Thumbnail <span class="text-slate-400 text-xs">(Image, max 5 MB)</span></label>
-    @if(isset($post) && $post->thumbnail)
+    @if(isset($post) && storage_exists($post->thumbnail))
         <div class="mb-2">
-            <img src="{{ Storage::url($post->thumbnail) }}" alt="Thumbnail" class="h-24 w-auto rounded-lg object-cover border border-slate-200">
+            <img src="{{ storage_url($post->thumbnail) }}" alt="Thumbnail" class="h-24 w-auto rounded-lg object-cover border border-slate-200">
             <p class="text-xs text-slate-400 mt-1">Upload a new image to replace it.</p>
         </div>
     @endif

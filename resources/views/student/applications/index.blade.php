@@ -35,8 +35,8 @@
         @forelse($applications as $app)
         <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
             <div class="flex items-start gap-4 px-5 py-4">
-                @if($app->institution?->logo)
-                    <img src="{{ Storage::url($app->institution->logo) }}" class="w-12 h-12 rounded-xl object-cover shrink-0">
+                @if(storage_exists($app->institution?->logo))
+                    <img src="{{ storage_url($app->institution->logo) }}" class="w-12 h-12 rounded-xl object-cover shrink-0">
                 @else
                     <div class="w-12 h-12 rounded-xl bg-[#ebf8ff] flex items-center justify-center shrink-0">
                         <span class="text-[#2c5aa0] text-lg font-bold">{{ strtoupper(substr($app->institution?->name ?? 'I', 0, 1)) }}</span>

@@ -209,8 +209,8 @@
                                 <th class="px-5 py-4 text-center min-w-52">
                                     <div class="flex flex-col items-center gap-3">
                                         <div class="h-14 w-14 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center overflow-hidden">
-                                            @if ($inst->logo)
-                                                <img src="{{ Storage::url($inst->logo) }}" alt="{{ $inst->name }}" class="w-12 h-12 object-contain">
+                                            @if(storage_exists($inst->logo))
+                                                <img src="{{ storage_url($inst->logo) }}" alt="{{ $inst->name }}" class="w-12 h-12 object-contain">
                                             @else
                                                 <i class="fas fa-university text-[#2c5aa0] text-xl"></i>
                                             @endif

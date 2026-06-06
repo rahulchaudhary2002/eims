@@ -71,8 +71,8 @@
     <div class="space-y-2">
         <label for="payment_proof" class="form-label">Payment Proof</label>
         <input type="file" name="payment_proof" id="payment_proof" class="form-control @error('payment_proof') border-red-400 @enderror">
-        @if(!empty($admission?->payment_proof))
-            <a href="{{ Storage::url($admission->payment_proof) }}" target="_blank" rel="noopener" class="text-xs text-blue-600 hover:underline">View current proof</a>
+        @if(!empty(storage_exists($admission?->payment_proof)))
+            <a href="{{ storage_url($admission->payment_proof) }}" target="_blank" rel="noopener" class="text-xs text-blue-600 hover:underline">View current proof</a>
         @endif
         @error('payment_proof') <p class="form-error">{{ $message }}</p> @enderror
     </div>

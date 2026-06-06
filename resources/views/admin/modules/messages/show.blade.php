@@ -44,13 +44,13 @@
                     <p class="text-slate-400 italic text-sm">No text content.</p>
                 @endif
 
-                @if($message->attachment)
+                @if(storage_exists($message->attachment))
                     <div class="mt-4 flex items-center gap-3 p-3 bg-blue-50 border border-blue-100 rounded-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"/></svg>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-slate-700 truncate">{{ basename($message->attachment) }}</p>
                         </div>
-                        <a href="{{ Storage::url($message->attachment) }}" target="_blank" class="btn btn-secondary btn-sm shrink-0">Download</a>
+                        <a href="{{ storage_url($message->attachment) }}" target="_blank" class="btn btn-secondary btn-sm shrink-0">Download</a>
                     </div>
                 @endif
             </div>

@@ -151,7 +151,7 @@
                                             <button type="submit" class="text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-full px-2 py-0.5 hover:bg-blue-100 transition">Verify</button>
                                         </form>
                                     @endif
-                                    <a href="{{ Storage::url($document->file_path) }}" target="_blank" rel="noopener" class="btn-icon btn-icon-view" title="Download">
+                                    <a href="{{ storage_url($document->file_path) }}" target="_blank" rel="noopener" class="btn-icon btn-icon-view" title="Download">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
                                     </a>
                                 </div>

@@ -34,7 +34,7 @@
 
             @if($isImage)
                 <div class="eims-card overflow-hidden">
-                    <img src="{{ Storage::url($postMedium->file_path) }}"
+                    <img src="{{ storage_url($postMedium->file_path) }}"
                         alt="{{ $postMedium->caption ?? 'Media' }}"
                         class="w-full max-h-96 object-contain bg-slate-50">
                 </div>
@@ -61,7 +61,7 @@
                     <div>
                         <dt class="text-xs font-medium text-slate-500 uppercase tracking-wide">File</dt>
                         <dd class="mt-1">
-                            <a href="{{ Storage::url($postMedium->file_path) }}" target="_blank" class="text-blue-600 hover:underline text-sm">
+                            <a href="{{ storage_url($postMedium->file_path) }}" target="_blank" class="text-blue-600 hover:underline text-sm">
                                 {{ basename($postMedium->file_path) }}
                             </a>
                         </dd>
@@ -96,7 +96,7 @@
                             View Post
                         </a>
                     @endif
-                    <a href="{{ Storage::url($postMedium->file_path) }}" target="_blank" class="btn btn-secondary w-full text-sm">
+                    <a href="{{ storage_url($postMedium->file_path) }}" target="_blank" class="btn btn-secondary w-full text-sm">
                         Download File
                     </a>
                     <form action="{{ route('admin.post-media.destroy', $postMedium) }}" method="POST" onsubmit="return confirm('Delete this media file? This cannot be undone.')">

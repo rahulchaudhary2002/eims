@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,6 +12,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // @storageExists($path) … @endStorageExists
+        Blade::if('storageExists', fn ($path) => storage_exists($path));
+
         // Short relative time: 1m, 2h, 5d, 3w, or "M d" for older dates
         Carbon::macro('shortDiff', function () {
             $diff = (int) now()->diffInSeconds($this, true);

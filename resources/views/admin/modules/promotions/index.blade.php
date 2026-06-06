@@ -92,8 +92,8 @@
                     @forelse($promotions as $promotion)
                         <tr>
                             <td class="w-12">
-                                @if($promotion->image)
-                                    <img src="{{ Storage::url($promotion->image) }}" alt="{{ $promotion->title }}"
+                                @if(storage_exists($promotion->image))
+                                    <img src="{{ storage_url($promotion->image) }}" alt="{{ $promotion->title }}"
                                         class="h-10 w-12 object-cover rounded-lg border border-slate-200">
                                 @else
                                     <div class="h-10 w-12 bg-slate-100 rounded-lg flex items-center justify-center">

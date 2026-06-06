@@ -23,8 +23,8 @@
         <label class="student-form-label">File {{ $doc ? '' : '*' }}</label>
     <input type="file" name="file_path" accept=".pdf,.jpg,.jpeg,.png"
             class="student-form-file">
-    @if($doc?->file_path)
-        <a href="{{ Storage::url($doc->file_path) }}" target="_blank" class="text-xs text-[#4299e1] hover:underline mt-1 block no-underline">View current file</a>
+    @if(storage_exists($doc?->file_path))
+        <a href="{{ storage_url($doc->file_path) }}" target="_blank" class="text-xs text-[#4299e1] hover:underline mt-1 block no-underline">View current file</a>
     @endif
     @error('file_path')<p class="student-form-error">{{ $message }}</p>@enderror
     <p class="student-form-help">PDF, JPG, PNG. Max 10MB.</p>

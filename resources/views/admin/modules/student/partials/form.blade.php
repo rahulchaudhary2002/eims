@@ -121,9 +121,9 @@
         <h3 class="text-base font-semibold text-slate-800">Avatar</h3>
     </div>
 
-    @if(isset($student) && $student->avatar)
+    @if(isset($student) && storage_exists($student->avatar))
     <div class="flex items-center gap-4">
-        <img src="{{ Storage::url($student->avatar) }}" alt="Avatar"
+        <img src="{{ storage_url($student->avatar) }}" alt="Avatar"
              class="w-16 h-16 rounded-full object-cover border-2 border-slate-200">
         <p class="text-sm text-slate-500">Upload a new image to replace the current avatar.</p>
     </div>

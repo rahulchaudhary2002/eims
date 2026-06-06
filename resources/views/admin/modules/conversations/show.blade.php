@@ -42,8 +42,8 @@
                class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors border-b border-slate-50 no-underline conv-item {{ $conv->id === $conversation->id ? 'bg-blue-50 border-l-2 border-l-blue-500' : '' }}"
                data-name="{{ strtolower(($conv->student?->name ?? '') . ' ' . ($conv->institution?->name ?? '')) }}">
 
-                @if($conv->student?->avatar)
-                    <img src="{{ Storage::url($conv->student->avatar) }}" class="w-9 h-9 rounded-full object-cover shrink-0">
+                @if(storage_exists($conv->student?->avatar))
+                    <img src="{{ storage_url($conv->student->avatar) }}" class="w-9 h-9 rounded-full object-cover shrink-0">
                 @else
                     <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-white font-semibold text-xs" style="background-color:#64748b">
                         {{ strtoupper(substr($conv->student?->name ?? $conv->institution?->name ?? '?', 0, 1)) }}
@@ -94,8 +94,8 @@
 
             {{-- Avatars --}}
             <div class="relative shrink-0">
-                @if($conversation->student?->avatar)
-                    <img src="{{ Storage::url($conversation->student->avatar) }}" class="w-9 h-9 rounded-full object-cover">
+                @if(storage_exists($conversation->student?->avatar))
+                    <img src="{{ storage_url($conversation->student->avatar) }}" class="w-9 h-9 rounded-full object-cover">
                 @else
                     <div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background-color:#2563eb">
                         {{ strtoupper(substr($conversation->student?->name ?? '?', 0, 1)) }}
@@ -156,8 +156,8 @@
                         @if($msg->message)
                         <p class="text-sm leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
                         @endif
-                        @if($msg->attachment)
-                        <a href="{{ Storage::url($msg->attachment) }}" target="_blank"
+                        @if(storage_exists($msg->attachment))
+                        <a href="{{ storage_url($msg->attachment) }}" target="_blank"
                            class="inline-flex items-center gap-1.5 text-xs {{ $isStaff ? 'text-white/80 hover:text-white' : 'text-blue-600' }} mt-1.5 no-underline hover:underline">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"/></svg>
                             {{ basename($msg->attachment) }}

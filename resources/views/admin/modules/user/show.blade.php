@@ -24,8 +24,8 @@
     {{-- Avatar Banner --}}
     <div class="eims-card p-6">
         <div class="flex items-center gap-5">
-            @if($user->avatar)
-            <img src="{{ Storage::url($user->avatar) }}" alt="Avatar"
+            @if(storage_exists($user->avatar))
+            <img src="{{ storage_url($user->avatar) }}" alt="Avatar"
                  class="w-20 h-20 rounded-full object-cover border-2 border-slate-200 shrink-0">
             @else
             <div class="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center shrink-0">

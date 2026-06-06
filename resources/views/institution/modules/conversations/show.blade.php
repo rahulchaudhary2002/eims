@@ -35,8 +35,8 @@
                class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors border-b border-slate-50 no-underline conv-item {{ $conv->id === $conversation->id ? 'bg-blue-50 border-l-2 border-l-blue-500' : '' }}"
                data-name="{{ strtolower($conv->student?->name ?? '') }}">
 
-                @if($conv->student?->avatar)
-                    <img src="{{ Storage::url($conv->student->avatar) }}" class="w-10 h-10 rounded-full object-cover shrink-0">
+                @if(storage_exists($conv->student?->avatar))
+                    <img src="{{ storage_url($conv->student->avatar) }}" class="w-10 h-10 rounded-full object-cover shrink-0">
                 @else
                     <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-white font-semibold text-sm" style="background-color:#2563eb">
                         {{ strtoupper(substr($conv->student?->name ?? 'S', 0, 1)) }}
@@ -87,8 +87,8 @@
             </a>
 
             {{-- Student avatar --}}
-            @if($conversation->student?->avatar)
-                <img src="{{ Storage::url($conversation->student->avatar) }}" class="w-9 h-9 rounded-full object-cover shrink-0">
+            @if(storage_exists($conversation->student?->avatar))
+                <img src="{{ storage_url($conversation->student->avatar) }}" class="w-9 h-9 rounded-full object-cover shrink-0">
             @else
                 <div class="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style="background-color:#2563eb">
                     <span class="text-white font-bold text-sm">{{ strtoupper(substr($conversation->student?->name ?? 'S', 0, 1)) }}</span>
@@ -118,8 +118,8 @@
             <div class="flex {{ $isInstitution ? 'justify-end' : 'justify-start' }} items-end gap-2">
 
                 @if(!$isInstitution)
-                @if($msg->sender?->avatar)
-                    <img src="{{ Storage::url($msg->sender->avatar) }}" class="w-7 h-7 rounded-full object-cover shrink-0">
+                @if(storage_exists($msg->sender?->avatar))
+                    <img src="{{ storage_url($msg->sender->avatar) }}" class="w-7 h-7 rounded-full object-cover shrink-0">
                 @else
                     <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style="background-color:#2563eb">
                         <span class="text-[10px] font-bold text-white">{{ strtoupper(substr($msg->sender?->name ?? 'S', 0, 1)) }}</span>
@@ -134,8 +134,8 @@
                         @if($msg->message)
                         <p class="text-sm leading-relaxed whitespace-pre-line">{{ $msg->message }}</p>
                         @endif
-                        @if($msg->attachment)
-                        <a href="{{ Storage::url($msg->attachment) }}" target="_blank"
+                        @if(storage_exists($msg->attachment))
+                        <a href="{{ storage_url($msg->attachment) }}" target="_blank"
                            class="inline-flex items-center gap-1.5 text-xs {{ $isInstitution ? 'text-white/80 hover:text-white' : 'text-blue-600' }} mt-1.5 no-underline hover:underline">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"/></svg>
                             Attachment
@@ -250,7 +250,7 @@ document.getElementById('conv-search')?.addEventListener('input', function () {
 (function () {
     const USER_CLASS      = 'App\\Models\\User';
     const studentName     = @json($conversation->student?->name ?? 'Student');
-    const studentAvatar   = @json($conversation->student?->avatar ? Storage::url($conversation->student->avatar) : null);
+    const studentAvatar   = @json($conversation->student?->avatar ? storage_url($conversation->student->avatar) : null);
     const conversationId  = {{ $conversation->id }};
     const msgAction       = @json(route('institution.conversations.messages.store', $conversation));
 

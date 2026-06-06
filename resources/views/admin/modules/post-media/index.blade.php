@@ -67,7 +67,7 @@
                         <tr>
                             <td class="w-16">
                                 @if($isImage)
-                                    <img src="{{ Storage::url($item->file_path) }}" alt="{{ $item->caption }}"
+                                    <img src="{{ storage_url($item->file_path) }}" alt="{{ $item->caption }}"
                                         class="h-12 w-16 object-cover rounded-lg border border-slate-200">
                                 @else
                                     <div class="h-12 w-16 bg-slate-100 rounded-lg flex items-center justify-center">

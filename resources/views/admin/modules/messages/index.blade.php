@@ -83,8 +83,8 @@
                                     {{ $msg->message ? \Illuminate\Support\Str::limit($msg->message, 60) : '-' }}
                                 </td>
                                 <td class="text-sm">
-                                    @if($msg->attachment)
-                                        <a href="{{ Storage::url($msg->attachment) }}" target="_blank" class="text-blue-600 hover:underline text-xs">View</a>
+                                    @if(storage_exists($msg->attachment))
+                                        <a href="{{ storage_url($msg->attachment) }}" target="_blank" class="text-blue-600 hover:underline text-xs">View</a>
                                     @else
                                         <span class="text-slate-400">-</span>
                                     @endif

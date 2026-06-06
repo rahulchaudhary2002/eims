@@ -40,8 +40,8 @@
                data-name="{{ strtolower($conv->institution?->name ?? '') }}">
 
                 {{-- Avatar --}}
-                @if($conv->institution?->logo)
-                    <img src="{{ Storage::url($conv->institution->logo) }}" class="w-12 h-12 rounded-full object-cover shrink-0">
+                @if(storage_exists($conv->institution?->logo))
+                    <img src="{{ storage_url($conv->institution->logo) }}" class="w-12 h-12 rounded-full object-cover shrink-0">
                 @else
                     <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background-color:#2c5aa0">
                         <span class="text-white font-bold text-sm">{{ strtoupper(substr($conv->institution?->name ?? 'I', 0, 1)) }}</span>

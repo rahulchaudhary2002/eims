@@ -5,8 +5,8 @@
     {{-- Avatar --}}
     <div class="flex items-center gap-5">
         <div class="flex-shrink-0">
-            @if ($user->avatar)
-                <img src="{{ Storage::url($user->avatar) }}" alt="Avatar"
+            @if(storage_exists($user->avatar))
+                <img src="{{ storage_url($user->avatar) }}" alt="Avatar"
                      class="w-20 h-20 rounded-full object-cover border-4 border-[#4299e1]/30">
             @else
                 <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#2c5aa0] to-[#4299e1] flex items-center justify-center text-white text-2xl font-bold">

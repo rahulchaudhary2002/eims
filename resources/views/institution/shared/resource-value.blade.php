@@ -36,7 +36,7 @@
 @endphp
 
 @if(is_string($value) && (str_contains($field, 'file') || str_contains($field, 'image') || str_contains($field, 'thumbnail') || str_contains($field, 'proof') || str_contains($field, 'attachment')))
-    <a href="{{ Storage::url($value) }}" target="_blank" class="text-blue-600 hover:underline">View file</a>
+    <a href="{{ storage_url($value) }}" target="_blank" class="text-blue-600 hover:underline">View file</a>
 @elseif(is_bool($value))
     <span class="badge {{ $value ? 'badge-green' : 'badge-secondary' }}">{{ $display }}</span>
 @elseif(($fieldType ?? null) === 'ckeditor')

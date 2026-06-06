@@ -85,14 +85,14 @@
                             </td>
                             <td class="px-5 py-4">
                                 <div class="flex flex-col gap-1">
-                                    @if($record->transcript_file)
-                                        <a href="{{ Storage::url($record->transcript_file) }}" target="_blank"
+                                    @if(storage_exists($record->transcript_file))
+                                        <a href="{{ storage_url($record->transcript_file) }}" target="_blank"
                                            class="inline-flex items-center gap-1.5 text-xs text-[#4299e1] hover:underline no-underline">
                                             <i class="fas fa-file-pdf text-red-400"></i> Transcript
                                         </a>
                                     @endif
-                                    @if($record->character_certificate_file)
-                                        <a href="{{ Storage::url($record->character_certificate_file) }}" target="_blank"
+                                    @if(storage_exists($record->character_certificate_file))
+                                        <a href="{{ storage_url($record->character_certificate_file) }}" target="_blank"
                                            class="inline-flex items-center gap-1.5 text-xs text-[#4299e1] hover:underline no-underline">
                                             <i class="fas fa-file-pdf text-red-400"></i> Certificate
                                         </a>

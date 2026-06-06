@@ -20,8 +20,8 @@
                 @if($message->message)
                 <p class="text-sm text-gray-700 leading-relaxed">{{ $message->message }}</p>
                 @endif
-                @if($message->attachment)
-                <a href="{{ Storage::url($message->attachment) }}" target="_blank"
+                @if(storage_exists($message->attachment))
+                <a href="{{ storage_url($message->attachment) }}" target="_blank"
                    class="flex items-center gap-1.5 text-sm text-[#4299e1] font-medium hover:underline mt-3 no-underline">
                     <i class="fas fa-paperclip"></i> Download Attachment
                 </a>

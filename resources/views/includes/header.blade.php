@@ -90,8 +90,8 @@
                         {{-- Account button --}}
                         <button @click="accountOpen = !accountOpen"
                             class="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-all focus:outline-none">
-                            @if($student->avatar)
-                                <img src="{{ Storage::url($student->avatar) }}" class="w-8 h-8 rounded-full object-cover shrink-0">
+                            @if(storage_exists($student->avatar))
+                                <img src="{{ storage_url($student->avatar) }}" class="w-8 h-8 rounded-full object-cover shrink-0">
                             @else
                                 <div class="w-8 h-8 rounded-full bg-[#ebf8ff] flex items-center justify-center shrink-0">
                                     <span class="text-[#2c5aa0] text-sm font-bold">{{ strtoupper(substr($student->name, 0, 1)) }}</span>
@@ -172,8 +172,8 @@
                         {{-- Student info panel --}}
                         <div class="w-56 shrink-0">
                             <div class="flex items-center gap-3 p-4 bg-gradient-to-br from-[#2c5aa0] to-[#4299e1] rounded-xl text-white mb-3">
-                                @if($authStudent->avatar)
-                                    <img src="{{ Storage::url($authStudent->avatar) }}" class="w-12 h-12 rounded-full object-cover ring-2 ring-white/30 shrink-0">
+                                @if(storage_exists($authStudent->avatar))
+                                    <img src="{{ storage_url($authStudent->avatar) }}" class="w-12 h-12 rounded-full object-cover ring-2 ring-white/30 shrink-0">
                                 @else
                                     <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center ring-2 ring-white/30 shrink-0">
                                         <span class="text-xl font-bold">{{ strtoupper(substr($authStudent->name, 0, 1)) }}</span>
@@ -276,8 +276,8 @@
 
                     {{-- Student info --}}
                     <div class="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[#2c5aa0] to-[#4299e1] rounded-xl text-white mb-4 mx-2">
-                        @if($authStudent->avatar)
-                            <img src="{{ Storage::url($authStudent->avatar) }}" class="w-10 h-10 rounded-full object-cover ring-2 ring-white/30 shrink-0">
+                        @if(storage_exists($authStudent->avatar))
+                            <img src="{{ storage_url($authStudent->avatar) }}" class="w-10 h-10 rounded-full object-cover ring-2 ring-white/30 shrink-0">
                         @else
                             <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
                                 <span class="font-bold">{{ strtoupper(substr($authStudent->name, 0, 1)) }}</span>

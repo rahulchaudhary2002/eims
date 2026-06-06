@@ -81,7 +81,7 @@
                     @php $ext = strtolower(pathinfo($document->file_path, PATHINFO_EXTENSION)); @endphp
                     <div class="w-12 h-12 bg-white rounded-lg border border-slate-200 flex items-center justify-center shrink-0">
                         @if(in_array($ext, ['jpg','jpeg','png','webp']))
-                            <img src="{{ Storage::url($document->file_path) }}" alt=""
+                            <img src="{{ storage_url($document->file_path) }}" alt=""
                                  class="w-full h-full object-cover rounded-lg">
                         @else
                             <span class="text-xs font-bold text-slate-500 uppercase">{{ $ext }}</span>
@@ -90,7 +90,7 @@
                     <div class="min-w-0 flex-1">
                         <p class="text-sm font-medium text-slate-700 truncate">{{ basename($document->file_path) }}</p>
                     </div>
-                    <a href="{{ Storage::url($document->file_path) }}" target="_blank" rel="noopener"
+                    <a href="{{ storage_url($document->file_path) }}" target="_blank" rel="noopener"
                        class="btn btn-secondary shrink-0 text-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
                         Download

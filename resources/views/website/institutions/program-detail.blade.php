@@ -10,8 +10,8 @@
         'upcoming' => 'bg-yellow-100 text-yellow-700 border-yellow-200',
         'closed'   => 'bg-red-100 text-red-700 border-red-200',
     ];
-    $logo = $institution->logo && Storage::disk('public')->exists($institution->logo)
-        ? Storage::url($institution->logo)
+    $logo = $institution->logo && Storage::disk('public')->exists(storage_exists($institution->logo))
+        ? storage_url($institution->logo)
         : null;
 @endphp
 

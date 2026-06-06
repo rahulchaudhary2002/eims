@@ -17,8 +17,8 @@
         @forelse($conversations as $conv)
         <a href="{{ route('student.conversations.show', $conv) }}"
            class="flex items-center gap-4 bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border {{ $conv->unread_count > 0 ? 'border-[#bee3f8]' : 'border-gray-200' }} px-5 py-4 hover:shadow-md transition-all no-underline">
-            @if($conv->institution?->logo)
-                <img src="{{ Storage::url($conv->institution->logo) }}" class="w-11 h-11 rounded-xl object-cover shrink-0">
+            @if(storage_exists($conv->institution?->logo))
+                <img src="{{ storage_url($conv->institution->logo) }}" class="w-11 h-11 rounded-xl object-cover shrink-0">
             @else
                 <div class="w-11 h-11 rounded-xl bg-[#ebf8ff] flex items-center justify-center shrink-0">
                     <span class="text-[#2c5aa0] font-bold">{{ strtoupper(substr($conv->institution?->name ?? 'I', 0, 1)) }}</span>

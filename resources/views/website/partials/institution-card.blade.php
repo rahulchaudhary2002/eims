@@ -9,8 +9,8 @@
 <a href="{{ route($cardRoute, $institution->slug) }}"
    class="block bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:-translate-y-1.5 hover:shadow-2xl border border-gray-200 no-underline group">
     <div class="relative h-44 overflow-hidden bg-[#f7fafc]">
-        @if ($institution->cover_image)
-            <img src="{{ Storage::url($institution->cover_image) }}"
+        @if(storage_exists($institution->cover_image))
+            <img src="{{ storage_url($institution->cover_image) }}"
                  alt="{{ $institution->name }}"
                  class="w-full h-full object-cover transition-all duration-300 group-hover:scale-105">
         @else
@@ -29,8 +29,8 @@
     <div class="p-7">
         <div class="flex items-start gap-4 mb-4">
             <div class="w-16 h-16 rounded-xl bg-white border border-gray-200 shadow-sm overflow-hidden flex-shrink-0">
-                @if ($institution->logo)
-                    <img src="{{ Storage::url($institution->logo) }}"
+                @if(storage_exists($institution->logo))
+                    <img src="{{ storage_url($institution->logo) }}"
                          alt="{{ $institution->name }} logo"
                          class="w-full h-full object-contain p-1.5">
                 @else

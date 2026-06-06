@@ -9,8 +9,8 @@
     <div class="container max-w-7xl mx-auto px-4">
         <div class="flex flex-col sm:flex-row sm:items-center gap-5 mt-4">
             <div class="flex items-center gap-4">
-                @if($student->avatar)
-                    <img src="{{ Storage::url($student->avatar) }}" class="w-16 h-16 rounded-full object-cover border-4 border-white/30 shrink-0">
+                @if(storage_exists($student->avatar))
+                    <img src="{{ storage_url($student->avatar) }}" class="w-16 h-16 rounded-full object-cover border-4 border-white/30 shrink-0">
                 @else
                     <div class="w-16 h-16 rounded-full bg-white/20 border-4 border-white/30 flex items-center justify-center text-2xl font-bold shrink-0">
                         {{ strtoupper(substr($student->name, 0, 1)) }}
@@ -94,8 +94,8 @@
                     @csrf @method('PUT')
 
                     <div class="flex items-center gap-5">
-                        @if($student->avatar)
-                            <img src="{{ Storage::url($student->avatar) }}" class="w-20 h-20 rounded-full object-cover ring-4 ring-gray-100">
+                        @if(storage_exists($student->avatar))
+                            <img src="{{ storage_url($student->avatar) }}" class="w-20 h-20 rounded-full object-cover ring-4 ring-gray-100">
                         @else
                             <div class="w-20 h-20 rounded-full bg-[#ebf8ff] flex items-center justify-center ring-4 ring-gray-100">
                                 <span class="text-[#2c5aa0] text-3xl font-bold">{{ strtoupper(substr($student->name, 0, 1)) }}</span>
@@ -248,13 +248,13 @@
                                     </td>
                                     <td class="px-5 py-4">
                                         <div class="flex flex-col gap-1">
-                                            @if($record->transcript_file)
-                                                <a href="{{ Storage::url($record->transcript_file) }}" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-[#4299e1] hover:underline no-underline">
+                                            @if(storage_exists($record->transcript_file))
+                                                <a href="{{ storage_url($record->transcript_file) }}" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-[#4299e1] hover:underline no-underline">
                                                     <i class="fas fa-file-pdf text-red-400"></i> Transcript
                                                 </a>
                                             @endif
-                                            @if($record->character_certificate_file)
-                                                <a href="{{ Storage::url($record->character_certificate_file) }}" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-[#4299e1] hover:underline no-underline">
+                                            @if(storage_exists($record->character_certificate_file))
+                                                <a href="{{ storage_url($record->character_certificate_file) }}" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-[#4299e1] hover:underline no-underline">
                                                     <i class="fas fa-file-pdf text-red-400"></i> Certificate
                                                 </a>
                                             @endif
@@ -332,8 +332,8 @@
                                     · {{ $document->created_at->format('M d, Y') }}
                                 </p>
                             </div>
-                            @if($document->file_path)
-                            <a href="{{ Storage::url($document->file_path) }}" target="_blank" class="text-xs font-semibold text-[#4299e1] hover:underline no-underline shrink-0">View</a>
+                            @if(storage_exists($document->file_path))
+                            <a href="{{ storage_url($document->file_path) }}" target="_blank" class="text-xs font-semibold text-[#4299e1] hover:underline no-underline shrink-0">View</a>
                             @endif
                         </div>
                         @endforeach

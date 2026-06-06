@@ -44,8 +44,8 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0 ml-3">
-                        @if($doc->file_path)
-                            <a href="{{ Storage::url($doc->file_path) }}" target="_blank"
+                        @if(storage_exists($doc->file_path))
+                            <a href="{{ storage_url($doc->file_path) }}" target="_blank"
                                class="text-xs text-[#4299e1] px-3 py-1.5 border border-[#bee3f8] rounded-lg hover:bg-[#ebf8ff] transition no-underline">View</a>
                         @endif
                         <a href="{{ route('student.documents.edit', $doc) }}"

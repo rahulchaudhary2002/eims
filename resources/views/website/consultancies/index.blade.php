@@ -116,8 +116,8 @@
                         <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-7 hover:-translate-y-1.5 hover:shadow-2xl transition-all">
                             <div class="flex items-start gap-4 mb-4">
                                 <div class="w-16 h-16 rounded-xl border border-gray-200 bg-white flex items-center justify-center flex-shrink-0 overflow-hidden shadow-sm">
-                                    @if ($consultancy->logo)
-                                        <img src="{{ Storage::url($consultancy->logo) }}" alt="{{ $consultancy->name }}" class="w-full h-full object-contain p-1.5">
+                                    @if(storage_exists($consultancy->logo))
+                                        <img src="{{ storage_url($consultancy->logo) }}" alt="{{ $consultancy->name }}" class="w-full h-full object-contain p-1.5">
                                     @else
                                         <i class="fas fa-handshake text-[#4299e1] text-2xl"></i>
                                     @endif

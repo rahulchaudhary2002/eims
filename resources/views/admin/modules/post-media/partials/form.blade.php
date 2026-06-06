@@ -31,14 +31,14 @@
     <label for="file_path" class="form-label">
         File <span class="{{ isset($postMedium) ? 'text-slate-400 text-xs' : 'text-red-500' }}">{{ isset($postMedium) ? '(upload to replace)' : '*' }}</span>
     </label>
-    @if(isset($postMedium) && $postMedium->file_path)
+    @if(isset($postMedium) && storage_exists($postMedium->file_path))
         <div class="mb-2">
             @php $ext = pathinfo($postMedium->file_path, PATHINFO_EXTENSION); @endphp
             @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif','webp']))
-                <img src="{{ Storage::url($postMedium->file_path) }}" alt="Preview" class="h-24 w-auto rounded-lg object-cover border border-slate-200">
+                <img src="{{ storage_url($postMedium->file_path) }}" alt="Preview" class="h-24 w-auto rounded-lg object-cover border border-slate-200">
             @else
                 <p class="text-xs text-slate-500">
-                    <a href="{{ Storage::url($postMedium->file_path) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($postMedium->file_path) }}</a>
+                    <a href="{{ storage_url($postMedium->file_path) }}" target="_blank" class="text-blue-600 hover:underline">{{ basename($postMedium->file_path) }}</a>
                 </p>
             @endif
             <p class="text-xs text-slate-400 mt-1">Upload a new file to replace the current one.</p>

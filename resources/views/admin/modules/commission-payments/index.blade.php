@@ -91,8 +91,8 @@
                             <td class="font-mono text-xs text-slate-500">{{ $payment->transaction_reference ?? '-' }}</td>
                             <td class="text-xs text-slate-500">{{ $payment->payment_date?->format('d M Y') ?? '-' }}</td>
                             <td>
-                                @if($payment->payment_proof)
-                                    <a href="{{ Storage::url($payment->payment_proof) }}" target="_blank" class="text-blue-600 hover:underline text-xs">View</a>
+                                @if(storage_exists($payment->payment_proof))
+                                    <a href="{{ storage_url($payment->payment_proof) }}" target="_blank" class="text-blue-600 hover:underline text-xs">View</a>
                                 @else
                                     <span class="text-slate-400 text-xs">-</span>
                                 @endif

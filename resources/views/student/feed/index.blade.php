@@ -92,7 +92,7 @@
                 <article class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.06)] border border-gray-200 overflow-hidden hover:shadow-[0_8px_25px_rgba(0,0,0,0.1)] transition-shadow">
 
                     {{-- Thumbnail --}}
-                    @php $coverImage = $post->thumbnail ? Storage::url($post->thumbnail) : ($post->media->where('type', 'image')->first()?->file_path ? Storage::url($post->media->where('type', 'image')->first()->file_path) : null); @endphp
+                    @php $coverImage = $post->thumbnail ? storage_url($post->thumbnail) : ($post->media->where('type', 'image')->first()?->file_path ? storage_url($post->media->where('type', 'image')->first()->file_path) : null); @endphp
                     @if($coverImage)
                     <div class="h-48 overflow-hidden">
                         <img src="{{ $coverImage }}" alt="{{ $post->title }}"
@@ -106,8 +106,8 @@
                         <div class="flex items-center justify-between gap-3 mb-4">
                             <a href="{{ route('website.institutions.show', $post->institution->slug) }}"
                                class="flex items-center gap-2.5 no-underline group">
-                                @if($post->institution->logo)
-                                    <img src="{{ Storage::url($post->institution->logo) }}" alt="{{ $post->institution->name }}"
+                                @if(storage_exists($post->institution->logo))
+                                    <img src="{{ storage_url($post->institution->logo) }}" alt="{{ $post->institution->name }}"
                                          class="w-9 h-9 rounded-lg object-contain border border-gray-100 p-0.5 bg-white">
                                 @else
                                     <div class="w-9 h-9 rounded-lg bg-[#ebf8ff] flex items-center justify-center border border-[#bee3f8]">

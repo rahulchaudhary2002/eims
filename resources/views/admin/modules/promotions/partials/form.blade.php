@@ -90,9 +90,9 @@
 {{-- Image --}}
 <div>
     <label for="image" class="form-label">Image <span class="text-slate-400 text-xs">(max 5 MB)</span></label>
-    @if(isset($promotion) && $promotion->image)
+    @if(isset($promotion) && storage_exists($promotion->image))
         <div class="mb-2">
-            <img src="{{ Storage::url($promotion->image) }}" alt="{{ $promotion->title }}"
+            <img src="{{ storage_url($promotion->image) }}" alt="{{ $promotion->title }}"
                 class="h-20 w-auto rounded-lg object-cover border border-slate-200">
             <p class="text-xs text-slate-400 mt-1">Upload a new image to replace it.</p>
         </div>

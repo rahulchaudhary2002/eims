@@ -98,8 +98,8 @@
                     <tr>
                         <td>
                             <div class="flex items-center gap-3">
-                                @if($student->avatar)
-                                    <img src="{{ Storage::url($student->avatar) }}" alt=""
+                                @if(storage_exists($student->avatar))
+                                    <img src="{{ storage_url($student->avatar) }}" alt=""
                                          class="w-8 h-8 rounded-full object-cover shrink-0">
                                 @else
                                     <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">

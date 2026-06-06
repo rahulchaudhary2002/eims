@@ -169,7 +169,7 @@
                                 @foreach($referral->student->documents as $doc)
                                     <div class="flex items-center justify-between text-sm">
                                         <span class="text-slate-700">{{ $doc->document_type ?? 'Document' }}</span>
-                                        <a href="{{ Storage::url($doc->file_path) }}" target="_blank" rel="noopener" class="text-blue-600 hover:underline text-xs">View</a>
+                                        <a href="{{ storage_url($doc->file_path) }}" target="_blank" rel="noopener" class="text-blue-600 hover:underline text-xs">View</a>
                                     </div>
                                 @endforeach
                             </div>

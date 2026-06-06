@@ -68,10 +68,10 @@
 {{-- Agreement File --}}
 <div>
     <label for="agreement_file" class="form-label">Agreement File <span class="text-slate-400 text-xs">(PDF/DOC/DOCX, max 10 MB)</span></label>
-    @if(isset($referralAgreement) && $referralAgreement->agreement_file)
+    @if(isset($referralAgreement) && storage_exists($referralAgreement->agreement_file))
         <p class="text-xs text-slate-500 mb-1">
             Current:
-            <a href="{{ Storage::url($referralAgreement->agreement_file) }}" target="_blank" class="text-blue-600 hover:underline">
+            <a href="{{ storage_url($referralAgreement->agreement_file) }}" target="_blank" class="text-blue-600 hover:underline">
                 {{ basename($referralAgreement->agreement_file) }}
             </a>
             - upload a new file to replace it.

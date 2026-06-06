@@ -43,8 +43,8 @@
                     <div class="flex justify-between gap-3">
                         <dt class="text-slate-500">Proof</dt>
                         <dd>
-                            @if($admission->payment_proof)
-                                <a href="{{ Storage::url($admission->payment_proof) }}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">View</a>
+                            @if(storage_exists($admission->payment_proof))
+                                <a href="{{ storage_url($admission->payment_proof) }}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">View</a>
                             @else
                                 -
                             @endif

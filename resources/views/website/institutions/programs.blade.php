@@ -5,8 +5,8 @@
 
 @section('content')
 @php
-    $logo = $institution->logo && Storage::disk('public')->exists($institution->logo)
-        ? Storage::url($institution->logo)
+    $logo = $institution->logo && Storage::disk('public')->exists(storage_exists($institution->logo))
+        ? storage_url($institution->logo)
         : null;
 @endphp
 

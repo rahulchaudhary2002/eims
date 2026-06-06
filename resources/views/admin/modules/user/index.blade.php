@@ -86,8 +86,8 @@
                         <td class="text-slate-400 text-sm">{{ $user->id }}</td>
                         <td>
                             <div class="flex items-center gap-3">
-                                @if($user->avatar)
-                                <img src="{{ Storage::url($user->avatar) }}" alt=""
+                                @if(storage_exists($user->avatar))
+                                <img src="{{ storage_url($user->avatar) }}" alt=""
                                      class="w-8 h-8 rounded-full object-cover border border-slate-200 shrink-0">
                                 @else
                                 <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">

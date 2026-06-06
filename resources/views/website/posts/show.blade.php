@@ -2,8 +2,8 @@
 
 @section('meta-title', $post->title . ' - ' . config('app.name'))
 @section('meta-description', strip_tags(Str::limit($post->content, 160)))
-@if ($post->thumbnail)
-    @section('og-image', Storage::url($post->thumbnail))
+@if(storage_exists($post->thumbnail))
+    @section('og-image', storage_url($post->thumbnail))
 @endif
 
 @section('content')
@@ -48,9 +48,9 @@
                 @endif
             </div>
 
-            @if ($post->thumbnail)
+            @if(storage_exists($post->thumbnail))
                 <div class="rounded-xl overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.25)] border border-white/10">
-                    <img src="{{ Storage::url($post->thumbnail) }}" alt="{{ $post->title }}"
+                    <img src="{{ storage_url($post->thumbnail) }}" alt="{{ $post->title }}"
                          class="w-full h-56 md:h-72 object-cover">
                 </div>
             @else
@@ -224,9 +224,9 @@
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                             @foreach ($post->media as $media)
-                                @if (str_starts_with($media->mime_type ?? '', 'image') || isset($media->file_path))
+                                @if (str_starts_with($media->mime_type ?? '', 'image') || isset(storage_exists($media->file_path)))
                                     <div class="rounded-xl overflow-hidden h-36 border border-gray-100">
-                                        <img src="{{ Storage::url($media->file_path) }}"
+                                        <img src="{{ storage_url($media->file_path) }}"
                                              alt="Media" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
                                     </div>
                                 @endif
@@ -255,8 +255,8 @@
                         <h3 class="text-xl font-bold text-[#2c5aa0] mb-4">About Institution</h3>
                         <div class="flex items-start gap-3 mb-4">
                             <div class="h-12 w-12 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center overflow-hidden flex-shrink-0">
-                                @if ($post->institution->logo)
-                                    <img src="{{ Storage::url($post->institution->logo) }}" alt="{{ $post->institution->name }}" class="h-full w-full object-contain p-1">
+                                @if(storage_exists($post->institution->logo))
+                                    <img src="{{ storage_url($post->institution->logo) }}" alt="{{ $post->institution->name }}" class="h-full w-full object-contain p-1">
                                 @else
                                     <i class="fas fa-university text-[#2c5aa0]"></i>
                                 @endif

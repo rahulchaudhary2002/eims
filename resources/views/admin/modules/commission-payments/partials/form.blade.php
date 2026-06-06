@@ -100,10 +100,10 @@
 {{-- Payment Proof --}}
 <div>
     <label for="payment_proof" class="form-label">Payment Proof <span class="text-slate-400 text-xs">(PDF/JPG/PNG, max 10 MB)</span></label>
-    @if(isset($commissionPayment) && $commissionPayment->payment_proof)
+    @if(isset($commissionPayment) && storage_exists($commissionPayment->payment_proof))
         <p class="text-xs text-slate-500 mb-1">
             Current:
-            <a href="{{ Storage::url($commissionPayment->payment_proof) }}" target="_blank" class="text-blue-600 hover:underline">
+            <a href="{{ storage_url($commissionPayment->payment_proof) }}" target="_blank" class="text-blue-600 hover:underline">
                 {{ basename($commissionPayment->payment_proof) }}
             </a>
             - upload a new file to replace it.

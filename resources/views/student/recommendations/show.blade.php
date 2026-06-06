@@ -24,8 +24,8 @@
         <div class="max-w-2xl space-y-5">
             <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden">
                 <div class="flex items-center gap-4 px-6 py-5 border-b border-gray-100">
-                    @if($studentRecommendation->institution?->logo)
-                        <img src="{{ Storage::url($studentRecommendation->institution->logo) }}" class="w-14 h-14 rounded-xl object-cover">
+                    @if(storage_exists($studentRecommendation->institution?->logo))
+                        <img src="{{ storage_url($studentRecommendation->institution->logo) }}" class="w-14 h-14 rounded-xl object-cover">
                     @else
                         <div class="w-14 h-14 rounded-xl bg-yellow-50 flex items-center justify-center">
                             <span class="text-yellow-600 text-2xl font-bold">{{ strtoupper(substr($studentRecommendation->institution?->name ?? 'I', 0, 1)) }}</span>
