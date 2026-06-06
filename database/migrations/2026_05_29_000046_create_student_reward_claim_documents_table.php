@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('verification_note')->nullable();
             $table->timestamps();
 
-            $table->index(['student_reward_claim_id', 'document_type']);
+            $table->index(['student_reward_claim_id', 'document_type'], 'srcd_claim_id_doc_type_index');
         });
     }
 
