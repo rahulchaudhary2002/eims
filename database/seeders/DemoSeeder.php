@@ -433,34 +433,40 @@ class DemoSeeder extends Seeder
         }
 
         // ── 13. STUDENT ACADEMIC RECORDS ──────────────────────────────
+        // Delete and recreate so records are always linked to the correct student IDs
+        $demoStudentIds = collect($students)->pluck('id')->all();
+        StudentAcademicRecord::whereIn('student_id', $demoStudentIds)->delete();
+
+        $academicRecords = [];
         $levels = ['slc_see', 'plus2'];
         foreach ($students as $i => $st) {
             foreach ($levels as $j => $level) {
-                StudentAcademicRecord::firstOrCreate(
-                    ['student_id' => $st->id, 'level' => $level],
-                    [
-                        'institution_name' => $level === 'slc_see' ? 'Janata Secondary School' : 'Galaxy Higher Secondary School',
-                        'board'            => $level === 'slc_see' ? 'neb' : 'neb',
-                        'passed_year'      => $level === 'slc_see' ? 2017 + $i : 2019 + $i,
-                        'gpa'              => round(2.5 + ($i * 0.3), 2),
-                        'percentage'       => round(65 + ($i * 3.5), 2),
-                        'is_verified'      => $j === 0,
-                    ]
-                );
+                $academicRecords[] = StudentAcademicRecord::create([
+                    'student_id'       => $st->id,
+                    'level'            => $level,
+                    'institution_name' => $level === 'slc_see' ? 'Janata Secondary School' : 'Galaxy Higher Secondary School',
+                    'board'            => 'neb',
+                    'passed_year'      => $level === 'slc_see' ? 2017 + $i : 2019 + $i,
+                    'gpa'              => round(2.5 + ($i * 0.3), 2),
+                    'percentage'       => round(65 + ($i * 3.5), 2),
+                    'is_verified'      => $j === 0,
+                ]);
             }
         }
 
         // ── 14. STUDENT DOCUMENTS ──────────────────────────────────────
+        // Delete and recreate so documents are always linked to the correct student IDs
+        StudentDocument::whereIn('student_id', $demoStudentIds)->delete();
+
         foreach ($students as $st) {
             foreach (['citizenship', 'pp_photo'] as $docType) {
-                StudentDocument::firstOrCreate(
-                    ['student_id' => $st->id, 'document_type' => $docType],
-                    [
-                        'title'     => ucfirst(str_replace('_', ' ', $docType)),
-                        'file_path' => 'student-docs/sample-' . $docType . '.pdf',
-                        'status'    => 'active',
-                    ]
-                );
+                StudentDocument::create([
+                    'student_id'    => $st->id,
+                    'document_type' => $docType,
+                    'title'         => ucfirst(str_replace('_', ' ', $docType)),
+                    'file_path'     => 'student-docs/sample-' . $docType . '.pdf',
+                    'status'        => 'active',
+                ]);
             }
         }
 
@@ -956,6 +962,16 @@ class DemoSeeder extends Seeder
             );
         }
 
-        $this->command->info('DemoSeeder complete. Seeded: users, students, institutions, programs, courses, certifications, applications, admissions, scholarships, commissions, messages, and more.');
+        $this->command->info('DemoSeeder complete.');
+        $this->command->newLine();
+        $this->command->info('── Demo Student Accounts (password: password) ─────────────────');
+        foreach ($students as $i => $st) {
+            $recordIds = collect($academicRecords)
+                ->filter(fn($r) => $r->student_id === $st->id)
+                ->pluck('id')
+                ->join(', ');
+            $this->command->line("  [{$st->id}] {$st->email}  →  academic record IDs: {$recordIds}");
+        }
+        $this->command->newLine();
     }
 }
