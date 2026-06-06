@@ -20,14 +20,18 @@
 </section>
 
 <section class="bg-[#f7fafc] pt-12 pb-20">
-    <div class="container max-w-7xl mx-auto px-4 space-y-4">
+    <div class="container max-w-7xl mx-auto px-4">
 
         @if(session('success'))
-        <div class="bg-green-50 border border-green-200 text-green-700 px-5 py-3 rounded-xl text-sm font-medium flex items-center gap-2">
+        <div class="bg-green-50 border border-green-200 text-green-700 px-5 py-3 rounded-xl text-sm font-medium flex items-center gap-2 mb-6">
             <i class="fas fa-check-circle"></i> {{ session('success') }}
         </div>
         @endif
 
+        <div class="grid lg:grid-cols-[minmax(0,1fr)_320px] gap-8 items-start">
+
+        {{-- Main content --}}
+        <div class="min-w-0">
         <div class="bg-white rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.08)] border border-gray-200 overflow-hidden">
             @if($records->count())
             <div class="overflow-x-auto">
@@ -137,6 +141,11 @@
             </div>
             @endif
         </div>
+        </div>{{-- end main --}}
+
+        @include('student.academic-records.partials.sidebar')
+
+        </div>{{-- end flex --}}
 
     </div>
 </section>

@@ -20,36 +20,41 @@
 
 <section class="bg-[#f7fafc] pt-12 pb-20">
     <div class="container max-w-7xl mx-auto px-4">
-        <div class="student-form-shell">
-            <div class="student-form-card">
-                <div class="student-form-header">
-                    <h2 class="student-form-title">Academic Record</h2>
-                    <p class="student-form-description">Add your educational history with clean, structured details just like the main inquiry and application forms.</p>
+        <div class="grid lg:grid-cols-[minmax(0,1fr)_320px] gap-8 items-start">
+
+            {{-- Form --}}
+            <div class="min-w-0">
+                <div class="student-form-card">
+                    <div class="student-form-header">
+                        <h2 class="student-form-title">Academic Record</h2>
+                        <p class="student-form-description">Add your educational history with clean, structured details.</p>
+                    </div>
+
+                    @if ($errors->any())
+                        <div class="student-form-errors">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('student.academic-records.store') }}" enctype="multipart/form-data" class="space-y-5">
+                        @csrf
+                        @include('student.academic-records.partials.form')
+                        <div class="student-form-actions">
+                            <a href="{{ route('student.academic-records.index') }}" class="student-form-btn-secondary">Cancel</a>
+                            <button type="submit" class="student-form-btn-primary">
+                                <i class="fas fa-save"></i> Save Record
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                @if ($errors->any())
-                    <div class="student-form-errors">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                <form method="POST" action="{{ route('student.academic-records.store') }}" enctype="multipart/form-data" class="space-y-5">
-                    @csrf
-                    @include('student.academic-records.partials.form')
-                    <div class="student-form-actions">
-                        <a href="{{ route('student.academic-records.index') }}"
-                           class="student-form-btn-secondary">Cancel</a>
-                        <button type="submit"
-                            class="student-form-btn-primary">
-                            <i class="fas fa-save"></i> Save Record
-                        </button>
-                    </div>
-                </form>
             </div>
+
+            @include('student.academic-records.partials.sidebar')
+
         </div>
     </div>
 </section>

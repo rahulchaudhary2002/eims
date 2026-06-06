@@ -18,11 +18,12 @@
 
 <section class="bg-[#f7fafc] pt-12 pb-20">
     <div class="container max-w-7xl mx-auto px-4">
-        <div class="student-form-shell">
+        <div class="grid lg:grid-cols-[minmax(0,1fr)_320px] gap-8 items-start">
+
             <div class="student-form-card">
                 <div class="student-form-header">
                     <h2 class="student-form-title">Document Upload</h2>
-                    <p class="student-form-description">Use the same polished document form pattern as the main inquiry and application pages.</p>
+                    <p class="student-form-description">Add a new document to your profile.</p>
                 </div>
 
                 @if ($errors->any())
@@ -39,15 +40,16 @@
                     @csrf
                     @include('student.documents.partials.form')
                     <div class="student-form-actions">
-                        <a href="{{ route('student.documents.index') }}"
-                           class="student-form-btn-secondary">Cancel</a>
-                        <button type="submit"
-                            class="student-form-btn-primary">
+                        <a href="{{ route('student.documents.index') }}" class="student-form-btn-secondary">Cancel</a>
+                        <button type="submit" class="student-form-btn-primary">
                             <i class="fas fa-upload"></i> Upload
                         </button>
                     </div>
                 </form>
             </div>
+
+            @include('student.academic-records.partials.sidebar')
+
         </div>
     </div>
 </section>

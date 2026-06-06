@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StoreStudentDocumentRequest;
 use App\Http\Requests\Student\UpdateStudentDocumentRequest;
+use App\Models\Institution;
+use App\Models\InstitutionProgram;
+use App\Models\Post;
 use App\Models\StudentDocument;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,12 +23,16 @@ class StudentDocumentController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('student.documents.index', compact('documents'));
+        [$latestPosts, $featuredInstitutions, $openPrograms] = $this->sidebarData();
+
+        return view('student.documents.index', compact('documents', 'latestPosts', 'featuredInstitutions', 'openPrograms'));
     }
 
     public function create(): View
     {
-        return view('student.documents.create');
+        [$latestPosts, $featuredInstitutions, $openPrograms] = $this->sidebarData();
+
+        return view('student.documents.create', compact('latestPosts', 'featuredInstitutions', 'openPrograms'));
     }
 
     public function store(StoreStudentDocumentRequest $request): RedirectResponse
@@ -57,7 +64,9 @@ class StudentDocumentController extends Controller
     {
         abort_if($document->student_id !== $request->user('student')->id, 403);
 
-        return view('student.documents.edit', compact('document'));
+        [$latestPosts, $featuredInstitutions, $openPrograms] = $this->sidebarData();
+
+        return view('student.documents.edit', compact('document', 'latestPosts', 'featuredInstitutions', 'openPrograms'));
     }
 
     public function update(UpdateStudentDocumentRequest $request, StudentDocument $document): RedirectResponse
@@ -79,6 +88,28 @@ class StudentDocumentController extends Controller
 
         return redirect()->route('student.documents.index')
             ->with('success', 'Document updated successfully.');
+    }
+
+    private function sidebarData(): array
+    {
+        $latestPosts = Post::where('is_published', true)
+            ->orderByDesc('published_at')
+            ->limit(5)
+            ->get();
+
+        $featuredInstitutions = Institution::where('status', 'active')
+            ->where('is_featured', true)
+            ->limit(4)
+            ->get();
+
+        $openPrograms = InstitutionProgram::where('status', 'open')
+            ->whereHas('institution', fn($q) => $q->where('is_featured', true))
+            ->with(['program', 'institution'])
+            ->latest()
+            ->limit(4)
+            ->get();
+
+        return [$latestPosts, $featuredInstitutions, $openPrograms];
     }
 
     public function destroy(Request $request, StudentDocument $document): RedirectResponse
