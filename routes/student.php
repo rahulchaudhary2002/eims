@@ -35,6 +35,8 @@ Route::middleware(['auth:student'])
 
         // Academic Records
         Route::resource('academic-records', StudentAcademicRecordController::class);
+        Route::delete('academic-records/documents/{document}', [StudentAcademicRecordController::class, 'destroyDocument'])
+            ->name('academic-records.documents.destroy');
 
         // Documents
         Route::resource('documents', StudentDocumentController::class);

@@ -27,6 +27,7 @@ class StudentDocument extends Model
 
     protected $fillable = [
         'student_id',
+        'academic_record_id',
         'document_type',
         'title',
         'file_path',
@@ -37,5 +38,10 @@ class StudentDocument extends Model
     public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function academicRecord(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(StudentAcademicRecord::class, 'academic_record_id');
     }
 }

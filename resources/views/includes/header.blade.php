@@ -128,6 +128,8 @@
                 'My Account' => [
                     ['fas fa-tachometer-alt', 'Dashboard', 'student.dashboard', 'text-[#4299e1]'],
                     ['fas fa-user', 'Profile', 'student.profile.index', 'text-[#4299e1]'],
+                    ['fas fa-graduation-cap', 'Academic Records', 'student.academic-records.index', 'text-[#805ad5]'],
+                    ['fas fa-folder-open', 'My Documents', 'student.documents.index', 'text-[#d69e2e]'],
                     ['fas fa-cog', 'Settings', 'student.settings.index', 'text-[#718096]'],
                 ],
                 'Applications' => [
@@ -290,7 +292,7 @@
                     {{-- All student links grouped --}}
                     @php
                     $mobileGroups = [
-                        [['fas fa-tachometer-alt', 'Dashboard', 'student.dashboard'], ['fas fa-user', 'Profile', 'student.profile.index'], ['fas fa-cog', 'Settings', 'student.settings.index']],
+                        [['fas fa-tachometer-alt', 'Dashboard', 'student.dashboard'], ['fas fa-user', 'Profile', 'student.profile.index'], ['fas fa-graduation-cap', 'Academic Records', 'student.academic-records.index'], ['fas fa-folder-open', 'My Documents', 'student.documents.index'], ['fas fa-cog', 'Settings', 'student.settings.index']],
                         [['fas fa-file-alt', 'Applications', 'student.applications.index'], ['fas fa-graduation-cap', 'Scholarships', 'student.scholarship-applications.index'], ['fas fa-coins', 'Cashbacks', 'student.cashbacks.index'], ['fas fa-gift', 'Reward Claims', 'student.reward-claims.index']],
                         [['fas fa-newspaper', 'My Feed', 'student.feed.index'], ['fas fa-heart', 'Favorites', 'student.favorites.index'], ['fas fa-balance-scale', 'Compare', 'website.compare.index'], ['fas fa-star', 'Recommendations', 'student.recommendations.index']],
                         [['fas fa-comments', 'Inquiries', 'website.inquiry.create'], ['fas fa-calendar', 'Counseling', 'student.counseling-sessions.index'], ['fas fa-star-half-alt', 'Reviews', 'student.reviews.index']],

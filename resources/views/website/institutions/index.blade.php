@@ -1,7 +1,7 @@
 @extends('website.layouts.app')
 
 @section('meta-title', 'Institutions - ' . config('app.name'))
-@section('meta-description', 'Browse and filter top educational institutions — colleges, schools, universities, and consultancies — by type, location, and more.')
+@section('meta-description', 'Browse and filter top educational institutions - colleges, schools, universities, and consultancies - by type, location, and more.')
 
 @section('content')
 
@@ -15,7 +15,7 @@
                 Find Your Perfect Institution
             </h1>
             <p class="text-[1.2rem] text-white/90 mb-8">
-                Browse and compare institutions across Nepal — colleges, schools, universities, and consultancies. Filter by location, programs, and type to find the right fit for your educational journey.
+                Browse and compare institutions across Nepal - colleges, schools, universities, and consultancies. Filter by location, programs, and type to find the right fit for your educational journey.
             </p>
 
             <div class="flex flex-wrap justify-center gap-4">

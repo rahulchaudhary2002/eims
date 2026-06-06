@@ -24,8 +24,14 @@ class UpdateStudentAcademicRecordRequest extends FormRequest
             'gpa'                        => ['nullable', 'numeric', 'min:0', 'max:4', 'required_if:grade_type,gpa'],
             'percentage'                 => ['nullable', 'numeric', 'min:0', 'max:100', 'required_if:grade_type,percentage'],
             'symbol_number'              => ['nullable', 'string', 'max:50'],
-            'transcript_file'            => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
-            'character_certificate_file' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
+            'transcript_file'               => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
+            'character_certificate_file'    => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
+            'additional_documents'          => ['nullable', 'array'],
+            'additional_documents.*'        => ['required_with:additional_document_types', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
+            'additional_document_titles'    => ['nullable', 'array'],
+            'additional_document_titles.*'  => ['required_with:additional_documents', 'string', 'max:255'],
+            'additional_document_types'     => ['nullable', 'array'],
+            'additional_document_types.*'   => ['required_with:additional_documents', 'string', 'in:' . implode(',', array_keys(\App\Models\StudentDocument::DOCUMENT_TYPES))],
         ];
     }
 }

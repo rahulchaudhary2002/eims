@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StudentAcademicRecord extends Model
 {
@@ -64,5 +65,10 @@ class StudentAcademicRecord extends Model
     public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function additionalDocuments(): HasMany
+    {
+        return $this->hasMany(StudentDocument::class, 'academic_record_id');
     }
 }

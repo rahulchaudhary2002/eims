@@ -21,7 +21,7 @@
                 <p class="text-sm font-semibold text-gray-800 group-hover:text-[#4299e1] transition line-clamp-2 leading-snug">{{ $post->title }}</p>
                 <p class="text-xs text-gray-400 mt-1">
                     <span class="capitalize">{{ \App\Models\Post::TYPES[$post->type] ?? $post->type }}</span>
-                    · {{ $post->published_at?->diffForHumans() ?? '—' }}
+                    · {{ $post->published_at?->diffForHumans() ?? '-' }}
                 </p>
             </div>
         </a>

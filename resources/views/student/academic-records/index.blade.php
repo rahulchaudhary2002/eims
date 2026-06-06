@@ -65,10 +65,10 @@
                             <td class="px-5 py-4 text-gray-500">
                                 @if($record->board)<div>{{ \App\Models\StudentAcademicRecord::BOARDS[$record->board] ?? $record->board }}</div>@endif
                                 @if($record->faculty)<div class="text-gray-400 text-xs mt-0.5">{{ $record->faculty }}</div>@endif
-                                @if(!$record->board && !$record->faculty)<span class="text-gray-300">—</span>@endif
+                                @if(!$record->board && !$record->faculty)<span class="text-gray-300">-</span>@endif
                             </td>
                             <td class="px-5 py-4 text-gray-700 font-medium">
-                                {{ $record->passed_year ?? '—' }}
+                                {{ $record->passed_year ?? '-' }}
                             </td>
                             <td class="px-5 py-4">
                                 @if($record->gpa)
@@ -80,7 +80,7 @@
                                         {{ number_format($record->percentage, 2) }}%
                                     </span>
                                 @else
-                                    <span class="text-gray-300">—</span>
+                                    <span class="text-gray-300">-</span>
                                 @endif
                             </td>
                             <td class="px-5 py-4">

@@ -9,6 +9,7 @@ use App\Models\Institution;
 use App\Models\InstitutionProgram;
 use App\Models\Post;
 use App\Models\StudentAcademicRecord;
+use App\Models\StudentDocument;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -50,7 +51,9 @@ class StudentAcademicRecordController extends Controller
                 ->store("students/{$studentId}/academic", 'public');
         }
 
-        StudentAcademicRecord::create($data);
+        $record = StudentAcademicRecord::create($data);
+
+        $this->saveAdditionalDocuments($request, $record, $studentId);
 
         return redirect()->route('student.academic-records.index')
             ->with('success', 'Academic record added successfully.');
@@ -67,6 +70,7 @@ class StudentAcademicRecordController extends Controller
     {
         abort_if($academicRecord->student_id !== $request->user('student')->id, 403);
 
+        $academicRecord->load('additionalDocuments');
         [$latestPosts, $featuredInstitutions, $openPrograms] = $this->sidebarData();
 
         return view('student.academic-records.edit', compact('academicRecord', 'latestPosts', 'featuredInstitutions', 'openPrograms'));
@@ -96,8 +100,47 @@ class StudentAcademicRecordController extends Controller
 
         $academicRecord->update($data);
 
+        $this->saveAdditionalDocuments($request, $academicRecord, $studentId);
+
         return redirect()->route('student.academic-records.index')
             ->with('success', 'Academic record updated successfully.');
+    }
+
+    public function destroyDocument(Request $request, StudentDocument $document): RedirectResponse
+    {
+        $record = $document->academicRecord;
+        abort_if($record->student_id !== $request->user('student')->id, 403);
+
+        Storage::disk('public')->delete($document->file_path);
+        $document->delete();
+
+        return back()->with('success', 'Document removed.');
+    }
+
+    private function saveAdditionalDocuments(Request $request, StudentAcademicRecord $record, int $studentId): void
+    {
+        if (!$request->hasFile('additional_documents')) {
+            return;
+        }
+
+        foreach ($request->file('additional_documents') as $index => $file) {
+            if (!$file || !$file->isValid()) {
+                continue;
+            }
+
+            $title = $request->input("additional_document_titles.{$index}") ?: $file->getClientOriginalName();
+            $type  = $request->input("additional_document_types.{$index}", 'other');
+            $path  = $file->store("students/{$studentId}/academic/additional", 'public');
+
+            StudentDocument::create([
+                'student_id'         => $studentId,
+                'academic_record_id' => $record->id,
+                'document_type'      => $type,
+                'title'              => $title,
+                'file_path'          => $path,
+                'status'             => 'active',
+            ]);
+        }
     }
 
     private function sidebarData(): array
