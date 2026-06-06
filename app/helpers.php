@@ -11,7 +11,7 @@ function storage_url(?string $path, string $default = ''): string
     if (!$path) return $default;
 
     try {
-        if (!Storage::exists($path)) return $default;
+        if (!Storage::disk('public')->exists($path)) return $default;
     } catch (\Exception) {
         return $default;
     }
@@ -27,7 +27,7 @@ function storage_exists(?string $path): bool
     if (!$path) return false;
 
     try {
-        return Storage::exists($path);
+        return Storage::disk('public')->exists($path);
     } catch (\Exception) {
         return false;
     }
