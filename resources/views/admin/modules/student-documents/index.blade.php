@@ -82,8 +82,12 @@
                     <tr>
                         <td class="text-slate-400 text-sm">{{ $documents->firstItem() + $loop->index }}</td>
                         <td>
-                            <div class="font-medium text-slate-800">{{ $doc->student->name }}</div>
-                            <div class="text-xs text-slate-400">{{ $doc->student->email }}</div>
+                            @if($doc->student)
+                                <a href="{{ route('admin.students.show', $doc->student) }}" class="font-medium text-slate-800 hover:text-blue-600">{{ $doc->student->name }}</a>
+                                <div class="text-xs text-slate-400">{{ $doc->student->email }}</div>
+                            @else
+                                <span class="text-slate-400 text-sm italic">Deleted student</span>
+                            @endif
                         </td>
                         <td>
                             <span class="badge badge-blue">

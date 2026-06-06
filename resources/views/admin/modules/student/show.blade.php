@@ -3,7 +3,7 @@
 @section('page-title', 'Student Details')
 
 @section('content')
-<div class="space-y-5" x-data="{ tab: '{{ session('tab', 'overview') }}' }">
+<div class="space-y-5" x-data="studentTabs">
 
     <x-admin.page-header :title="$student->name" subtitle="Student account details"
         :breadcrumbs="[['label'=>'Dashboard','route'=>'admin.dashboard'],['label'=>'Students','route'=>'admin.students.index'],['label'=>$student->name]]">
@@ -84,7 +84,7 @@
         <nav class="flex gap-1 p-1.5 min-w-max">
             @foreach($tabs as $t)
             <button
-                @click="tab = '{{ $t['key'] }}'"
+                @click="setTab('{{ $t['key'] }}')"
                 :class="tab === '{{ $t['key'] }}' ? 'bg-white shadow-sm text-slate-800 font-semibold' : 'text-slate-500 hover:text-slate-700 hover:bg-white/60'"
                 class="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm transition-all whitespace-nowrap">
                 {{ $t['label'] }}
@@ -388,6 +388,19 @@
                                     <a href="{{ route('admin.student-academic-records.edit', $record) }}" class="btn-icon btn-icon-edit" title="Edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125"/></svg>
                                     </a>
+                                    @if(!$record->is_verified)
+                                    <form method="POST" action="{{ route('admin.student-academic-records.verify', $record) }}">
+                                        @csrf @method('PATCH')
+                                        <button type="submit"
+                                            title="{{ $record->is_verified ? 'Remove verification' : 'Mark as verified' }}"
+                                            class="btn-icon {{ $record->is_verified ? 'text-emerald-600 hover:bg-emerald-50 border-emerald-200' : 'text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 border-slate-200' }} w-7 h-7 flex items-center justify-center rounded-lg border transition-colors">
+                                                {{-- Outline: click to verify --}}
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -1030,4 +1043,23 @@
     </div>
 
 </div>
+@endsection
+
+@section('page-specific-script')
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('studentTabs', () => ({
+        tab: window.location.hash.slice(1) || 'overview',
+        setTab(key) {
+            this.tab = key;
+            history.replaceState(null, '', window.location.pathname + '#' + key);
+        },
+        init() {
+            window.addEventListener('hashchange', () => {
+                this.tab = window.location.hash.slice(1) || 'overview';
+            });
+        }
+    }));
+});
+</script>
 @endsection

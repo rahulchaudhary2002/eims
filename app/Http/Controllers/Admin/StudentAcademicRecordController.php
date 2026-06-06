@@ -143,8 +143,19 @@ class StudentAcademicRecordController extends Controller
 
     public function verify(StudentAcademicRecord $studentAcademicRecord): RedirectResponse
     {
-        $studentAcademicRecord->update(['is_verified' => true]);
+        $isVerified = !$studentAcademicRecord->is_verified;
+        $studentAcademicRecord->update(['is_verified' => $isVerified]);
 
-        return back()->with('success', 'Academic record marked as verified.');
+        $message = $isVerified
+            ? 'Academic record marked as verified.'
+            : 'Academic record verification removed.';
+
+        $studentShowUrl = route('admin.students.show', $studentAcademicRecord->student_id);
+
+        if (str_starts_with(url()->previous(), $studentShowUrl)) {
+            return redirect($studentShowUrl . '#academic')->with('success', $message);
+        }
+
+        return redirect()->back()->with('success', $message);
     }
 }

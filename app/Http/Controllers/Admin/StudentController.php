@@ -116,6 +116,11 @@ class StudentController extends Controller
             Storage::disk('public')->delete($student->avatar);
         }
 
+        $student->update([
+            'email' => 'deleted-student-' . $student->id . '-' . $student->email,
+            'phone' => $student->phone ? 'deleted-student-' . $student->id . '-' . $student->phone : null,
+        ]);
+
         $student->delete();
 
         return redirect()->route('admin.students.index')

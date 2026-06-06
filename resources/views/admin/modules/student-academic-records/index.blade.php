@@ -99,8 +99,12 @@
                     <tr>
                         <td class="text-slate-400 text-sm">{{ $records->firstItem() + $loop->index }}</td>
                         <td>
-                            <div class="font-medium text-slate-800">{{ $record->student->name }}</div>
-                            <div class="text-xs text-slate-400">{{ $record->student->email }}</div>
+                            @if($record->student)
+                                <a href="{{ route('admin.students.show', $record->student) }}" class="font-medium text-slate-800 hover:text-blue-600">{{ $record->student->name }}</a>
+                                <div class="text-xs text-slate-400">{{ $record->student->email }}</div>
+                            @else
+                                <span class="text-slate-400 text-sm italic">Deleted student</span>
+                            @endif
                         </td>
                         <td>
                             <span class="badge badge-blue">
