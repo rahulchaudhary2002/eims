@@ -1076,12 +1076,12 @@ select.form-control {
     white-space: nowrap;
 }
 
-.badge-success  { background: var(--color-success-light); color: #15803D; }
+.badge-success, .badge-green  { background: var(--color-success-light); color: #15803D; }
 .badge-warning  { background: var(--color-warning-light); color: #B45309; }
-.badge-danger   { background: var(--color-danger-light);  color: #991B1B; }
-.badge-info     { background: var(--color-info-light);    color: #0369A1; }
-.badge-primary  { background: var(--color-primary-light); color: #1D4ED8; }
-.badge-secondary { background: #F1F5F9; color: #475569; }
+.badge-danger, .badge-red   { background: var(--color-danger-light);  color: #991B1B; }
+.badge-info, .badge-blue     { background: var(--color-info-light);    color: #0369A1; }
+.badge-primary, .badge-indigo  { background: var(--color-primary-light); color: #1D4ED8; }
+.badge-secondary, .badge-gray { background: #F1F5F9; color: #475569; }
 .badge-slate    { background: #F1F5F9; color: #475569; }
 .badge-sky      { background: var(--color-sky-light);     color: #0369A1; }
 .badge-approved { background: #DCFCE7; color: #15803D; }

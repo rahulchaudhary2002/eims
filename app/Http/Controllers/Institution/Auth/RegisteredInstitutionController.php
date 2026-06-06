@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Institution\Auth;
 
+use App\Events\NewRegistrationNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Level;
 use App\Models\ProgramCategory;
+use App\Models\User;
+use App\Notifications\NewRegistrationAlert;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules\Password;
 
 class RegisteredInstitutionController extends Controller
@@ -38,6 +42,14 @@ class RegisteredInstitutionController extends Controller
 
         // Store registration metadata in the session so it can be picked up after admin review.
         // (In a full implementation this would be a dedicated InstitutionRegistration model.)
+        // Notify all platform users in real-time
+        $platformUsers = User::where('is_active', true)
+            ->where(fn ($q) => $q->where('is_super_admin', true)->orWhere('is_platform_user', true))
+            ->get();
+        $userUrl = route('admin.users.show', $user->id);
+        Notification::send($platformUsers, new NewRegistrationAlert('institution', $user->name, $user->email, $userUrl));
+        event(new NewRegistrationNotification('institution', $user->name, $user->email, $user->id, $userUrl));
+
         session()->flash('institution_registered', true);
 
         return redirect()->route('register', ['tab' => 'institution'])

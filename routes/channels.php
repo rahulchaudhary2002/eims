@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 // Private conversation channel - authorizes students, institution users, and super admins.
+// Platform-wide notification channel — accessible to super admins and platform users
+Broadcast::channel('platform.notifications', function ($user) {
+    return $user instanceof \App\Models\User
+        && ($user->is_super_admin || $user->is_platform_user);
+});
+
 Broadcast::channel('conversation.{conversationId}', function ($user, int $conversationId) {
     $conversation = Conversation::find($conversationId);
 

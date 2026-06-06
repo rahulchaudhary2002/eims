@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Student\Auth;
 
+use App\Events\NewRegistrationNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use App\Models\User;
+use App\Notifications\NewRegistrationAlert;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
@@ -39,6 +43,14 @@ class RegisteredStudentController extends Controller
         ]);
 
         event(new Registered($student));
+
+        // Notify all platform users in real-time
+        $platformUsers = User::where('is_active', true)
+            ->where(fn ($q) => $q->where('is_super_admin', true)->orWhere('is_platform_user', true))
+            ->get();
+        $studentUrl = route('admin.students.show', $student->id);
+        Notification::send($platformUsers, new NewRegistrationAlert('student', $student->name, $student->email, $studentUrl));
+        event(new NewRegistrationNotification('student', $student->name, $student->email, $student->id, $studentUrl));
 
         Auth::guard('student')->login($student);
 

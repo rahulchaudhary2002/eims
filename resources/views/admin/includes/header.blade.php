@@ -25,15 +25,40 @@
     <div class="flex items-center gap-2 shrink-0">
 
         {{-- Notifications --}}
-        <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+        @php $unreadCount = auth('web')->user()->unreadNotifications->count(); @endphp
+        <div class="relative" x-data="{
+                open: false,
+                unread: {{ $unreadCount }},
+                items: [],
+                init() {
+                    if (typeof window.Echo === 'undefined') return;
+                    window.Echo.private('platform.notifications')
+                        .listen('.new.registration', (e) => {
+                            this.unread++;
+                            this.items.unshift({
+                                message: e.message,
+                                time: e.time,
+                                url: e.url || null,
+                            });
+                            this.showToast(e.message, e.url);
+                        });
+                },
+                showToast(msg, url) {
+                    const t = document.createElement('a');
+                    t.href = url || '#';
+                    t.className = 'fixed bottom-5 right-5 z-[9999] bg-slate-800 text-white text-sm px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 hover:bg-slate-700 transition-all no-underline cursor-pointer';
+                    t.innerHTML = `<span class='w-2 h-2 rounded-full bg-green-400 shrink-0'></span><span>${msg}</span><span class='text-xs text-slate-400 shrink-0'>View →</span>`;
+                    document.body.appendChild(t);
+                    setTimeout(() => t.remove(), 5000);
+                }
+            }"
+            @click.outside="open = false">
             <button @click="open = !open"
                 class="relative w-9 h-9 flex items-center justify-center rounded-button border border-slate-200 bg-white text-slate-500 hover:bg-primary-50 hover:text-primary-600 hover:border-primary-200 transition-all duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/>
                 </svg>
-                @if(auth('web')->user()->unreadNotifications->count() > 0)
-                <span class="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full ring-2 ring-white"></span>
-                @endif
+                <span x-show="unread > 0" class="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full ring-2 ring-white"></span>
             </button>
 
             <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-150"
@@ -41,31 +66,55 @@
                  x-transition:enter-end="opacity-100 scale-100 translate-y-0"
                  class="absolute top-12 right-0 w-80 bg-white rounded-card border border-slate-200 shadow-medium z-50">
                 <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-                    <span class="text-sm font-semibold text-slate-700">Notifications</span>
+                    <span class="text-sm font-semibold text-slate-700">
+                        Notifications
+                        <span x-show="unread > 0" x-text="'(' + unread + ')'" class="text-primary-600 ml-1"></span>
+                    </span>
                     <form method="POST" action="{{ route('admin.notification.read-all') }}">
                         @csrf
-                        <button type="submit" class="text-xs text-primary-600 hover:underline font-medium">
+                        <button type="submit" @click="unread = 0" class="text-xs text-primary-600 hover:underline font-medium">
                             Mark all read
                         </button>
                     </form>
                 </div>
-                <ul class="max-h-80 overflow-y-auto divide-y divide-slate-50">
+                <ul class="max-h-80 overflow-y-auto divide-y divide-slate-50" id="notification-list">
+                    {{-- Real-time items prepended by Alpine --}}
+                    <template x-for="(item, i) in items" :key="i">
+                        <li class="hover:bg-slate-50 transition-colors">
+                            <a :href="item.url || '#'" class="px-4 py-3 flex items-start gap-3 no-underline">
+                                <div class="mt-1.5 shrink-0">
+                                    <span class="block w-2 h-2 rounded-full bg-primary-500"></span>
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-sm text-slate-700 leading-snug" x-text="item.message"></p>
+                                    <p class="text-xs text-slate-400 mt-1" x-text="item.time"></p>
+                                </div>
+                            </a>
+                        </li>
+                    </template>
                     @forelse(auth('web')->user()->notifications()->latest()->take(8)->get() as $notification)
-                    <li class="px-4 py-3 hover:bg-slate-50 flex items-start gap-3 transition-colors {{ $notification->read_at ? 'opacity-60' : '' }}">
-                        <div class="mt-1.5 shrink-0">
-                            @if($notification->read_at)
-                            <span class="block w-2 h-2 rounded-full bg-slate-300"></span>
-                            @else
-                            <span class="block w-2 h-2 rounded-full bg-primary-500"></span>
-                            @endif
+                    @php $notifUrl = $notification->data['url'] ?? null; @endphp
+                    <li class="hover:bg-slate-50 transition-colors {{ $notification->read_at ? 'opacity-60' : '' }}">
+                        @if($notifUrl)
+                        <a href="{{ $notifUrl }}" class="px-4 py-3 flex items-start gap-3 no-underline">
+                        @else
+                        <div class="px-4 py-3 flex items-start gap-3">
+                        @endif
+                            <div class="mt-1.5 shrink-0">
+                                <span class="block w-2 h-2 rounded-full {{ $notification->read_at ? 'bg-slate-300' : 'bg-primary-500' }}"></span>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm text-slate-700 leading-snug">{{ $notification->data['message'] ?? 'Notification' }}</p>
+                                <p class="text-xs text-slate-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                            </div>
+                        @if($notifUrl)
+                        </a>
+                        @else
                         </div>
-                        <div class="min-w-0">
-                            <p class="text-sm text-slate-700 leading-snug">{{ $notification->data['message'] ?? 'Notification' }}</p>
-                            <p class="text-xs text-slate-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
-                        </div>
+                        @endif
                     </li>
                     @empty
-                    <li class="px-4 py-8 text-center text-slate-400 text-sm">
+                    <li class="px-4 py-8 text-center text-slate-400 text-sm" x-show="items.length === 0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mx-auto mb-2 text-slate-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.143 17.082a24.248 24.248 0 003.844.148m-3.844-.148a23.856 23.856 0 01-5.455-1.31 8.964 8.964 0 002.3-5.542m3.155 6.852a3 3 0 005.667 1.097m1.765-6.565a4.5 4.5 0 00-1.765-3.346M3 3l18 18"/>
                         </svg>
@@ -122,34 +171,3 @@
 
 </header>
 
-
-<script>
-    // Toggle Sidebar
-    document.getElementById('toggleSidebar').addEventListener('click', function() {
-        document.body.classList.toggle('sidebar-closed');
-    });
-
-    // Notifications Dropdown
-    const notificationBtn = document.getElementById('notificationBtn');
-    const notificationDropdown = document.getElementById('notificationDropdown');
-    notificationBtn.addEventListener('click', () => {
-        notificationDropdown.classList.toggle('hidden');
-    });
-
-    // Profile Dropdown
-    const profileBtn = document.getElementById('profileBtn');
-    const profileDropdown = document.getElementById('profileDropdown');
-    profileBtn.addEventListener('click', () => {
-        profileDropdown.classList.toggle('hidden');
-    });
-
-    // Close on click outside
-    document.addEventListener('click', function(e) {
-        if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
-            notificationDropdown.classList.add('hidden');
-        }
-        if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
-            profileDropdown.classList.add('hidden');
-        }
-    });
-</script>
