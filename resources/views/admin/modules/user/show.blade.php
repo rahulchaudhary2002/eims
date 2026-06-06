@@ -37,6 +37,8 @@
                     <h2 class="text-xl font-bold text-slate-800">{{ $user->name }}</h2>
                     @if($user->is_super_admin)
                     <span class="badge badge-red">Super Admin</span>
+                    @elseif($user->is_platform_user)
+                    <span class="badge badge-blue">Platform User</span>
                     @endif
                     @if($user->is_active)
                     <span class="badge badge-green">Active</span>

@@ -28,22 +28,25 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        /** @var \App\Models\User $user */
         $user = auth('web')->user();
 
-        // Super admins go to admin dashboard; institution users go to institution dashboard
-        if ($user->is_super_admin) {
-            return redirect()->intended(route('admin.dashboard', absolute: false));
-        }
-
-        // Set current institution for institution users
+        // Always set institution session if the user has any active institution assignments
         $firstInstitution = $user->activeInstitutions()->first();
         if ($firstInstitution) {
             session([
                 'current_institution_id' => $firstInstitution->id,
-                'active_institution_id' => $firstInstitution->id,
+                'active_institution_id'  => $firstInstitution->id,
             ]);
         }
 
+        // Platform users (including super admins) go to admin dashboard
+        // They can still navigate to institution dashboard if they have assignments
+        if ($user->is_super_admin || $user->is_platform_user) {
+            return redirect()->intended(route('admin.dashboard', absolute: false));
+        }
+
+        // Institution-only users go to institution dashboard
         return redirect()->intended(route('institution.dashboard', absolute: false));
     }
 

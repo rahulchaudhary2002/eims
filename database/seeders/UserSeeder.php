@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
                 'email' => 'admin@app.com',
                 'phone' => '1234567890',
                 'is_super_admin' => true,
+                'is_platform_user' => true,
                 'is_active' => true,
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),

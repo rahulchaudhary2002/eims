@@ -296,6 +296,15 @@
 
     <div class="flex flex-col gap-4">
         <label class="flex items-center gap-3 cursor-pointer select-none">
+            <input type="checkbox" name="is_platform_user" value="1"
+                class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                {{ old('is_platform_user', $user->is_platform_user ?? false) ? 'checked' : '' }}>
+            <div>
+                <span class="text-sm font-medium text-slate-700">Platform User</span>
+                <p class="text-xs text-slate-400">Can access the admin platform. May also be an institution user.</p>
+            </div>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer select-none">
             <input type="checkbox" name="is_active" value="1"
                 class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 {{ old('is_active', $user->is_active ?? true) ? 'checked' : '' }}>

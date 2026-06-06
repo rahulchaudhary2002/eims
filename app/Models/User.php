@@ -21,6 +21,7 @@ class User extends Authenticatable
         'password',
         'avatar',
         'is_super_admin',
+        'is_platform_user',
         'is_active',
         'email_verified_at',
     ];
@@ -33,10 +34,11 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'is_super_admin'    => 'boolean',
-            'is_active'         => 'boolean',
-            'password'          => 'hashed',
+            'email_verified_at'  => 'datetime',
+            'is_super_admin'     => 'boolean',
+            'is_platform_user'   => 'boolean',
+            'is_active'          => 'boolean',
+            'password'           => 'hashed',
         ];
     }
 

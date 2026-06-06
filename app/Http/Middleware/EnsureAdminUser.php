@@ -12,7 +12,7 @@ class EnsureAdminUser
     {
         $user = $request->user('web');
 
-        abort_unless($user && $user->is_super_admin, 403, 'You do not have access to the admin dashboard.');
+        abort_unless($user && ($user->is_super_admin || $user->is_platform_user), 403, 'You do not have access to the admin dashboard.');
 
         return $next($request);
     }

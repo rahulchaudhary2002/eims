@@ -21,7 +21,7 @@ class EnsureInstitutionUser
         $hasInstitution = $user->activeInstitutions()->exists();
 
         abort_unless(
-            $hasInstitution || $user->is_super_admin,
+            $hasInstitution || $user->is_super_admin || $user->is_platform_user,
             403,
             'No active institution assignment was found for your account.'
         );
