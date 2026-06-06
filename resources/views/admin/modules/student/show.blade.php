@@ -594,7 +594,7 @@
         @else
             <div class="px-6 py-10 text-center text-slate-400">
                 <p class="mb-3">No scholarship applications yet.</p>
-                <a href="{{ route('admin.scholarship-applications.create', ['student_id' => $student->id]) }}" class="btn btn-primary text-sm">Add First</a>
+                <a href="{{ route('admin.scholarship-applications.index') }}" class="btn btn-outline text-sm">View All Applications</a>
             </div>
         @endif
     </div>
